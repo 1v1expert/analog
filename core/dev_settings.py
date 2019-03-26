@@ -7,7 +7,6 @@
 """
 
 import os
-from .local_settings import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -120,3 +119,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SECRET_KEY = '7b0fm0-2v3s(95g&3u3z18=!bi(4#!@5m_hul)6no++=mdpj@q'
+# Database
+# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+	    'NAME': 'django_db',
+	    'USER' : 'user',
+	    'PASSWORD': '86754231',
+	    'HOST': '5.228.7.134',
+	    'PORT': '5432',
+    }
+}
