@@ -28,6 +28,7 @@ ALLOWED_HOSTS = ['tseluyko.ru', '127.0.0.1']
 INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'catalog.apps.AnalogAuthConfig',
+    'jet',
     'django.contrib.admin',
     # 'django.contrib.auth',
     'django.contrib.contenttypes',
