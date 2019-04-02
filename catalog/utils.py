@@ -3,6 +3,7 @@ from collections import OrderedDict
 
 from .choices import *
 from .models import *
+from django.db import models
 
 
 class XLSDocumentReader(object):
@@ -60,6 +61,7 @@ class ProcessingUploadData(object):
         name: name
     }
     """
+    
     def __init__(self, data):
         self.ATTRIBUTE_LINE = 1
         self.OPTION_LINE = 3
@@ -95,7 +97,7 @@ class ProcessingUploadData(object):
                     })
                 else:
                     attributes.append({
-                        "type": self.attributes[key],
+                        "type": TYPES_REV_DICT.get(self.attributes[key]),
                         "name": self.options[key],
                         "value": product[key]
                         })
@@ -105,7 +107,8 @@ class ProcessingUploadData(object):
             
             self.products.append(structured_product)
             
-        resp = self.check_exists_category()
+        # TODO: make correctly check_exists
+        #resp = self.check_exists_category()
         
         
     
@@ -114,9 +117,75 @@ class ProcessingUploadData(object):
         self.options = self.data[self.OPTION_LINE]
         self.body = self.data[self.OPTION_LINE+1:]
     
-    def create_products(self):
+    def create_products(self, request):
+        
         for product in self.products:
-            pass
+            created = False
+            try:
+                category = Category.objects.get(title__icontains=product['subclass'],
+                                                parent__title__icontains=product['class'])
+            except Category.DoesNotExist:
+                print('Category does not exists ', product['class'], product['subclass'])
+                continue
+                
+            try:
+                manufacturer = Manufacturer.objects.get(title__icontains=product['manufacturer'])
+            except Manufacturer.DoesNotExist:
+                print('Manufacturer does not exists', product['manufacturer'])
+                continue
+            try:
+                Product.objects.get(article=product['vendor_code'], manufacturer=manufacturer)
+            except Product.DoesNotExist:
+                created = True
+                obj_product = Product(article=product['vendor_code'],
+                                      manufacturer=manufacturer,
+                                      title=product['name'],
+                                      category=category,
+                                      created_by=request.user)
+            
+            # obj_product, created = Product.objects.get_or_create(article=product['vendor_code'], manufacturer=manufacturer,
+            #                                             defaults={
+            #                                                 "title": product['name'],
+            #                                                 "category": category,
+            #                                                 "created_by": request.user
+            #                                             })
+            if created:
+                for attr in product['attributes']:
+                    try:
+                        print(attr)
+                        if attr.get('type'):
+                            attribute = Attribute.objects.get(type=attr['type'],
+                                                              category=category,
+                                                              title__icontains=attr['name'])
+                            attr_val = AttributeValue(title=attr['value'],
+                                                      attribute=attribute,
+                                                      created_by=request.user
+                                                      )
+
+                            obj_product.updated_by = request.user
+                            obj_product.save()
+                            
+                            
+                            
+                            attr_val.updated_by = request.user
+                            attr_val.save()
+                            attr_val.products.add(obj_product)
+
+                            obj_product.attrs_vals.add(attr_val)
+                            obj_product.save()
+                            #attr_val.save()
+                            
+                            
+                            #obj_product.save()
+                            
+                        # else:
+                        #     raise
+                    except Exception as e:
+                        print(e)
+                        pass #raise
+                    
+            
+            
         
     def check_exists_category(self):
         

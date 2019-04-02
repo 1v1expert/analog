@@ -62,12 +62,41 @@ class AttrValAdmin(BaseAdmin):
     #         print(json.dumps(kwargs, indent=2))
     #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+from django.contrib.admin.views.main import ChangeList
+from .models import Product
+from .forms import ProductChangeListForm
+class ProductChangeList(ChangeList):
+    def __init__(self, request, model, list_display, list_display_links,
+                 list_filter, date_hierarchy, search_fields, list_select_related,
+                 list_per_page, list_max_show_all, list_editable, model_admin, sortable_by):
+        super(ProductChangeList, self).__init__(request, model, list_display, list_display_links,
+                 list_filter, date_hierarchy, search_fields, list_select_related,
+                 list_per_page, list_max_show_all, list_editable, model_admin, sortable_by)
+    
+        # these need to be defined here, and not in MovieAdmin
+        self.list_display=['title', 'article', 'manufacturer', 'attrs_vals', 'category','is_public', 'deleted']
+        self.list_display_links = ['attrs_vals']
+        # self.list_editable = ['genre']
+
+
+# class ProductAdmin(admin.ModelAdmin):
+#
+
 
 class ProductAdmin(BaseAdmin):
-    list_display=['title','id','article', 'manufacturer', 'category','is_public', 'deleted']
+    list_display = ['title', 'article', 'manufacturer', 'get_attrs_vals', 'category', 'is_public', 'deleted']
     # inlines = [PropertiesInline]
-    filter_horizontal = ['attrs_vals']
-    autocomplete_fields = ['category', 'manufacturer','attrs_vals']
+    #filter_horizontal = ['attrs_vals']
+    autocomplete_fields = ['category', 'manufacturer',]
+
+    def get_attrs_vals(self, obj):
+        return "\n".join([p.title for p in obj.attrs_vals.all()])
+
+    # def get_changelist(self, request, **kwargs):
+    #     return ProductChangeList
+    #
+    # def get_changelist_form(self, request, **kwargs):
+    #     return ProductChangeListForm
     # exclude = ('attrs_vals', )
 
 # class ListingAdmin(BaseAdmin):
@@ -89,7 +118,9 @@ class FileUploadAdmin(admin.ModelAdmin):
         print(request, vars(queryset[0].file), queryset)
         for qq in queryset:
             file = XLSDocumentReader(path=qq.file.name).parse_file()
-            ProcessingUploadData(file).get_structured_data()
+            dd = ProcessingUploadData(file)
+            dd.get_structured_data()
+            dd.create_products(request)
 
     process_file.short_description = u'Импортировать данные'
     

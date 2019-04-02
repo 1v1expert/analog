@@ -13,3 +13,25 @@ STRUCTURE_PRODUCT = (
 
 STRUCTURE_PRODUCT_REV_DICT = _rev_dict(STRUCTURE_PRODUCT)
 
+HARD          = 'hrd'
+SOFT          = 'sft'
+RECALCULATION = 'rcl'
+RELATION      = 'rlt'
+PRICE         = 'prc'
+TYPES = (
+    (HARD,          'жесткий'),
+    (SOFT,          'Мягкий'),
+    (RECALCULATION, 'Пересчет'),
+    (RELATION,      'Взаимосвязь'),
+    (PRICE,         'Цена')
+)
+TYPES_REV_DICT = _rev_dict(TYPES)
+UNITS = (
+    ('mm', 'мм'),
+    ('cm', 'см'),
+    ('m', 'м'),
+    ('km', 'км'),
+    ('g', 'гр'),
+    ('kg', 'кг'),
+    ('tonne', 'т')
+)

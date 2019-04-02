@@ -8,3 +8,4 @@ class CatalogConfig(AppConfig):
 
 class AnalogAuthConfig(AuthConfig):
     verbose_name = "Функционал системного администратора"
+    

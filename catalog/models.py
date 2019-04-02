@@ -5,6 +5,7 @@
 from django.db import models
 # import uuid
 from django.contrib.auth.models import User
+from .choices import TYPES, UNITS
 from django.utils import timezone
 
 
@@ -102,28 +103,7 @@ class Attribute(Base):
     """
     Модель атрибута товара
     """
-    HARD          = 'hrd'
-    SOFT          = 'sft'
-    RECALCULATION = 'rcl'
-    RELATION      = 'rlt'
-    PRICE         = 'prc'
-    TYPES = (
-        (HARD,          'Жесткий'),
-        (SOFT,          'Мягкий'),
-        (RECALCULATION, 'Пересчет'),
-        (RELATION,      'Взаимосвязь'),
-        (PRICE,         'Цена')
-    )
-    UNITS = (
-        ('mm', 'мм'),
-        ('cm', 'см'),
-        ('m', 'м'),
-        ('km', 'км'),
-        ('g', 'гр'),
-        ('kg', 'кг'),
-        ('tonne', 'т')
-    )
-
+    
     title = models.CharField(max_length=255, verbose_name='Наименование')
     type = models.CharField(max_length=13, choices=TYPES, verbose_name="Тип")
     unit = models.CharField(max_length=5, choices=UNITS, verbose_name="Единицы измерения", blank=True)
@@ -131,6 +111,7 @@ class Attribute(Base):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='attributes', limit_choices_to={'parent__isnull': False})
     
     def __str__(self):
+        self.UNITS = UNITS
         text = self.title
         if self.unit:
             for unit in self.UNITS:
