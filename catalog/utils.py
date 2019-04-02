@@ -2,6 +2,7 @@ import openpyxl
 from collections import OrderedDict
 
 from .choices import *
+from .models import *
 
 
 class XLSDocumentReader(object):
@@ -67,14 +68,26 @@ class ProcessingUploadData(object):
         self.attributes = []
         self.options = []
         self.body = []
+
+        self.unique_manufacturer, self.unique_class, self.unique_subclass = set(), set(), set()
+        self.unique_type_attributes, self.unique_value_attributes = set(), set()
         
         self.products = []
     
     def get_structured_data(self):
         self.to_separate()
         
+        for opt in range(5, len(self.attributes) + 4):
+            self.unique_type_attributes.add(self.attributes[opt])
+            self.unique_value_attributes.add(self.options[opt])
+        
         for product in self.body:
             structured_product, attributes = {}, []
+            
+            self.unique_class.add(product[1])
+            self.unique_subclass.add(product[2])
+            self.unique_manufacturer.add(product[4])
+            
             for key in product.keys():
                 if key < 5:
                     structured_product.update({
@@ -91,16 +104,34 @@ class ProcessingUploadData(object):
             })
             
             self.products.append(structured_product)
+            
+        resp = self.check_exists_category()
         
-        return self.products
+        
     
     def to_separate(self):
         self.attributes = self.data[self.ATTRIBUTE_LINE]
         self.options = self.data[self.OPTION_LINE]
         self.body = self.data[self.OPTION_LINE+1:]
     
+    def create_products(self):
+        for product in self.products:
+            pass
+        
     def check_exists_category(self):
-    
+        
+        try:
+            class_list = list(self.unique_class)
+            subclass_list = list(self.unique_subclass)
+            if (len(class_list) > 1) or (len(subclass_list) > 1):
+                return "Too many class or subclass: {}, {}".format(class_list, subclass_list)
+            else:
+                category = Category.objects.get(title__icontains=class_list[0],
+                                                parent__title__icontains=subclass_list[0])
+        except:
+            return "Not found class or subclass"
+        
+        print(self.unique_type_attributes, self.unique_value_attributes, self.unique_manufacturer, self.unique_class, self.unique_subclass)
     
     def get_attribute(self):
         pass

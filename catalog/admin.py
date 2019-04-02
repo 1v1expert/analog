@@ -89,7 +89,7 @@ class FileUploadAdmin(admin.ModelAdmin):
         print(request, vars(queryset[0].file), queryset)
         for qq in queryset:
             file = XLSDocumentReader(path=qq.file.name).parse_file()
-            ProcessingUploadData(file).build_valid_data()
+            ProcessingUploadData(file).get_structured_data()
 
     process_file.short_description = u'Импортировать данные'
     
