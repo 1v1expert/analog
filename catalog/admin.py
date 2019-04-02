@@ -90,7 +90,7 @@ class ProductAdmin(BaseAdmin):
     autocomplete_fields = ['category', 'manufacturer',]
 
     def get_attrs_vals(self, obj):
-        return "\n".join([p.title for p in obj.attrs_vals.all()])
+        return "; ".join(['{}: {}'.format(p.attribute.title, p.title) for p in obj.attrs_vals.all()])
 
     # def get_changelist(self, request, **kwargs):
     #     return ProductChangeList
@@ -117,11 +117,13 @@ class FileUploadAdmin(admin.ModelAdmin):
     def process_file(self, request, queryset):
         print(request, vars(queryset[0].file), queryset)
         for qq in queryset:
-            file = XLSDocumentReader(path=qq.file.name).parse_file()
-            dd = ProcessingUploadData(file)
-            dd.get_structured_data()
-            dd.create_products(request)
-
+            created, error = ProcessingUploadData(
+                XLSDocumentReader(path=qq.file.name).parse_file()
+            ).get_structured_data(request)
+            if created:
+                messages.add_message(request, messages.SUCCESS, 'Данные успешно загружены из {} файла в БД'.format(qq.file.name))
+            else:
+                messages.add_message(request, messages.ERROR, error)
     process_file.short_description = u'Импортировать данные'
     
     def save_model(self, request, obj, form, change):

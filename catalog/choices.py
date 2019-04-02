@@ -2,6 +2,9 @@ def _rev_dict(choices):
     return {v: k for k, v in choices}
 
 
+def _dict(choices):
+    return {k: v for k, v in choices}
+
 STRUCTURE_PRODUCT = (
     (0, 'name'),
     (1, 'class'),
@@ -12,6 +15,7 @@ STRUCTURE_PRODUCT = (
 )
 
 STRUCTURE_PRODUCT_REV_DICT = _rev_dict(STRUCTURE_PRODUCT)
+STRUCTURE_PRODUCT_DICT = _dict(STRUCTURE_PRODUCT)
 
 HARD          = 'hrd'
 SOFT          = 'sft'
@@ -20,12 +24,14 @@ RELATION      = 'rlt'
 PRICE         = 'prc'
 TYPES = (
     (HARD,          'жесткий'),
-    (SOFT,          'Мягкий'),
+    (SOFT,          'мягкий'),
     (RECALCULATION, 'Пересчет'),
     (RELATION,      'Взаимосвязь'),
     (PRICE,         'Цена')
 )
 TYPES_REV_DICT = _rev_dict(TYPES)
+TYPES_DICT = _dict(TYPES)
+
 UNITS = (
     ('mm', 'мм'),
     ('cm', 'см'),
