@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Category, Product, Manufacturer, Attribute, AttributeValue, Specification
+from .models import Category, Product, Manufacturer, Attribute, AttributeValue, Specification, DataFile
+from django.contrib import messages
 import json
 
 
@@ -12,6 +13,7 @@ def mark_as_unpublished(modeladmin, request, queryset):
 mark_as_unpublished.short_description = u"Снять с публикации"
 
 
+
 class BaseAdmin(admin.ModelAdmin):
 
     list_display = ['title', 'id','is_public', 'deleted','created_at','created_by','updated_at','updated_by']
@@ -20,7 +22,7 @@ class BaseAdmin(admin.ModelAdmin):
     list_filter = ['is_public', 'deleted','created_at','updated_at']
     search_fields = ['id', 'title']
     
-    def save_model(self, request, obj, form, change): 
+    def save_model(self, request, obj, form, change):
         if not change:
             obj.created_by = request.user
         obj.updated_by = request.user
@@ -45,7 +47,7 @@ class CategoryAdmin(BaseAdmin):
 
 
 class AttrAdmin(BaseAdmin):
-    list_display=['title', 'unit', 'id', 'type', 'priority','category','is_public', 'deleted']
+    list_display=['title', 'unit', 'id', 'type', 'priority', 'category', 'is_public', 'deleted']
     autocomplete_fields = ['category']
 
 
@@ -72,15 +74,34 @@ class ProductAdmin(BaseAdmin):
 #     actions = None
 #     search_fields = ['=user__username', ]
 #     fieldsets = [
-#         (None, {'fields':()}), 
+#         (None, {'fields':()}),
 #         ]
 
 #     def __init__(self, *args, **kwargs):
 #         super(LogEntryAdmin, self).__init__(*args, **kwargs)
 #         self.list_display_links = (None, )
+from .utils import XLSDocumentReader
+class FileUploadAdmin(admin.ModelAdmin):
+    actions = ['process_file']
+    list_display = ['file']
 
-# TODO реализовать фильтры поиска по колонкам, рецепт тут: https://medium.com/@hakibenita/how-to-add-a-text-filter-to-django-admin-5d1db93772d8 
-# TODO экспорт в формат xls https://xlsxwriter.readthedocs.io/index.html 
+    def process_file(self, request, queryset):
+        print(request, vars(queryset[0].file), queryset)
+        for qq in queryset:
+            XLSDocumentReader(path=qq.file.name).get_data()
+
+    process_file.short_description = u'Импортировать данные'
+    
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        obj.updated_by = request.user
+        obj.save()
+    
+    #autocomplete_fields = ['category']
+# TODO реализовать фильтры поиска по колонкам, рецепт тут: https://medium.com/@hakibenita/how-to-add-a-text-filter-to-django-admin-5d1db93772d8
+# TODO экспорт в формат xls https://xlsxwriter.readthedocs.io/index.html
+
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(AttributeValue, AttrValAdmin)
@@ -88,5 +109,6 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Manufacturer, BaseAdmin)
 admin.site.register(Attribute, AttrAdmin)
 admin.site.register(Specification, BaseAdmin)
+admin.site.register(DataFile, FileUploadAdmin)
 
 # Register your models here.

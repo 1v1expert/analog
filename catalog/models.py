@@ -30,7 +30,7 @@ class Base(models.Model):
     # def save(self, *args, **kwargs):
     #     if not self.uid:
     #         self.created_at = timezone.now()
-        
+    
     #     self.updated_at = timezone.now()
     #     return super(Base, self).save(*args, **kwargs)
 
@@ -89,7 +89,7 @@ class Category(Base):
 #     title = models.CharField(max_length=255, verbose_name='Наименование')
 #     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='subcategories')
 #     short_title = models.CharField(max_length=255, verbose_name='Краткое наименование', blank=True)
-    
+
 #     def __str__(self):
 #         return self.category.title + ' -> ' + self.title
 
@@ -198,3 +198,21 @@ class Specification(Base):
     class Meta:
         verbose_name = "Спецификация"
         verbose_name_plural = "Спецификации"
+        
+        
+class DataFile(Base):
+    """
+    Модель загрузки файлов
+    """
+    file = models.FileField(upload_to='files', verbose_name='Файл')
+    
+    class Meta:
+        verbose_name = "Файл"
+        verbose_name_plural = "Файлы"
+        
+    def __str__(self):
+        return self.file.name
+    
+    def save(self, *args, **kwargs):
+        super(DataFile, self).save(*args, **kwargs)
+        print(vars(self.file), self.file)#self.data.url)
