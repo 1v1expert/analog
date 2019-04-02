@@ -80,7 +80,7 @@ class ProductAdmin(BaseAdmin):
 #     def __init__(self, *args, **kwargs):
 #         super(LogEntryAdmin, self).__init__(*args, **kwargs)
 #         self.list_display_links = (None, )
-from .utils import XLSDocumentReader
+from .utils import XLSDocumentReader, ProcessingUploadData
 class FileUploadAdmin(admin.ModelAdmin):
     actions = ['process_file']
     list_display = ['file']
@@ -88,7 +88,8 @@ class FileUploadAdmin(admin.ModelAdmin):
     def process_file(self, request, queryset):
         print(request, vars(queryset[0].file), queryset)
         for qq in queryset:
-            XLSDocumentReader(path=qq.file.name).get_data()
+            file = XLSDocumentReader(path=qq.file.name).parse_file()
+            ProcessingUploadData(file).build_valid_data()
 
     process_file.short_description = u'Импортировать данные'
     

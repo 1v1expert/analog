@@ -1,8 +1,10 @@
 import openpyxl
 from collections import OrderedDict
 
+from .choices import *
+
+
 class XLSDocumentReader(object):
-    lines_header = 4
     
     def __init__(self, path=None, workbook=None):
         assert path or workbook, "You should provide either path to file or XLS-object"
@@ -29,59 +31,77 @@ class XLSDocumentReader(object):
         self.values = []
         self.doc = []
         
-    def get_full_data(self):
-        line = {}
+    def parse_file(self):
         rows = self.sheet.rows
         for cnt, row in enumerate(rows):
+            line = {}
             for cnt_c, cell in enumerate(row):
-                line.update({cnt_c: cell.value})
+                if cell.value:
+                    line.update({cnt_c: cell.value})
             self.doc.append(line)
-            
-    def parse_header(self, cnt, row):
-        #values = []
-        
-        if cnt == 1:
-            for cnt_c, cell in enumerate(row):
-                if cell.value and cnt_c > 4:
-                    self.attributes.update({cnt_c: cell.value})
-        elif cnt == 3:
-            for cnt_c, cell in enumerate(row):
-                self.options.update({cnt_c: cell.value})
-
-    def parse_body(self, cnt, row):
-        #values = []
-        data = {}
-        for cnt_c, cell in enumerate(row):
-            if cell.value:
-                data[cnt_c] = cell.value
-        return data
-        #self.values
-        
-    def get_data(self):
-        rows = self.sheet.rows
-        for cnt, row in enumerate(rows):
-            if cnt < 4:
-                self.parse_header(cnt, row)
-            else:
-                self.values.append(self.parse_body(cnt, row))
-        return {
-            'values': self.values,
-            'options': self.options,
-            'attributes': self.attributes
-        }
-
-
-class FillingDB(object):
+        return self.doc
     
+
+class ProcessingUploadData(object):
+    """Класс преобразования считанных данных из загружаемого файла
+    products = [product1, product2, ...]
+    product = {
+        name: name,
+        class: class,
+        subclass: subclass,
+        vendor_code: vendor_code,
+        manufacturer: manufacturer,
+        attributes: [attr1, attr2, ...]
+    }
+    attribute = {
+        type: type.
+        value: value,
+        name: name
+    }
+    """
     def __init__(self, data):
+        self.ATTRIBUTE_LINE = 1
+        self.OPTION_LINE = 3
+        
         self.data = data
+        self.attributes = []
+        self.options = []
+        self.body = []
+        
+        self.products = []
     
-    def main_cycle(self):
-        for line in self.data.get('values', None):
-            pass
+    def get_structured_data(self):
+        self.to_separate()
+        
+        for product in self.body:
+            structured_product, attributes = {}, []
+            for key in product.keys():
+                if key < 5:
+                    structured_product.update({
+                            STRUCTURE_PRODUCT[key][1]: product[key]
+                    })
+                else:
+                    attributes.append({
+                        "type": self.attributes[key],
+                        "name": self.options[key],
+                        "value": product[key]
+                        })
+            structured_product.update({
+                STRUCTURE_PRODUCT[5][1]: attributes
+            })
+            
+            self.products.append(structured_product)
+        
+        return self.products
     
-    def check_exists(self):
-        pass
+    def to_separate(self):
+        self.attributes = self.data[self.ATTRIBUTE_LINE]
+        self.options = self.data[self.OPTION_LINE]
+        self.body = self.data[self.OPTION_LINE+1:]
+    
+    def check_exists_category(self):
+    
     
     def get_attribute(self):
         pass
+    
