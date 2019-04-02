@@ -9,6 +9,10 @@ __pycache__/
 # PyCharm projects
 .idea/
 
+# Xls'x files
+*.xls
+*.xlsx
+
 # Distribution / packaging
 .Python
 build/
