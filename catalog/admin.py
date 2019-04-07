@@ -44,9 +44,12 @@ class SubCatValInline(admin.TabularInline):
 from feincms.admin import tree_editor
 
 class CategoryAdmin(tree_editor.TreeEditor, BaseAdmin):
-    list_display = ('title',)
-
-
+    list_display = ('title', 'get_attributes')
+    
+    def get_attributes(self, obj):
+        """Атрибуты"""
+        return "; ".join(['{}: {}'.format(p.type, p.title) for p in obj.attributes.all()])
+    
 admin.site.register(Category, CategoryAdmin)
 
 
