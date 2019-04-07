@@ -24,6 +24,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['tseluyko.ru', '127.0.0.1', 'vladdos.ddns.net']
 
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+# Application definition
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -36,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'feincms',
+    'mptt'
     
 ]
 
@@ -50,11 +55,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
-
+FEINCMS_ADMIN_MEDIA = '/static/feincms/'
+FEINCMS_ADMIN_MEDIA_LOCATION = os.path.join('static/feincms/')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join('feincms/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

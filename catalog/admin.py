@@ -8,6 +8,7 @@ def mark_as_published(modeladmin, request, queryset):
     queryset.update(is_public=True)
 mark_as_published.short_description = u"Опубликовать"
 
+
 def mark_as_unpublished(modeladmin, request, queryset):
     queryset.update(is_public=False)
 mark_as_unpublished.short_description = u"Снять с публикации"
@@ -40,21 +41,30 @@ class BaseAdmin(admin.ModelAdmin):
 class SubCatValInline(admin.TabularInline):
     model = Category
 
+from feincms.admin import tree_editor
 
-class CategoryAdmin(BaseAdmin):
-    autocomplete_fields = ['parent']
-    inlines=[SubCatValInline]
+class CategoryAdmin(tree_editor.TreeEditor, BaseAdmin):
+    list_display = ('title',)
+
+
+admin.site.register(Category, CategoryAdmin)
+
+
+# class CategoryAdmin(BaseAdmin):
+#     autocomplete_fields = ['parent']
+#     inlines=[SubCatValInline]
 
 
 class AttrAdmin(BaseAdmin):
-    list_display=['title', 'unit', 'id', 'type', 'priority', 'category', 'is_public', 'deleted']
-    autocomplete_fields = ['category']
+    list_display=['title', 'unit', 'id', 'type', 'priority', 'is_public', 'deleted']
+    #'category'
+    #autocomplete_fields = ['category']
 
 
 class AttrValAdmin(BaseAdmin):
     list_display=['title', 'attribute', 'id', 'is_public', 'deleted']
     
-    autocomplete_fields = ['attribute']
+    #autocomplete_fields = ['attribute']
     exclude= ('products',)
     
     # def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -137,9 +147,9 @@ class FileUploadAdmin(admin.ModelAdmin):
 # TODO экспорт в формат xls https://xlsxwriter.readthedocs.io/index.html
 
 
-admin.site.register(Category, CategoryAdmin)
+#admin.site.register(Category, CategoryAdmin)
 admin.site.register(AttributeValue, AttrValAdmin)
-admin.site.register(Product, ProductAdmin)
+#admin.site.register(Product, ProductAdmin)
 admin.site.register(Manufacturer, BaseAdmin)
 admin.site.register(Attribute, AttrAdmin)
 admin.site.register(Specification, BaseAdmin)

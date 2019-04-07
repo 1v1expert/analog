@@ -50,7 +50,7 @@ class Manufacturer(Base):
         verbose_name = "Производитель"
         verbose_name_plural = "Производители"
 
-
+import mptt
 class Category(Base):
     """
     Модель класса товаров
@@ -59,6 +59,7 @@ class Category(Base):
     childs = None
     title = models.CharField(max_length=255, verbose_name='Наименование')
     short_title = models.CharField(max_length=255, verbose_name='Краткое наименование', blank=True)
+    attributes = models.ManyToManyField('Attribute', blank=True, verbose_name="Атрибуты")
     
     def getAttributes(self):
         if not self.childs:
@@ -82,7 +83,7 @@ class Category(Base):
         verbose_name = "Класс"
         verbose_name_plural = "Классы"
 
-
+mptt.register(Category, )
 # class Subcategory(Base):
 #     """
 #     Модель Пподкласса товаров
@@ -108,7 +109,7 @@ class Attribute(Base):
     type = models.CharField(max_length=13, choices=TYPES, verbose_name="Тип")
     unit = models.CharField(max_length=5, choices=UNITS, verbose_name="Единицы измерения", blank=True)
     priority = models.PositiveSmallIntegerField(verbose_name='Приоритет')
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='attributes', limit_choices_to={'parent__isnull': False})
+    #category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='attributes', limit_choices_to={'parent__isnull': False})
     
     def __str__(self):
         self.UNITS = UNITS
