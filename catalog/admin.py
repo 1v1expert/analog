@@ -43,10 +43,29 @@ class SubCatValInline(admin.TabularInline):
 
 from feincms.admin import tree_editor
 
+class AttributeshipInline(admin.TabularInline):
+    model = Category.attributes.through
+
 class CategoryAdmin(tree_editor.TreeEditor, BaseAdmin):
-    list_display = ('title', 'get_attributes')
+    #list_display = ('title', 'get_attributes')
     
-    def get_attributes(self, obj):
+    inlines = [AttributeshipInline]
+    exclude = ('attributes', )
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        obj.updated_by = request.user
+        obj.save()
+        if obj.parent and not obj.attributes.all().count():
+            print(obj, list(obj.parent.attributes.all()))
+            obj.attributes.add(*list(obj.parent.attributes.all()))
+            print(obj.attributes.all())
+            obj.save()
+        
+
+    @staticmethod
+    def get_attributes(obj):
         """Атрибуты"""
         return "; ".join(['{}: {}'.format(p.type, p.title) for p in obj.attributes.all()])
     
