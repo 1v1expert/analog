@@ -74,16 +74,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'analog_db',
-#         'USER' : 'analog',
-#         'PASSWORD' : 'password',
-#         'HOST' : '81.177.141.29',
-#         'PORT' : '5432',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'analog',
+        'USER': 'postgres',
+        'PASSWORD': '@WSX2wsx123',
+        'HOST': '176.99.11.125',
+        'PORT': '5432',
+    }
+}
 
 
 # Password validation
@@ -127,13 +127,13 @@ STATIC_URL = '/static/'
 SECRET_KEY = '7b0fm0-2v3s(95g&3u3z18=!bi(4#!@5m_hul)6no++=mdpj@q'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-	    'NAME': 'django_db',
-	    'USER' : 'user',
-	    'PASSWORD': '86754231',
-	    'HOST': '5.228.7.134',
-	    'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+# 	    'NAME': 'django_db',
+# 	    'USER' : 'user',
+# 	    'PASSWORD': '86754231',
+# 	    'HOST': '5.228.7.134',
+# 	    'PORT': '5432',
+#     }
+# }

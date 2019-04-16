@@ -46,11 +46,12 @@ from feincms.admin import tree_editor
 class AttributeshipInline(admin.TabularInline):
     model = Category.attributes.through
 
+
 class CategoryAdmin(tree_editor.TreeEditor, BaseAdmin):
-    #list_display = ('title', 'get_attributes')
+    list_display = ('title', 'get_attributes')
     
-    inlines = [AttributeshipInline]
-    exclude = ('attributes', )
+    #inlines = [AttributeshipInline]
+    #exclude = ('attributes', )
 
     def save_model(self, request, obj, form, change):
         if not change:
