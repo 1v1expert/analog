@@ -34,12 +34,11 @@ def search_view(request):
 				find_products = Product.objects.filter(manufacturer=form.cleaned_data['manufacturer_to'], category=product.category)
 				# cycle for attributes in product attributes
 				for attr in product.attrs_vals.all():
-					pass
 					# find_product = find_product.filter(attrs_vals__attribute=attr.attribute,
 					#                                    attrs_vals__title=attr.title)
-					# if attr.attribute.type in ('hrd', 'sft'):
-					#
-					# 	find_products = find_products.filter(attrs_vals__attribute=attr.attribute, attrs_vals__title=attr.title)
+					if attr.attribute.type in ('hrd', 'sft'):
+
+						find_products = find_products.filter(attrs_vals__attribute=attr.attribute, attrs_vals__title=attr.title)
 
 				if find_products.count() == 1:
 					error = {'val': False}
