@@ -172,7 +172,7 @@ class FileUploadAdmin(admin.ModelAdmin):
 
 #admin.site.register(Category, CategoryAdmin)
 admin.site.register(AttributeValue, AttrValAdmin)
-#admin.site.register(Product, ProductAdmin)
+admin.site.register(Product, ProductAdmin)
 admin.site.register(Manufacturer, BaseAdmin)
 admin.site.register(Attribute, AttrAdmin)
 admin.site.register(Specification, BaseAdmin)

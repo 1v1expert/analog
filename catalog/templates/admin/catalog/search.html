@@ -1,9 +1,49 @@
-{% extends 'base/base.html' %}
-
-<form action="/your-name/" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
+{% extends 'admin/base.html' %}
+{% load i18n static jet_tags %}
+{% block extrahead %}
+    {{ block.super }}
 
 {% endblock %}
+
+{% block blockbots %}
+    {{ block.super }}
+    <!-- FIXING SELECT 2 JQUERY ISSUE-->
+    <script src="{% static 'admin/js/vendor/jquery/jquery.js' as url %}{{ url|jet_append_version }}"
+            type="text/javascript"></script>
+    <script src="{% static 'admin/js/jquery.init.js' as url %}{{ url|jet_append_version }}"></script>
+{% endblock %}
+{% block content %}
+    <style>
+        input[type=checkbox] {
+            display: inline-block;
+        }
+    </style>
+
+    {% if Error.val %}
+        <h3>{{ Error.msg }}</h3>
+    {% endif %}
+
+    {% if form %}
+        <form action="/search/" method="post">
+            <h3>Поиск аналогов</h3>
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="fieldWrapper">
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                </div>
+            {% endfor %}
+            {#        <p>------------------</p>#}
+            {#        {% for field in advanced_form %}#}
+            {#            <div class="fieldWrapper">#}
+            {#                {{ field.errors }}#}
+            {#                {{ field.label_tag }} {{ field }}#}
+            {#            </div>#}
+            {#        {% endfor %}#}
+            <input type="submit" value="Submit"/>
+        </form>
+    {% endif %}
+
+
+{% endblock %}
+

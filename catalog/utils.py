@@ -20,11 +20,6 @@ class XLSDocumentReader(object):
         self.xlsx = path
         self.ws = self.workbook.active
         self.sheet = self.workbook.active
-        # self.request = request
-        # self.sender = sender
-        # For errors
-        # self.header_matrix_reversed_map = {(v[0] if isinstance(v, (list, tuple)) else v): k for k, v in self.header_matrix_map.items()}
-        # self.table_row_reversed_map = {(v[0] if isinstance(v, (list, tuple)) else v): k for k, v in self.table_row_map.items()}
         self.errors = {}
         self.all_errors = {}
         self.document = {}
@@ -84,12 +79,14 @@ class ProcessingUploadData(object):
             self.unique_value_attributes.add(self.options[opt])
         
         for product in self.body:
+            if not product:
+                continue
             structured_product, attributes = {}, []
             
             self.unique_class.add(product[1])
             self.unique_subclass.add(product[2])
             self.unique_manufacturer.add(product[4])
-            
+            #print(self.options)
             for key in product.keys():
                 if key < 5:
                     structured_product.update({
@@ -97,7 +94,7 @@ class ProcessingUploadData(object):
                     })
                 else:
                     attributes.append({
-                        "type": TYPES_REV_DICT.get(self.attributes[key]),
+                        "type": TYPES_REV_DICT.get(self.attributes[key].lower()),
                         "name": self.options[key],
                         "value": product[key]
                         })
@@ -160,10 +157,12 @@ class ProcessingUploadData(object):
             return 'Ошибка! Не найден производитель товаров: {}'.format(product.get('manufacturer'))
         # check category
         try:
-            category = Category.objects.get(title__icontains=product['subclass'],
-                                            parent__title__icontains=product['class'])
+            category = Category.objects.get(title__iexact=product['subclass'],
+                                            parent__title__iexact=product['class'])
         except Category.DoesNotExist:
             return 'Ошибка! Не найден класс {} с подклассом {}'.format(product['class'], product['subclass'])
+        except Category.MultipleObjectsReturned:
+            return 'Ошибка! Найдено более одного подкласса {} с классом {}'.format(product['subclass'], product['class'])
         # check product
         try:
             Product.objects.get(article=product['vendor_code'], manufacturer=manufacturer)

@@ -25,9 +25,9 @@ PRICE         = 'prc'
 TYPES = (
     (HARD,          'жесткий'),
     (SOFT,          'мягкий'),
-    (RECALCULATION, 'Пересчет'),
-    (RELATION,      'Взаимосвязь'),
-    (PRICE,         'Цена')
+    (RECALCULATION, 'пересчет'),
+    (RELATION,      'взаимосвязь'),
+    (PRICE,         'цена')
 )
 TYPES_REV_DICT = _rev_dict(TYPES)
 TYPES_DICT = _dict(TYPES)
