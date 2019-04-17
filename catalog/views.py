@@ -34,7 +34,7 @@ def search_view(request):
 				for attr in products_values:
 					# find_product = find_product.filter(attrs_vals__attribute=attr.attribute,
 					#                                    attrs_vals__title=attr.title)
-					if attr.attribute.type == 'hrd':
+					if attr.attribute.type in ('hrd', 'sft'):
 						# print(find_product)
 						find_products = find_products.filter(attrs_vals__attribute=attr.attribute, attrs_vals__title=attr.title)
 						# print('hrd', attr)
