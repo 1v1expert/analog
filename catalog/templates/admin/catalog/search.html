@@ -19,7 +19,7 @@
         }
     </style>
     {% if Results %}
-        <div class="col-md-6" style="width: 30%;min-height: 150px;float: left;">
+        <div style="width: 30%;min-height: 150px;float: left;">
             <h2>Исходный продукт</h2>
             <p>Артикул: {{ Product.article }}</p>
             <p>Наименование: {{ Product.title }}</p>
@@ -33,7 +33,7 @@
                 {% endfor %}
             </table>
         </div>
-        <div class="col-md-6" style="width: 70%;min-height: 150px;margin-left: 30%;">
+        <div style="width: 70%;min-height: 150px;margin-left: 30%;">
             <h2>Найден {{ Results.count }} продукт(-a, -ов)</h2>
             {% for result in Results %}
                 <p>Артикул: {{ result.article }}</p>
@@ -72,7 +72,7 @@
             {#                {{ field.label_tag }} {{ field }}#}
             {#            </div>#}
             {#        {% endfor %}#}
-            <input type="submit" value="Submit"/>
+            <input type="submit" value="Искать"/>
         </form>
     {% endif %}
 
