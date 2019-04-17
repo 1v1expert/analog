@@ -4,7 +4,7 @@
     {{ block.super }}
 
 {% endblock %}
-
+{% block title %}My amazing blog{% endblock %}
 {% block blockbots %}
     {{ block.super }}
     <!-- FIXING SELECT 2 JQUERY ISSUE-->
@@ -18,8 +18,14 @@
             display: inline-block;
         }
     </style>
+
+    {% if Error.val %}
+        <h3 style="color: darkred">{{ Error.msg }}</h3>
+    {% endif %}
+
     {% if Results %}
-        <div style="width: 30%;min-height: 150px;float: left;">
+        <h2>Найден {{ Results.count }} продукт(-a, -ов)</h2>
+        <div style="width: 15%;min-height: 150px;float: left;">
             <h2>Исходный продукт</h2>
             <p>Артикул: {{ Product.article }}</p>
             <p>Наименование: {{ Product.title }}</p>
@@ -33,26 +39,25 @@
                 {% endfor %}
             </table>
         </div>
-        <div style="width: 70%;min-height: 150px;margin-left: 30%;">
-            <h2>Найден {{ Results.count }} продукт(-a, -ов)</h2>
-            {% for result in Results %}
-                <p>Артикул: {{ result.article }}</p>
-                <p>Наименование: {{ result.title }}</p>
-                <p>Класс: {{ result.category.parent.title }} --> {{ result.category.title }}</p>
-                <p>Производитель: {{ result.manufacturer }}</p>
-                <table>
-                    {% for attr in result.attrs_vals.all %}
-                        <tr>
-                            <td>{{ attr }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            {% endfor %}
-        </div>
-    {% endif %}
 
-    {% if Error.val %}
-        <h3>{{ Error.msg }}</h3>
+{#min-height: 150px;margin-left: {% widthratio forloop.counter 1 15 %}%;#}
+        {% for result in Results %}
+            <div style="width: 15%;float: left;">
+            <h2>{{ forloop.counter }} продукт</h2>
+            <p>Артикул: {{ result.article }}</p>
+            <p>Наименование: {{ result.title }}</p>
+            <p>Класс: {{ result.category.parent.title }} --> {{ result.category.title }}</p>
+            <p>Производитель: {{ result.manufacturer }}</p>
+            <table>
+                {% for attr in result.attrs_vals.all %}
+                    <tr>
+                        <td>{{ attr }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            </div>
+        {% endfor %}
+
     {% endif %}
 
     {% if form %}

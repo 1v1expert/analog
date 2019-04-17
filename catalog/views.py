@@ -16,6 +16,7 @@ def search_view(request):
 		form = SearchForm(request.POST)
 		if form.is_valid():
 			try:
+				# проверка на единственность и существование продукта с артикулом и поставщиком
 				try:
 					product = Product.objects.get(article=form.cleaned_data['article'],
 					                              manufacturer=form.cleaned_data['manufacturer_from'])
@@ -29,15 +30,17 @@ def search_view(request):
 					                                                               'и производителем {}'.format(
 						                                                        form.cleaned_data['article'],
 						                                                        form.cleaned_data['manufacturer_from'])}})
-				products_values = AttributeValue.objects.filter(product=product)
+				# initial filter product
 				find_products = Product.objects.filter(manufacturer=form.cleaned_data['manufacturer_to'], category=product.category)
-				for attr in products_values:
+				# cycle for attributes in product attributes
+				for attr in product.attrs_vals.all():
+					pass
 					# find_product = find_product.filter(attrs_vals__attribute=attr.attribute,
 					#                                    attrs_vals__title=attr.title)
-					if attr.attribute.type in ('hrd', 'sft'):
-						# print(find_product)
-						find_products = find_products.filter(attrs_vals__attribute=attr.attribute, attrs_vals__title=attr.title)
-						# print('hrd', attr)
+					# if attr.attribute.type in ('hrd', 'sft'):
+					#
+					# 	find_products = find_products.filter(attrs_vals__attribute=attr.attribute, attrs_vals__title=attr.title)
+
 				if find_products.count() == 1:
 					error = {'val': False}
 				elif find_products.count() == 0:
