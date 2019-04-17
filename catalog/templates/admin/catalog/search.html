@@ -19,21 +19,36 @@
         }
     </style>
     {% if Results %}
-        <h2>Найден {{ Results.count }} продукт(-a, -ов)</h2>
-        {% for result in Results %}
-            <p>Артикул: {{ result.article }}</p>
-            <p>Наименование: {{ result.title }}</p>
-            <p>Класс: {{ result.category.parent.title }} --> {{ result.category.title }}</p>
-            <p>Производитель: {{ result.manufacturer }}</p>
-        <table>
-            {% for attr in result.attrs_vals.all %}
-                <tr>
-                <td>{{ attr }}</td>
-                </tr>
+        <div class="col-md-6" style="width: 30%;min-height: 150px;float: left;">
+            <h2>Исходный продукт</h2>
+            <p>Артикул: {{ Product.article }}</p>
+            <p>Наименование: {{ Product.title }}</p>
+            <p>Класс: {{ Product.category.parent.title }} --> {{ Product.category.title }}</p>
+            <p>Производитель: {{ Product.manufacturer }}</p>
+            <table>
+                {% for attr in Product.attrs_vals.all %}
+                    <tr>
+                        <td>{{ attr }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-md-6" style="width: 70%;min-height: 150px;margin-left: 30%;">
+            <h2>Найден {{ Results.count }} продукт(-a, -ов)</h2>
+            {% for result in Results %}
+                <p>Артикул: {{ result.article }}</p>
+                <p>Наименование: {{ result.title }}</p>
+                <p>Класс: {{ result.category.parent.title }} --> {{ result.category.title }}</p>
+                <p>Производитель: {{ result.manufacturer }}</p>
+                <table>
+                    {% for attr in result.attrs_vals.all %}
+                        <tr>
+                            <td>{{ attr }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
             {% endfor %}
-        </table>
-            <p>--------------</p>
-        {% endfor %}
+        </div>
     {% endif %}
 
     {% if Error.val %}
