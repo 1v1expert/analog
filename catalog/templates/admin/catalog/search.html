@@ -18,6 +18,23 @@
             display: inline-block;
         }
     </style>
+    {% if Results %}
+        <h2>Найден {{ Results.count }} продукт(-a, -ов)</h2>
+        {% for result in Results %}
+            <p>Артикул: {{ result.article }}</p>
+            <p>Наименование: {{ result.title }}</p>
+            <p>Класс: {{ result.category.parent.title }} --> {{ result.category.title }}</p>
+            <p>Производитель: {{ result.manufacturer }}</p>
+        <table>
+            {% for attr in result.attrs_vals.all %}
+                <tr>
+                <td>{{ attr }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+            <p>--------------</p>
+        {% endfor %}
+    {% endif %}
 
     {% if Error.val %}
         <h3>{{ Error.msg }}</h3>

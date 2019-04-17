@@ -14,13 +14,23 @@ def search_view(request):
 			try:
 				product = Product.objects.get(article=form.cleaned_data['article'], manufacturer=form.cleaned_data['manufacturer_from'])
 				products_values = AttributeValue.objects.filter(product=product)
-				find_product = Product.objects.filter(manufacturer=form.cleaned_data['manufacturer_to'])
+				find_products = Product.objects.filter(manufacturer=form.cleaned_data['manufacturer_to'], category=product.category)
 				for attr in products_values:
-					if attr.attribute.type=='hrd':
-						find_product = find_product.filter(attrs_vals_=attr)
-						print('hrd', attr)
-					
-				print(products_values, find_product)
+					# find_product = find_product.filter(attrs_vals__attribute=attr.attribute,
+					#                                    attrs_vals__title=attr.title)
+					if attr.attribute.type == 'hrd':
+						# print(find_product)
+						find_products = find_products.filter(attrs_vals__attribute=attr.attribute, attrs_vals__title=attr.title)
+						# print('hrd', attr)
+				if find_products.count() == 1:
+					error = {'val': False}
+				elif find_products.count() == 0:
+					error = {'val': True, 'msg': 'По заданным параметрам не найдено продуктов'}
+				else:
+					error = {'val': True, 'msg': 'По заданным параметрам найдено более одного продукта'}
+				return render(request, 'admin/catalog/search.html', {'Results': find_products,
+				                                                     'Error': error})
+				# print(products_values, find_product)
 				#print(product.category)
 				#print(product.category.attributes.filter(type='hrd'))
 				#find_product = Product.objects.filter(manufacturer=form.cleaned_data['manufacturer_to'])
