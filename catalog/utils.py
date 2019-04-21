@@ -176,11 +176,10 @@ class ProcessingUploadData(object):
         # check attributes
         for attr in product['attributes']:
             try:
-                attribute = Attribute.objects.get(type=TYPES_DICT[attr['type']], category=category, title__icontains=attr['name'])
+                attribute = Attribute.objects.get(type=attr['type'], category=category, title__icontains=attr['name'])
                 attr.update({"attr_obj": attribute})
             except Attribute.DoesNotExist:
-                return 'Ошибка! Не найден атрибут с типом: {} - {} и наименованием {} в категории {}'.format(TYPES_DICT[attr['type']],
-                                                                                                             category.pk, attr['name'], category)
+                return 'Ошибка! Не найден атрибут с типом: {} - {} и наименованием {} в категории {}'.format(TYPES_DICT[attr['type']], attr['type'], category.pk, attr['name'], category)
             except Attribute.MultipleObjectsReturned:
                 return 'Ошибка! Найдено несколько атрибутов с типом: {} и наименованием {}'.format(TYPES_DICT[attr['type']], attr['name'])
         
