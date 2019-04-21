@@ -127,6 +127,8 @@ def search_view(request):
 				error = {'val': True, 'msg': 'По заданным параметрам не найдено продуктов'}
 			else:
 				error = {'val': True, 'msg': 'По заданным параметрам найдено более одного продукта'}
+				return render(request, 'admin/catalog/search.html', {'Results': result.products_found[1:2], 'Product': result.product,
+			                                                     'Error': error})
 			return render(request, 'admin/catalog/search.html', {'Results': result.products_found, 'Product': result.product,
 			                                                     'Error': error})
 			# print(products_values, find_product)
