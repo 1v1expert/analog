@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import *
-from .models import Product, AttributeValue
+from .models import Product, AttributeValue, Category
 from django.http.response import HttpResponse
 
 
@@ -51,7 +51,11 @@ class SearchProducts(object):
 			              {'Error': {'val': True, 'msg': 'Найдено более одного продукта с артикулом {}'
 			                                             'и производителем {}'.format(self.article, self.manufacturer_from)}})
 		# initial filter product
-		print(self.manufacturer_to.pk, self.product.category.pk)
+		category = Category.objects.filter(title=self.product.category.title)
+		products2 = Product.objects.filter(category=self.product.category)#.values_list('manufacturer__title', named=True)
+		for pr in products2:
+			print(pr.manufacturer)
+		print(self.manufacturer_to.pk,self.manufacturer_to, self.product.category.pk, self.product.category.title, category, products2)
 		self.products_found = Product.objects.filter(manufacturer=self.manufacturer_to, category__title=self.product.category.title)
 		#print(self.products_found)
 		# result2 = Product.objects.filter(manufacturer=self.manufacturer_to,
