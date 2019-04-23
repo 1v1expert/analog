@@ -127,9 +127,10 @@ def search_view(request):
 				# print(advanced_search)
 				product = Product.objects.get(article=article, manufacturer=manufacturer_from)
 				attributes = product.category.attributes.all()
-				attributes_list = [{attr.title: attr.type} for attr in attributes]
+				attributes_list = [(attr.title, attr.type) for attr in attributes]
 				print(attributes_list)
 				advanced_form = AdvancedSearchForm(request.POST, extra=attributes_list)
+				advanced_form.article = article
 				#print(article)
 				#print(advanced_form.article)
 				return render(request, 'admin/catalog/search.html', {'advanced_form': advanced_form})

@@ -41,3 +41,5 @@ UNITS = (
     ('kg', 'кг'),
     ('tonne', 'т')
 )
+
+TYPES_SEARCH = (('min', 'Мин'), ('max', 'Макс'), ('near', 'Ближ'))

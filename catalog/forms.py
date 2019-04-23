@@ -1,4 +1,5 @@
 from django import forms
+from .choices import TYPES_SEARCH
 from .models import AttributeValue, Manufacturer
 
 
@@ -17,8 +18,9 @@ class SearchForm(forms.Form):
     
 
 class AdvancedSearchForm(forms.Form):
-    article = forms.CharField(label='Артикул')
-    hrd_attrs = forms.ChoiceField(label='hrd attr', choices=('ss', 'gg'))
+    article = forms.CharField(label='Артикул', widget=forms.TextInput(attrs={'readonly':'readonly'}))#, disabled=True, required=False)
+    #forms.CharField()
+    # hrd_attrs = forms.ChoiceField(label='hrd attr', choices=('ss', 'gg'), required=False)
 
     def __init__(self, *args, **kwargs):
         extra_fields = kwargs.pop('extra', 0)
@@ -32,4 +34,6 @@ class AdvancedSearchForm(forms.Form):
     
         for index in extra_fields:
             # generate extra fields in the number specified via extra_fields
-            self.fields['extra_field_{index}'.format(index=index)] = forms.CharField()
+            self.fields['extra_field_{index}'.format(index=index[0])] = forms.ChoiceField(label=index[0],
+                                                                                          required=False,
+                                                                                          choices=TYPES_SEARCH)
