@@ -24,12 +24,12 @@ class AdvancedSearchForm(forms.Form):
         extra_fields = kwargs.pop('extra', 0)
     
         # check if extra_fields exist. If they don't exist assign 0 to them
-        if not extra_fields:
-            extra_fields = 0
+        # if not extra_fields:
+        #     extra_fields = 0
     
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
         #self.fields['total_input_fields'].initial = extra_fields
     
-        for index in range(int(extra_fields)):
+        for index in extra_fields:
             # generate extra fields in the number specified via extra_fields
             self.fields['extra_field_{index}'.format(index=index)] = forms.CharField()
