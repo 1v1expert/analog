@@ -15,5 +15,21 @@ class SearchForm(forms.Form):
     manufacturer_to = forms.ModelChoiceField(label='Необходимый производитель', empty_label=None, queryset=Manufacturer.objects.all())
     advanced_search = forms.BooleanField(label='Расширенный поиск', widget=forms.CheckboxInput, required=False)
     
-class AdvancedeSearchForm(forms.Form):
+
+class AdvancedSearchForm(forms.Form):
     article = forms.CharField(label='Артикул')
+    hrd_attrs = forms.ChoiceField(label='hrd attr', choices=('ss', 'gg'))
+
+    def __init__(self, *args, **kwargs):
+        extra_fields = kwargs.pop('extra', 0)
+    
+        # check if extra_fields exist. If they don't exist assign 0 to them
+        if not extra_fields:
+            extra_fields = 0
+    
+        super(AdvancedSearchForm, self).__init__(*args, **kwargs)
+        #self.fields['total_input_fields'].initial = extra_fields
+    
+        for index in range(int(extra_fields)):
+            # generate extra fields in the number specified via extra_fields
+            self.fields['extra_field_{index}'.format(index=index)] = forms.CharField()

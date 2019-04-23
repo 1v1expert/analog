@@ -63,7 +63,8 @@ class SearchProducts(object):
 		# for pr in products2:
 		# 	print(pr.manufacturer)
 		# print(self.manufacturer_to.pk,self.manufacturer_to, self.product.category.pk, self.product.category.title, category, products2)
-		self.products_found = Product.objects.filter(manufacturer=self.manufacturer_to, category__title=self.product.category.title)
+		self.products_found = Product.objects.filter(manufacturer=self.manufacturer_to, category=self.product.category)
+		                                             #, category__title=self.product.category.title)
 
 		sft_attrs = self.product.attrs_vals.filter(attribute__type='sft')
 		hrd_attrs = self.product.attrs_vals.filter(attribute__type='hrd')
@@ -119,9 +120,15 @@ def search_view(request):
 		form = SearchForm(request.POST)
 		if form.is_valid():
 			advanced_search = form.cleaned_data['advanced_search']
-			print(advanced_search)
+			
 			if advanced_search:
-				advanced_form = AdvancedeSearchForm()
+				article = form.cleaned_data['article']
+				manufacturer_from = form.cleaned_data['manufacturer_from']
+				# print(advanced_search)
+				product = Product.objects.filter()
+				advanced_form = AdvancedSearchForm(request.POST, extra=0)
+				#print(article)
+				#print(advanced_form.article)
 				return render(request, 'admin/catalog/search.html', {'advanced_form': advanced_form})
 			else:
 				return SearchProducts(request, form).search()
