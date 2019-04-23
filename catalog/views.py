@@ -106,31 +106,44 @@ class SearchProducts(object):
 						                                                   attrs_vals__attribute=attr.attribute)
 					else:
 						pass # todo: continue cycle
-		return self
+		return render(self.request, 'admin/catalog/search.html', {'Results': self.products_found, 'Product': self.product,
+			                                                     'Error': {}})
+		#  self
 
 
 def search_view(request):
 	form = SearchForm()
-	advanced_form = AdvancedeSearchForm()
+	
 	
 	if request.method == 'POST':
 		form = SearchForm(request.POST)
 		if form.is_valid():
+			advanced_search = form.cleaned_data['advanced_search']
+			print(advanced_search)
+			if advanced_search:
+				advanced_form = AdvancedeSearchForm()
+				return render(request, 'admin/catalog/search.html', {'advanced_form': advanced_form})
+			else:
+				return SearchProducts(request, form).search()
 			# try:
 			# проверка на единственность и существование продукта с артикулом и поставщиком
-			result = SearchProducts(request, form).search()
-			if isinstance(result, HttpResponse):
-				return result
-			if result.products_found.count() == 1:
-				error = {'val': False}
-			elif result.products_found.count() == 0:
-				error = {'val': True, 'msg': 'По заданным параметрам не найдено продуктов'}
-			else:
-				error = {'val': True, 'msg': 'По заданным параметрам найдено более одного продукта'}
-				return render(request, 'admin/catalog/search.html', {'Results': result.products_found[1:2], 'Product': result.product,
-			                                                     'Error': error})
-			return render(request, 'admin/catalog/search.html', {'Results': result.products_found, 'Product': result.product,
-			                                                     'Error': error})
+			#result = SearchProducts(request, form).search()
+			# -------
+			
+			# if isinstance(result, HttpResponse):
+			# 	return result
+			# if result.products_found.count() == 1:
+			# 	error = {'val': False}
+			# elif result.products_found.count() == 0:
+			# 	error = {'val': True, 'msg': 'По заданным параметрам не найдено продуктов'}
+			# else:
+			# 	error = {'val': True, 'msg': 'По заданным параметрам найдено более одного продукта'}
+			# 	return render(request, 'admin/catalog/search.html', {'Results': result.products_found[1:2], 'Product': result.product,
+			#                                                      'Error': error})
+			# return render(request, 'admin/catalog/search.html', {'Results': result.products_found, 'Product': result.product,
+			#                                                      'Error': error})
+		
+			# --------
 			# print(products_values, find_product)
 			#print(product.category)
 			#print(product.category.attributes.filter(type='hrd'))
@@ -144,4 +157,4 @@ def search_view(request):
 			#print(form.cleaned_data)
 		return render(request, 'admin/catalog/search.html', {'Fake': 'Fake'})
 
-	return render(request, 'admin/catalog/search.html', {'form': form, 'advanced_form': advanced_form}) #{'form': form})
+	return render(request, 'admin/catalog/search.html', {'form': form})#, 'advanced_form': advanced_form}) #{'form': form})

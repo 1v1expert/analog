@@ -60,6 +60,27 @@
 
     {% endif %}
 
+    {% if advanced_form %}
+        <form action="/search/" method="post">
+            <h3>Поиск аналогов</h3>
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="fieldWrapper">
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                </div>
+            {% endfor %}
+            {#        <p>------------------</p>#}
+            {#        {% for field in advanced_form %}#}
+            {#            <div class="fieldWrapper">#}
+            {#                {{ field.errors }}#}
+            {#                {{ field.label_tag }} {{ field }}#}
+            {#            </div>#}
+            {#        {% endfor %}#}
+            <input type="submit" value="Искать"/>
+        </form>
+    {% endif %}
+
     {% if form %}
         <form action="/search/" method="post">
             <h3>Поиск аналогов</h3>
