@@ -113,12 +113,23 @@ class SearchProducts(object):
 		#  self
 
 
-def advanced_search_view(request,product_id, *args, **kwargs):
+def advanced_search_view(request,product_id, manufacturer_to, *args, **kwargs):
+	print(manufacturer_to)
 	product = Product.objects.get(pk=product_id)
 	attributes = product.category.attributes.all()
 	attributes_list = [(attr.title, attr.type) for attr in attributes]
-	advanced_form = AdvancedSearchForm(request.POST, extra=attributes_list)
-	advanced_form.article = product.article
+	data = {'article': product.article}
+	advanced_form = AdvancedSearchForm(extra=attributes_list, initial=data)
+	# manufacturer_from
+	if request.method == 'POST':
+		advanced_form = AdvancedSearchForm(request.POST, extra=attributes_list)
+		if advanced_form.is_valid():
+			advanced_form.cleaned_data['manufacturer_from'] = product.manufacturer
+			advanced_form.cleaned_data['manufacturer_to'] = manufacturer_to
+			print(advanced_form.cleaned_data)
+			#print(advanced_form.cleaned_data)
+			return SearchProducts(request, advanced_form).search()
+	#advanced_form.article = product.article
 	# form = SearchForm(request.POST)
 	# print(form.is_valid())
 	# if form.is_valid():
@@ -129,7 +140,8 @@ def advanced_search_view(request,product_id, *args, **kwargs):
 	# attributes = product.category.attributes.all()
 	# attributes_list = [(attr.title, attr.type) for attr in attributes]
 	# advanced_form = AdvancedSearchForm(request.POST, extra=attributes_list)
-	return render(request, 'admin/catalog/advanced_search.html', {'advanced_form': advanced_form, 'product': product})#, {'advanced_form': advanced_form})
+	return render(request, 'admin/catalog/advanced_search.html', {'advanced_form': advanced_form, 'product': product,
+	                                                              'manufacturer_to': manufacturer_to})#, {'advanced_form': advanced_form})
 	
 import urllib
 def search_view(request):
@@ -142,6 +154,7 @@ def search_view(request):
 			advanced_search = form.cleaned_data['advanced_search']
 			article = form.cleaned_data['article']
 			manufacturer_from = form.cleaned_data['manufacturer_from']
+			manufacturer_to = form.cleaned_data['manufacturer_to']
 			
 			if advanced_search:
 				request.session['article'] = 'ss'
@@ -152,7 +165,7 @@ def search_view(request):
 				# print("%s?%s" % (redirect('catalog:advanced_search').url, form.cleaned_data))
 				# return "%s?%s" % (redirect('catalog:advanced_search'), "article=2")
 				product = Product.objects.get(article=article, manufacturer=manufacturer_from)
-				return redirect('catalog:advanced_search', product.pk)
+				return redirect('catalog:advanced_search', product.pk, manufacturer_to.id)
 				#return redirect('catalog:advanced_search')#, {"article":article, "mm":manufacturer_from})
 				#redirect('catalog:advanced_search')#, (article, manufacturer_from))
 				# print(advanced_search)
