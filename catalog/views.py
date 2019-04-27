@@ -12,6 +12,7 @@ def render_search(request, queryset):
 
 class SearchProducts(object):
 	def __init__(self, request, form):
+		print(form.cleaned_data)
 		self.request = request
 		self.manufacturer_from = form.cleaned_data['manufacturer_from']
 		self.manufacturer_to = form.cleaned_data['manufacturer_to']
@@ -21,7 +22,7 @@ class SearchProducts(object):
 		self.product = None
 	
 	@staticmethod
-	def finding_the_сlosest_attribute_value(all_attr, step_attr):
+	def finding_the_closest_attribute_value(all_attr, step_attr):
 		# first_attr = need_attr.first()
 		# print(need_attr, need_attr)
 		# # all_attrr = all_attr.filter(attrs_vals__attribute__title=first_attr[1]) # title
@@ -32,21 +33,9 @@ class SearchProducts(object):
 		value = min(values_list, key=lambda x: abs(x-float(step_attr.title)))
 		print(values_list, )
 		return value
-		# for i, attr in enumerate(all_attr):
-		# 	values_list = []
-		# 	ttr =
-		# 	print(ttr)
-		# 	if not i:
-		# 		difference = float(attr[0]) - float(need_attr.title)
-		# 		value = attr[0]
-		# 		continue
-		# 	if float(attr[0]) - float(need_attr.title) < difference:
-		# 		difference = float(attr[0]) - float(need_attr.title)
-		# 		value = attr[0]
-		# 	print(value, difference)
-		# return value
 	
-	def search(self):
+	def search(self, *args):
+		print(args)
 		
 			#print(value, difference, '\n\n', all_attr)
 		try:
@@ -102,7 +91,7 @@ class SearchProducts(object):
 					#print(first_need_attr, first_need_attr.attribute.title, first_need_attr.attribute.type)
 					
 					#  берём первый мягкий аттрибут согласно его приоритету у товара по которому ищем
-					value = self.finding_the_сlosest_attribute_value(middle_products_found, attr)
+					value = self.finding_the_closest_attribute_value(middle_products_found, attr)
 					if i + 1 == sft_attrs.count():  # check enf of cycle
 						self.products_found = middle_products_found.filter(attrs_vals__title=value,
 						                                                   attrs_vals__attribute=attr.attribute)
@@ -113,11 +102,12 @@ class SearchProducts(object):
 		#  self
 
 
-def advanced_search_view(request,product_id, manufacturer_to, *args, **kwargs):
+def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
 	print(manufacturer_to)
 	product = Product.objects.get(pk=product_id)
-	attributes = product.category.attributes.all()
-	attributes_list = [(attr.title, attr.type) for attr in attributes]
+	attributes = product.category.attributes.all().exclude(type='hrd')
+	attributes_list = [(attr.title, attr.type, attr.pk) for attr in attributes]
+	print(attributes_list)
 	data = {'article': product.article}
 	advanced_form = AdvancedSearchForm(extra=attributes_list, initial=data)
 	# manufacturer_from
@@ -126,9 +116,8 @@ def advanced_search_view(request,product_id, manufacturer_to, *args, **kwargs):
 		if advanced_form.is_valid():
 			advanced_form.cleaned_data['manufacturer_from'] = product.manufacturer
 			advanced_form.cleaned_data['manufacturer_to'] = manufacturer_to
-			print(advanced_form.cleaned_data)
 			#print(advanced_form.cleaned_data)
-			return SearchProducts(request, advanced_form).search()
+			return SearchProducts(request, advanced_form).search(*attributes_list)
 	#advanced_form.article = product.article
 	# form = SearchForm(request.POST)
 	# print(form.is_valid())
@@ -142,8 +131,8 @@ def advanced_search_view(request,product_id, manufacturer_to, *args, **kwargs):
 	# advanced_form = AdvancedSearchForm(request.POST, extra=attributes_list)
 	return render(request, 'admin/catalog/advanced_search.html', {'advanced_form': advanced_form, 'product': product,
 	                                                              'manufacturer_to': manufacturer_to})#, {'advanced_form': advanced_form})
+
 	
-import urllib
 def search_view(request):
 	form = SearchForm()
 	#advanced_search = False
@@ -215,3 +204,8 @@ def search_view(request):
 		return render(request, 'admin/catalog/search.html', {'Fake': 'Fake'})
 
 	return render(request, 'admin/catalog/search.html', {'form': form})#, 'advanced_form': advanced_form}) #{'form': form})
+
+
+def search_from_file_view(request):
+	form = SearchFromFile()
+	return render(request, 'admin/catalog/search.html', {'form': form})

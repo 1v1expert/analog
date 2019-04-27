@@ -42,4 +42,4 @@ UNITS = (
     ('tonne', 'т')
 )
 
-TYPES_SEARCH = (('min', 'Мин'), ('max', 'Макс'), ('near', 'Ближ'))
+TYPES_SEARCH = (('near', 'Ближ'), ('min', 'Мин'), ('max', 'Макс'))
