@@ -1,0 +1,48 @@
+{% extends 'admin/base.html' %}
+{% load i18n static jet_tags %}
+{% block extrahead %}
+    {{ block.super }}
+
+{% endblock %}
+{% block title %}My amazing blog{% endblock %}
+{% block blockbots %}
+    {{ block.super }}
+    <!-- FIXING SELECT 2 JQUERY ISSUE-->
+    <script src="{% static 'admin/js/vendor/jquery/jquery.js' as url %}{{ url|jet_append_version }}"
+            type="text/javascript"></script>
+    <script src="{% static 'admin/js/jquery.init.js' as url %}{{ url|jet_append_version }}"></script>
+{% endblock %}
+{% block content %}
+    <style>
+        input[type=checkbox] {
+            display: inline-block;
+        }
+    </style>
+
+    {% if Error.val %}
+        <h3 style="color: darkred">{{ Error.msg }}</h3>
+    {% endif %}
+
+    {% if advanced_form %}
+        <form action="/advancedsearch/" method="post">
+            <h3>Расширенный поиск</h3>
+            {% csrf_token %}
+            {% for field in advanced_form %}
+                <div class="fieldWrapper">
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                </div>
+            {% endfor %}
+            {#        <p>------------------</p>#}
+            {#        {% for field in advanced_form %}#}
+            {#            <div class="fieldWrapper">#}
+            {#                {{ field.errors }}#}
+            {#                {{ field.label_tag }} {{ field }}#}
+            {#            </div>#}
+            {#        {% endfor %}#}
+            <input type="submit" value="Искать"/>
+        </form>
+    {% endif %}
+
+{% endblock %}
+
