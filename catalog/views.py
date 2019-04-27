@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from .forms import *
 from .models import Product, AttributeValue, Category
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
+#from django.http import HttpResponse
 
 
 def render_search(request, queryset):
@@ -112,9 +113,28 @@ class SearchProducts(object):
 		#  self
 
 
+def advanced_search_view(request,product_id, *args, **kwargs):
+	product = Product.objects.get(pk=product_id)
+	attributes = product.category.attributes.all()
+	attributes_list = [(attr.title, attr.type) for attr in attributes]
+	advanced_form = AdvancedSearchForm(request.POST, extra=attributes_list)
+	advanced_form.article = product.article
+	# form = SearchForm(request.POST)
+	# print(form.is_valid())
+	# if form.is_valid():
+	# 	advanced_search = form.cleaned_data['advanced_search']
+	# 	article = form.cleaned_data['article']
+	# 	manufacturer_from = form.cleaned_data['manufacturer_from']
+	# product = Product.objects.get(article=article, manufacturer=manufacturer_from)
+	# attributes = product.category.attributes.all()
+	# attributes_list = [(attr.title, attr.type) for attr in attributes]
+	# advanced_form = AdvancedSearchForm(request.POST, extra=attributes_list)
+	return render(request, 'admin/catalog/advanced_search.html', {'advanced_form': advanced_form, 'product': product})#, {'advanced_form': advanced_form})
+	
+import urllib
 def search_view(request):
 	form = SearchForm()
-	
+	#advanced_search = False
 	
 	if request.method == 'POST':
 		form = SearchForm(request.POST)
@@ -124,17 +144,28 @@ def search_view(request):
 			manufacturer_from = form.cleaned_data['manufacturer_from']
 			
 			if advanced_search:
-				# print(advanced_search)
+				request.session['article'] = 'ss'
+				# message = "<message for user>"
+				# request.user.me.create(message=message)
+				#print(advanced_search)
+				#HttpResponseRedirect\
+				# print("%s?%s" % (redirect('catalog:advanced_search').url, form.cleaned_data))
+				# return "%s?%s" % (redirect('catalog:advanced_search'), "article=2")
 				product = Product.objects.get(article=article, manufacturer=manufacturer_from)
-				attributes = product.category.attributes.all()
-				attributes_list = [(attr.title, attr.type) for attr in attributes]
-				print(attributes_list)
-				advanced_form = AdvancedSearchForm(request.POST, extra=attributes_list)
-				#advanced_form.article = article
-				
-				#print(article)
-				#print(advanced_form.article)
-				return render(request, 'admin/catalog/search.html', {'advanced_form': advanced_form})
+				return redirect('catalog:advanced_search', product.pk)
+				#return redirect('catalog:advanced_search')#, {"article":article, "mm":manufacturer_from})
+				#redirect('catalog:advanced_search')#, (article, manufacturer_from))
+				# print(advanced_search)
+				# product = Product.objects.get(article=article, manufacturer=manufacturer_from)
+				# attributes = product.category.attributes.all()
+				# attributes_list = [(attr.title, attr.type) for attr in attributes]
+				# print(attributes_list)
+				# advanced_form = AdvancedSearchForm(request.POST, extra=attributes_list)
+				# #advanced_form.article = article
+				#
+				# #print(article)
+				# #print(advanced_form.article)
+				# return render(request, 'admin/catalog/search.html', {'advanced_form': advanced_form})
 			else:
 				return SearchProducts(request, form).search()
 			# try:
@@ -167,6 +198,7 @@ def search_view(request):
 			# 	                                                                      'при поиске артикула {}, >> {}'.format(
 			# 		                                                               form.cleaned_data['article'], e)}})
 			#print(form.cleaned_data)
+
 		return render(request, 'admin/catalog/search.html', {'Fake': 'Fake'})
 
 	return render(request, 'admin/catalog/search.html', {'form': form})#, 'advanced_form': advanced_form}) #{'form': form})

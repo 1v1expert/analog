@@ -18,8 +18,8 @@ class SearchForm(forms.Form):
     
 
 class AdvancedSearchForm(forms.Form):
-    article = forms.CharField(label='Артикул', widget=forms.TextInput(attrs={'readonly':'readonly'}))#, disabled=True, required=False)
-    advanced_search = forms.BooleanField(label='Расширенный поиск', widget=forms.CheckboxInput, required=False)
+    # article = forms.CharField(label='Артикул', widget=forms.TextInput(attrs={'readonly':'readonly'}))#, disabled=True, required=False)
+    # advanced_search = forms.BooleanField(label='Расширенный поиск', widget=forms.CheckboxInput, required=False)
     #forms.CharField()
     # hrd_attrs = forms.ChoiceField(label='hrd attr', choices=('ss', 'gg'), required=False)
 

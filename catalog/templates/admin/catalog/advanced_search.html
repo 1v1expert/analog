@@ -24,8 +24,9 @@
     {% endif %}
 
     {% if advanced_form %}
+        <div style="width: 30%;float: left;">
         <form action="/advancedsearch/" method="post">
-            <h3>Расширенный поиск</h3>
+            <h2>Расширенный поиск</h2>
             {% csrf_token %}
             {% for field in advanced_form %}
                 <div class="fieldWrapper">
@@ -42,6 +43,20 @@
             {#        {% endfor %}#}
             <input type="submit" value="Искать"/>
         </form>
+        </div>
+        <div style="width: 30%;float: left;">
+            <h3>Продукт: {{ product.title }}</h3>
+            <p>Артикул: {{ product.article }}</p>
+            <p>Класс: {{ product.category.parent.title }} --> {{ product.category.title }}</p>
+            <p>Производитель: {{ product.manufacturer }}</p>
+            <table>
+                {% for attr in product.attrs_vals.all %}
+                    <tr>
+                        <td>{{ attr }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            </div>
     {% endif %}
 
 {% endblock %}
