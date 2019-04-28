@@ -5,7 +5,7 @@
 from django.db import models
 # import uuid
 from django.contrib.auth.models import User
-from .choices import TYPES, UNITS
+from .choices import TYPES, UNITS, TYPES_FILE
 from django.utils import timezone
 
 
@@ -187,6 +187,7 @@ class DataFile(Base):
     Модель загрузки файлов
     """
     file = models.FileField(upload_to='files', verbose_name='Файл')
+    type = models.CharField(max_length=13, choices=TYPES_FILE, verbose_name="Тип файла", blank=True, default=TYPES_FILE[0][0])
     
     class Meta:
         verbose_name = "Файл"

@@ -10,7 +10,7 @@ class ProductChangeListForm(forms.ModelForm):
    
 
 class SearchFromFile(forms.Form):
-    file = forms.FileField(label='Файл')
+    file = forms.FileField(label='Файл', required=False)
     manufacturer_from = forms.ModelChoiceField(label='Исходный производитель', empty_label=None, queryset=Manufacturer.objects.all())
     manufacturer_to = forms.ModelChoiceField(label='Необходимый производитель', empty_label=None, queryset=Manufacturer.objects.all())
 

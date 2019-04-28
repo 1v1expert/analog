@@ -22,6 +22,7 @@ SOFT          = 'sft'
 RECALCULATION = 'rcl'
 RELATION      = 'rlt'
 PRICE         = 'prc'
+
 TYPES = (
     (HARD,          'жесткий'),
     (SOFT,          'мягкий'),
@@ -43,3 +44,8 @@ UNITS = (
 )
 
 TYPES_SEARCH = (('near', 'Ближ'), ('min', 'Мин'), ('max', 'Макс'))
+
+TYPES_FILE = (
+	('import', 'Импорт базы'),
+	('search', 'Поиск')
+)

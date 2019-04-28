@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, reverse
 from .forms import *
-from .models import Product, AttributeValue, Category
+from catalog.models import Product, AttributeValue, Category, DataFile
+from catalog import choices
+from catalog.handlers import handle_uploaded_search_file
 from django.http.response import HttpResponse, HttpResponseRedirect
 #from django.http import HttpResponse
 
@@ -207,5 +209,15 @@ def search_view(request):
 
 
 def search_from_file_view(request):
-	form = SearchFromFile()
-	return render(request, 'admin/catalog/search.html', {'form': form})
+	if request.method == 'POST':
+		form = SearchFromFile(request.POST, request.FILES)
+		print(vars(form), form.is_valid())
+		if form.is_valid():
+			print(form.is_valid())
+			instance = DataFile(file=request.FILES['file'], type=choices.TYPES_FILE[1])
+			instance.save()
+			print(vars(instance))
+			return handle_uploaded_search_file(request.FILES['file'], instance.file.path)
+	else:
+		form = SearchFromFile()
+	return render(request, 'admin/catalog/search.html', {'file_form': form})
