@@ -79,14 +79,19 @@ class SearchProducts(object):
 				if mdl_pr_count:
 					if mdl_pr_count > 1:
 						if i + 1 == sft_attrs.count(): # check enf of cycle
-							self.products_found = test_middle_products
-							return self
+							self.products_found = test_middle_products[1:2]
+							#return self
+							return render(self.request, 'admin/catalog/search.html',
+							              {'Results': self.products_found, 'Product': self.product, 'Error': {}})
 						middle_products_found = test_middle_products
 						#value = None
 					else: # =1
 						print('internal else, mdl_pr_count = ', mdl_pr_count)
 						self.products_found = test_middle_products
-						return self
+						#return self
+						return render(self.request, 'admin/catalog/search.html',
+						              {'Results': self.products_found, 'Product': self.product, 'Error': {}})
+						
 				else:
 					print('internal else, mdl_pr_count = ', mdl_pr_count, middle_products_found)
 					first_need_attr = sft_attrs.order_by('attribute__priority')
