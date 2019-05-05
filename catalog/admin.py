@@ -1,16 +1,21 @@
 from django.contrib import admin
 from .models import Category, Product, Manufacturer, Attribute, AttributeValue, Specification, DataFile
 from django.contrib import messages
+from catalog.file_utils import XLSDocumentReader, ProcessingUploadData
 import json
 
 
 def mark_as_published(modeladmin, request, queryset):
     queryset.update(is_public=True)
+    
+    
 mark_as_published.short_description = u"Опубликовать"
 
 
 def mark_as_unpublished(modeladmin, request, queryset):
     queryset.update(is_public=False)
+    
+    
 mark_as_unpublished.short_description = u"Снять с публикации"
 
 
@@ -64,7 +69,6 @@ class CategoryAdmin(tree_editor.TreeEditor, BaseAdmin):
             print(obj.attributes.all())
             obj.save()
         
-
     @staticmethod
     def get_attributes(obj):
         """Атрибуты"""
@@ -79,13 +83,13 @@ admin.site.register(Category, CategoryAdmin)
 
 
 class AttrAdmin(BaseAdmin):
-    list_display=['title', 'unit', 'id', 'type', 'priority', 'is_public', 'deleted']
+    list_display = ['title', 'unit', 'id', 'type', 'priority', 'is_public', 'deleted']
     #'category'
     #autocomplete_fields = ['category']
 
 
 class AttrValAdmin(BaseAdmin):
-    list_display=['title', 'attribute', 'id', 'is_public', 'deleted']
+    list_display = ['title', 'attribute', 'id', 'is_public', 'deleted']
     
     #autocomplete_fields = ['attribute']
     exclude= ('products',)
@@ -142,7 +146,7 @@ class ProductAdmin(BaseAdmin):
 #     def __init__(self, *args, **kwargs):
 #         super(LogEntryAdmin, self).__init__(*args, **kwargs)
 #         self.list_display_links = (None, )
-from .utils import XLSDocumentReader, ProcessingUploadData
+
 class FileUploadAdmin(admin.ModelAdmin):
     actions = ['process_file']
     list_display = ['file']
