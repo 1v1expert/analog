@@ -26,7 +26,7 @@ def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
 			advanced_form.cleaned_data['manufacturer_from'] = product.manufacturer
 			advanced_form.cleaned_data['manufacturer_to'] = manufacturer_to
 			#print(advanced_form.cleaned_data)
-			return SearchProducts(request, advanced_form).search(*attributes_list)
+			return SearchProducts(request, advanced_form, product).search(*attributes_list)
 	#advanced_form.article = product.article
 	# form = SearchForm(request.POST)
 	# print(form.is_valid())
