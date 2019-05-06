@@ -39,8 +39,10 @@ class AdvancedSearchForm(forms.Form):
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
         #self.fields['total_input_fields'].initial = extra_fields
     
-        for index in extra_fields:
+        for index in extra_fields.keys():
             # generate extra fields in the number specified via extra_fields
-            self.fields['extra_field_{index}'.format(index=index[2])] = forms.ChoiceField(label=index[0],
-                                                                                          required=False,
-                                                                                          choices=TYPES_SEARCH)
+            self.fields['extra_field_{index}'.format(index=index)] = \
+                forms.ChoiceField(label='{} ({})'.format(extra_fields[index]['title'],
+                                                         extra_fields[index]['type_display']),
+                                  required=False,
+                                  choices=TYPES_SEARCH)

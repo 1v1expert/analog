@@ -15,18 +15,25 @@ def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
 	print(manufacturer_to)
 	product = Product.objects.get(pk=product_id)
 	attributes = product.category.attributes.all()#.exclude(type='hrd')
-	attributes_list = [(attr.title, attr.type, attr.pk) for attr in attributes]
-	print(attributes_list)
+	#attributes = product.attrs_vals.all()
+	attributes_array = {str(attr.pk): {'title': attr.title,
+	                                   'type_display': attr.get_type_display(),
+	                                   'type': attr.type} for attr in attributes}
+	# print(attributes_array)
+	# print(attributes_array)
+	# attributes_list = [(attr.title, attr.get_type_display(), attr.pk, attr.type) for attr in attributes]
+	# print(attributes_list)
 	data = {'article': product.article}
-	advanced_form = AdvancedSearchForm(extra=attributes_list, initial=data)
+	advanced_form = AdvancedSearchForm(extra=attributes_array, initial=data)
 	# manufacturer_from
 	if request.method == 'POST':
-		advanced_form = AdvancedSearchForm(request.POST, extra=attributes_list)
+		advanced_form = AdvancedSearchForm(request.POST, extra=attributes_array)
 		if advanced_form.is_valid():
 			advanced_form.cleaned_data['manufacturer_from'] = product.manufacturer
 			advanced_form.cleaned_data['manufacturer_to'] = manufacturer_to
 			#print(advanced_form.cleaned_data)
-			return SearchProducts(request, advanced_form, product).search(*attributes_list)
+			SearchProducts(request, advanced_form, product).global_search(default=False)
+			return SearchProducts(request, advanced_form, product).search(**attributes_array)
 	#advanced_form.article = product.article
 	# form = SearchForm(request.POST)
 	# print(form.is_valid())
@@ -65,9 +72,22 @@ def search_view(request):
 			if advanced_search:
 				return redirect('catalog:advanced_search', product.pk, manufacturer_to.id)
 			else:
-				return SearchProducts(request, form, product).search()
+				result = SearchProducts(request, form, product).global_search()
+				
+				if result.founded_products.count():
+					if result.founded_products.count() == 1:
+						error = {'val': False}
+					else:
+						error = {'val': True, 'msg': 'Найдено более одного продукта, подходящего по параметрам поиска {}'}
+					return render(request, 'admin/catalog/search.html',
+					              {'Results': result.founded_products, 'Product': product, 'Error': error})
+				else:
+					error = {'val': True, 'msg': 'Продукты, удовлетворяющие параметрам поиска, не найдены'}
+					return render(request, 'admin/catalog/search.html',
+					              {'Results': result.founded_products, 'Product': product, 'Error': error})
+				# return SearchProducts(request, form, product).search()
 
-		return render(request, 'admin/catalog/search.html', {'Fake': 'Fake'})
+		return render(request, 'admin/catalog/search.html', {'Error': 'Ошибка формы'})
 
 	return render(request, 'admin/catalog/search.html', {'form': form})
 
