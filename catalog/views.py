@@ -11,6 +11,21 @@ def render_search(request, queryset):
 # Create your views here.
 
 
+def result_processing(instance, request, product, default=True):
+	instance.global_search(default=default)
+	if instance.founded_products.count():
+		if instance.founded_products.count() == 1:
+			error = {'val': False}
+		else:
+			error = {'val': True, 'msg': 'Найдено более одного продукта, подходящего по параметрам поиска {}'}
+		return render(request, 'admin/catalog/search.html',
+		              {'Results': instance.founded_products, 'Product': product, 'Error': error})
+	else:
+		error = {'val': True, 'msg': 'Продукты, удовлетворяющие параметрам поиска, не найдены'}
+		return render(request, 'admin/catalog/search.html',
+		              {'Results': instance.founded_products, 'Product': product, 'Error': error})
+	
+
 def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
 	print(manufacturer_to)
 	product = Product.objects.get(pk=product_id)
@@ -32,8 +47,9 @@ def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
 			advanced_form.cleaned_data['manufacturer_from'] = product.manufacturer
 			advanced_form.cleaned_data['manufacturer_to'] = manufacturer_to
 			#print(advanced_form.cleaned_data)
-			SearchProducts(request, advanced_form, product).global_search(default=False)
-			return SearchProducts(request, advanced_form, product).search(**attributes_array)
+			result = SearchProducts(request, advanced_form, product)
+			return result_processing(result, request, product, default=False)
+			
 	#advanced_form.article = product.article
 	# form = SearchForm(request.POST)
 	# print(form.is_valid())
@@ -72,19 +88,8 @@ def search_view(request):
 			if advanced_search:
 				return redirect('catalog:advanced_search', product.pk, manufacturer_to.id)
 			else:
-				result = SearchProducts(request, form, product).global_search()
-				
-				if result.founded_products.count():
-					if result.founded_products.count() == 1:
-						error = {'val': False}
-					else:
-						error = {'val': True, 'msg': 'Найдено более одного продукта, подходящего по параметрам поиска {}'}
-					return render(request, 'admin/catalog/search.html',
-					              {'Results': result.founded_products, 'Product': product, 'Error': error})
-				else:
-					error = {'val': True, 'msg': 'Продукты, удовлетворяющие параметрам поиска, не найдены'}
-					return render(request, 'admin/catalog/search.html',
-					              {'Results': result.founded_products, 'Product': product, 'Error': error})
+				result = SearchProducts(request, form, product)
+				return result_processing(result, request, product, default=True)
 				# return SearchProducts(request, form, product).search()
 
 		return render(request, 'admin/catalog/search.html', {'Error': 'Ошибка формы'})
