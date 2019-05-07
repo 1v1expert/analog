@@ -124,6 +124,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+FILES_ROOT = os.path.join(BASE_DIR, 'files')
+FILES_URL = '/files/'
+
 SECRET_KEY = '7b0fm0-2v3s(95g&3u3z18=!bi(4#!@5m_hul)6no++=mdpj@q'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases

@@ -36,7 +36,10 @@ class XLSDocumentReader(object):
                 if cell.value:
                     line.update({cnt_c: cell.value})
             self.doc.append(line)
+            
+        self.workbook._archive.close()
         return self.doc
+        
     
 
 class ProcessingUploadData(object):
@@ -145,9 +148,6 @@ class ProcessingUploadData(object):
                     new_product.attrs_vals.add(attr_val)
                     #obj_product.save()
                     #attr_val.save()
-                    
-                    
-
                     
     def check_exists_types(self, product):
         # check manufacturer

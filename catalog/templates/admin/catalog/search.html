@@ -103,7 +103,7 @@
     {% endif %}
 
     {% if file_form %}
-        <form action="{% url 'catalog:search_from_file' %}" method="post">
+        <form enctype="multipart/form-data" action="{% url 'catalog:search_from_file' %}" method="post">
             <h3>Поиск спецификаций из файла</h3>
             {% csrf_token %}
             {% for field in file_form %}

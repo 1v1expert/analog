@@ -4,7 +4,8 @@ from catalog.models import Product, AttributeValue, Category, DataFile
 from catalog import choices
 from catalog.handlers import handle_uploaded_search_file
 from catalog.utils import SearchProducts
-
+import os
+from django.http import HttpResponse, Http404
 
 def render_search(request, queryset):
 	return render(request, 'admin/catalog/search.html', queryset)
@@ -27,7 +28,6 @@ def result_processing(instance, request, product, default=True):
 	
 
 def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
-	print(manufacturer_to)
 	product = Product.objects.get(pk=product_id)
 	attributes = product.category.attributes.all()#.exclude(type='hrd')
 	#attributes = product.attrs_vals.all()
@@ -92,21 +92,38 @@ def search_view(request):
 				return result_processing(result, request, product, default=True)
 				# return SearchProducts(request, form, product).search()
 
-		return render(request, 'admin/catalog/search.html', {'Error': 'Ошибка формы'})
+		return render(request, 'admin/catalog/search.html', {'Error': {'val': True, 'msg': 'Ошибка формы'}})
 
 	return render(request, 'admin/catalog/search.html', {'form': form})
 
-
+from django.conf import settings
 def search_from_file_view(request):
 	if request.method == 'POST':
 		form = SearchFromFile(request.POST, request.FILES)
-		print(vars(form), form.is_valid())
+
 		if form.is_valid():
-			print(form.is_valid())
-			instance = DataFile(file=request.FILES['file'], type=choices.TYPES_FILE[1])
+			print(vars(request.FILES))
+			instance = DataFile(file=request.FILES['file'],
+			                    type=choices.TYPES_FILE[1][0],
+			                    created_by=request.user,
+			                    updated_by=request.user)
 			instance.save()
-			print(vars(instance))
-			return handle_uploaded_search_file(request.FILES['file'], instance.file.path)
+			# print(vars(instance))
+			file_response = handle_uploaded_search_file(request.FILES['file'], instance.file, form, request)
+			
+			# return file
+			# file_path = instance.file.path
+			# if os.path.exists(file_path):
+			# 	with open(file_path, 'rb') as fh:
+			# 		response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+			# 		response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+			# 		return response
+			# raise Http404
+		
+			response = HttpResponse(file_response, content_type='text/plain')
+			response['Content-Disposition'] = 'attachment; filename=' + file_response.name #'{}/{}'.format(settings.FILES_ROOT, file_response.name) #file_response.path
+			return response
+			# return redirect('http://google.com')
 	else:
 		form = SearchFromFile()
 	return render(request, 'admin/catalog/search.html', {'file_form': form})
