@@ -2,7 +2,14 @@ from django.contrib import admin
 from .models import Category, Product, Manufacturer, Attribute, AttributeValue, Specification, DataFile
 from django.contrib import messages
 from catalog.file_utils import XLSDocumentReader, ProcessingUploadData
+
+from django.utils.safestring import mark_safe
+
+from feincms.admin import tree_editor
+
 import json
+
+from django.contrib.admin.models import LogEntry
 
 
 def mark_as_published(modeladmin, request, queryset):
@@ -46,7 +53,6 @@ class BaseAdmin(admin.ModelAdmin):
 class SubCatValInline(admin.TabularInline):
     model = Category
 
-from feincms.admin import tree_editor
 
 class AttributeshipInline(admin.TabularInline):
     model = Category.attributes.through
@@ -69,13 +75,12 @@ class CategoryAdmin(tree_editor.TreeEditor, BaseAdmin):
             print(obj.attributes.all())
             obj.save()
         
-    @staticmethod
-    def get_attributes(obj):
+    # @staticmethod
+    def get_attributes(self, obj):
         """Атрибуты"""
         return "; ".join(['{}: {}'.format(p.type, p.title) for p in obj.attributes.all()])
+    get_attributes.short_description = 'Атрибуты'
     
-admin.site.register(Category, CategoryAdmin)
-
 
 # class CategoryAdmin(BaseAdmin):
 #     autocomplete_fields = ['parent']
@@ -92,7 +97,7 @@ class AttrValAdmin(BaseAdmin):
     list_display = ['title', 'attribute', 'id', 'is_public', 'deleted']
     
     #autocomplete_fields = ['attribute']
-    exclude= ('products',)
+    exclude = ('products',)
     
     # def formfield_for_foreignkey(self, db_field, request, **kwargs):
     #     if db_field.name == "attribute":
@@ -147,10 +152,20 @@ class ProductAdmin(BaseAdmin):
 #         super(LogEntryAdmin, self).__init__(*args, **kwargs)
 #         self.list_display_links = (None, )
 
+
 class FileUploadAdmin(admin.ModelAdmin):
     actions = ['process_file']
-    list_display = ['file']
+    list_display = ['file', 'type', 'file_link', 'created_at', 'updated_at']
+    
+    def file_link(self, obj):
+        if obj.file:
+            return mark_safe("<a href='/%s'>скачать</a>" % (obj.file.url,))
+        else:
+            return "No attachment"
 
+    file_link.allow_tags = True
+    file_link.short_description = 'Ссылка на скачивание'
+    
     def process_file(self, request, queryset):
         print(request, vars(queryset[0].file), queryset)
         for qq in queryset:
@@ -170,16 +185,33 @@ class FileUploadAdmin(admin.ModelAdmin):
         obj.save()
     
     #autocomplete_fields = ['category']
+
+
+class LogEntryAdmin(admin.ModelAdmin):
+    list_display = ['content_type', 'user', 'action_time', 'object_id', 'object_repr', 'action_flag', 'change_message']
+    readonly_fields = ('content_type', 'user', 'action_time', 'object_id', 'object_repr', 'action_flag',
+                       'change_message')
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def get_actions(self, request):
+        actions = super(LogEntryAdmin, self).get_actions(request)
+        # del actions['delete_selected']
+        return actions
+
 # TODO реализовать фильтры поиска по колонкам, рецепт тут: https://medium.com/@hakibenita/how-to-add-a-text-filter-to-django-admin-5d1db93772d8
 # TODO экспорт в формат xls https://xlsxwriter.readthedocs.io/index.html
 
 
 #admin.site.register(Category, CategoryAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(AttributeValue, AttrValAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Manufacturer, BaseAdmin)
 admin.site.register(Attribute, AttrAdmin)
 admin.site.register(Specification, BaseAdmin)
 admin.site.register(DataFile, FileUploadAdmin)
+admin.site.register(LogEntry, LogEntryAdmin)
 
 # Register your models here.

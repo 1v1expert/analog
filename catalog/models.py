@@ -190,9 +190,10 @@ class DataFile(Base):
     type = models.CharField(max_length=13, choices=TYPES_FILE, verbose_name="Тип файла", blank=True, default=TYPES_FILE[0][0])
     
     class Meta:
+        ordering = ('updated_at', )
         verbose_name = "Файл"
         verbose_name_plural = "Файлы"
-        
+    
     def __str__(self):
         return self.file.name
     
