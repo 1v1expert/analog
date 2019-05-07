@@ -1,15 +1,17 @@
 from django.contrib import admin
-from .models import Category, Product, Manufacturer, Attribute, AttributeValue, Specification, DataFile
 from django.contrib import messages
-from catalog.file_utils import XLSDocumentReader, ProcessingUploadData
 
 from django.utils.safestring import mark_safe
+from django.contrib.admin.models import LogEntry
+
+from catalog.models import Category, Product, Manufacturer, Attribute, AttributeValue, Specification, DataFile
+from catalog.file_utils import XLSDocumentReader, ProcessingUploadData
 
 from feincms.admin import tree_editor
 
 import json
 
-from django.contrib.admin.models import LogEntry
+
 
 
 def mark_as_published(modeladmin, request, queryset):
