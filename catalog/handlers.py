@@ -45,7 +45,7 @@ def handle_uploaded_search_file(file, path, form, request):
 			result_content.append(body)
 			
 	filename = 'result_for_{}.csv'.format(path.name[6:-5])
-	with open('{}/{}'.format(settings.FILES_ROOT, filename), 'w', newline='', encoding='utf-8-sig') as csvfile:
+	with open('{}/{}'.format(settings.FILES_ROOT, filename), 'w', newline='', encoding='utf-8') as csvfile:
 		writer = csv.writer(csvfile, dialect='excel')
 		for row in result_content:
 			writer.writerow(row)
