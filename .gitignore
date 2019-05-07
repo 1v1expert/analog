@@ -10,6 +10,7 @@ __pycache__/
 .idea/
 
 # Xls'x files
+files/*
 *.xls
 *.xlsx
 
