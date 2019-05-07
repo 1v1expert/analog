@@ -13,7 +13,6 @@ class SearchProducts(object):
 		self.manufacturer_to = form.cleaned_data['manufacturer_to']
 		# self.article = form.cleaned_data['article']
 		self.product = product
-		# self.products_found = None
 		self.founded_products = None
 	
 	@staticmethod

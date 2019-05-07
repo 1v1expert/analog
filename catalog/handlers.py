@@ -4,15 +4,14 @@ from catalog.utils import SearchProducts
 from catalog import choices
 import csv
 
-
-from django.shortcuts import render
 from django.conf import settings
+from django.shortcuts import render
 
-def handle_uploaded_search_file(file, path, form, request):
+
+def loaded_search_file_handler(file, path, form, request):
 	content = XLSDocumentReader(path=path).parse_file()
 	manufacturer_from = form.cleaned_data['manufacturer_from']
-	manufacturer_to = form.cleaned_data['manufacturer_to']
-	
+
 	result_content = []
 	for i, rec in enumerate(content):
 		body = []
@@ -56,3 +55,18 @@ def handle_uploaded_search_file(file, path, form, request):
 		# instance.file.path = '{}/{}'.format(settings.FILES_ROOT, filename)
 		instance.save()
 	return instance.file
+
+
+def result_processing(instance, request, product, default=True):
+	instance.global_search(default=default)
+	if instance.founded_products.count():
+		if instance.founded_products.count() == 1:
+			error = {'val': False}
+		else:
+			error = {'val': True, 'msg': 'Найдено более одного продукта, подходящего по параметрам поиска {}'}
+		return render(request, 'admin/catalog/search.html',
+		              {'Results': instance.founded_products, 'Product': product, 'Error': error})
+	else:
+		error = {'val': True, 'msg': 'Продукты, удовлетворяющие параметрам поиска, не найдены'}
+		return render(request, 'admin/catalog/search.html',
+		              {'Results': instance.founded_products, 'Product': product, 'Error': error})
