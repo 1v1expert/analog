@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'feincms',
-    'mptt'
+    'mptt',
+    'app'
 ]
 
 MIDDLEWARE = [
