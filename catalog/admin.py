@@ -9,10 +9,6 @@ from catalog.file_utils import XLSDocumentReader, ProcessingUploadData
 
 from feincms.admin import tree_editor
 
-import json
-
-
-
 
 def mark_as_published(modeladmin, request, queryset):
     queryset.update(is_public=True)
@@ -26,7 +22,6 @@ def mark_as_unpublished(modeladmin, request, queryset):
     
     
 mark_as_unpublished.short_description = u"Снять с публикации"
-
 
 
 class BaseAdmin(admin.ModelAdmin):
