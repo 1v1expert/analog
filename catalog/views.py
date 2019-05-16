@@ -6,7 +6,7 @@ from catalog.handlers import loaded_search_file_handler, result_processing
 from catalog.utils import SearchProducts
 import os
 from django.http import HttpResponse, Http404
-
+from django.contrib.auth.decorators import login_required
 
 def render_search(request, queryset):
 	return render(request, 'admin/catalog/search.html', queryset)
@@ -34,7 +34,8 @@ def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
 	return render(request, 'admin/catalog/advanced_search.html', {'advanced_form': advanced_form, 'product': product,
 	                                                              'manufacturer_to': manufacturer_to})#, {'advanced_form': advanced_form})
 
-	
+
+@login_required(login_url='/admin/login')
 def search_view(request):
 	form = SearchForm()
 	if request.method == 'POST':
@@ -67,6 +68,7 @@ def search_view(request):
 	return render(request, 'admin/catalog/search.html', {'form': form})
 
 
+@login_required(login_url='/admin/login')
 def search_from_file_view(request):
 	if request.method == 'POST':
 		form = SearchFromFile(request.POST, request.FILES)

@@ -1,60 +1,130 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<title>AnalogService</title>
-{#		<meta name="description" content="Jetson is a Dashboard & Admin Site Responsive Template by hencework." />#}
-{#		<meta name="keywords" content="admin, admin dashboard, admin template, cms, crm, Jetson Admin, Jetsonadmin, premium admin templates, responsive admin, sass, panel, software, ui, visualization, web app, application" />#}
-		<meta name="author" content="hencework"/>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>AnalogService</title>
+    {#		<meta name="description" content="Jetson is a Dashboard & Admin Site Responsive Template by hencework." />#}
+    {#		<meta name="keywords" content="admin, admin dashboard, admin template, cms, crm, Jetson Admin, Jetsonadmin, premium admin templates, responsive admin, sass, panel, software, ui, visualization, web app, application" />#}
+    <meta name="author" content="hencework"/>
 
-		<!-- Favicon -->
-		<link rel="shortcut icon" href="favicon.ico">
-		<link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-		<!-- vector map CSS -->
-		<link href="{% static 'css/jasny-bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>
+    <!-- vector map CSS -->
+    <link href="{% static 'css/jasny-bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>
 
+    {% block extra_css %}
+    {% endblock extra_css %}
 
-		<!-- Custom CSS -->
-		<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
-	</head>
-	<body>
-    {% block body %}
-		<!--Preloader-->
-		<div class="preloader-it">
-			<div class="la-anim-1"></div>
-		</div>
-		<!--/Preloader-->
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+</head>
+<body>
+{% block body %}
+    {% block preloader %}
+        <!--Preloader-->
+        <div class="preloader-it">
+            <div class="la-anim-1"></div>
+        </div>
+        <!--/Preloader-->
+    {% endblock preloader %}
+    <div class="wrapper theme-1-active pimary-color-green">
 
-        <div class="wrapper pa-0">
-            {% block header %}
-{#                todo: there should be a universal slug#}
-            {% endblock header %}
+        {#        <div class="wrapper pa-0">#}
+        {% block header %}
+            {#                todo: there should be a universal slug#}
+        {% endblock header %}
 
-            {% block content %}
-{#			todo: this should be заглушка#}
-            {% endblock content %}
+        {% block nav %}
+            <!-- Top Menu Items -->
+            <nav class="navbar navbar-inverse navbar-fixed-top">
+                <div class="mobile-only-brand pull-left">
+                    <div class="nav-header pull-left">
+                        <div class="logo-wrap">
+                            <a href="{% url 'app:home' %}">
+                                <span class="brand-text">AnalogService</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a id="toggle_mobile_nav" class="mobile-only-view" href="javascript:void(0);"><i
+                            class="zmdi zmdi-more"></i></a>
+                </div>
+                <div id="mobile_only_nav" class="mobile-only-nav pull-right">
+                    <ul class="nav navbar-right top-nav pull-right">
+                        <li>
+                            <a id="open_right_sidebars" href="">{{ user.username }}</a>
+                        </li>
+                        <li>
+                            <a id="open_right_sidebar" href="#"><i class="zmdi zmdi-settings top-nav-icon"></i></a>
+                        </li>
+                        <li class="dropdown auth-drp">
+                            <a href="#" class="dropdown-toggle pr-0" data-toggle="dropdown"><img
+                                    src="{% static 'images/avatar.svg' %}" alt="user_auth"
+                                    class="user-auth-img img-circle"/><span class="user-online-status"></span></a>
+                            <ul class="dropdown-menu user-auth-dropdown" data-dropdown-in="flipInX"
+                                data-dropdown-out="flipOutX">
+                                <li>
+                                    <a href=""><i class="zmdi zmdi-account"></i><span>Профиль</span></a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="sub-menu show-on-hover">
+                                    <a href="#" class="dropdown-toggle pr-0 level-2-drp"><i
+                                            class="zmdi zmdi-check text-success"></i> available</a>
+                                    <ul class="dropdown-menu open-left-side">
+                                        <li>
+                                            <a href="#"><i
+                                                    class="zmdi zmdi-check text-success"></i><span>Доступен</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i
+                                                    class="zmdi zmdi-circle-o text-warning"></i><span>Занят</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i
+                                                    class="zmdi zmdi-minus-circle-outline text-danger"></i><span>Не доступен</span></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="{% url 'app:logout' %}"><i class="zmdi zmdi-power"></i><span>Выход</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- /Top Menu Items -->
+        {% endblock nav %}
 
-		</div>
-		<!-- /#wrapper -->
+        {% block content %}
+            {#			todo: this should be заглушка#}
+        {% endblock content %}
 
-		<!-- JavaScript -->
-        {% block js %}
-            <!-- jQuery -->
-            <script src="{% static 'js/jquery.min.js' %}"></script>
+    </div>
+    <!-- /#wrapper -->
+{% endblock body %}
 
-            <!-- Bootstrap Core JavaScript -->
-            <script src="{% static 'js/bootstrap.min.js' %}"></script>
-            <script src="{% static 'js/jasny-bootstrap.min.js' %}"></script>
+<!-- JavaScript -->
+{% block js %}
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
 
-            <!-- Slimscroll JavaScript -->
-            <script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jasny-bootstrap.min.js' %}"></script>
 
-            <!-- Init JavaScript -->
-            <script src="{% static 'js/init.js' %}"></script>
-        {% endblock js %}
-    {% endblock body %}
-	</body>
+    <!-- Slimscroll JavaScript -->
+    <script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+
+    {% block extra_js %}
+    {% endblock extra_js %}
+
+    <!-- Init JavaScript -->
+    <script src="{% static 'js/init.js' %}"></script>
+{% endblock js %}
+</body>
 </html>

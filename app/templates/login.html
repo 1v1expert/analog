@@ -1,70 +1,86 @@
 {% extends 'base.html' %}
-{% block header %}
-    <header class="sp-header">
-        <div class="sp-logo-wrap pull-left">
-            <a href="#">
-{#                <img class="brand-img mr-10" src="dist/img/logo.png" alt="brand"/> exclude brand image #}
-                <span class="brand-text">AnalogService</span>
-            </a>
-        </div>
-        <div class="form-group mb-0 pull-right">
-            <span class="inline-block pr-10">Не имеете аккаунт?</span>
-            <a class="inline-block btn btn-info  btn-rounded btn-outline" href="{% url 'app:check_in' %}">Регистрация</a>
-        </div>
-        <div class="clearfix"></div>
-    </header>
-{% endblock header %}
-{% block content %}
-    <!-- Main Content -->
-    <div class="page-wrapper pa-0 ma-0 auth-page">
-        <div class="container-fluid">
-            <!-- Row -->
-            <div class="table-struct full-width full-height">
-                <div class="table-cell vertical-align-middle auth-form-wrap">
-                    <div class="auth-form  ml-auto mr-auto no-float">
-                        <div class="row">
-                            <div class="col-sm-12 col-xs-12">
-                                <div class="mb-30">
-                                    <h3 class="text-center txt-dark mb-10">Войти в AnalogService</h3>
-                                    <h6 class="text-center nonecase-font txt-grey">Введите свои данные ниже</h6>
-                                </div>
-                                <div class="form-wrap">
-                                    <form action="#">
-                                        <div class="form-group">
-                                            <label class="control-label mb-10" for="exampleInputEmail_2">Email
-                                                address</label>
-                                            <input type="email" class="form-control" required=""
-                                                   id="exampleInputEmail_2" placeholder="Enter email">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="pull-left control-label mb-10" for="exampleInputpwd_2">Password</label>
-                                            <a class="capitalize-font txt-primary block mb-10 pull-right font-12"
-                                               href="#">забыли пароль ?</a>
-                                            <div class="clearfix"></div>
-                                            <input type="password" class="form-control" required=""
-                                                   id="exampleInputpwd_2" placeholder="Enter pwd">
-                                        </div>
 
-                                        <div class="form-group">
-                                            <div class="checkbox checkbox-primary pr-10 pull-left">
-                                                <input id="checkbox_2" required="" type="checkbox">
-                                                <label for="checkbox_2"> Keep me logged in</label>
-                                            </div>
-                                            <div class="clearfix"></div>
+{% block body %}
+    <div class="wrapper pa-0">
+        {% block header %}
+            <header class="sp-header">
+                <div class="sp-logo-wrap pull-left">
+                    <a href="#">
+                        {#                <img class="brand-img mr-10" src="dist/img/logo.png" alt="brand"/> exclude brand image #}
+                        <span class="brand-text">AnalogService</span>
+                    </a>
+                </div>
+                <div class="form-group mb-0 pull-right">
+                    <span class="inline-block pr-10">Не имеете аккаунт?</span>
+                    <a class="inline-block btn btn-info  btn-rounded btn-outline" href="{% url 'app:check_in' %}">Регистрация</a>
+                </div>
+                <div class="clearfix"></div>
+            </header>
+        {% endblock header %}
+
+        {% block nav %}
+        {% endblock nav %}
+
+        {% block content %}
+            <!-- Main Content -->
+            <div class="page-wrapper pa-0 ma-0 auth-page">
+                <div class="container-fluid">
+                    <!-- Row -->
+                    <div class="table-struct full-width full-height">
+                        <div class="table-cell vertical-align-middle auth-form-wrap">
+                            <div class="auth-form  ml-auto mr-auto no-float">
+                                <div class="row">
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="mb-30">
+                                            <h3 class="text-center txt-dark mb-10">Войти в AnalogService</h3>
+                                            {% if error %}
+                                                <h6 class="text-center nonecase-font txt-danger">{{ error }}</h6>
+                                            {% else %}
+                                            <h6 class="text-center nonecase-font txt-grey">Введите свои данные ниже</h6>
+                                            {% endif %}
+
                                         </div>
-                                        <div class="form-group text-center">
-                                            <button type="submit" class="btn btn-info  btn-rounded">sign in</button>
+                                        <div class="form-wrap">
+
+                                            <form action="{% url 'app:login' %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+
+                                                    <label class="control-label mb-10"
+                                                           for="{{ auth_form.username.id_for_label }}">{{ auth_form.username.label }}</label>
+                                                    {{ auth_form.username }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="pull-left control-label mb-10"
+                                                           for="{{ auth_form.password.id_for_label }}">{{ auth_form.username.label }}</label>
+                                                    {{ auth_form.password }}
+                                                    <a class="capitalize-font txt-primary block mb-10 pull-right font-12"
+                                                       href="#">забыли пароль ?</a>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="checkbox checkbox-primary pr-10 pull-left">
+                                                        <input id="checkbox_2" required="" type="checkbox">
+                                                        <label for="checkbox_2"> Оставить меня в системе</label>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="form-group text-center">
+                                                    <button type="submit" class="btn btn-info  btn-rounded">войти
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- /Row -->
                 </div>
-            </div>
-            <!-- /Row -->
-        </div>
 
+            </div>
+            <!-- /Main Content -->
+        {% endblock content %}
     </div>
-    <!-- /Main Content -->
-{% endblock content %}
+{% endblock body %}

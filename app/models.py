@@ -5,7 +5,7 @@ from django.dispatch import receiver
 import uuid
 
 
-class Client(models.Model):
+class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True, verbose_name="Расширенные данные")
     token = models.UUIDField(default=uuid.uuid4, verbose_name="Авторизационный токен")
@@ -17,13 +17,13 @@ class Client(models.Model):
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
     
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Client.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+# todo: this code maybe need in the future, need rewrite
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Client.objects.create(user=instance)
+#
+#
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()
