@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 # from app.forms import ProfileForm
 from app.forms import MyAuthenticationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url='/login')
 def login_view(request):
 	auth_form = MyAuthenticationForm(request)
 	if request.method == 'POST':
