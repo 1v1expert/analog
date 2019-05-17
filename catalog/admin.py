@@ -201,11 +201,26 @@ class LogEntryAdmin(admin.ModelAdmin):
 # TODO экспорт в формат xls https://xlsxwriter.readthedocs.io/index.html
 
 
+class FixAttrValAdmin(BaseAdmin):
+    list_display = ['value__title', 'attribute', 'id']
+    exclude = ('products',)
+
+    
+class UnFixAttrValAdmin(BaseAdmin):
+    list_display = ['value', 'attribute', 'id']
+
+    # autocomplete_fields = ['attribute']
+    exclude = ('products',)
+    
+
+class FixValAdmin(BaseAdmin):
+    list_display = ['title', 'attribute', 'id', 'deleted']
+
 #admin.site.register(Category, CategoryAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(FixedAttributeValue)
-admin.site.register(UnFixedAttributeValue)
-admin.site.register(FixedValue)
+admin.site.register(FixedAttributeValue, FixAttrValAdmin)
+admin.site.register(UnFixedAttributeValue, UnFixAttrValAdmin)
+admin.site.register(FixedValue, FixValAdmin)
 # admin.site.register(FixedAttributeValue, AttrValAdmin)
 # admin.site.register(UnFixedAttributeValue, AttrValAdmin)
 admin.site.register(Product, ProductAdmin)
