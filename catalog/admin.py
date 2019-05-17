@@ -205,6 +205,7 @@ class LogEntryAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(FixedAttributeValue)
 admin.site.register(UnFixedAttributeValue)
+admin.site.register(FixedValue)
 # admin.site.register(FixedAttributeValue, AttrValAdmin)
 # admin.site.register(UnFixedAttributeValue, AttrValAdmin)
 admin.site.register(Product, ProductAdmin)
