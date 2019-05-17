@@ -202,7 +202,12 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 
 class FixAttrValAdmin(BaseAdmin):
-    list_display = ['value__title', 'attribute', 'id']
+    list_display = ['value_title', 'attribute', 'id']
+    
+    @staticmethod
+    def value_title(obj):
+        return obj.title
+
     exclude = ('products',)
 
     
@@ -216,7 +221,9 @@ class UnFixAttrValAdmin(BaseAdmin):
 class FixValAdmin(BaseAdmin):
     list_display = ['title', 'attribute', 'id', 'deleted']
 
-#admin.site.register(Category, CategoryAdmin)
+# admin.site.register(Category, CategoryAdmin)
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(FixedAttributeValue, FixAttrValAdmin)
 admin.site.register(UnFixedAttributeValue, UnFixAttrValAdmin)
