@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from .forms import *
-from catalog.models import Product, AttributeValue, Category, DataFile
+from catalog.models import Product, FixedAttributeValue, UnFixedAttributeValue, Category, DataFile
 from catalog import choices
 from catalog.handlers import loaded_search_file_handler, result_processing
 from catalog.utils import SearchProducts

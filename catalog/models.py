@@ -125,20 +125,43 @@ class Attribute(Base):
         verbose_name_plural = "Атрибуты"
 
 
-class AttributeValue(Base):
+class FixedValue(Base):
+    title = models.CharField(max_length=255, verbose_name='Значение')
+    attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="fixed_value")
+    
+    
+class FixedAttributeValue(Base):
     """
     Модель значения атрибута
     """
-    title = models.CharField(max_length=255, verbose_name='Значение')
-    attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="values")
+    value = models.ForeignKey(FixedValue, on_delete=models.PROTECT, verbose_name="Фиксированное значение атрибута")
+    # title = models.CharField(max_length=255, verbose_name='Значение')
+    attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="fixed_values")
     products = models.ManyToManyField('Product', blank=True)
     
     def __str__(self):
-        return str(self.attribute) + ": " + self.title
+        return str(self.attribute) + ": " + self.value.title
     
     class Meta:
-        verbose_name = "Значение атрибута"
-        verbose_name_plural = "Значения атрибутов"
+        verbose_name = "Значение атрибута(фикс)"
+        verbose_name_plural = "Значения атрибутов(фикс)"
+
+
+class UnFixedAttributeValue(Base):
+    """
+    Модель значения атрибута
+    """
+    value = models.FloatField(verbose_name="Нефикс значение атрибута")
+    # title = models.CharField(max_length=255, verbose_name='Значение')
+    attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="unfixed_values")
+    products = models.ManyToManyField('Product', blank=True)
+    
+    def __str__(self):
+        return '{}: {}'.format(self.attribute, self.value)
+    
+    class Meta:
+        verbose_name = "Значение атрибута(нефикс)"
+        verbose_name_plural = "Значения атрибутов(нефикс)"
 
 
 class Product(Base):
@@ -149,7 +172,8 @@ class Product(Base):
     article = models.CharField(max_length=255, verbose_name='Артикул')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='products', limit_choices_to={'parent__isnull': False})
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name="Производитель", related_name='products')
-    attrs_vals = models.ManyToManyField('AttributeValue', verbose_name="Атрибуты")
+    fixed_attrs_vals = models.ManyToManyField('FixedAttributeValue', verbose_name="Фикс атрибуты")
+    unfixed_attrs_vals = models.ManyToManyField('UnFixedAttributeValue', verbose_name="Нефикс атрибуты")
 
     def __str__(self):
         return self.title

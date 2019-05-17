@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.contrib.admin.models import LogEntry
 
-from catalog.models import Category, Product, Manufacturer, Attribute, AttributeValue, Specification, DataFile
+from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, UnFixedAttributeValue, Specification, DataFile
 from catalog.file_utils import XLSDocumentReader, ProcessingUploadData
 
 from feincms.admin import tree_editor
@@ -203,7 +203,10 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 #admin.site.register(Category, CategoryAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(AttributeValue, AttrValAdmin)
+admin.site.register(FixedAttributeValue)
+admin.site.register(UnFixedAttributeValue)
+# admin.site.register(FixedAttributeValue, AttrValAdmin)
+# admin.site.register(UnFixedAttributeValue, AttrValAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Manufacturer, BaseAdmin)
 admin.site.register(Attribute, AttrAdmin)
