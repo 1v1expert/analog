@@ -23,7 +23,7 @@ class SearchProducts(object):
 		values_list = [
 			attr.unfixed_attrs_vals.get(attribute__type=types, attribute__title=step_attr.attribute.title).value for attr
 			in all_attr]
-		print(values_list)
+		# print(values_list)
 		
 		if method == 'min':
 			value = min(values_list, key=lambda x: x)
@@ -40,41 +40,42 @@ class SearchProducts(object):
 		# hrd attr
 		hrd = 'hrd'
 		hrd_fix_attributes = all_fix_attributes.filter(attribute__type=hrd)#self.product.fixed_attrs_vals.filter(attribute__type=hrd)
-		print(hrd_fix_attributes)
+		# print(hrd_fix_attributes)
 		hrd_unfix_attributes = all_unfix_attributes.filter(attribute__type=hrd)#self.product.unfixed_attrs_vals.filter(attribute__type=hrd)
 		for hrd_fix_attr in hrd_fix_attributes:
+			# print('HRD_FIX_ATTR', hrd_fix_attr.value.title)
 			if default:
-				value = ''
+				value = hrd_fix_attr.value.pk
 			else:
 				value = self.form.cleaned_data['extra_field_fix{}'.format(hrd_fix_attr.pk)]
-			print(value)
+			# print(value)
 			self.founded_products = self.founded_products.filter(fixed_attrs_vals__value__pk=value,#attrs_vals__title=attribute.title,
 			                                                     fixed_attrs_vals__attribute=hrd_fix_attr.attribute)
-		print('Count after HRD FIX search prdcts-> ', self.founded_products.count())
+		# print('Count after HRD FIX search prdcts-> ', self.founded_products.count())
 		for hrd_unfix_attr in hrd_unfix_attributes:
 			if not default:
 				method = self.form.cleaned_data['extra_field_unfix{}'.format(hrd_unfix_attr.pk)]
 			value = self.finding_the_closest_attribute_value(self.founded_products, hrd_unfix_attr, method, types=hrd)
-			print(value, hrd_unfix_attr.value, type(value), type(hrd_unfix_attr.value))
+			# print(value, hrd_unfix_attr.value, type(value), type(hrd_unfix_attr.value))
 			self.founded_products = self.founded_products.filter(unfixed_attrs_vals__value=value,#attrs_vals__title=attribute.title,
 			                                                     unfixed_attrs_vals__attribute=hrd_unfix_attr.attribute)
 																#attrs_vals__attribute=attribute.attribute)
 		
-		print('Count after HRD search prdcts-> ', self.founded_products.count())
+		# print('Count after HRD search prdcts-> ', self.founded_products.count())
 		if not self.founded_products.count():
 			return
 		# middle_results = self.founded_products
 		# sft attr
 		sft = 'sft'
 		sft_fix_attributes = all_fix_attributes.filter(attribute__type=sft)#self.product.fixed_attrs_vals.filter(attribute__type=sft)
-		print(sft_fix_attributes)
+		# print(sft_fix_attributes)
 		sft_unfix_attributes = all_unfix_attributes.filter(attribute__type=sft)#self.product.unfixed_attrs_vals.filter(attribute__type=sft)
 		for sft_fix_attr in sft_fix_attributes:
 			if default:
-				value = ''
+				value = sft_fix_attr.value.pk
 			else:
 				value = self.form.cleaned_data['extra_field_fix{}'.format(sft_fix_attr.pk)]
-			print(value)
+			# print(value)
 			middle_results = self.founded_products.filter(fixed_attrs_vals__value__pk=value,
 			                                                     # attrs_vals__title=attribute.title,
 			                                                     fixed_attrs_vals__attribute=sft_fix_attr.attribute)
@@ -84,13 +85,13 @@ class SearchProducts(object):
 			if count == 1:
 				self.founded_products = middle_results
 				return
-		print('Count after SFT FIX search prdcts-> ', self.founded_products.count())
+		# print('Count after SFT FIX search prdcts-> ', self.founded_products.count())
 		# middle_results = self.founded_products
 		for sft_unfix_attr in sft_unfix_attributes:
 			if not default:
 				method = self.form.cleaned_data['extra_field_unfix{}'.format(sft_unfix_attr.pk)]
 			value = self.finding_the_closest_attribute_value(self.founded_products, sft_unfix_attr, method, types=sft)
-			print(value, sft_unfix_attr.value, type(value), type(sft_unfix_attr.value))
+			# print(value, sft_unfix_attr.value, type(value), type(sft_unfix_attr.value))
 			middle_results = self.founded_products.filter(unfixed_attrs_vals__value=value,
 			                                                     # attrs_vals__title=attribute.title,
 			                                                     unfixed_attrs_vals__attribute=sft_unfix_attr.attribute)
@@ -104,14 +105,14 @@ class SearchProducts(object):
 		# rcl attr
 		rcl = 'rcl'
 		rcl_unfix_attributes = all_unfix_attributes.filter(attribute__type=rcl)#self.product.unfixed_attrs_vals.filter(attribute__type=rcl)
-		print(rcl_unfix_attributes)
-		print('Count after SFT search prdcts-> ', self.founded_products.count())
+		# print(rcl_unfix_attributes)
+		# print('Count after SFT search prdcts-> ', self.founded_products.count())
 		# middle_results = self.founded_products
 		for rcl_unfix_attr in rcl_unfix_attributes:
 			if not default:
 				method = self.form.cleaned_data['extra_field_unfix{}'.format(rcl_unfix_attr.pk)]
 			value = self.finding_the_closest_attribute_value(self.founded_products, rcl_unfix_attr, method, types=rcl)
-			print(value, rcl_unfix_attr.value, type(value), type(rcl_unfix_attr.value))
+			# print(value, rcl_unfix_attr.value, type(value), type(rcl_unfix_attr.value))
 			middle_results = self.founded_products.filter(unfixed_attrs_vals__value=value,
 			                                              # attrs_vals__title=attribute.title,
 			                                              unfixed_attrs_vals__attribute=rcl_unfix_attr.attribute)
