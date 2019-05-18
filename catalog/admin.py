@@ -123,14 +123,21 @@ class ProductChangeList(ChangeList):
 
 
 class ProductAdmin(BaseAdmin):
-    list_display = ['title', 'article', 'manufacturer', 'get_attrs_vals', 'category', 'is_public', 'deleted']
+    list_display = ['title', 'article', 'manufacturer', 'get_fix_attrs_vals', 'get_unfix_attrs_vals', 'category', 'is_public', 'deleted']
     # inlines = [PropertiesInline]
     #filter_horizontal = ['attrs_vals']
     autocomplete_fields = ['category', 'manufacturer',]
+    
+    # @staticmethod
+    def get_fix_attrs_vals(self, obj):
+        return "; ".join(['{}: {}'.format(p.attribute.title, p.value.title) for p in obj.fixed_attrs_vals.all()])
 
-    def get_attrs_vals(self, obj):
-        return "; ".join(['{}: {}'.format(p.attribute.title, p.title) for p in obj.attrs_vals.all()])
+    get_fix_attrs_vals.short_description = 'Фиксированные атрибуты'
+    
+    def get_unfix_attrs_vals(self, obj):
+        return "; ".join(['{}: {}'.format(p.attribute.title, p.value) for p in obj.unfixed_attrs_vals.all()])
 
+    get_unfix_attrs_vals.short_description = 'Нефиксированные атрибуты'
     # def get_changelist(self, request, **kwargs):
     #     return ProductChangeList
     #

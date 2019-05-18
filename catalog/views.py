@@ -16,11 +16,21 @@ def render_search(request, queryset):
 def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
 	product = Product.objects.get(pk=product_id)
 	attributes = product.category.attributes.all()#.exclude(type='hrd')
+	fix_attributes = product.fixed_attrs_vals.all()#category.attributes.all()
+	unfix_attributes = product.unfixed_attrs_vals.all()#category.attributes.all()
 	#attributes = product.attrs_vals.all()
 	attributes_array = {str(attr.pk): {'title': attr.title,
 	                                   'type_display': attr.get_type_display(),
+	                                   'attribute': attr,
 	                                   'type': attr.type} for attr in attributes}
 
+	
+	fix_attributes_array = {str(attr.pk): {'title': attr.attribute.title,
+	                                   'type_display': attr.attribute.get_type_display(),
+	                                       'chose': 's',
+	                                   'type': attr.attribute.type} for attr in fix_attributes}
+
+	print(attributes_array, '\n', fix_attributes_array)
 	data = {'article': product.article}
 	advanced_form = AdvancedSearchForm(extra=attributes_array, initial=data)
 	if request.method == 'POST':
