@@ -1,8 +1,8 @@
 import openpyxl
 from collections import OrderedDict
 
-from .choices import *
-from .models import *
+from catalog.choices import *
+from catalog.models import *
 from django.db import models
 
 
@@ -40,7 +40,6 @@ class XLSDocumentReader(object):
         self.workbook._archive.close()
         return self.doc
         
-    
 
 class ProcessingUploadData(object):
     """Класс преобразования считанных данных из загружаемого файла
@@ -74,6 +73,14 @@ class ProcessingUploadData(object):
         
         self.products = []
     
+    @staticmethod
+    def is_digit(s):
+        try:
+            float(s)
+            return True
+        except ValueError:
+            return False
+        
     def get_structured_data(self, request):
         self.to_separate()
         
@@ -99,11 +106,13 @@ class ProcessingUploadData(object):
                     attributes.append({
                         "type": TYPES_REV_DICT.get(self.attributes[key].lower()),
                         "name": self.options[key],
-                        "value": product[key]
+                        "value": float(product[key]) if self.is_digit(product[key]) else product[key],
+                        "is_digit": self.is_digit(product[key])
                         })
             structured_product.update({
                 STRUCTURE_PRODUCT[5][1]: attributes
             })
+            print(structured_product)
             
             is_valid_data = self.check_exists_types(structured_product)
             if isinstance(is_valid_data, str):
@@ -123,6 +132,32 @@ class ProcessingUploadData(object):
     
     def create_products(self, request):
         
+        def create_attr():
+            # if attr.get('type'):
+            if attr.get('is_digit'):
+                attr_val = UnFixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'],
+                                                 created_by=request.user)
+        
+                new_product.updated_by = request.user
+                new_product.save()
+        
+                attr_val.updated_by = request.user
+                attr_val.save()
+                attr_val.products.add(new_product)
+        
+                new_product.unfixed_attrs_vals.add(attr_val)
+            else:
+                attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'], created_by=request.user)
+    
+                new_product.updated_by = request.user
+                new_product.save()
+    
+                attr_val.updated_by = request.user
+                attr_val.save()
+                attr_val.products.add(new_product)
+    
+                new_product.fixed_attrs_vals.add(attr_val)
+                
         for product in self.products:
             new_product = Product(article=product['vendor_code'],
                                   manufacturer=product['manufacturer_obj'],
@@ -131,21 +166,7 @@ class ProcessingUploadData(object):
                                   created_by=request.user)
 
             for attr in product['attributes']:
-
-                if attr.get('type'):
-                    attr_val = AttributeValue(title=attr['value'],
-                                              attribute=attr['attr_obj'],
-                                              created_by=request.user
-                                              )
-
-                    new_product.updated_by = request.user
-                    new_product.save()
-                    
-                    attr_val.updated_by = request.user
-                    attr_val.save()
-                    attr_val.products.add(new_product)
-
-                    new_product.attrs_vals.add(attr_val)
+                create_attr()
                     #obj_product.save()
                     #attr_val.save()
                     
@@ -175,9 +196,14 @@ class ProcessingUploadData(object):
                 product['vendor_code'], manufacturer.title)
         # check attributes
         for attr in product['attributes']:
+            # find instance attribute
             try:
                 attribute = Attribute.objects.get(type=attr['type'], category=category, title__icontains=attr['name'])
                 attr.update({"attr_obj": attribute})
+                # find fixed attribute
+                if not attr['is_digit']:
+                    fix_value = FixedValue.objects.get(title=attr['value'], attribute=attribute)
+                    attr['value'] = fix_value
             except Attribute.DoesNotExist:
                 return 'Ошибка! Не найден атрибут с типом: {} и наименованием {} в категории {}'.format(TYPES_DICT[attr['type']], attr['name'], category)
             except Attribute.MultipleObjectsReturned:

@@ -126,13 +126,20 @@ class Attribute(Base):
 
 
 class FixedValue(Base):
+    """
+    Модель фиксированного значения атрибута
+    """
     title = models.CharField(max_length=255, verbose_name='Значение')
     attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="fixed_value")
+    
+    class Meta:
+        verbose_name = "Фиксированное значение"
+        verbose_name_plural = "Фиксированные значения"
     
     
 class FixedAttributeValue(Base):
     """
-    Модель значения атрибута
+    Модель фиксированного значения атрибута
     """
     value = models.ForeignKey(FixedValue, on_delete=models.PROTECT, verbose_name="Фиксированное значение атрибута")
     # title = models.CharField(max_length=255, verbose_name='Значение')
@@ -149,7 +156,7 @@ class FixedAttributeValue(Base):
 
 class UnFixedAttributeValue(Base):
     """
-    Модель значения атрибута
+    Модель нефиксированного значения атрибута
     """
     value = models.FloatField(verbose_name="Нефикс значение атрибута")
     # title = models.CharField(max_length=255, verbose_name='Значение')
