@@ -43,7 +43,7 @@ UNITS = (
     ('tonne', 'т')
 )
 
-TYPES_SEARCH = (('nearest', 'Ближ'), ('min', 'Мин'), ('max', 'Макс'))
+TYPES_SEARCH = (('nearest', 'Ближ'), ('min', 'Мин'), ('max', 'Макс'), ('closest_min', 'Ближ. мин'), ('closest_max', 'Ближ. макс'))
 
 TYPES_FILE = (
 	('import', 'Импорт базы'),

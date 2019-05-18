@@ -34,6 +34,8 @@ class SearchProducts(object):
 		method = 'nearest'
 		# print('count products - ', self.founded_products.count())
 		for type_attr in TYPES:  # (hrd, sft, rcl, rlt, prc)
+			fix_attributes = self.product.fixed_attrs_vals.filter(attribute__type=type_attr[0])
+			unfix_attributes = self.product.unfixed_attrs_vals.filter(attribute__type=type_attr[0])
 			attributes = self.product.attrs_vals.filter(attribute__type=type_attr[0])
 			# print(attributes)
 			if attributes.count():  # если аттрибуты этого типа есть у искомого продукта
