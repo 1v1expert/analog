@@ -44,5 +44,5 @@ class AdvancedSearchForm(forms.Form):
             self.fields['extra_field_{index}'.format(index=index)] = \
                 forms.ChoiceField(label='{} ({})'.format(extra_fields[index]['title'],
                                                          extra_fields[index]['type_display']),
-                                  required=False,
-                                  choices=TYPES_SEARCH)
+                                  required=False, choices=extra_fields[index]['choices'])
+                                  # choices=TYPES_SEARCH)
