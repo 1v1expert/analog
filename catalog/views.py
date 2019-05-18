@@ -24,7 +24,11 @@ def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
 	#                                    'type_display': attr.get_type_display(),
 	#                                    'attribute': attr,
 	#                                    'type': attr.type} for attr in attributes}
-	attributes_array = dict()
+	attributes_array = {
+	'fix' + str(attr.pk): {'title': attr.attribute.title, 'type_display': attr.attribute.get_type_display(),
+	                       'choices': FixedValue.objects.filter(attribute=attr.attribute).values_list('pk', 'title'),
+	                       # 'choices': [attribute.title for attribute in FixedValue.objects.filter(attribute=attr.attribute)],
+	                       'type': attr.attribute.type} for attr in fix_attributes}
 	
 	fix_attributes_array = {'fix' + str(attr.pk): {'title': attr.attribute.title,
 	                                   'type_display': attr.attribute.get_type_display(),
@@ -33,10 +37,10 @@ def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
 	                                   'type': attr.attribute.type} for attr in fix_attributes}
 	
 	unfix_attributes_array = {
-	'unfix' + str(attr.pk): {'title': attr.attribute.title, 'type_display': attr.attribute.get_type_display(),
-	                       'choices': TYPES_SEARCH,
-	                       # 'choices': [attribute.title for attribute in FixedValue.objects.filter(attribute=attr.attribute)],
-	                       'type': attr.attribute.type} for attr in unfix_attributes}
+		'unfix' + str(attr.pk): {'title': attr.attribute.title, 'type_display': attr.attribute.get_type_display(),
+		                         'choices': TYPES_SEARCH,
+		                         # 'choices': [attribute.title for attribute in FixedValue.objects.filter(attribute=attr.attribute)],
+		                         'type': attr.attribute.type} for attr in unfix_attributes}
 	
 	attributes_array.update(fix_attributes_array)
 	attributes_array.update(unfix_attributes_array)

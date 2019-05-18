@@ -213,7 +213,7 @@ class FixAttrValAdmin(BaseAdmin):
     
     @staticmethod
     def value_title(obj):
-        return obj.title
+        return obj.value.title
 
     exclude = ('products',)
 

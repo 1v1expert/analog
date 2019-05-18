@@ -49,7 +49,12 @@
             <p>Класс: {{ product.category.parent.title }} --> {{ product.category.title }}</p>
             <p>Производитель: {{ product.manufacturer }}</p>
             <table>
-                {% for attr in product.attrs_vals.all %}
+                {% for attr in product.fixed_attrs_vals.all %}
+                    <tr>
+                        <td>{{ attr }}</td>
+                    </tr>
+                {% endfor %}
+                {% for attr in product.unfixed_attrs_vals.all %}
                     <tr>
                         <td>{{ attr }}</td>
                     </tr>

@@ -24,7 +24,7 @@
     {% endif %}
 
     {% if Results %}
-        <h2>Найден {{ Results.count }} продукт(-a, -ов)</h2>
+        <h2>Найден {{ Results.count }} продукт(-a, -ов) за {{ Lead_time }} c</h2>
         <div style="width: 15%;min-height: 150px;float: left;">
             <h2>Исходный продукт</h2>
             <p>Артикул: {{ Product.article }}</p>
@@ -32,9 +32,14 @@
             <p>Класс: {{ Product.category.parent.title }} --> {{ Product.category.title }}</p>
             <p>Производитель: {{ Product.manufacturer }}</p>
             <table>
-                {% for attr in Product.attrs_vals.all %}
+                {% for attr in Product.fixed_attrs_vals.all %}
                     <tr>
-                        <td>{{ attr }}</td>
+                        <td>({{ attr.attribute.get_type_display }}) {{ attr }}</td>
+                    </tr>
+                {% endfor %}
+                {% for attr in Product.unfixed_attrs_vals.all %}
+                    <tr>
+                        <td>({{ attr.attribute.get_type_display }}) {{ attr }}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -49,7 +54,12 @@
             <p>Класс: {{ result.category.parent.title }} --> {{ result.category.title }}</p>
             <p>Производитель: {{ result.manufacturer }}</p>
             <table>
-                {% for attr in result.attrs_vals.all %}
+                {% for attr in result.fixed_attrs_vals.all %}
+                    <tr>
+                        <td>{{ attr }}</td>
+                    </tr>
+                {% endfor %}
+                {% for attr in result.unfixed_attrs_vals.all %}
                     <tr>
                         <td>{{ attr }}</td>
                     </tr>

@@ -65,8 +65,8 @@ def result_processing(instance, request, product, default=True):
 		else:
 			error = {'val': True, 'msg': 'Найдено более одного продукта, подходящего по параметрам поиска {}'}
 		return render(request, 'admin/catalog/search.html',
-		              {'Results': instance.founded_products, 'Product': product, 'Error': error})
+		              {'Results': instance.founded_products, 'Product': product, 'Error': error, 'Lead_time': instance.lead_time})
 	else:
 		error = {'val': True, 'msg': 'Продукты, удовлетворяющие параметрам поиска, не найдены'}
 		return render(request, 'admin/catalog/search.html',
-		              {'Results': instance.founded_products, 'Product': product, 'Error': error})
+		              {'Results': instance.founded_products, 'Product': product, 'Error': error, 'Lead_time': instance.lead_time})
