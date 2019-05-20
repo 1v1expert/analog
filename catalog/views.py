@@ -16,7 +16,7 @@ def render_search(request, queryset):
 def advanced_search_view(request, product_id, manufacturer_to, *args, **kwargs):
 	# be sure to rewrite form formation
 	product = Product.objects.get(pk=product_id)
-	attributes = product.category.attributes.all()#.exclude(type='hrd')
+	# attributes = product.category.attributes.all()#.exclude(type='hrd')
 	fix_attributes = product.fixed_attrs_vals.all()#category.attributes.all()
 	unfix_attributes = product.unfixed_attrs_vals.all()#category.attributes.all()
 	#attributes = product.attrs_vals.all()

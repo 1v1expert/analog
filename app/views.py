@@ -22,6 +22,11 @@ def login_view(request):
 	# return render(request, 'login.html', {})
 
 
+@login_required(login_url='/login')
+def search(request):
+	return redirect('catalog:search')
+
+
 def check_in_view(request):
 	client_form = ProfileForm(request.user.profile)
 	return render(request, 'check_in.html', {
