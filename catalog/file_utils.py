@@ -137,25 +137,14 @@ class ProcessingUploadData(object):
             if attr.get('is_digit'):
                 attr_val = UnFixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'],
                                                  created_by=request.user)
-        
-                new_product.updated_by = request.user
-                new_product.save()
-        
-                attr_val.updated_by = request.user
-                attr_val.save()
-                attr_val.products.add(new_product)
-        
+            else:
+                attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'], created_by=request.user,
+                                               updated_by=request.user)
+ 
+            attr_val.products.add(new_product)
+            if attr.get('is_digit'):
                 new_product.unfixed_attrs_vals.add(attr_val)
             else:
-                attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'], created_by=request.user)
-    
-                new_product.updated_by = request.user
-                new_product.save()
-    
-                attr_val.updated_by = request.user
-                attr_val.save()
-                attr_val.products.add(new_product)
-    
                 new_product.fixed_attrs_vals.add(attr_val)
                 
         for product in self.products:
@@ -163,7 +152,8 @@ class ProcessingUploadData(object):
                                   manufacturer=product['manufacturer_obj'],
                                   title=product['name'],
                                   category=product['category_obj'],
-                                  created_by=request.user)
+                                  created_by=request.user,
+                                  updated_by=request.user)
 
             for attr in product['attributes']:
                 create_attr()
