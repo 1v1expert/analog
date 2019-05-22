@@ -106,7 +106,7 @@ class ProcessingUploadData(object):
                     attributes.append({
                         "type": TYPES_REV_DICT.get(self.attributes[key].lower()),
                         "name": self.options[key],
-                        "value": float(product[key]) if self.is_digit(product[key]) else product[key],
+                        "value": float(product[key]) if self.is_digit(product[key]) else product[key].lstrip().rstrip(),
                         "is_digit": self.is_digit(product[key])
                         })
             structured_product.update({
