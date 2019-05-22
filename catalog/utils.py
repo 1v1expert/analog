@@ -193,8 +193,9 @@ class SearchProducts(object):
 	def global_search(self, default=True):
 		
 		self.founded_products = Product.objects.filter(manufacturer=self.manufacturer_to, category=self.product.category)
-		# print('Count fnd prdcts-> ', self.founded_products.count())
-		self.smart_attribute_search(default=default)
+		if self.founded_products.count():
+			# print('Count fnd prdcts-> ', self.founded_products.count())
+			self.smart_attribute_search(default=default)
 		self.lead_time = time.time() - self.start_time
 		# print('Count after search prdcts-> ', self.founded_products.count())
 		# print("--- %s seconds ---" % (time.time() - start_time))
