@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 # from app.forms import ProfileForm
-from app.forms import MyAuthenticationForm
+from app.forms import MyAuthenticationForm, AppSearchForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -34,9 +34,14 @@ def check_in_view(request):
 	})
 
 
+
+
 @login_required(login_url='/login')
 def home_view(request):
-	return render(request, 'home.html', {'user': request.user})
+	form = AppSearchForm()
+	if request.method == 'POST':
+		form = AppSearchForm(request.POST)
+	return render(request, 'home.html', {'user': request.user, 'form': form})
 
 
 def logout_view(request):

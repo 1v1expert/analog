@@ -8,6 +8,7 @@ import os
 from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 
+
 def render_search(request, queryset):
 	return render(request, 'admin/catalog/search.html', queryset)
 # Create your views here.

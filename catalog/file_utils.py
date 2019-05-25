@@ -136,7 +136,7 @@ class ProcessingUploadData(object):
             # if attr.get('type'):
             if attr.get('is_digit'):
                 attr_val = UnFixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'],
-                                                 created_by=request.user)
+                                                 created_by=request.user, updated_by=request.user)
             else:
                 attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'], created_by=request.user,
                                                updated_by=request.user)
