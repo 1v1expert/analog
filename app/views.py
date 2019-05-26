@@ -39,6 +39,7 @@ def check_in_view(request):
 @login_required(login_url='/login')
 def home_view(request):
 	form = AppSearchForm()
+	# form['article'].help_text = 'GG'
 	if request.method == 'POST':
 		form = AppSearchForm(request.POST)
 	return render(request, 'home.html', {'user': request.user, 'form': form})

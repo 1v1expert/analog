@@ -15,62 +15,156 @@
                 <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                     <ol class="breadcrumb">
                         <li><a href="{% url 'app:home' %}">Главная</a></li>
-{#                        <li><a href="index.html">DataBase</a></li>#}
-{#                        <li><a href="#"><span>table</span></a></li>#}
-{#                        <li class="active"><span>View</span></li>#}
+                        {#                        <li><a href="index.html">DataBase</a></li>#}
+                        {#                        <li><a href="#"><span>table</span></a></li>#}
+                        {#                        <li class="active"><span>View</span></li>#}
                     </ol>
                 </div>
                 <!-- /Breadcrumb -->
             </div>
             <!-- /Title -->
 
-        <!-- Main content -->
 
-        <!-- Row -->
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="panel panel-default card-view">
-								<div class="panel-heading">
-									<div class="pull-left">
-										<h6 class="panel-title txt-dark">Поиск аналогов</h6>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-								<div class="panel-wrapper collapse in">
-									<div class="panel-body">
-                                        <div class="form-wrap">
-
-                                            {% if form %}
+            <!-- Main content -->
+            {% if form %}
+                <!-- Row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default card-view">
+                            <div class="panel-heading">
+                                <div class="pull-left">
+                                    <h6 class="panel-title txt-dark">Поиск аналогов</h6>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="panel-wrapper collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <div class="form-wrap">
                                                 <form action="/search/" method="post">
-                                                    {% csrf_token %}
-                                                    {% for field in form %}
-                                                        <div class="form-group">
-                                                            {{ field.errors }}
-                                                            <label class="control-label mb-10 text-left">{{ field.label }}</label>
-                                                            {{ field }}
+                                                    <div class="form-body">
+                                                        <h6 class="txt-dark capitalize-font"><i
+                                                                class="zmdi zmdi-account mr-10"></i>Основная информация
+                                                        </h6>
+                                                        <hr class="light-grey-hr"/>
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group {{ form.article.error_messages }}">
+                                                                    <label class="control-label mb-10">{{ form.article.label }}</label>
+                                                                    {{ form.article }}
+{#                                                                    <input type="text" id="firstName"#}
+{#                                                                           class="form-control"#}
+{#                                                                           placeholder="John doe">#}
+                                                                    <span class="help-block">{{ form.article.help_text}} </span>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    {% endfor %}
-                                                    {#        <p>------------------</p>#}
-                                                    {#        {% for field in advanced_form %}#}
-                                                    {#            <div class="fieldWrapper">#}
-                                                    {#                {{ field.errors }}#}
-                                                    {#                {{ field.label_tag }} {{ field }}#}
-                                                    {#            </div>#}
-                                                    {#        {% endfor %}#}
-{#                                                    <button type="submit" class="btn btn-success mr-10">Submit</button>#}
-                                                    <input type="submit" class="btn btn-success mr-10" value="Искать"/>
+                                                        <div class="row">
+                                                            <!--/span-->
+                                                            <div class="col-md-6">
+                                                                <div class="form-group has-error">
+                                                                    <label class="control-label mb-10">{{ form.manufacturer_from.label }}</label>
+                                                                    {{ form.manufacturer_from }}
+{#                                                                    <input type="text" id="lastName"#}
+{#                                                                           class="form-control" placeholder="12n">#}
+                                                                    <span class="help-block"> {{ form.manufacturer_from.help_text }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group has-error">
+                                                                    <label class="control-label mb-10">{{ form.manufacturer_to.label }}</label>
+                                                                    {{ form.manufacturer_to }}
+{#                                                                    <input type="text" id="lastName"#}
+{#                                                                           class="form-control" placeholder="12n">#}
+                                                                    <span class="help-block"> {{ form.manufacturer_to.help_text }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <!--/span-->
+                                                        </div>
+
+                                                        <div class="form-actions mt-10">
+                                                            <input type="submit" class="btn btn-success mr-10"
+                                                                   value="Искать"/>
+                                                            <button type="button" id="showAdvancedForm" class="btn btn-default">Открыть расширенную форму
+                                                            </button>
+                                                        </div>
+                                                        <!-- /Row -->
+                                                        <div id="advForm">
+                                                            <div class="seprator-block"></div>
+
+                                                            <h6 class="txt-dark capitalize-font"><i
+                                                                    class="zmdi zmdi-account-box mr-10"></i>Расширенная
+                                                                информация</h6>
+                                                            <hr class="light-grey-hr"/>
+
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group {{ form.article.error_messages }}">
+                                                                        <label class="control-label mb-10">{{ form.article.label }}</label>
+                                                                        {{ form.article }}
+                                                                        {#                                                                    <input type="text" id="firstName"#}
+                                                                        {#                                                                           class="form-control"#}
+                                                                        {#                                                                           placeholder="John doe">#}
+                                                                        <span class="help-block">{{ form.article.help_text }} </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="submit" class="btn btn-success mr-10"
+                                                                   value="Искать"/>
+                                                        </div>
+
+
+                                                    </div>
                                                 </form>
-                                            {% endif %}
-
-
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            {% endif %}
 
-        <!-- End main content -->
+
+
+
+
+
+            {##}
+            {#                                            {% if form %}#}
+            {#                                                <form action="/search/" method="post">#}
+            {#                                                    {% csrf_token %}#}
+            {#                                                    {% for field in form %}#}
+            {#                                                        <div class="form-group">#}
+            {#                                                            {{ field.errors }}#}
+            {#                                                            <label class="control-label mb-10 text-left">{{ field.label }}</label>#}
+            {#                                                            {{ field }}#}
+            {#                                                        </div>#}
+            {#                                                    {% endfor %}#}
+            {#        <p>------------------</p>#}
+            {#        {% for field in advanced_form %}#}
+            {#            <div class="fieldWrapper">#}
+            {#                {{ field.errors }}#}
+            {#                {{ field.label_tag }} {{ field }}#}
+            {#            </div>#}
+            {#        {% endfor %}#}
+            {#                                                    <button type="submit" class="btn btn-success mr-10">Submit</button>#}
+            {#                                                    <input type="submit" class="btn btn-success mr-10" value="Искать"/>#}
+            {#                                                </form>#}
+            {#                                            {% endif %}#}
+            {##}
+            {##}
+            {#                                        </div>#}
+            {#                                    </div>#}
+            {#                                </div>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+
+            <!-- End main content -->
         </div>
     </div>
 {% endblock content %}
@@ -93,4 +187,20 @@
 
     <!-- Fancy Dropdown JS -->
     <script src="{% static 'js/dropdown-bootstrap-extended.js' %}"></script>
+    <script>
+        $(function () {
+            $('#advForm').hide();
+            $('#showAdvancedForm').click(function (e) {
+                if($('#advForm:visible').length) {
+                    $('#advForm').hide('slow');
+                    $('#showAdvancedForm').text('Открыть расширенную форму')
+                } else {
+                    $('#advForm').show('slow');
+                    $('#showAdvancedForm').text('Закрыть расширенную форму')
+                }
+                {#alert('Show adnvanced form');#}
+
+            })
+        });
+    </script>
 {% endblock extra_js %}

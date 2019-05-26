@@ -18,10 +18,12 @@ class MyAuthenticationForm(AuthenticationForm):
 
 
 class AppSearchForm(forms.Form):
+	# forms.CharField()
 	article = forms.CharField(label='Артикул', widget=forms.TextInput(attrs={'autofocus': True,
 	                                                                         'class': 'form-control',
 	                                                                         'placeholder': "Введите артикул товара"
-	                                                                         }))
+	                                                                         }),
+	                          help_text="", error_messages={"has_errors": False})
 	manufacturer_from = forms.ModelChoiceField(label='Исходный производитель', empty_label=None,
 	                                           queryset=Manufacturer.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
 	manufacturer_to = forms.ModelChoiceField(label='Необходимый производитель', empty_label=None,
