@@ -42,7 +42,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-xs-12">
                                             <div class="form-wrap">
-                                                <form action="/search/" method="post">
+                                                <form action="/search/" method="post" id="form">
                                                     <div class="form-body">
                                                         <h6 class="txt-dark capitalize-font"><i
                                                                 class="zmdi zmdi-account mr-10"></i>Основная информация
@@ -76,8 +76,6 @@
                                                                 <div class="form-group has-error">
                                                                     <label class="control-label mb-10">{{ form.manufacturer_to.label }}</label>
                                                                     {{ form.manufacturer_to }}
-{#                                                                    <input type="text" id="lastName"#}
-{#                                                                           class="form-control" placeholder="12n">#}
                                                                     <span class="help-block"> {{ form.manufacturer_to.help_text }}</span>
                                                                 </div>
                                                             </div>
@@ -99,18 +97,15 @@
                                                                 информация</h6>
                                                             <hr class="light-grey-hr"/>
 
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group {{ form.article.error_messages }}">
-                                                                        <label class="control-label mb-10">{{ form.article.label }}</label>
-                                                                        {{ form.article }}
-                                                                        {#                                                                    <input type="text" id="firstName"#}
-                                                                        {#                                                                           class="form-control"#}
-                                                                        {#                                                                           placeholder="John doe">#}
-                                                                        <span class="help-block">{{ form.article.help_text }} </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+{#                                                            <div class="row">#}
+{#                                                                <div class="col-md-12">#}
+{#                                                                    <div class="form-group {{ form.article.error_messages }}">#}
+{#                                                                        <label class="control-label mb-10">{{ form.article.label }}</label>#}
+{#                                                                        {{ form.article }}#}
+{#                                                                        <span class="help-block">{{ form.article.help_text }} </span>#}
+{#                                                                    </div>#}
+{#                                                                </div>#}
+{#                                                            </div>#}
                                                             <input type="submit" class="btn btn-success mr-10"
                                                                    value="Искать"/>
                                                         </div>
@@ -189,18 +184,62 @@
     <script src="{% static 'js/dropdown-bootstrap-extended.js' %}"></script>
     <script>
         $(function () {
-            $('#advForm').hide();
+            var form = $('#form');
+            var advform = $('#advForm');
+            advform.hide();
             $('#showAdvancedForm').click(function (e) {
-                if($('#advForm:visible').length) {
-                    $('#advForm').hide('slow');
+                if ($('#advForm:visible').length) {
+                    alert('Open form');
+                    //e.preventDefault();
+
+                    advform.hide('slow');
                     $('#showAdvancedForm').text('Открыть расширенную форму')
                 } else {
-                    $('#advForm').show('slow');
+                    var url = form.attr('action');
+                    //console.log(form.serialize());
+                    {#var formData = new FormData(form);#}
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/get_product/',
+                        data: form.serialize(), // serializes the form's elements.
+                        success: function (data) {
+                            console.log(data);
+                            var insert_html = "";
+                            for (var elem in data.result){
+                                console.log(elem);
+                                var slct = ""
+                                for (var choice in data.result[elem].choices){
+
+                                }
+                                var row = "<div class=\"form-group has-error\">" +
+                                    " <label class=\"control-label mb-10\">Исходный производитель</label>" +
+                                    "<select name=" + elem + "class=\"form-control\" id=\"id_ " + elem + "manufacturer_from\">\n" +
+                                    "  <option value=\"1\">EAE</option>\n" +
+                                    "\n" +
+                                    "  <option value=\"2\">ДКС</option>\n" +
+                                    "\n" +
+                                    "</select>" +
+                                    "<span class=\"help-block\"> </span></div>";
+                                insert_html += row
+                            }
+                            advform.html(insert_html);
+                            {#console.log(dt.success);#}
+                            {#console.log(dt, JSON.parse(dt));#}
+                            {#alert(JSON.parse(data)); // show response from the php script.#}
+                        },
+                        error: function (data) {
+                            console.log(data);
+
+                        }
+                    });
+
+                    advform.show('slow');
                     $('#showAdvancedForm').text('Закрыть расширенную форму')
                 }
                 {#alert('Show adnvanced form');#}
 
             })
         });
+
     </script>
 {% endblock extra_js %}
