@@ -204,24 +204,28 @@
                         data: form.serialize(), // serializes the form's elements.
                         success: function (data) {
                             console.log(data);
-                            var insert_html = "";
+                            var insert_html = "<div class=\"seprator-block\"></div>\n" +
+                                    "\n" +
+                                    "<h6 class=\"txt-dark capitalize-font\"><i\n" +
+                                    "class=\"zmdi zmdi-account-box mr-10\"></i>Расширенная\n" +
+                                    "информация</h6>\n" +
+                                    "<hr class=\"light-grey-hr\"/>";
                             for (var elem in data.result){
                                 console.log(elem);
-                                var slct = ""
+                                var slct = "";
                                 for (var choice in data.result[elem].choices){
-
+                                   slct += "  <option value=\"" + data.result[elem].choices[choice][0] + "\">" + data.result[elem].choices[choice][1]  + "</option>\n"
                                 }
-                                var row = "<div class=\"form-group has-error\">" +
-                                    " <label class=\"control-label mb-10\">Исходный производитель</label>" +
-                                    "<select name=" + elem + "class=\"form-control\" id=\"id_ " + elem + "manufacturer_from\">\n" +
-                                    "  <option value=\"1\">EAE</option>\n" +
-                                    "\n" +
-                                    "  <option value=\"2\">ДКС</option>\n" +
-                                    "\n" +
+                                var row = "<div class=\"form-group\">" +
+                                    " <label class=\"control-label mb-10\">" + data.result[elem].title + "</label>" +
+                                    "<select name=\"" + elem + "\" class=\"form-control\" id=\"id_" + elem + "manufacturer_from\">\n" +
+                                    slct +
                                     "</select>" +
                                     "<span class=\"help-block\"> </span></div>";
                                 insert_html += row
                             }
+                            insert_html += "<input type=\"submit\" class=\"btn btn-success mr-10\"\n" +
+                                "                                                                   value=\"Искать\"/></div>";
                             advform.html(insert_html);
                             {#console.log(dt.success);#}
                             {#console.log(dt, JSON.parse(dt));#}
