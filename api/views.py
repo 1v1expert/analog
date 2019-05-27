@@ -19,12 +19,14 @@ def get_product(request):
 			try:
 				product = Product.objects.get(article=article, manufacturer=manufacturer_from)
 			except Product.DoesNotExist:
-				return render(request, 'admin/catalog/search.html',
-				              {'Error': {'val': True, 'msg': 'Не найден продукт с артикулом {}'.format(article)}})
+				return JsonResponse({'result': [], 'error': "Не найден продукт"}, content_type='application/json')
+				# return render(request, 'admin/catalog/search.html',
+				#               {'Error': {'val': True, 'msg': 'Не найден продукт с артикулом {}'.format(article)}})
 			except Product.MultipleObjectsReturned:
-				return render(request, 'admin/catalog/search.html',
-				              {'Error': {'val': True, 'msg': 'Найдено более одного продукта с артикулом {}'
-				                                             'и производителем {}'.format(article, manufacturer_from)}})
+				return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"}, content_type='application/json')
+				# return render(request, 'admin/catalog/search.html',
+				#               {'Error': {'val': True, 'msg': 'Найдено более одного продукта с артикулом {}'
+				#                                              'и производителем {}'.format(article, manufacturer_from)}})
 			
 			fix_attributes = product.fixed_attrs_vals.all()  # category.attributes.all()
 			unfix_attributes = product.unfixed_attrs_vals.all()  # category.attributes.all()
@@ -61,10 +63,9 @@ def get_product(request):
 			# attributes_array.update(fix_attributes_array)
 			attributes_array.update(unfix_attributes_array)
 			
-			data = {'article': product.article}
-			print(attributes_array)
+
 			# advanced_form = AdvancedSearchForm(extra=attributes_array, initial=data)
-			return JsonResponse({'result': attributes_array}, content_type='application/json')
+			return JsonResponse({'result': attributes_array, 'error': False}, content_type='application/json')
 		# 	return list attrs
 		else:
 			print('Unvalid form')
