@@ -24,8 +24,12 @@ def login_view(request):
 
 @login_required(login_url='/login')
 def search(request):
-	return redirect('catalog:search')
-
+	form = AppSearchForm()
+	# form['article'].help_text = 'GG'
+	if request.method == 'POST':
+		form = AppSearchForm(request.POST)
+	return render(request, 'search.html', {'user': request.user, 'form': form})
+	
 
 @login_required(login_url='/login')
 def advanced_search(request):
@@ -39,15 +43,9 @@ def check_in_view(request):
 	})
 
 
-
-
 @login_required(login_url='/login')
 def home_view(request):
-	form = AppSearchForm()
-	# form['article'].help_text = 'GG'
-	if request.method == 'POST':
-		form = AppSearchForm(request.POST)
-	return render(request, 'home.html', {'user': request.user, 'form': form})
+	return render(request, 'home.html', {'user': request.user})
 
 
 def logout_view(request):

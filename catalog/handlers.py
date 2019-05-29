@@ -77,14 +77,14 @@ def result_api_processing(instance, request, product, default=True):
 	instance.global_search(default=default)
 	if instance.founded_products.count():
 		if instance.founded_products.count() == 1:
-			error = {'val': False}
+			error = False
 		else:
-			error = {'val': True, 'msg': 'Найдено более одного продукта, подходящего по параметрам поиска {}'}
+			error = 'Найдено более одного продукта, подходящего по параметрам поиска'
 		return JsonResponse(
-			{'result': [{"article": prod.article} for prod in instance.founded_products],
+			{'result': [prod.article for prod in instance.founded_products],
 			 'error': error, 'Lead_time': instance.lead_time}, content_type='application/json')
 	else:
-		error = {'val': True, 'msg': 'Продукты, удовлетворяющие параметрам поиска, не найдены'}
+		error = 'Продукты, удовлетворяющие параметрам поиска, не найдены'
 		return JsonResponse(
 			{'result': [], 'error': error,
 			 'Lead_time': instance.lead_time}, content_type='application/json')

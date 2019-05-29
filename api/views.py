@@ -6,6 +6,7 @@ from catalog.choices import TYPES_SEARCH
 from catalog.models import Product, FixedValue
 from django.core import serializers
 from catalog.utils import SearchProducts
+from catalog.handlers import result_api_processing
 
 
 def search(request):
@@ -25,10 +26,9 @@ def search(request):
 				                    content_type='application/json')
 			
 			result = SearchProducts(request, form, product)
-			return result_processing(result, request, product,
-			                         default=True)  # return SearchProducts(request, form, product).search()
+			return result_api_processing(result, request, product, default=True)  # return SearchProducts(request, form, product).search()
 		
-		return render(request, 'admin/catalog/search.html', {'Error': {'val': True, 'msg': 'Ошибка формы'}})
+		return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
 	
 	return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"}, content_type='application/json')
 
