@@ -71,7 +71,7 @@
     {% endif %}
 
     {% if advanced_form %}
-        <form action="/search/" method="post">
+        <form action="{% url 'catalog:advanced_search' %}" method="post">
             <h3>Поиск аналогов</h3>
             {% csrf_token %}
             {% for field in advanced_form %}
@@ -92,7 +92,7 @@
     {% endif %}
 
     {% if form %}
-        <form action="/search/" method="post">
+        <form action="{% url 'catalog:search' %}" method="post">
             <h3>Поиск аналогов</h3>
             {% csrf_token %}
             {% for field in form %}

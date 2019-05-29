@@ -5,6 +5,36 @@ from catalog.forms import SearchForm, AdvancedSearchForm
 from catalog.choices import TYPES_SEARCH
 from catalog.models import Product, FixedValue
 from django.core import serializers
+from catalog.utils import SearchProducts
+
+
+def search(request):
+	if request.method == 'POST':
+		form = SearchForm(request.POST)
+		if form.is_valid():
+			article = form.cleaned_data['article']
+			manufacturer_from = form.cleaned_data['manufacturer_from']
+			# manufacturer_to = form.cleaned_data['manufacturer_to']
+			
+			try:
+				product = Product.objects.get(article=article, manufacturer=manufacturer_from)
+			except Product.DoesNotExist:
+				return JsonResponse({'result': [], 'error': "Не найден продукт"}, content_type='application/json')
+			except Product.MultipleObjectsReturned:
+				return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"},
+				                    content_type='application/json')
+			
+			result = SearchProducts(request, form, product)
+			return result_processing(result, request, product,
+			                         default=True)  # return SearchProducts(request, form, product).search()
+		
+		return render(request, 'admin/catalog/search.html', {'Error': {'val': True, 'msg': 'Ошибка формы'}})
+	
+	return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"}, content_type='application/json')
+
+
+def advanced_search(request):
+	return redirect('catalog:search')
 
 
 def get_product(request):

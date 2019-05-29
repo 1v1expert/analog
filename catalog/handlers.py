@@ -6,6 +6,7 @@ import csv
 
 from django.conf import settings
 from django.shortcuts import render
+from django.http import JsonResponse
 
 
 def loaded_search_file_handler(file, path, form, request):
@@ -70,3 +71,20 @@ def result_processing(instance, request, product, default=True):
 		error = {'val': True, 'msg': 'Продукты, удовлетворяющие параметрам поиска, не найдены'}
 		return render(request, 'admin/catalog/search.html',
 		              {'Results': instance.founded_products, 'Product': product, 'Error': error, 'Lead_time': instance.lead_time})
+
+
+def result_api_processing(instance, request, product, default=True):
+	instance.global_search(default=default)
+	if instance.founded_products.count():
+		if instance.founded_products.count() == 1:
+			error = {'val': False}
+		else:
+			error = {'val': True, 'msg': 'Найдено более одного продукта, подходящего по параметрам поиска {}'}
+		return JsonResponse(
+			{'result': [{"article": prod.article} for prod in instance.founded_products],
+			 'error': error, 'Lead_time': instance.lead_time}, content_type='application/json')
+	else:
+		error = {'val': True, 'msg': 'Продукты, удовлетворяющие параметрам поиска, не найдены'}
+		return JsonResponse(
+			{'result': [], 'error': error,
+			 'Lead_time': instance.lead_time}, content_type='application/json')

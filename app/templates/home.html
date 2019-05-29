@@ -42,7 +42,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-xs-12">
                                             <div class="form-wrap">
-                                                <form action="/search/" method="post" id="form">
+                                                <form action="{% url 'app:search' %}" method="post" id="form">
                                                     <div class="form-body">
                                                         <h6 class="txt-dark capitalize-font"><i
                                                                 class="zmdi zmdi-account mr-10"></i>Основная информация
@@ -214,7 +214,7 @@
                             }
                             var row = "<div class=\"form-group\">" +
                                 " <label class=\"control-label mb-10\">" + data.result[elem].title + "</label>" +
-                                "<select name=\"" + elem + "\" class=\"form-control\" id=\"id_" + elem + "manufacturer_from\">\n" +
+                                "<select name=\"extra_field_" + elem + "\" class=\"form-control\" id=\"id_extra_field_" + elem + "\">\n" +
                                 slct +
                                 "</select>" +
                                 "<span class=\"help-block\"> </span></div>";
@@ -243,19 +243,20 @@
             var form = $('#form');
             var advform = $('#advForm');
             advform.hide();
+            {#var action = form.attr('action');#}
             $('#showAdvancedForm').click(function (e) {
                 if ($('#advForm:visible').length) {
                     //e.preventDefault();
-
-
-                    advform.hide('slow');
+                    form.attr('action', "{% url 'app:search' %}");
+                    advform.hide('slow').html('');
+                    {#advform;#}
                     $('#showAdvancedForm').text('Открыть расширенную форму')
                 } else {
+                    form.attr('action', "{% url 'app:advanced_search' %}");
                     var insert_html = Check_or_Get_ProductAttributes(form);
                     console.log(insert_html, 'insert_html');
                     if (insert_html) {
-                        advform.html(insert_html);
-                        advform.show('slow');
+                        advform.html(insert_html).show('slow');
                         $('#showAdvancedForm').text('Закрыть расширенную форму')
                     }
                 }
