@@ -30,6 +30,7 @@ class AdvancedSearchForm(forms.Form):
     # hrd_attrs = forms.ChoiceField(label='hrd attr', choices=('ss', 'gg'), required=False)
 
     def __init__(self, *args, **kwargs):
+        print(kwargs)
         extra_fields = kwargs.pop('extra', 0)
     
         # check if extra_fields exist. If they don't exist assign 0 to them

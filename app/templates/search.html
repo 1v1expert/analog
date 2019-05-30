@@ -44,10 +44,10 @@
                                             <div class="form-wrap">
                                                 <form action="{% url 'api:search' %}" method="post" id="form">
                                                     <div class="form-body">
-                                                        <h6 class="txt-dark capitalize-font"><i
-                                                                class="zmdi zmdi-account mr-10"></i>Основная информация
-                                                        </h6>
-                                                        <hr class="light-grey-hr"/>
+{#                                                        <h6 class="txt-dark text-uppercase"><i#}
+{#                                                                class="zmdi zmdi-info mr-10"></i>Основная информация#}
+{#                                                        </h6>#}
+{#                                                        <hr class="light-grey-hr"/>#}
                                                         {% csrf_token %}
                                                         <div class="row">
                                                             <div class="col-md-12">
@@ -187,7 +187,7 @@
             var url = form.attr('action');
             //console.log(form.serialize());
             {#var formData = new FormData(form);#}
-            var response;
+            var html;
             $.ajax({
                 type: "POST",
                 url: "{% url 'api:get_product' %}",//'/api/get_product/',
@@ -196,35 +196,55 @@
                 success: function (data) {
                     if (data.error) {
                         alert(data.error);
-                        response = false;
+                        {#response = false;#}
                     }
                     else {
                         console.log(data);
-                        var insert_html = "<div class=\"seprator-block\"></div>\n" +
+                        var result = {};
+                        for (var type in data.result.product_types){
+                            result[data.result.product_types[type]] = {'name': data.result.all_types[data.result.product_types[type]],
+                            'result': []}
+                        }
+
+                        result['pre_html'] = "<div class=\"seprator-block\"></div>\n" +
                             "\n" +
-                            "<h6 class=\"txt-dark capitalize-font\"><i\n" +
-                            "class=\"zmdi zmdi-account-box mr-10\"></i>Расширенная\n" +
-                            "информация</h6>\n" +
+                            "<h4 class=\"txt-dark text-uppercase\"><i\n" +
+                            "class=\"zmdi zmdi-star-outline mr-10\"></i>Расширенная\n" +
+                            "информация</h4>\n" +
                             "<hr class=\"light-grey-hr\"/>";
-                        for (var elem in data.result) {
-                            console.log(elem);
+
+                        for (var elem in data.result.attributes) {
                             var slct = "";
-                            for (var choice in data.result[elem].choices) {
-                                slct += "  <option value=\"" + data.result[elem].choices[choice][0] + "\">" + data.result[elem].choices[choice][1] + "</option>\n"
+                            for (var choice in data.result.attributes[elem].choices) {
+                                slct += "  <option value=\"" + data.result.attributes[elem].choices[choice][0] + "\">" + data.result.attributes[elem].choices[choice][1] + "</option>\n"
                             }
-                            var row = "<div class=\"form-group\">" +
-                                " <label class=\"control-label mb-10\">" + data.result[elem].title + "</label>" +
+                            var row = "<div class=\"form-group col-md-3\">" +
+                                " <label class=\"control-label mb-10\">" + data.result.attributes[elem].title + "</label>" +
                                 "<select name=\"extra_field_" + elem + "\" class=\"form-control\" id=\"id_extra_field_" + elem + "\">\n" +
                                 slct +
                                 "</select>" +
                                 "<span class=\"help-block\"> </span></div>";
-                            insert_html += row
+                            result[data.result.attributes[elem].type].result.push(row);
                         }
-                        insert_html += "<input type=\"submit\" class=\"btn btn-success mr-10\"\n" +
+                        result['post_html'] = "<input type=\"submit\" class=\"btn btn-success mr-10\"\n" +
                             "                                                                   value=\"Искать\"/></div>";
-
-                        response = insert_html;
+                        console.log(result);
+                        html = "";
+                        html += result.pre_html;
+                        for (var type in data.result.product_types){
+                            if (result[data.result.product_types[type]].result.length) {
+                                html += "\n" +
+                                    "\n" +
+                                    "<h6 class=\"txt-success\">Атрибуты типа: " + result[data.result.product_types[type]].name + "</h6>\n" +
+                                    "<hr class=\"light-grey-hr\"/>";
+                                html += "<div class=\"row\">";
+                                html += result[data.result.product_types[type]].result.join("");
+                                html += "</div>"
+                            }
+                        }
                     }
+                    // Build html
+
                     {#console.log(dt.success);#}
                     {#console.log(dt, JSON.parse(dt));#}
                     {#alert(JSON.parse(data)); // show response from the php script.#}
@@ -232,10 +252,11 @@
                 },
                 error: function (data) {
                     console.log(data);
+                    alert('Ошибка')
 
                 }
             });
-            return response;
+            return html || null;
         }
     </script>
     <script>
@@ -243,8 +264,9 @@
             var form = $('#form');
             var advform = $('#advForm');
             advform.hide();
-            var url = form.attr('action');
+
             form.submit(function (e) {
+                var url = form.attr('action');
                 e.preventDefault();
                 $.ajax({
                     type: "POST",
