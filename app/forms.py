@@ -17,6 +17,14 @@ class MyAuthenticationForm(AuthenticationForm):
 	}), )
 
 
+class SearchFromFile(forms.Form):
+	file = forms.FileField(label='Файл', required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+	manufacturer_from = forms.ModelChoiceField(label='Исходный производитель', empty_label=None,
+	                                           queryset=Manufacturer.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+	manufacturer_to = forms.ModelChoiceField(label='Необходимый производитель', empty_label=None,
+	                                         queryset=Manufacturer.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+
+ 
 class AppSearchForm(forms.Form):
 	# forms.CharField()
 	article = forms.CharField(label='Артикул', widget=forms.TextInput(attrs={'autofocus': True,

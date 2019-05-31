@@ -33,7 +33,7 @@
                         <div class="panel panel-default card-view">
                             <div class="panel-heading">
                                 <div class="pull-left">
-                                    <h6 class="panel-title txt-dark">Поиск аналогов по артикулу</h6>
+                                    <h6 class="panel-title txt-dark">Поиск аналогов из файла</h6>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -42,7 +42,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-xs-12">
                                             <div class="form-wrap">
-                                                <form action="{% url 'api:search' %}" method="post" id="form">
+                                                <form enctype="multipart/form-data" action="{% url 'app:search_from_file' %}" method="post">
                                                     <div class="form-body">
 {#                                                        <h6 class="txt-dark text-uppercase"><i#}
 {#                                                                class="zmdi zmdi-info mr-10"></i>Основная информация#}
@@ -51,13 +51,13 @@
                                                         {% csrf_token %}
                                                         <div class="row">
                                                             <div class="col-md-12">
-                                                                <div class="form-group {{ form.article.error_messages }}">
-                                                                    <label class="control-label mb-10">{{ form.article.label }}</label>
-                                                                    {{ form.article }}
+                                                                <div class="form-group {{ form.file.error_messages }}">
+                                                                    <label class="control-label mb-10">{{ form.file.label }}</label>
+                                                                    {{ form.file }}
 {#                                                                    <input type="text" id="firstName"#}
 {#                                                                           class="form-control"#}
 {#                                                                           placeholder="John doe">#}
-                                                                    <span class="help-block">{{ form.article.help_text}} </span>
+                                                                    <span class="help-block">{{ form.file.help_text}} </span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -85,32 +85,7 @@
                                                         <div class="form-actions mt-10">
                                                             <input type="submit" class="btn btn-success mr-10"
                                                                    value="Искать"/>
-                                                            <button type="button" id="showAdvancedForm" class="btn btn-default">Открыть расширенную форму
-                                                            </button>
                                                         </div>
-                                                        <!-- /Row -->
-                                                        <div id="advForm">
-                                                            <div class="seprator-block"></div>
-
-                                                            <h6 class="txt-dark capitalize-font"><i
-                                                                    class="zmdi zmdi-account-box mr-10"></i>Расширенная
-                                                                информация</h6>
-                                                            <hr class="light-grey-hr"/>
-
-{#                                                            <div class="row">#}
-{#                                                                <div class="col-md-12">#}
-{#                                                                    <div class="form-group {{ form.article.error_messages }}">#}
-{#                                                                        <label class="control-label mb-10">{{ form.article.label }}</label>#}
-{#                                                                        {{ form.article }}#}
-{#                                                                        <span class="help-block">{{ form.article.help_text }} </span>#}
-{#                                                                    </div>#}
-{#                                                                </div>#}
-{#                                                            </div>#}
-                                                            <input type="submit" class="btn btn-success mr-10"
-                                                                   value="Искать"/>
-                                                        </div>
-
-
                                                     </div>
                                                 </form>
                                             </div>
@@ -182,133 +157,133 @@
 
     <!-- Fancy Dropdown JS -->
     <script src="{% static 'js/dropdown-bootstrap-extended.js' %}"></script>
-    <script>
-        function Check_or_Get_ProductAttributes(form) {
-            var url = form.attr('action');
-            //console.log(form.serialize());
+{#    <script>#}
+{#        function Check_or_Get_ProductAttributes(form) {#}
+{#            var url = form.attr('action');#}
+{#            //console.log(form.serialize());#}
             {#var formData = new FormData(form);#}
-            var html;
-            $.ajax({
-                type: "POST",
-                url: "{% url 'api:get_product' %}",//'/api/get_product/',
-                async: false,
-                data: form.serialize(), // serializes the form's elements.
-                success: function (data) {
-                    if (data.error) {
-                        alert(data.error);
+{#            var html;#}
+{#            $.ajax({#}
+{#                type: "POST",#}
+{#                url: "{% url 'api:get_product' %}",//'/api/get_product/',#}
+{#                async: false,#}
+{#                data: form.serialize(), // serializes the form's elements.#}
+{#                success: function (data) {#}
+{#                    if (data.error) {#}
+{#                        alert(data.error);#}
                         {#response = false;#}
-                    }
-                    else {
-                        console.log(data);
-                        var result = {};
-                        for (var type in data.result.product_types){
-                            result[data.result.product_types[type]] = {'name': data.result.all_types[data.result.product_types[type]],
-                            'result': []}
-                        }
-
-                        result['pre_html'] = "<div class=\"seprator-block\"></div>\n" +
-                            "\n" +
-                            "<h4 class=\"txt-dark text-uppercase\"><i\n" +
-                            "class=\"zmdi zmdi-star-outline mr-10\"></i>Расширенная\n" +
-                            "информация</h4>\n" +
-                            "<hr class=\"light-grey-hr\"/>";
-
-                        for (var elem in data.result.attributes) {
-                            var slct = "";
-                            for (var choice in data.result.attributes[elem].choices) {
-                                slct += "  <option value=\"" + data.result.attributes[elem].choices[choice][0] + "\">" + data.result.attributes[elem].choices[choice][1] + "</option>\n"
-                            }
-                            var row = "<div class=\"form-group col-md-3\">" +
-                                " <label class=\"control-label mb-10\">" + data.result.attributes[elem].title + "</label>" +
-                                "<select name=\"extra_field_" + elem + "\" class=\"form-control\" id=\"id_extra_field_" + elem + "\">\n" +
-                                slct +
-                                "</select>" +
-                                "<span class=\"help-block\"> </span></div>";
-                            result[data.result.attributes[elem].type].result.push(row);
-                        }
-                        result['post_html'] = "<input type=\"submit\" class=\"btn btn-success mr-10\"\n" +
-                            "                                                                   value=\"Искать\"/></div>";
-                        console.log(result);
-                        html = "";
-                        html += result.pre_html;
-                        for (var type in data.result.product_types){
-                            if (result[data.result.product_types[type]].result.length) {
-                                html += "\n" +
-                                    "\n" +
-                                    "<h6 class=\"txt-success\">Атрибуты типа: " + result[data.result.product_types[type]].name + "</h6>\n" +
-                                    "<hr class=\"light-grey-hr\"/>";
-                                html += "<div class=\"row\">";
-                                html += result[data.result.product_types[type]].result.join("");
-                                html += "</div>"
-                            }
-                        }
-                    }
-                    // Build html
-
+{#                    }#}
+{#                    else {#}
+{#                        console.log(data);#}
+{#                        var result = {};#}
+{#                        for (var type in data.result.product_types){#}
+{#                            result[data.result.product_types[type]] = {'name': data.result.all_types[data.result.product_types[type]],#}
+{#                            'result': []}#}
+{#                        }#}
+{##}
+{#                        result['pre_html'] = "<div class=\"seprator-block\"></div>\n" +#}
+{#                            "\n" +#}
+{#                            "<h4 class=\"txt-dark text-uppercase\"><i\n" +#}
+{#                            "class=\"zmdi zmdi-star-outline mr-10\"></i>Расширенная\n" +#}
+{#                            "информация</h4>\n" +#}
+{#                            "<hr class=\"light-grey-hr\"/>";#}
+{##}
+{#                        for (var elem in data.result.attributes) {#}
+{#                            var slct = "";#}
+{#                            for (var choice in data.result.attributes[elem].choices) {#}
+{#                                slct += "  <option value=\"" + data.result.attributes[elem].choices[choice][0] + "\">" + data.result.attributes[elem].choices[choice][1] + "</option>\n"#}
+{#                            }#}
+{#                            var row = "<div class=\"form-group col-md-3\">" +#}
+{#                                " <label class=\"control-label mb-10\">" + data.result.attributes[elem].title + "</label>" +#}
+{#                                "<select name=\"extra_field_" + elem + "\" class=\"form-control\" id=\"id_extra_field_" + elem + "\">\n" +#}
+{#                                slct +#}
+{#                                "</select>" +#}
+{#                                "<span class=\"help-block\"> </span></div>";#}
+{#                            result[data.result.attributes[elem].type].result.push(row);#}
+{#                        }#}
+{#                        result['post_html'] = "<input type=\"submit\" class=\"btn btn-success mr-10\"\n" +#}
+{#                            "                                                                   value=\"Искать\"/></div>";#}
+{#                        console.log(result);#}
+{#                        html = "";#}
+{#                        html += result.pre_html;#}
+{#                        for (var type in data.result.product_types){#}
+{#                            if (result[data.result.product_types[type]].result.length) {#}
+{#                                html += "\n" +#}
+{#                                    "\n" +#}
+{#                                    "<h6 class=\"txt-success\">Атрибуты типа: " + result[data.result.product_types[type]].name + "</h6>\n" +#}
+{#                                    "<hr class=\"light-grey-hr\"/>";#}
+{#                                html += "<div class=\"row\">";#}
+{#                                html += result[data.result.product_types[type]].result.join("");#}
+{#                                html += "</div>"#}
+{#                            }#}
+{#                        }#}
+{#                    }#}
+{#                    // Build html#}
+{##}
                     {#console.log(dt.success);#}
                     {#console.log(dt, JSON.parse(dt));#}
                     {#alert(JSON.parse(data)); // show response from the php script.#}
-
-                },
-                error: function (data) {
-                    console.log(data);
-                    alert('Ошибка')
-
-                }
-            });
-            return html || null;
-        }
-    </script>
-    <script>
-        $(function () {
-            var form = $('#form');
-            var advform = $('#advForm');
-            advform.hide();
-
-            form.submit(function (e) {
-                var url = form.attr('action');
-                e.preventDefault();
-                $.ajax({
-                    type: "POST",
-                    url: url,//'/api/get_product/',
-                    async: false,
-                    data: form.serialize(), // serializes the form's elements.
-                    success: function (data) {
-                        if (data.error){
-                            alert(data.error);
-                        }
-                        else {
-                            alert(data.result.join(' ;'))
-                        }
-                        console.log('Success', data)
-                    },
-                    error: function (data) {
-                        alert('Произошла системная ошибка');
-                        console.log('Error', data)
-                    }
-                });
-            });
+{##}
+{#                },#}
+{#                error: function (data) {#}
+{#                    console.log(data);#}
+{#                    alert('Ошибка')#}
+{##}
+{#                }#}
+{#            });#}
+{#            return html || null;#}
+{#        }#}
+{#    </script>#}
+{#    <script>#}
+{#        $(function () {#}
+{#            var form = $('#form');#}
+{#            var advform = $('#advForm');#}
+{#            advform.hide();#}
+{##}
+{#            form.submit(function (e) {#}
+{#                var url = form.attr('action');#}
+{#                e.preventDefault();#}
+{#                $.ajax({#}
+{#                    type: "POST",#}
+{#                    url: url,//'/api/get_product/',#}
+{#                    async: false,#}
+{#                    data: form.serialize(), // serializes the form's elements.#}
+{#                    success: function (data) {#}
+{#                        if (data.error){#}
+{#                            alert(data.error);#}
+{#                        }#}
+{#                        else {#}
+{#                            alert(data.result.join(' ;'))#}
+{#                        }#}
+{#                        console.log('Success', data)#}
+{#                    },#}
+{#                    error: function (data) {#}
+{#                        alert('Произошла системная ошибка');#}
+{#                        console.log('Error', data)#}
+{#                    }#}
+{#                });#}
+{#            });#}
             {#var action = form.attr('action');#}
-            $('#showAdvancedForm').click(function (e) {
-                if ($('#advForm:visible').length) {
-                    //e.preventDefault();
-                    form.attr('action', "{% url 'api:search' %}");
-                    advform.hide('slow').html('');
+{#            $('#showAdvancedForm').click(function (e) {#}
+{#                if ($('#advForm:visible').length) {#}
+{#                    //e.preventDefault();#}
+{#                    form.attr('action', "{% url 'api:search' %}");#}
+{#                    advform.hide('slow').html('');#}
                     {#advform;#}
-                    $('#showAdvancedForm').text('Открыть расширенную форму')
-                } else {
-                    form.attr('action', "{% url 'api:advanced_search' %}");
-                    var insert_html = Check_or_Get_ProductAttributes(form);
-                    console.log(insert_html, 'insert_html');
-                    if (insert_html) {
-                        advform.html(insert_html).show('slow');
-                        $('#showAdvancedForm').text('Закрыть расширенную форму')
-                    }
-                }
+{#                    $('#showAdvancedForm').text('Открыть расширенную форму')#}
+{#                } else {#}
+{#                    form.attr('action', "{% url 'api:advanced_search' %}");#}
+{#                    var insert_html = Check_or_Get_ProductAttributes(form);#}
+{#                    console.log(insert_html, 'insert_html');#}
+{#                    if (insert_html) {#}
+{#                        advform.html(insert_html).show('slow');#}
+{#                        $('#showAdvancedForm').text('Закрыть расширенную форму')#}
+{#                    }#}
+{#                }#}
                 {#alert('Show adnvanced form');#}
-
-            })
-        });
-
-    </script>
+{##}
+{#            })#}
+{#        });#}
+{##}
+{#    </script>#}
 {% endblock extra_js %}
