@@ -182,6 +182,8 @@
 
     <!-- Fancy Dropdown JS -->
     <script src="{% static 'js/dropdown-bootstrap-extended.js' %}"></script>
+{#    todo: copy js into local folder#}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         function Check_or_Get_ProductAttributes(form) {
             var url = form.attr('action');
@@ -195,7 +197,8 @@
                 data: form.serialize(), // serializes the form's elements.
                 success: function (data) {
                     if (data.error) {
-                        alert(data.error);
+                        {#alert(data.error);#}
+                        swal("Ошибка!", data.error, "info");
                         {#response = false;#}
                     }
                     else {
@@ -251,8 +254,8 @@
 
                 },
                 error: function (data) {
-                    console.log(data);
-                    alert('Ошибка')
+                    {#console.log(data);#}
+                    swal("Произошла ошибка", "Проверьте корректность формы и попробуйте снова", "error");
 
                 }
             });
@@ -275,15 +278,19 @@
                     data: form.serialize(), // serializes the form's elements.
                     success: function (data) {
                         if (data.error){
-                            alert(data.error);
+                            {#alert(data.error);#}
+                            swal("Ошибка!", data.error, "info");
                         }
                         else {
-                            alert(data.result.join(' ;'))
+                            {#alert(data.result.join(' ;'))#}
+                            swal("Успешно!", "Артикул(-ы): " + data.result.join(' ;'), "success");
                         }
-                        console.log('Success', data)
+                        {#console.log('Success', data);#}
+
                     },
                     error: function (data) {
-                        alert('Произошла системная ошибка');
+                        swal("Сбой поиска!", "Произошла системная ошибка", "warning");
+                        {#alert('Произошла системная ошибка');#}
                         console.log('Error', data)
                     }
                 });
