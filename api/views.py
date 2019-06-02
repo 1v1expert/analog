@@ -108,7 +108,9 @@ def get_product(request):
 			try:
 				product = Product.objects.get(article=article, manufacturer=manufacturer_from)
 			except Product.DoesNotExist:
-				return JsonResponse({'result': [], 'error': "Не найден продукт"}, content_type='application/json')
+				return JsonResponse({'result': [],
+				                     'error': "Продукт с артикулом {} в базе не найден".format(article)
+				                     }, content_type='application/json')
 			except Product.MultipleObjectsReturned:
 				return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"}, content_type='application/json')
 				
