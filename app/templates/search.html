@@ -29,7 +29,7 @@
             {% if form %}
                 <!-- Row -->
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-8 col-sm-offset-2">
                         <div class="panel panel-default card-view">
                             <div class="panel-heading">
                                 <div class="pull-left">
@@ -214,15 +214,15 @@
                             "\n" +
                             "<h4 class=\"txt-dark text-uppercase\"><i\n" +
                             "class=\"zmdi zmdi-star-outline mr-10\"></i>Расширенная\n" +
-                            "информация</h4>\n" +
-                            "<hr class=\"light-grey-hr\"/>";
+                            "информация</h4>\n";
+                            {#"<hr class=\"light-grey-hr\"/>";#}
 
                         for (var elem in data.result.attributes) {
                             var slct = "";
                             for (var choice in data.result.attributes[elem].choices) {
                                 slct += "  <option value=\"" + data.result.attributes[elem].choices[choice][0] + "\">" + data.result.attributes[elem].choices[choice][1] + "</option>\n"
                             }
-                            var row = "<div class=\"form-group col-md-3\">" +
+                            var row = "<div class=\"form-group col-md-4\">" +
                                 " <label class=\"control-label mb-10\">" + data.result.attributes[elem].title + "</label>" +
                                 "<select name=\"extra_field_" + elem + "\" class=\"form-control\" id=\"id_extra_field_" + elem + "\">\n" +
                                 slct +
@@ -238,11 +238,15 @@
                         html += result.pre_html;
                         for (var type in data.result.product_types){
                             if (result[data.result.product_types[type]].result.length) {
-                                html += "\n" +
-                                    "\n" +
-                                    "<h6 class=\"txt-success\">Атрибуты типа: " + result[data.result.product_types[type]].name + "</h6>\n" +
-                                    "<hr class=\"light-grey-hr\"/>";
-                                html += "<div class=\"row\">";
+
+                                var res_type = data.result.product_types[type];
+                                var pre_div = "\n <div class=\"row\" style=\"display: none;\" >";
+
+                                if ((res_type === 'hrd') || (res_type === 'sft')) {
+                                    pre_div = "\n <hr class=\"light-grey-hr\"/>" +
+                                        "<div class=\"row\" style=\"display: block;\" >";
+                                }
+                                html += pre_div;
                                 html += result[data.result.product_types[type]].result.join("");
                                 html += "</div>"
                             }
