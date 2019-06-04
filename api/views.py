@@ -52,7 +52,7 @@ def get_attributes(product, api=True):
 	attributes_array.update(unfix_attributes_array)
 	
 	# types = set(product.category.attributes.all().values_list('type',  flat=True))
-	response = {'attributes': attributes_array, 'product_types': list((type_[0] for type_ in TYPES)), 'all_types': TYPES_DICT}
+	response = {'attributes': attributes_array, 'product_types': list((type_[0] for type_ in TYPES))[::-1], 'all_types': TYPES_DICT}
 	# print(response, '\n\n', TYPES_REV_DICT, '\n\n', TYPES_DICT)
 	# attributes_array.update()
 	# print(attributes_array, '\n', list(types))
@@ -98,7 +98,7 @@ def advanced_search(request):
 	#               {'advanced_form': advanced_form, 'product': product, 'manufacturer_to': manufacturer_to})
 
 
-def get_product(request):
+def check_product_and_get_attributes(request):
 	if request.method == 'POST':
 		form = SearchForm(request.POST)
 		if form.is_valid():
