@@ -203,6 +203,7 @@
                     }
                     else {
                         console.log(data);
+                        {# build result #}
                         var result = {};
                         for (var type in data.result.product_types){
                             result[data.result.product_types[type]] = {'name': data.result.all_types[data.result.product_types[type]],
@@ -232,6 +233,7 @@
                         result['post_html'] = "<input type=\"submit\" class=\"btn btn-success mr-10\"\n" +
                             "                                                                   value=\"Искать\"/></div>";
                         console.log(result);
+                        {# print result #}
                         html = "";
                         html += result.pre_html;
                         for (var type in data.result.product_types){
