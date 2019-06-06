@@ -100,12 +100,12 @@ class ProcessingUploadData(object):
             for key in product.keys():
                 if key < 5:
                     structured_product.update({
-                            STRUCTURE_PRODUCT[key][1]: product[key]
+                            STRUCTURE_PRODUCT[key][1]: product[key].lstrip().rstrip()
                     })
                 else:
                     attributes.append({
                         "type": TYPES_REV_DICT.get(self.attributes[key].lower()),
-                        "name": self.options[key],
+                        "name": self.options[key].lstrip().rstrip(),
                         "value": float(product[key]) if self.is_digit(product[key]) else product[key].lstrip().rstrip(),
                         "is_digit": self.is_digit(product[key])
                         })
@@ -140,8 +140,10 @@ class ProcessingUploadData(object):
             else:
                 attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'], created_by=request.user,
                                                updated_by=request.user)
- 
+                
+            attr_val.save()
             attr_val.products.add(new_product)
+            attr_val.save()
             if attr.get('is_digit'):
                 new_product.unfixed_attrs_vals.add(attr_val)
             else:
@@ -154,7 +156,7 @@ class ProcessingUploadData(object):
                                   category=product['category_obj'],
                                   created_by=request.user,
                                   updated_by=request.user)
-
+            new_product.save()
             for attr in product['attributes']:
                 create_attr()
                     #obj_product.save()
@@ -198,6 +200,7 @@ class ProcessingUploadData(object):
                 return 'Ошибка! Не найден атрибут с типом: {} и наименованием {} в категории {}'.format(TYPES_DICT[attr['type']], attr['name'], category)
             except Attribute.MultipleObjectsReturned:
                 return 'Ошибка! Найдено несколько атрибутов с типом: {} и наименованием {}'.format(TYPES_DICT[attr['type']], attr['name'])
+            #  todo: useful insert check FixedValue.DoesNotExist
         
         product.update({
             "manufacturer_obj": manufacturer,
