@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['tseluyko.ru', '127.0.0.1', 'vladdos.ddns.net', '176.99.11.125']
+ALLOWED_HOSTS = ['tseluyko.ru', '127.0.0.1', 'vladdos.ddns.net', '176.99.11.125', 'analogpro.ru']
 
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
