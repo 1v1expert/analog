@@ -6,14 +6,8 @@ from django.conf import settings
 class BookkeepingWriter(object):
     def __init__(self, name):
         self.filename = name
-    
-    def dump_csv(self, data):
-        with open('{}/{}'.format(settings.FILES_ROOT, self.filename), 'w', newline='', encoding='utf-8') as csvfile:
-            writer = csv.writer(csvfile, dialect='excel')
-            for row in data:
-                writer.writerow(row)
-                
-    def dump_xls(self, data):
+        
+    def dump(self, data):
         pass
     
     def writerow(self, row, fmt):
@@ -47,3 +41,10 @@ class BookkeepingWriter(object):
 
     def __exit__(self, _type, value, tb):
         self._wb.close()
+
+
+def dump_csv(name, data):
+    with open('{}/{}'.format(settings.FILES_ROOT, name), 'w', newline='', encoding='utf-8') as csv_file:
+        writer = csv.writer(csv_file, dialect='excel')
+        for row in data:
+            writer.writerow(row)

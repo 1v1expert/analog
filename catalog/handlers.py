@@ -4,6 +4,7 @@ from catalog.utils import SearchProducts
 from catalog import choices
 
 from reporters.writers import BookkeepingWriter
+from reporters.writers import dump_csv
 
 import csv
 
@@ -49,7 +50,7 @@ def loaded_search_file_handler(file, path, form, request):
 			
 	filename = 'OUT_{}.csv'.format(path.name[6:-5])
 	
-	BookkeepingWriter(filename).dump_csv(result_content)
+	dump_csv(filename, result_content)
 	instance = DataFile(type=choices.TYPES_FILE[2][0], created_by=request.user, updated_by=request.user)
 	instance.file.name = 'files/{}'.format(filename)
 	instance.save()
