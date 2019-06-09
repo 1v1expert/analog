@@ -47,7 +47,7 @@ def loaded_search_file_handler(file, path, form, request):
 			
 			result_content.append(body)
 			
-	filename = 'result_for_{}.csv'.format(path.name[6:-5])
+	filename = 'OUT_{}.csv'.format(path.name[6:-5])
 	
 	BookkeepingWriter(filename).dump_csv(result_content)
 	instance = DataFile(type=choices.TYPES_FILE[2][0], created_by=request.user, updated_by=request.user)

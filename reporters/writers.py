@@ -16,6 +16,13 @@ class BookkeepingWriter(object):
     def dump_xls(self, data):
         pass
     
+    def writerow(self, row, fmt):
+        # TODO: this is way too ugly and must be rewritten.
+        for col, item in enumerate(row):
+            c_fmt = fmt
+            self._default_ws.write(self._row, col, item, c_fmt)
+        self._row += 1
+    
     def __enter__(self):
         self._wb = xlsxwriter.Workbook(self.filename,
                                        {'default_date_format': 'dd.mm.yyyy'}
