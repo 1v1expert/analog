@@ -2,6 +2,9 @@ from catalog.file_utils import XLSDocumentReader
 from catalog.models import Product, DataFile
 from catalog.utils import SearchProducts
 from catalog import choices
+
+from reporters.writers import BookkeepingWriter
+
 import csv
 
 from django.conf import settings
@@ -45,16 +48,21 @@ def loaded_search_file_handler(file, path, form, request):
 			result_content.append(body)
 			
 	filename = 'result_for_{}.csv'.format(path.name[6:-5])
-	with open('{}/{}'.format(settings.FILES_ROOT, filename), 'w', newline='', encoding='utf-8') as csvfile:
-		writer = csv.writer(csvfile, dialect='excel')
-		for row in result_content:
-			writer.writerow(row)
-		instance = DataFile(type=choices.TYPES_FILE[1][0], created_by=request.user,
-		                    updated_by=request.user)
+	
+	BookkeepingWriter(filename).dump_csv(result_content)
+	instance = DataFile(type=choices.TYPES_FILE[2][0], created_by=request.user, updated_by=request.user)
+	instance.file.name = 'files/{}'.format(filename)
+	instance.save()
+	
+	# with open('{}/{}'.format(settings.FILES_ROOT, filename), 'w', newline='', encoding='utf-8') as csvfile:
+	# 	writer = csv.writer(csvfile, dialect='excel')
+	# 	for row in result_content:
+	# 		writer.writerow(row)
+
 		# instance.file = csvfile
-		instance.file.name = 'files/{}'.format(filename)
+		
 		# instance.file.path = '{}/{}'.format(settings.FILES_ROOT, filename)
-		instance.save()
+		# instance.save()
 	return instance.file
 
 

@@ -52,5 +52,6 @@ TYPES_SEARCH = (
 
 TYPES_FILE = (
 	('import', 'Импорт базы'),
-	('search', 'Поиск')
+	('search', 'Поиск'),
+    ('result_search', 'Результат поиска')
 )

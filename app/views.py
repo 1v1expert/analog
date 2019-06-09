@@ -63,10 +63,11 @@ def advanced_search(request):
 
 
 def check_in_view(request):
-	client_form = ProfileForm(request.user.profile)
-	return render(request, 'check_in.html', {
-		'client_form': client_form
-	})
+	return render(request, 'check_in.html', {})
+	# client_form = ProfileForm(request.user.profile)
+	# return render(request, 'check_in.html', {
+	# 	'client_form': client_form
+	# })
 
 
 @login_required(login_url='/login')

@@ -42,3 +42,4 @@ sphinxcontrib-websupport==1.1.0
 traitlets==4.3.2
 urllib3==1.24.1
 wcwidth==0.1.7
+XlsxWriter==1.1.8

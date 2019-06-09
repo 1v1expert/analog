@@ -159,7 +159,7 @@ class ProductAdmin(BaseAdmin):
 
 class FileUploadAdmin(admin.ModelAdmin):
     actions = ['process_file']
-    list_display = ['file', 'type', 'file_link', 'created_at', 'updated_at']
+    list_display = ['file', 'type', 'file_link', 'created_at', 'created_by']
     
     def file_link(self, obj):
         if obj.file:

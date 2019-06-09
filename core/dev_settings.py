@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'feincms',
     'mptt',
     'app',
-    'api'
+    'api',
+    'reporters'
 ]
 
 MIDDLEWARE = [
