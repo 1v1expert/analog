@@ -32,6 +32,7 @@ def search(request):
 				return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"},
 				                    content_type='application/json')
 			
+			MainLog(user=request.user, message='По артикулу: {} и производителю: {}'.format(article, manufacturer_from), action_flag=2).save()
 			result = SearchProducts(request, form, product)
 			return result_api_processing(result, request, product, default=True)  # return SearchProducts(request, form, product).search()
 		

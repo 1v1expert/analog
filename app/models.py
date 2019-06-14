@@ -15,10 +15,10 @@ LOGOUT = 3
 COMMON = 4
 
 ACTION_FLAG_CHOICES = (
-    (AUTHORIZATION, _('Authorization')),
-    (SEARCH, _('Search')),
-    (LOGOUT, _('Logout')),
-    (COMMON, _('Common'))
+    (AUTHORIZATION, _('Авторизация')),
+    (SEARCH, _('Поиск')),
+    (LOGOUT, _('Выход из системы')),
+    (COMMON, _('Общий'))
 )
 
 
