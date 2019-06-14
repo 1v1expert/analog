@@ -90,14 +90,15 @@ def result_api_processing(instance, request, product, default=True):
 		if instance.founded_products.count() == 1:
 			error = False
 		else:
-			error = 'Найдено более одного продукта, подходящего по параметрам поиска'
+			error = False
+			# error = 'Найдено более одного продукта, подходящего по параметрам поиска'
 		
 		MainLog(user=request.user, message='Поиск выполнился за {}c., найдено {}'.format(instance.lead_time,
 		                                                                                 [prod.article for prod in
 		                                                                                  instance.founded_products]),
 		        action_flag=2).save()
 		return JsonResponse(
-			{'result': [prod.article for prod in instance.founded_products],
+			{'result': [prod.article for prod in instance.founded_products[:1]],
 			 'error': error, 'Lead_time': instance.lead_time}, content_type='application/json')
 	else:
 		MainLog(user=request.user,
