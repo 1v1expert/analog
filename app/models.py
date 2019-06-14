@@ -1,9 +1,41 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+from django.utils.translation import gettext, gettext_lazy as _
+from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import uuid
+# from django.contrib.admin.models import LogEntry
 
+
+AUTHORIZATION = 1
+SEARCH = 2
+LOGOUT = 3
+COMMON = 4
+
+ACTION_FLAG_CHOICES = (
+    (AUTHORIZATION, _('Authorization')),
+    (SEARCH, _('Search')),
+    (LOGOUT, _('Logout')),
+    (COMMON, _('Common'))
+)
+
+
+class MainLog(models.Model):
+    action_time = models.DateTimeField(_('action time'), default=timezone.now, editable=False, )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, blank=True, null=True, verbose_name=_('user'),)
+    message = models.TextField(_('message'), blank=True)
+    action_flag = models.PositiveSmallIntegerField(_('action flag'), choices=ACTION_FLAG_CHOICES)
+    
+    class Meta:
+        verbose_name = _('main log')
+        verbose_name_plural = _('main logs')
+        ordering = ('-action_time',)
+    
+    def __str__(self):
+        return self.user + '; ' + self.message
+        
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

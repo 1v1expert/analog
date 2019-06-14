@@ -7,6 +7,8 @@ from django.contrib.admin.models import LogEntry
 from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, UnFixedAttributeValue, Specification, DataFile
 from catalog.file_utils import XLSDocumentReader, ProcessingUploadData
 
+from app.models import MainLog
+
 from feincms.admin import tree_editor
 
 
@@ -191,6 +193,10 @@ class FileUploadAdmin(admin.ModelAdmin):
     #autocomplete_fields = ['category']
 
 
+class MainLogAdmin(admin.ModelAdmin):
+    list_display = ['user', 'action_time', 'message', 'action_flag']
+
+
 class LogEntryAdmin(admin.ModelAdmin):
     list_display = ['content_type', 'user', 'action_time', 'object_id', 'object_repr', 'action_flag', 'change_message']
     readonly_fields = ('content_type', 'user', 'action_time', 'object_id', 'object_repr', 'action_flag',
@@ -231,6 +237,7 @@ class FixValAdmin(BaseAdmin):
 # admin.site.register(Category, CategoryAdmin)
 
 
+admin.site.register(MainLog, MainLogAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(FixedAttributeValue, FixAttrValAdmin)
 admin.site.register(UnFixedAttributeValue, UnFixAttrValAdmin)

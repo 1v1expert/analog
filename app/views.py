@@ -9,7 +9,9 @@ from catalog.models import DataFile
 from catalog import choices
 from catalog.handlers import loaded_search_file_handler
 
+
 from app.forms import MyAuthenticationForm, AppSearchForm, SearchFromFile
+from app.models import MainLog
 
 
 def login_view(request):
@@ -20,11 +22,14 @@ def login_view(request):
 		user = authenticate(username=username, password=password)
 		if user is not None:
 			if user.is_active:
+				MainLog(user=user, message='Авторизация пользователя {} пройдена успешно'.format(username), action_flag=1).save()
 				login(request, user)
 				return redirect('app:home')
+		MainLog(message='Ошибка при авторизации по логин: {}, паролю: {}'.format(username, password), action_flag=1).save()
 		return render(request, 'login.html', {'auth_form': auth_form, 'error': 'Неверно введён логин или пароль'})
 		# auth = MyAuthenticationForm(request.POST)
 		# print(auth.get_user())
+	MainLog(message='Страница авторизации', action_flag=4).save()
 	return render(request, 'login.html', {'auth_form': auth_form})
 	# return render(request, 'login.html', {})
 
@@ -35,6 +40,7 @@ def search(request):
 	# form['article'].help_text = 'GG'
 	if request.method == 'POST':
 		form = AppSearchForm(request.POST)
+	MainLog(user=request.user, message='Страница поиска по артикулу', action_flag=2).save()
 	return render(request, 'search.html', {'user': request.user, 'form': form})
 	
 
@@ -54,6 +60,7 @@ def search_from_file_view(request):
 			return response
 	else:
 		form = SearchFromFile()
+		MainLog(user=request.user, message='Страница поиска по файлу', action_flag=2).save()
 		return render(request, 'search_from_file.html', {'user': request.user, 'form': form})
 
 
@@ -63,6 +70,7 @@ def advanced_search(request):
 
 
 def check_in_view(request):
+	MainLog(message='Страница регистрации', action_flag=4).save()
 	return render(request, 'check_in.html', {})
 	# client_form = ProfileForm(request.user.profile)
 	# return render(request, 'check_in.html', {
@@ -72,9 +80,11 @@ def check_in_view(request):
 
 @login_required(login_url='/login')
 def home_view(request):
+	MainLog(user=request.user, message='Домашняя страница', action_flag=4).save()
 	return render(request, 'home.html', {'user': request.user})
 
 
 def logout_view(request):
+	MainLog(user=request.user, message='Выход пользователя {} пройдена успешно'.format(request.user), action_flag=3).save()
 	logout(request)
 	return redirect('app:login')

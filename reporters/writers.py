@@ -8,6 +8,19 @@ class BookkeepingWriter(object):
         self.filename = name
         
     def dump(self, data):
+        self.write_top_header(**data['top_header'])
+        self.write_table_header(data['table_header'].values())
+        # FIXME: make use of `for k in data['table_header']`
+        for row in data['table_data']:
+            self.write_table_row(row.values())
+    
+    def write_top_header(self):
+        pass
+    
+    def write_table_header(self):
+        pass
+    
+    def write_table_row(self):
         pass
     
     def writerow(self, row, fmt):

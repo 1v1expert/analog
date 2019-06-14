@@ -3,6 +3,8 @@ from catalog.models import Product, DataFile
 from catalog.utils import SearchProducts
 from catalog import choices
 
+from app.models import MainLog
+
 from reporters.writers import BookkeepingWriter
 from reporters.writers import dump_csv
 
@@ -89,10 +91,18 @@ def result_api_processing(instance, request, product, default=True):
 			error = False
 		else:
 			error = 'Найдено более одного продукта, подходящего по параметрам поиска'
+		
+		MainLog(user=request.user, message='Поиск выполнился за {}c., найдено {}'.format(instance.lead_time,
+		                                                                                 [prod.article for prod in
+		                                                                                  instance.founded_products]),
+		        action_flag=2).save()
 		return JsonResponse(
 			{'result': [prod.article for prod in instance.founded_products],
 			 'error': error, 'Lead_time': instance.lead_time}, content_type='application/json')
 	else:
+		MainLog(user=request.user,
+		        message='Поиск выполнился за {}c., продуктов, удовлетворяющих параметрам поиска, не найдено'.format(instance.lead_time),
+		        action_flag=2).save()
 		error = 'Продукты, удовлетворяющие параметрам поиска, не найдены'
 		return JsonResponse(
 			{'result': [], 'error': error,

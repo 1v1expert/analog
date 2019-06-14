@@ -34,7 +34,7 @@ class XLSDocumentReader(object):
             line = {}
             for cnt_c, cell in enumerate(row):
                 if cell.value:
-                    line.update({cnt_c: cell.value})
+                    line.update({cnt_c: str(cell.value)})
             self.doc.append(line)
             
         self.workbook._archive.close()
@@ -98,6 +98,7 @@ class ProcessingUploadData(object):
             self.unique_manufacturer.add(product[4])
             #print(self.options)
             for key in product.keys():
+                print('Product: ', product[key])
                 if key < 5:
                     structured_product.update({
                             STRUCTURE_PRODUCT[key][1]: product[key].lstrip().rstrip()
