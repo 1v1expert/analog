@@ -10,7 +10,7 @@ from catalog import choices
 from catalog.handlers import loaded_search_file_handler
 
 
-from app.forms import MyAuthenticationForm, AppSearchForm, SearchFromFile
+from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile
 from app.models import MainLog
 
 
@@ -70,8 +70,20 @@ def advanced_search(request):
 
 
 def check_in_view(request):
-	MainLog(message='Страница регистрации', action_flag=4).save()
-	return render(request, 'check_in.html', {})
+	# print( request.META)
+	reg_form = MyRegistrationForm()
+	if request.method == 'POST':
+		reg_form = MyRegistrationForm(request.POST)
+		print(vars(reg_form))
+	# try:
+	# 	client_address = request.META['HTTP_X_FORWARDED_FOR']
+	# except:
+	# 	client_address = request.META['REMOTE_ADDR']
+	# print(client_address)
+	
+	# MainLog(message='Check_in view', client_address=client_address, action_flag=4).save()
+	MainLog(message='Check_in view', action_flag=4).save()
+	return render(request, 'check_in.html', {'reg_form': reg_form})
 	# client_form = ProfileForm(request.user.profile)
 	# return render(request, 'check_in.html', {
 	# 	'client_form': client_form

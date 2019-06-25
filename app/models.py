@@ -25,6 +25,7 @@ ACTION_FLAG_CHOICES = (
 class MainLog(models.Model):
     action_time = models.DateTimeField(_('action time'), default=timezone.now, editable=False, )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, blank=True, null=True, verbose_name=_('user'),)
+    client_address = models.TextField(max_length=200, blank=True, null=True, verbose_name="Адрес клиента")
     message = models.TextField(_('message'), blank=True)
     action_flag = models.PositiveSmallIntegerField(_('action flag'), choices=ACTION_FLAG_CHOICES)
     
