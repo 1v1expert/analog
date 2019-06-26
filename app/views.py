@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 # from app.forms import ProfileForm
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, models
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
@@ -73,8 +73,26 @@ def check_in_view(request):
 	# print( request.META)
 	reg_form = MyRegistrationForm()
 	if request.method == 'POST':
-		reg_form = MyRegistrationForm(request.POST)
-		print(vars(reg_form))
+		if request.POST['password'] != request.POST['double_password']:
+			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': "Введённые пароли не совпадают"})
+		
+		user, created = models.User.objects.get_or_create(username=request.POST['username'],
+		                                                  defaults={
+			                                                  'password': request.POST['password'],
+			                                                  'email': request.POST['email']
+		                                                  })
+		print(user, created)
+		if not created:
+			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь уже существует'})
+		else:
+			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь успешно создан'})
+		
+		# username = request.POST['username']
+		# password = request.POST['password']
+		# double_password = request.POST['double_password']
+		# reg_form = MyRegistrationForm(request.POST)
+		# print(vars(reg_form))
+		# print('post, {}', password, double_password)
 	# try:
 	# 	client_address = request.META['HTTP_X_FORWARDED_FOR']
 	# except:

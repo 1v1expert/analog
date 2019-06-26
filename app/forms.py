@@ -18,18 +18,19 @@ class MyAuthenticationForm(AuthenticationForm):
 
 	
 class MyRegistrationForm(forms.Form):
-	username = forms.CharField(label=_('Username'), widget=forms.TextInput(attrs={'autofocus': True,
+	username = forms.CharField(label=_('Логин'), widget=forms.TextInput(attrs={'autofocus': True,
 	                                                                              'class': 'form-control',
 	                                                                              'placeholder': "Введите имя пользователя"
 	                                                                              }))
-	password = forms.CharField(label=_("Password"), strip=False, widget=forms.PasswordInput(
+	password = forms.CharField(label="Пароль", strip=False, widget=forms.PasswordInput(
 		attrs={'class': 'form-control', 'placeholder': "Введите пароль"}), )
-	double_password = forms.CharField(label=_("Password"), strip=False, widget=forms.PasswordInput(
+	double_password = forms.CharField(label="Подтверждение пароля", strip=False, widget=forms.PasswordInput(
 		attrs={'class': 'form-control', 'placeholder': "Введите пароль"}), )
 	email = forms.EmailField(label=_("E-mail"), widget=forms.EmailInput(attrs={'autofocus': True, 'type': 'email',
 	                                                                              'class': 'form-control',
 	                                                                              'placeholder': "Введите email"
 	                                                                              }))
+
 
 class SearchFromFile(forms.Form):
 	file = forms.FileField(label='Файл', required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))

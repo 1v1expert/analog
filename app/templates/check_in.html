@@ -28,7 +28,11 @@
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="mb-30">
                                             <h3 class="text-center txt-dark mb-10">Регистрация в AnalogService</h3>
+                                            {% if error %}
+                                                <h6 class="text-center nonecase-font txt-danger">{{ error }}</h6>
+                                            {% else %}
                                             <h6 class="text-center nonecase-font txt-grey">Введите свои данные ниже</h6>
+                                            {% endif %}
                                         </div>
                                         <div class="form-wrap">
                                             <form action="{% url 'app:check_in' %}" method="post">
@@ -52,16 +56,17 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="pull-left control-label mb-10"
-                                                           for="exampleInputpwd_2">Password</label>
-                                                    <input type="password" class="form-control" required=""
-                                                           id="exampleInputpwd_2" placeholder="Enter pwd">
+                                                           for="{{ reg_form.password.id_for_label }}">{{ reg_form.password.label }}</label>
+                                                    {{ reg_form.password }}
+{#                                                    <input type="password" class="form-control" required=""#}
+{#                                                           id="exampleInputpwd_2" placeholder="Enter pwd">#}
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="pull-left control-label mb-10"
-                                                           for="exampleInputpwd_3">Confirm
-                                                        Password</label>
-                                                    <input type="password" class="form-control" required=""
-                                                           id="exampleInputpwd_3" placeholder="Enter pwd">
+                                                           for="{{ reg_form.double_password.id_for_label }}">{{ reg_form.double_password.label }}</label>
+                                                    {{ reg_form.double_password }}
+{#                                                    <input type="password" class="form-control" required=""#}
+{#                                                           id="exampleInputpwd_3" placeholder="Enter pwd">#}
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="checkbox checkbox-primary pr-10 pull-left">
