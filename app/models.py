@@ -27,11 +27,11 @@ class MainLog(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, blank=True, null=True, verbose_name=_('user'),)
     client_address = models.TextField(max_length=200, blank=True, null=True, verbose_name="Адрес клиента")
     message = models.TextField(_('message'), blank=True)
-    action_flag = models.PositiveSmallIntegerField(_('action flag'), choices=ACTION_FLAG_CHOICES)
+    # action_flag = models.PositiveSmallIntegerField(_('action flag'), choices=ACTION_FLAG_CHOICES)
     
     class Meta:
-        verbose_name = _('main log')
-        verbose_name_plural = _('main logs')
+        verbose_name = "Лог активности"
+        verbose_name_plural = "Логи активности"
         ordering = ('-action_time',)
     
     def __str__(self):

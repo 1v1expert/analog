@@ -27,7 +27,6 @@ def a_decorator_passing_logs(message=""):
 			MainLog(user=request.user,
 			        message=message,
 			        client_address=client_address,
-			        action_flag=4
 			        ).save()
 			
 			return func(request)
@@ -45,14 +44,14 @@ def login_view(request):
 		user = authenticate(username=username, password=password)
 		if user is not None:
 			if user.is_active:
-				MainLog(user=user, message='Авторизация пользователя {} пройдена успешно'.format(username), action_flag=1).save()
+				MainLog(user=user, message='Авторизация пользователя {} пройдена успешно'.format(username)).save()
 				login(request, user)
 				return redirect('app:home')
-		MainLog(message='Ошибка при авторизации по логин: {}, паролю: {}'.format(username, password), action_flag=1).save()
+		MainLog(message='Ошибка при авторизации по логин: {}, паролю: {}'.format(username, password)).save()
 		return render(request, 'login.html', {'auth_form': auth_form, 'error': 'Неверно введён логин или пароль'})
 		# auth = MyAuthenticationForm(request.POST)
 		# print(auth.get_user())
-	MainLog(message='Страница авторизации', action_flag=4).save()
+	MainLog(message='Страница авторизации').save()
 	return render(request, 'login.html', {'auth_form': auth_form})
 	# return render(request, 'login.html', {})
 
@@ -63,7 +62,7 @@ def search(request):
 	# form['article'].help_text = 'GG'
 	if request.method == 'POST':
 		form = AppSearchForm(request.POST)
-	MainLog(user=request.user, message='Страница поиска по артикулу', action_flag=2).save()
+	MainLog(user=request.user, message='Страница поиска по артикулу').save()
 	return render(request, 'search.html', {'user': request.user, 'form': form})
 	
 
@@ -83,7 +82,7 @@ def search_from_file_view(request):
 			return response
 	else:
 		form = SearchFromFile()
-		MainLog(user=request.user, message='Страница поиска по файлу', action_flag=2).save()
+		MainLog(user=request.user, message='Страница поиска по файлу').save()
 		return render(request, 'search_from_file.html', {'user': request.user, 'form': form})
 
 
@@ -114,7 +113,7 @@ def check_in_view(request):
 	except KeyError:
 		client_address = request.META.get('REMOTE_ADDR')
 	
-	MainLog(message='Check_in view', client_address=client_address, action_flag=4).save()
+	MainLog(message='Check_in view', client_address=client_address).save()
 	return render(request, 'check_in.html', {'reg_form': reg_form})
 
 
@@ -125,6 +124,6 @@ def home_view(request):
 
 
 def logout_view(request):
-	MainLog(user=request.user, message='Выход пользователя {} пройдена успешно'.format(request.user), action_flag=3).save()
+	MainLog(user=request.user, message='Выход пользователя {} пройдена успешно'.format(request.user)).save()
 	logout(request)
 	return redirect('app:login')

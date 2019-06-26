@@ -6,6 +6,8 @@ from django.db import models
 # import uuid
 from django.contrib.auth.models import User
 from .choices import TYPES, UNITS, TYPES_FILE
+
+import mptt
 from django.utils import timezone
 
 
@@ -50,7 +52,7 @@ class Manufacturer(Base):
         verbose_name = "Производитель"
         verbose_name_plural = "Производители"
 
-import mptt
+
 class Category(Base):
     """
     Модель класса товаров

@@ -194,7 +194,7 @@ class FileUploadAdmin(admin.ModelAdmin):
 
 
 class MainLogAdmin(admin.ModelAdmin):
-    list_display = ['user', 'action_time', 'message', 'action_flag', 'client_address']
+    list_display = ['user', 'action_time', 'message', 'client_address']
 
 
 class LogEntryAdmin(admin.ModelAdmin):
