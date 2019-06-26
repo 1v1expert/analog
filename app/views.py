@@ -14,6 +14,29 @@ from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, S
 from app.models import MainLog
 
 
+def a_decorator_passing_logs(message=""):
+	def decorator_processing(func):
+		def wrapper_logs(request):
+			print(vars(request))
+
+			try:
+				client_address = request.META['HTTP_X_FORWARDED_FOR']
+			except KeyError:
+				client_address = request.META.get('REMOTE_ADDR')
+	
+			MainLog(user=request.user,
+			        message=message,
+			        client_address=client_address,
+			        action_flag=4
+			        ).save()
+			
+			return func(request)
+		
+		return wrapper_logs
+	
+	return decorator_processing
+
+
 def login_view(request):
 	auth_form = MyAuthenticationForm(request)
 	if request.method == 'POST':
@@ -70,7 +93,6 @@ def advanced_search(request):
 
 
 def check_in_view(request):
-	# print( request.META)
 	reg_form = MyRegistrationForm()
 	if request.method == 'POST':
 		if request.POST['password'] != request.POST['double_password']:
@@ -87,30 +109,18 @@ def check_in_view(request):
 		else:
 			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь успешно создан'})
 		
-		# username = request.POST['username']
-		# password = request.POST['password']
-		# double_password = request.POST['double_password']
-		# reg_form = MyRegistrationForm(request.POST)
-		# print(vars(reg_form))
-		# print('post, {}', password, double_password)
-	# try:
-	# 	client_address = request.META['HTTP_X_FORWARDED_FOR']
-	# except:
-	# 	client_address = request.META['REMOTE_ADDR']
-	# print(client_address)
+	try:
+		client_address = request.META['HTTP_X_FORWARDED_FOR']
+	except KeyError:
+		client_address = request.META.get('REMOTE_ADDR')
 	
-	# MainLog(message='Check_in view', client_address=client_address, action_flag=4).save()
-	MainLog(message='Check_in view', action_flag=4).save()
+	MainLog(message='Check_in view', client_address=client_address, action_flag=4).save()
 	return render(request, 'check_in.html', {'reg_form': reg_form})
-	# client_form = ProfileForm(request.user.profile)
-	# return render(request, 'check_in.html', {
-	# 	'client_form': client_form
-	# })
 
 
 @login_required(login_url='/login')
+@a_decorator_passing_logs(message="Домашняя страница")
 def home_view(request):
-	MainLog(user=request.user, message='Домашняя страница', action_flag=4).save()
 	return render(request, 'home.html', {'user': request.user})
 
 

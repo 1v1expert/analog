@@ -35,7 +35,7 @@ class MainLog(models.Model):
         ordering = ('-action_time',)
     
     def __str__(self):
-        return self.user + '; ' + self.message
+        return '{}; {}'.format(self.user, self.message)
         
 
 class Profile(models.Model):
