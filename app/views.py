@@ -17,7 +17,6 @@ from app.models import MainLog
 def a_decorator_passing_logs(message=""):
 	def decorator_processing(func):
 		def wrapper_logs(request):
-			print(vars(request))
 
 			try:
 				client_address = request.META['HTTP_X_FORWARDED_FOR']
