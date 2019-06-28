@@ -9,6 +9,8 @@ from catalog.models import DataFile
 from catalog import choices
 from catalog.handlers import loaded_search_file_handler
 
+from django.contrib.auth.models import User
+
 
 from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile
 from app.models import MainLog
@@ -17,14 +19,20 @@ from app.models import MainLog
 def a_decorator_passing_logs(message=""):
 	def decorator_processing(func):
 		def wrapper_logs(request):
-
+			print(vars(request), request.method)
 			try:
 				client_address = request.META['HTTP_X_FORWARDED_FOR']
 			except KeyError:
 				client_address = request.META.get('REMOTE_ADDR')
-	
-			MainLog(user=request.user,
-			        message=message,
+				
+			path_info = request.META.get('PATH_INFO')
+			
+			user = request.user
+			if str(request.user) == 'AnonymousUser':
+				user = None
+			
+			MainLog(user=user,
+			        message='Path_info: {}; Method: {}'.format(message, path_info, request.method),
 			        client_address=client_address,
 			        ).save()
 			
@@ -35,6 +43,7 @@ def a_decorator_passing_logs(message=""):
 	return decorator_processing
 
 
+@a_decorator_passing_logs(message="")
 def login_view(request):
 	auth_form = MyAuthenticationForm(request)
 	if request.method == 'POST':
@@ -90,6 +99,7 @@ def advanced_search(request):
 	return redirect('catalog:search')
 
 
+@a_decorator_passing_logs(message="")
 def check_in_view(request):
 	reg_form = MyRegistrationForm()
 	if request.method == 'POST':
@@ -101,28 +111,22 @@ def check_in_view(request):
 			                                                  'password': request.POST['password'],
 			                                                  'email': request.POST['email']
 		                                                  })
-		print(user, created)
+
 		if not created:
 			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь уже существует'})
 		else:
 			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь успешно создан'})
 		
-	try:
-		client_address = request.META['HTTP_X_FORWARDED_FOR']
-	except KeyError:
-		client_address = request.META.get('REMOTE_ADDR')
-	
-	MainLog(message='Check_in view', client_address=client_address).save()
 	return render(request, 'check_in.html', {'reg_form': reg_form})
 
 
 @login_required(login_url='/login')
-@a_decorator_passing_logs(message="Домашняя страница")
+@a_decorator_passing_logs(message="")
 def home_view(request):
 	return render(request, 'home.html', {'user': request.user})
 
 
+@a_decorator_passing_logs(message="")
 def logout_view(request):
-	MainLog(user=request.user, message='Выход пользователя {} пройдена успешно'.format(request.user)).save()
 	logout(request)
 	return redirect('app:login')
