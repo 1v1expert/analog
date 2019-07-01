@@ -49,7 +49,7 @@ def search(request):
 			else:
 				MainLog(user=request.user, message=resp['error_system']
 				        ).save()
-				return JsonResponse(resp,content_type='application/json')
+				return JsonResponse(resp, content_type='application/json')
 			
 		return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
 	
@@ -143,31 +143,13 @@ def check_product_and_get_attributes(request):
 			article = form.cleaned_data['article']
 			manufacturer_from = form.cleaned_data['manufacturer_from']
 			
-			try:
-				product = Product.objects.get(article=article, manufacturer=manufacturer_from)
-			except Product.DoesNotExist:
-				return JsonResponse({'result': [],
-				                     'error': "Продукт с артикулом {} в базе не найден".format(article)
-				                     }, content_type='application/json')
-			except Product.MultipleObjectsReturned:
-				return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"}, content_type='application/json')
-				
-			attributes_array = get_attributes(product)
-			MainLog(user=request.user,
-			        message='По артикулу: {} и производителю: {} запрошена расширенная форма: {}'.format(article,
-			                                                                                            manufacturer_from,
-			                                                                                             attributes_array)).save()
-			return JsonResponse({'result': attributes_array, 'error': False}, content_type='application/json')
-		# 	return list attrs
-		else:
-			return JsonResponse({'result': [], 'error': "Не найден продукт"}, content_type='application/json')
-		# body_unicode = request.body.decode('utf-8')
-		# ----
-		# body = json.loads(request.body)
-		# content = body['manufacturer_from']
-		# print('POST', content)
-	data = some_data_to_dump = {"success": True}
-	# data = json.dumps(some_data_to_dump)
-	# data = simplejson.dumps(some_data_to_dump)
-	return JsonResponse(data, content_type='application/json')
-	# return HttpResponse(json.dumps(some_data_to_dump), content_type='application/json')
+			resp = check_product(article, manufacturer_from)
+			
+			if resp['correctly']:
+				attributes_array = get_attributes(resp['product'])
+				return JsonResponse({'result': attributes_array, 'error': False}, content_type='application/json')
+			else:
+				MainLog(user=request.user, message=resp['error_system']).save()
+				return JsonResponse(resp, content_type='application/json')
+			
+	return JsonResponse({"success": True}, content_type='application/json')
