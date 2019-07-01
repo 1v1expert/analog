@@ -12,7 +12,7 @@ from app.models import MainLog
 from app.decorators import a_decorator_passing_logs
 
 
-def check_product(user, article, manufacturer_from) -> dict:
+def check_product(article, manufacturer_from) -> dict:
 	response = {'result': []}
 	
 	try:
@@ -41,8 +41,8 @@ def search(request):
 			article = form.cleaned_data['article']
 			manufacturer_from = form.cleaned_data['manufacturer_from']
 			
-			resp = check_product(request.user, article, manufacturer_from)
-			print(resp)
+			resp = check_product(article, manufacturer_from)
+			
 			if resp['correctly']:
 				result = SearchProducts(request, form, resp['product'])
 				return result_api_processing(result, request, resp['product'], default=True)
@@ -51,23 +51,6 @@ def search(request):
 				        ).save()
 				return JsonResponse(resp,content_type='application/json')
 			
-			# try:
-			# 	product = Product.objects.get(article=article, manufacturer=manufacturer_from)
-			# except Product.DoesNotExist:
-			# 	MainLog(user=request.user, message='По артикулу: {} и производителю: {} товара не найдено'.format(article, manufacturer_from)).save()
-			# 	return JsonResponse({'result': [], 'error': "Не найден продукт"}, content_type='application/json')
-			# except Product.MultipleObjectsReturned:
-			# 	MainLog(user=request.user,
-			# 	        message='По артикулу: {} и производителю: {} найдено несколько товаров'.format(article,
-			# 	                                                                               manufacturer_from)).save()
-			# 	return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"},
-			# 	                    content_type='application/json')
-			
-			
-			# MainLog(user=request.user, message='По артикулу: {} и производителю: {}'.format(article, manufacturer_from)).save()
-			# result = SearchProducts(request, form, product)
-			# return result_api_processing(result, request, product, default=True)  # return SearchProducts(request, form, product).search()
-		
 		return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
 	
 	return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"}, content_type='application/json')
