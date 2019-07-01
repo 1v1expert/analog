@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-# from app.forms import ProfileForm
 
 from django.contrib.auth import authenticate, login, logout, models
 from django.contrib.auth.decorators import login_required
@@ -11,35 +10,7 @@ from catalog.handlers import loaded_search_file_handler
 
 
 from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile
-from app.models import MainLog
-
-
-def a_decorator_passing_logs(func):
-	def wrapper_logs(request):
-		try:
-			client_address = request.META['HTTP_X_FORWARDED_FOR']
-		except KeyError:
-			client_address = request.META.get('REMOTE_ADDR')
-			
-		path_info = request.META.get('PATH_INFO')
-		
-		user = request.user
-		if str(request.user) == 'AnonymousUser':
-			user = None
-			
-		message = 'path_info: {}; method: {}'.format(path_info, request.method)
-		
-		if request.method == 'POST':
-			message += '; post_data: {}'.format(request.POST)
-		
-		MainLog(user=user,
-		        message=message,
-		        client_address=client_address,
-		        ).save()
-		
-		return func(request)
-	
-	return wrapper_logs
+from app.decorators import a_decorator_passing_logs
 
 
 @a_decorator_passing_logs
