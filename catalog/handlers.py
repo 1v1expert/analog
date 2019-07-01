@@ -95,15 +95,13 @@ def result_api_processing(instance, request, product, default=True):
 		
 		MainLog(user=request.user, message='Поиск выполнился за {}c., найдено {}'.format(instance.lead_time,
 		                                                                                 [prod.article for prod in
-		                                                                                  instance.founded_products]),
-		        action_flag=2).save()
+		                                                                                  instance.founded_products])).save()
 		return JsonResponse(
 			{'result': [prod.article for prod in instance.founded_products[:1]],
 			 'error': error, 'Lead_time': instance.lead_time}, content_type='application/json')
 	else:
 		MainLog(user=request.user,
-		        message='Поиск выполнился за {}c., продуктов, удовлетворяющих параметрам поиска, не найдено'.format(instance.lead_time),
-		        action_flag=2).save()
+		        message='Поиск выполнился за {}c., продуктов, удовлетворяющих параметрам поиска, не найдено'.format(instance.lead_time)).save()
 		error = 'Продукты, удовлетворяющие параметрам поиска, не найдены'
 		return JsonResponse(
 			{'result': [], 'error': error,

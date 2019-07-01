@@ -9,41 +9,40 @@ from catalog.models import DataFile
 from catalog import choices
 from catalog.handlers import loaded_search_file_handler
 
-from django.contrib.auth.models import User
-
 
 from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile
 from app.models import MainLog
 
 
-def a_decorator_passing_logs(message=""):
-	def decorator_processing(func):
-		def wrapper_logs(request):
-			print(vars(request), request.method)
-			try:
-				client_address = request.META['HTTP_X_FORWARDED_FOR']
-			except KeyError:
-				client_address = request.META.get('REMOTE_ADDR')
-				
-			path_info = request.META.get('PATH_INFO')
+def a_decorator_passing_logs(func):
+	def wrapper_logs(request):
+		try:
+			client_address = request.META['HTTP_X_FORWARDED_FOR']
+		except KeyError:
+			client_address = request.META.get('REMOTE_ADDR')
 			
-			user = request.user
-			if str(request.user) == 'AnonymousUser':
-				user = None
-			
-			MainLog(user=user,
-			        message='Path_info: {}; Method: {}'.format(message, path_info, request.method),
-			        client_address=client_address,
-			        ).save()
-			
-			return func(request)
+		path_info = request.META.get('PATH_INFO')
 		
-		return wrapper_logs
+		user = request.user
+		if str(request.user) == 'AnonymousUser':
+			user = None
+			
+		message = 'path_info: {}; method: {}'.format(path_info, request.method)
+		
+		if request.method == 'POST':
+			message += '; post_data: {}'.format(request.POST)
+		
+		MainLog(user=user,
+		        message=message,
+		        client_address=client_address,
+		        ).save()
+		
+		return func(request)
 	
-	return decorator_processing
+	return wrapper_logs
 
 
-@a_decorator_passing_logs(message="")
+@a_decorator_passing_logs
 def login_view(request):
 	auth_form = MyAuthenticationForm(request)
 	if request.method == 'POST':
@@ -52,28 +51,25 @@ def login_view(request):
 		user = authenticate(username=username, password=password)
 		if user is not None:
 			if user.is_active:
-				MainLog(user=user, message='Авторизация пользователя {} пройдена успешно'.format(username)).save()
 				login(request, user)
 				return redirect('app:home')
-		MainLog(message='Ошибка при авторизации по логин: {}, паролю: {}'.format(username, password)).save()
 		return render(request, 'login.html', {'auth_form': auth_form, 'error': 'Неверно введён логин или пароль'})
-		# auth = MyAuthenticationForm(request.POST)
-		# print(auth.get_user())
-	MainLog(message='Страница авторизации').save()
+
 	return render(request, 'login.html', {'auth_form': auth_form})
-	# return render(request, 'login.html', {})
 
 
+@a_decorator_passing_logs
 @login_required(login_url='/login')
 def search(request):
 	form = AppSearchForm()
-	# form['article'].help_text = 'GG'
+
 	if request.method == 'POST':
 		form = AppSearchForm(request.POST)
-	MainLog(user=request.user, message='Страница поиска по артикулу').save()
+		
 	return render(request, 'search.html', {'user': request.user, 'form': form})
 	
 
+@a_decorator_passing_logs
 @login_required(login_url='/login')
 def search_from_file_view(request):
 	if request.method == 'POST':
@@ -90,16 +86,16 @@ def search_from_file_view(request):
 			return response
 	else:
 		form = SearchFromFile()
-		MainLog(user=request.user, message='Страница поиска по файлу').save()
 		return render(request, 'search_from_file.html', {'user': request.user, 'form': form})
 
 
+@a_decorator_passing_logs
 @login_required(login_url='/login')
 def advanced_search(request):
 	return redirect('catalog:search')
 
 
-@a_decorator_passing_logs(message="")
+@a_decorator_passing_logs
 def check_in_view(request):
 	reg_form = MyRegistrationForm()
 	if request.method == 'POST':
@@ -121,12 +117,12 @@ def check_in_view(request):
 
 
 @login_required(login_url='/login')
-@a_decorator_passing_logs(message="")
+@a_decorator_passing_logs
 def home_view(request):
 	return render(request, 'home.html', {'user': request.user})
 
 
-@a_decorator_passing_logs(message="")
+@a_decorator_passing_logs
 def logout_view(request):
 	logout(request)
 	return redirect('app:login')

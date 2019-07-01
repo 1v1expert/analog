@@ -21,18 +21,16 @@ def search(request):
 			try:
 				product = Product.objects.get(article=article, manufacturer=manufacturer_from)
 			except Product.DoesNotExist:
-				MainLog(user=request.user, message='По артикулу: {} и производителю: {} товара не найдено'.format(article, manufacturer_from),
-				        action_flag=2).save()
+				MainLog(user=request.user, message='По артикулу: {} и производителю: {} товара не найдено'.format(article, manufacturer_from)).save()
 				return JsonResponse({'result': [], 'error': "Не найден продукт"}, content_type='application/json')
 			except Product.MultipleObjectsReturned:
 				MainLog(user=request.user,
 				        message='По артикулу: {} и производителю: {} найдено несколько товаров'.format(article,
-				                                                                               manufacturer_from),
-				        action_flag=2).save()
+				                                                                               manufacturer_from)).save()
 				return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"},
 				                    content_type='application/json')
 			
-			MainLog(user=request.user, message='По артикулу: {} и производителю: {}'.format(article, manufacturer_from), action_flag=2).save()
+			MainLog(user=request.user, message='По артикулу: {} и производителю: {}'.format(article, manufacturer_from)).save()
 			result = SearchProducts(request, form, product)
 			return result_api_processing(result, request, product, default=True)  # return SearchProducts(request, form, product).search()
 		
@@ -80,14 +78,12 @@ def advanced_search(request):
 			except Product.DoesNotExist:
 				MainLog(user=request.user,
 				        message='По артикулу: {} и производителю: {} не найдено товара'.format(article,
-				                                                                                       manufacturer_from),
-				        action_flag=2).save()
+				                                                                                       manufacturer_from)).save()
 				return JsonResponse({'result': [], 'error': "Не найден продукт"}, content_type='application/json')
 			except Product.MultipleObjectsReturned:
 				MainLog(user=request.user,
 				        message='По артикулу: {} и производителю: {} найдено несколько товаров'.format(article,
-				                                                                                       manufacturer_from),
-				        action_flag=2).save()
+				                                                                                       manufacturer_from)).save()
 				return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"},
 				                    content_type='application/json')
 			attributes_array = get_attributes(product)
@@ -98,22 +94,18 @@ def advanced_search(request):
 				MainLog(user=request.user,
 				        message='По артикулу: {} и производителю: {} запрошен расширенный поиск: {}'.format(article,
 				                                                                                       manufacturer_from,
-				                                                                                        advanced_form.cleaned_data),
-				        action_flag=2).save()
+				                                                                                        advanced_form.cleaned_data)).save()
 				result = SearchProducts(request, advanced_form, product)
 				return result_api_processing(result, request, product, default=False)
 			else:
 				MainLog(user=request.user,
 				        message='Произошла ошибка при расширенном поиске по артикулу: {} и производителю: {}'.format(article,
-				                                                                                            manufacturer_from),
-				        action_flag=2).save()
+				                                                                                            manufacturer_from)).save()
 				return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
 		MainLog(user=request.user,
-		        message='Произошла ошибка при расширенном поиске, невалидная форма',
-		        action_flag=2).save()
+		        message='Произошла ошибка при расширенном поиске, невалидная форма').save()
 		return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
-	MainLog(message='Неверный тип запроса расширенного поиска',
-	        action_flag=2).save()
+	MainLog(message='Неверный тип запроса расширенного поиска').save()
 	return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"},
 	                    content_type='application/json')
 	# if request.method == 'POST':
@@ -147,8 +139,7 @@ def check_product_and_get_attributes(request):
 			MainLog(user=request.user,
 			        message='По артикулу: {} и производителю: {} запрошена расширенная форма: {}'.format(article,
 			                                                                                            manufacturer_from,
-			                                                                                             attributes_array),
-			        action_flag=2).save()
+			                                                                                             attributes_array)).save()
 			return JsonResponse({'result': attributes_array, 'error': False}, content_type='application/json')
 		# 	return list attrs
 		else:
