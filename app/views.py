@@ -9,7 +9,7 @@ from catalog import choices
 from catalog.handlers import loaded_search_file_handler
 
 
-from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile
+from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile, EmailConfirmationForm
 from app.decorators import a_decorator_passing_logs
 
 
@@ -85,8 +85,9 @@ def check_in_view(request):
 			from django.core.mail import send_mail
 			import hashlib
 			verif_code = hashlib.md5('{}'.format(user.pk).encode()).hexdigest()
+			href = 'http://analogpro.ru/email_confirmation/{}-{}/'.format(verif_code, user.pk)
 			send_mail('Подтверждение почты',
-			          'Ваш верификационный код - {}'.format(verif_code),
+			          'Ваш верификационный код - {}, введите его или перейдите по ссылке: {}'.format(verif_code, href),
 			          [request.POST['email']],
 			          fail_silently=False)
 			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь успешно создан'})
@@ -104,3 +105,9 @@ def home_view(request):
 def logout_view(request):
 	logout(request)
 	return redirect('app:login')
+
+
+def email_confirmation(request, verification_code, user_id):
+	confirmation_form = EmailConfirmationForm()
+	print(verification_code, user_id)
+	return render(request, 'home.html', {'conf_form': confirmation_form})

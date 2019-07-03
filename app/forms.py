@@ -7,6 +7,15 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 
+class EmailConfirmationForm(forms.Form):
+	code = forms.CharField(label="Код подтверждения", strip=False,
+	                       widget=forms.TextInput(attrs={'autofocus': True, 'class': 'form-control',
+	                                                     'placeholder': "Введите код подтверждения"
+	                                                     }
+	                                              )
+	                       )
+	
+	
 class MyAuthenticationForm(AuthenticationForm):
 	username = UsernameField(widget=forms.TextInput(attrs={'autofocus': True,
 	                                                       'class': 'form-control',
