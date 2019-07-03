@@ -82,6 +82,13 @@ def check_in_view(request):
 		if not created:
 			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь уже существует'})
 		else:
+			from django.core.mail import send_mail
+			import hashlib
+			verif_code = hashlib.md5('{}'.format(user.pk).encode()).hexdigest()
+			send_mail('Подтверждение почты',
+			          'Ваш верификационный код - {}'.format(verif_code),
+			          [request.POST['email']],
+			          fail_silently=False)
 			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь успешно создан'})
 		
 	return render(request, 'check_in.html', {'reg_form': reg_form})
