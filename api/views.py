@@ -77,9 +77,6 @@ def get_attributes(product, api=True):
 	
 	# types = set(product.category.attributes.all().values_list('type',  flat=True))
 	response = {'attributes': attributes_array, 'product_types': list((type_[0] for type_ in TYPES))[::-1], 'all_types': TYPES_DICT}
-	# print(response, '\n\n', TYPES_REV_DICT, '\n\n', TYPES_DICT)
-	# attributes_array.update()
-	# print(attributes_array, '\n', list(types))
 	return response
 
 

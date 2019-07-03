@@ -113,7 +113,6 @@ class ProcessingUploadData(object):
             structured_product.update({
                 STRUCTURE_PRODUCT[5][1]: attributes
             })
-            print(structured_product)
             
             is_valid_data = self.check_exists_types(structured_product)
             if isinstance(is_valid_data, str):
@@ -226,4 +225,3 @@ class ProcessingUploadData(object):
         #
     def get_attribute(self):
         pass
-    
