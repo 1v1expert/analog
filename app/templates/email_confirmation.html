@@ -28,26 +28,36 @@
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="mb-30">
                                             <h3 class="text-center txt-dark mb-10">Регистрация в AnalogService</h3>
-                                            {% if error %}
-                                                <h6 class="text-center nonecase-font txt-danger">{{ error }}</h6>
-                                            {% else %}
-                                            <h6 class="text-center nonecase-font txt-grey">Подтвердите email</h6>
-                                            {% endif %}
+                                            <h6 class="text-center nonecase-font txt-danger">{{ msg }}</h6>
                                         </div>
-                                        <div class="form-wrap">
-                                            <form action="{% url 'app:email_confirmation'  %}" method="post">
-                                                {% csrf_token %}
-                                                <div class="form-group">
-                                                    <label class="control-label mb-10" for="{{ conf_form.code.id_for_label }}">{{ conf_form.code.label }}</label>
-                                                    {{ conf_form.code }}
-                                                </div>
-                                                <div class="form-group text-center">
-                                                    <button type="submit" class="btn btn-info btn-rounded">
-                                                        подтвердить
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                        {% if confirmation %}
+                                            <div class="form-wrap">
+                                                <form action="{% url 'app:login' %}" method="get">
+                                                    <div class="form-group text-center">
+                                                        <button type="submit" class="btn btn-info btn-rounded">
+                                                            авторизоваться
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        {% else %}
+                                            <div class="form-wrap">
+                                                <form action="{% url 'app:email_confirmation' user.pk user.pk %}"
+                                                      method="post">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label class="control-label mb-10"
+                                                               for="{{ conf_form.code.id_for_label }}">{{ conf_form.code.label }}</label>
+                                                        {{ conf_form.code }}
+                                                    </div>
+                                                    <div class="form-group text-center">
+                                                        <button type="submit" class="btn btn-info btn-rounded">
+                                                            подтвердить
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

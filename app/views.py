@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib.auth import authenticate, login, logout, models
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.core.mail import get_connection, send_mail
+from django.conf import settings
 
 from catalog.models import DataFile
 from catalog import choices
@@ -12,6 +14,8 @@ from catalog.handlers import loaded_search_file_handler
 from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile, EmailConfirmationForm
 from app.decorators import a_decorator_passing_logs
 
+import hashlib
+
 
 @a_decorator_passing_logs
 def login_view(request):
@@ -20,6 +24,7 @@ def login_view(request):
 		username = request.POST['username']
 		password = request.POST['password']
 		user = authenticate(username=username, password=password)
+		print(user)
 		if user is not None:
 			if user.is_active:
 				login(request, user)
@@ -75,22 +80,30 @@ def check_in_view(request):
 		
 		user, created = models.User.objects.get_or_create(username=request.POST['username'],
 		                                                  defaults={
-			                                                  'password': request.POST['password'],
-			                                                  'email': request.POST['email']
+			                                                  # 'password': request.POST['password'],
+			                                                  'email': request.POST['email'],
+			                                                  'is_active': False
 		                                                  })
 
 		if not created:
 			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь уже существует'})
 		else:
-			from django.core.mail import send_mail
-			import hashlib
-			verif_code = hashlib.md5('{}'.format(user.pk).encode()).hexdigest()
-			href = 'http://analogpro.ru/email_confirmation/{}-{}/'.format(verif_code, user.pk)
-			send_mail('Подтверждение почты',
-			          'Ваш верификационный код - {}, введите его или перейдите по ссылке: {}'.format(verif_code, href),
-			          [request.POST['email']],
-			          fail_silently=False)
-			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь успешно создан'})
+			user.set_password(request.POST['password'])
+			user.save()
+			try:
+				connection = get_connection(host=settings.EMAIL_HOST, port=settings.EMAIL_PORT, username=settings.EMAIL_HOST_USER,
+				                            password=settings.EMAIL_HOST_PASSWORD, use_tls=settings.EMAIL_USE_TLS)
+				verif_code = hashlib.md5('{}'.format(user.pk).encode()).hexdigest()
+				href = 'http://analogpro.ru/email_confirmation/{}-{}/'.format(verif_code, user.pk)
+				send_mail('Подтверждение почты',
+				          'Ваш верификационный код - {}, введите его или перейдите по ссылке: {}'.format(verif_code,
+				                                                                                         href),
+				          'info@analogpro.ru', [request.POST['email']], connection=connection, fail_silently=False)
+				# print(response_email, [request.POST['email']])
+			except:
+				return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'Произошла проблема при отправке email'})
+			# return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь успешно создан'})
+			return redirect('app:email_confirmation', user.pk, user.pk)
 		
 	return render(request, 'check_in.html', {'reg_form': reg_form})
 
@@ -108,6 +121,24 @@ def logout_view(request):
 
 
 def email_confirmation(request, verification_code, user_id):
-	confirmation_form = EmailConfirmationForm()
-	print(verification_code, user_id)
-	return render(request, 'home.html', {'conf_form': confirmation_form})
+	user = get_object_or_404(models.User, pk=user_id)
+	check_code = hashlib.md5('{}'.format(user.pk).encode()).hexdigest()
+	msg = 'Подтвердите email'
+	if verification_code == check_code:
+		user.is_active = True
+		user.save()
+		msg = 'E-mail подтверждён'
+		return render(request, 'email_confirmation.html', {'confirmation': True, 'user': user, 'msg': msg})
+	elif verification_code == user_id:
+		confirmation_form = EmailConfirmationForm()
+		if request.method == 'POST':
+			confirmation_form = EmailConfirmationForm(request)
+			if check_code == request.POST['code']:
+				user.is_active = True
+				user.save()
+				msg = 'E-mail подтверждён'
+				return render(request, 'email_confirmation.html',
+				              {'confirmation': True, 'user': user, 'msg': msg})
+			else:
+				msg = 'Код неверен'
+		return render(request, 'email_confirmation.html', {'conf_form': confirmation_form, 'user': user, 'msg': msg})

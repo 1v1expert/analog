@@ -9,7 +9,7 @@ urlpatterns = [
 	url(r'^search_from_file/$', search_from_file_view, name='search_from_file'),
 	url(r'^advanced_search/$', search, name='advanced_search'),
 	url(r'^logout/$', logout_view, name='logout'),
-	url(r'^email_confirmation/(?P<verification_code>[\w-]+)-(?P<user_id>[0-9]+)/$', email_confirmation, name='email_confirmation'),
+	url(r'^email_confirmation/(?P<verification_code>[0-9\w-]+)-(?P<user_id>[0-9]+)/$', email_confirmation, name='email_confirmation'),
 	url(r'^$', home_view, name='home'),
 	# url(r'^admin/', admin.site.urls),
 ]
