@@ -3,6 +3,7 @@ from catalog.models import Product, DataFile
 from catalog.utils import SearchProducts
 from catalog import choices
 
+from internal.utils import get_product_info
 from app.models import MainLog
 
 from reporters.writers import BookkeepingWriter
@@ -86,19 +87,23 @@ def result_processing(instance, request, product, default=True):
 
 def result_api_processing(instance, request, product, default=True):
 	instance.global_search(default=default)
-	if instance.founded_products.count():
-		if instance.founded_products.count() == 1:
-			error = False
-		else:
-			error = False
+	number_of_products_found = instance.founded_products.count()
+	if number_of_products_found:
+		# if number_of_products_found == 1:
+		# 	error = False
+		# else:
+		# 	error = False
 			# error = 'Найдено более одного продукта, подходящего по параметрам поиска'
 		
 		MainLog(user=request.user, message='Поиск выполнился за {}c., найдено {}'.format(instance.lead_time,
 		                                                                                 [prod.article for prod in
 		                                                                                  instance.founded_products])).save()
+		# founded products must be one
+		founded_product = instance.founded_products.first()
 		return JsonResponse(
-			{'result': [prod.article for prod in instance.founded_products[:1]],
-			 'error': error, 'Lead_time': instance.lead_time}, content_type='application/json')
+			{'result': [founded_product.article], 'info': get_product_info(founded_product),
+			# {'result': [prod.article for prod in instance.founded_products[:1]],
+			 'error': False, 'Lead_time': instance.lead_time}, content_type='application/json')
 	else:
 		MainLog(user=request.user,
 		        message='Поиск выполнился за {}c., продуктов, удовлетворяющих параметрам поиска, не найдено'.format(instance.lead_time)).save()

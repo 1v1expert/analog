@@ -280,7 +280,7 @@
                 $.ajax({
                     type: "POST",
                     url: url,//'/api/get_product/',
-                    async: false,
+                    {#async: false,#}
                     data: form.serialize(), // serializes the form's elements.
                     success: function (data) {
                         if (data.error){
@@ -288,10 +288,29 @@
                             swal("Ошибка!", data.error, "info");
                         }
                         else {
-                            {#alert(data.result.join(' ;'))#}
-                            swal("Успешно!", "Артикул(-ы): " + data.result.join(' ;'), "success");
+                            {#alert(data.result.join(' ;'))     + data.result.join(' ;') #}
+                            swal("Успешно!", "Артикул(-ы): "+ data.result.join(' ;'), {
+                                buttons: {
+                                    cancel: "Закрыть",
+                                    catch: {
+                                        text: "Показать информацию",
+                                        value: "select"
+                                    },
+                                    {#defeat: true,#}
+                                }
+                            }).then(function (value) {
+                                switch (value) {
+
+                                    case "select":
+                                        swal("Gotcha!", "Информация о найденном продукте: " + data.info.join('; ') + "\n", "info");
+                                        break;
+
+                                    default:
+                                    {#swal("Got away safely!");#}
+                                }
+                            });
                         }
-                        {#console.log('Success', data);#}
+                        console.log('Success', data);
 
                     },
                     error: function (data) {

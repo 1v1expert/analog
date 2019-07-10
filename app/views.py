@@ -96,7 +96,7 @@ def check_in_view(request):
 				verif_code = hashlib.md5('{}'.format(user.pk).encode()).hexdigest()
 				href = 'http://analogpro.ru/email_confirmation/{}-{}/'.format(verif_code, user.pk)
 				send_mail('Подтверждение почты',
-				          'Ваш верификационный код - {}, введите его или перейдите по ссылке: {}'.format(verif_code,
+				          'Ваш верификационный код - {}, введите его или перейдите по ссылке: {}\n'.format(verif_code,
 				                                                                                         href),
 				          'info@analogpro.ru', [request.POST['email']], connection=connection, fail_silently=False)
 				# print(response_email, [request.POST['email']])

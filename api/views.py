@@ -7,7 +7,7 @@ from catalog.models import Product, FixedValue
 from django.core import serializers
 from catalog.utils import SearchProducts
 from catalog.handlers import result_api_processing
-
+from internal.utils import get_attributes
 from app.models import MainLog
 from app.decorators import a_decorator_passing_logs
 
@@ -54,30 +54,6 @@ def search(request):
 		return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
 	
 	return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"}, content_type='application/json')
-
-
-def get_attributes(product, api=True):
-	fix_attributes = product.fixed_attrs_vals.all()  # category.attributes.all()
-	unfix_attributes = product.unfixed_attrs_vals.all()  # category.attributes.all()
-	attributes_array = {
-		'fix' + str(attr.pk): {'title': attr.attribute.title, 'type_display': attr.attribute.get_type_display(),
-		                       'choices': [(at.pk, at.title) for at in
-		                                   FixedValue.objects.filter(attribute=attr.attribute)]
-		                       # serializers.serialize('json',
-		                       #                             FixedValue.objects.filter(attribute=attr.attribute),
-		                       #                             fields=('pk', 'title'))
-		                       # .values_list('pk', 'title'))
-			, # 'choices': [attribute.title for attribute in FixedValue.objects.filter(attribute=attr.attribute)],
-			                   'type': attr.attribute.type} for attr in fix_attributes}
-	unfix_attributes_array = {
-	'unfix' + str(attr.pk): {'title': attr.attribute.title, 'type_display': attr.attribute.get_type_display(),
-	                         'choices': TYPES_SEARCH, 'type': attr.attribute.type} for attr in unfix_attributes}
-	
-	attributes_array.update(unfix_attributes_array)
-	
-	# types = set(product.category.attributes.all().values_list('type',  flat=True))
-	response = {'attributes': attributes_array, 'product_types': list((type_[0] for type_ in TYPES))[::-1], 'all_types': TYPES_DICT}
-	return response
 
 
 def advanced_search(request):
