@@ -179,6 +179,8 @@ class Product(Base):
     """
     title = models.CharField(max_length=255, verbose_name='Наименование')
     article = models.CharField(max_length=255, verbose_name='Артикул')
+    additional_article = models.CharField(max_length=255, default="", blank=True, verbose_name='Доп. артикул')
+    series = models.CharField(max_length=255, default="", blank=True, verbose_name='Серия')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='products', limit_choices_to={'parent__isnull': False})
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name="Производитель", related_name='products')
     fixed_attrs_vals = models.ManyToManyField('FixedAttributeValue', verbose_name="Фикс атрибуты")
@@ -223,7 +225,7 @@ class DataFile(Base):
     type = models.CharField(max_length=13, choices=TYPES_FILE, verbose_name="Тип файла", blank=True, default=TYPES_FILE[0][0])
     
     class Meta:
-        ordering = ('updated_at', )
+        ordering = ('-updated_at', )
         verbose_name = "Файл"
         verbose_name_plural = "Файлы"
     

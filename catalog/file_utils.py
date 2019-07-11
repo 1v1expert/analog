@@ -48,7 +48,9 @@ class ProcessingUploadData(object):
         name: name,
         class: class,
         subclass: subclass,
-        vendor_code: vendor_code,
+        series: series,
+        article: article,
+        additional_article: additional_article,
         manufacturer: manufacturer,
         attributes: [attr1, attr2, ...]
     }
@@ -84,41 +86,46 @@ class ProcessingUploadData(object):
     def get_structured_data(self, request):
         self.to_separate()
         
-        for opt in range(5, len(self.attributes) + 4):
+        for opt in range(7, len(self.attributes) + 4):
             self.unique_type_attributes.add(self.attributes[opt])
             self.unique_value_attributes.add(self.options[opt])
         
-        for product in self.body:
-            if not product:
+        for count, line in enumerate(self.body):
+            if count % 100 == 0: print('Line #{}'.format(count))
+            if not line:
                 continue
             structured_product, attributes = {}, []
-            
-            self.unique_class.add(product[1])
-            self.unique_subclass.add(product[2])
-            self.unique_manufacturer.add(product[4])
+            try:
+                self.unique_class.add(line[1])
+                self.unique_subclass.add(line[2])
+                self.unique_manufacturer.add(line[4])
+            except KeyError:
+                return False, 'Error in line: {}'.format(line)
             #print(self.options)
-            for key in product.keys():
-                print('Product: ', product[key])
-                if key < 5:
+            for key in line.keys():
+                # print('Product: ', product[key])
+                if key < 7:
                     structured_product.update({
-                            STRUCTURE_PRODUCT[key][1]: product[key].lstrip().rstrip()
+                            STRUCTURE_PRODUCT[key][1]: line[key].lstrip().rstrip()
                     })
                 else:
                     attributes.append({
                         "type": TYPES_REV_DICT.get(self.attributes[key].lower()),
                         "name": self.options[key].lstrip().rstrip(),
-                        "value": float(product[key]) if self.is_digit(product[key]) else product[key].lstrip().rstrip(),
-                        "is_digit": self.is_digit(product[key])
+                        "value": float(line[key].replace(',', '.')) if self.is_digit(line[key].replace(',', '.')) else line[key].lstrip().rstrip(),
+                        "is_digit": self.is_digit(line[key].replace(',', '.'))
                         })
             structured_product.update({
-                STRUCTURE_PRODUCT[5][1]: attributes
+                STRUCTURE_PRODUCT[7][1]: attributes
             })
-            
+        
             is_valid_data = self.check_exists_types(structured_product)
             if isinstance(is_valid_data, str):
+                print(structured_product, 'reason: {}'.format(is_valid_data))
                 return False, is_valid_data
             else:
                 self.products.append(is_valid_data)
+        print('Check correct and finish, start create products')
         self.create_products(request)
         return True, 'Success'
         
@@ -150,7 +157,9 @@ class ProcessingUploadData(object):
                 new_product.fixed_attrs_vals.add(attr_val)
                 
         for product in self.products:
-            new_product = Product(article=product['vendor_code'],
+            new_product = Product(article=product['article'],
+                                  series=product.get('series', ""),
+                                  additional_article=product.get('additional_article', ""),
                                   manufacturer=product['manufacturer_obj'],
                                   title=product['name'],
                                   category=product['category_obj'],
@@ -161,7 +170,7 @@ class ProcessingUploadData(object):
                 create_attr()
                     #obj_product.save()
                     #attr_val.save()
-                    
+                   
     def check_exists_types(self, product):
         # check manufacturer
         try:
@@ -178,19 +187,19 @@ class ProcessingUploadData(object):
             return 'Ошибка! Найдено более одного подкласса {} с классом {}'.format(product['subclass'], product['class'])
         # check product
         try:
-            Product.objects.get(article=product['vendor_code'], manufacturer=manufacturer)
+            Product.objects.get(article=product['article'], manufacturer=manufacturer)
             return 'Ошибка! Наден продукт с наименованием - {} и производителем товара - {} в БД'.format(
-                product['vendor_code'], manufacturer.title)
+                product['article'], manufacturer.title)
         except Product.DoesNotExist:
             pass
         except Product.MultipleObjectsReturned:
             return 'Ошибка! Найдено несколько продуктов с наименованием - {} и производителем товара - {} в БД'.format(
-                product['vendor_code'], manufacturer.title)
+                product['article'], manufacturer.title)
         # check attributes
         for attr in product['attributes']:
             # find instance attribute
             try:
-                attribute = Attribute.objects.get(type=attr['type'], category=category, title__icontains=attr['name'])
+                attribute = Attribute.objects.get(type=attr['type'], category=category, title=attr['name'])
                 attr.update({"attr_obj": attribute})
                 # find fixed attribute
                 if not attr['is_digit']:
@@ -200,6 +209,8 @@ class ProcessingUploadData(object):
                 return 'Ошибка! Не найден атрибут с типом: {} и наименованием {} в категории {}'.format(TYPES_DICT[attr['type']], attr['name'], category)
             except Attribute.MultipleObjectsReturned:
                 return 'Ошибка! Найдено несколько атрибутов с типом: {} и наименованием {}'.format(TYPES_DICT[attr['type']], attr['name'])
+            except FixedValue.DoesNotExist:
+                return 'Ошибка! Не найден фикс. атрибут {} со значением {}'.format(attr['value'], attribute)
             #  todo: useful insert check FixedValue.DoesNotExist
         
         product.update({

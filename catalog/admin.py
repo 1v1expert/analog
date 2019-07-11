@@ -11,6 +11,8 @@ from app.models import MainLog
 
 from feincms.admin import tree_editor
 
+import time
+
 
 def mark_as_published(modeladmin, request, queryset):
     queryset.update(is_public=True)
@@ -174,10 +176,15 @@ class FileUploadAdmin(admin.ModelAdmin):
     
     def process_file(self, request, queryset):
         print(request, vars(queryset[0].file), queryset)
+        start_time = time.time()
+
         for qq in queryset:
             created, error = ProcessingUploadData(
                 XLSDocumentReader(path=qq.file.name).parse_file()
             ).get_structured_data(request)
+            lead_time = time.time() - start_time
+            MainLog(user=request.user,
+                    message='Success: {}, processed data from file: {} in {}  seconds'.format(created, qq.file.name, lead_time)).save()
             if created:
                 messages.add_message(request, messages.SUCCESS, 'Данные успешно загружены из {} файла в БД'.format(qq.file.name))
             else:

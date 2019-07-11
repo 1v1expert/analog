@@ -62,7 +62,7 @@ class SearchProducts(object):
 																#attrs_vals__attribute=attribute.attribute)
 		
 		# print('Count after HRD search prdcts-> ', self.founded_products.count())
-		if not self.founded_products.count():
+		if not self.founded_products.exists():
 			return
 		# middle_results = self.founded_products
 		# sft attr
@@ -193,7 +193,7 @@ class SearchProducts(object):
 	def global_search(self, default=True):
 		
 		self.founded_products = Product.objects.filter(manufacturer=self.manufacturer_to, category=self.product.category)
-		if self.founded_products.count():
+		if self.founded_products.exists():
 			# print('Count fnd prdcts-> ', self.founded_products.count())
 			self.smart_attribute_search(default=default)
 		self.lead_time = time.time() - self.start_time
