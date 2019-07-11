@@ -93,9 +93,9 @@ class ProcessingUploadData(object):
             self.unique_value_attributes.add(self.options[opt])
         
         for count, line in enumerate(self.body):
-            if count % 100 == 0: print('Line #{}'.format(count))
-            messages.add_message(request, messages.INFO,
-                                 'Success processed {} lines'.format(count))
+            if count % 100 == 0:
+                print('Line #{}'.format(count))
+                messages.add_message(request, messages.INFO, 'Success processed {} lines'.format(count))
             if not line:
                 continue
             structured_product, attributes = {}, []
