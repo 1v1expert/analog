@@ -28,8 +28,14 @@ def get_attributes(product, api=True):
 
 
 def get_product_info(product):
-	fix_attributes = product.fixed_attrs_vals.all()  # category.attributes.all()
-	unfix_attributes = product.unfixed_attrs_vals.all()  # category.attributes.all()
+	fix_attributes = product.fixed_attrs_vals\
+		.all()\
+		.exclude(attribute__title='ед.изм')\
+		.select_related('value', 'attribute')   # category.attributes.all()
+	unfix_attributes = product.unfixed_attrs_vals\
+		.all()\
+		.exclude(attribute__title='цена')\
+		.select_related('attribute')  # category.attributes.all()
 	
 	info = [{attr.attribute.title: attr.value} for attr in unfix_attributes]
 	for attr in fix_attributes:
