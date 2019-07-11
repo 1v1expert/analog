@@ -288,27 +288,94 @@
                             swal("Ошибка!", data.error, "info");
                         }
                         else {
-                            {#alert(data.result.join(' ;'))     + data.result.join(' ;') #}
+                            var MOUNTAINS = [
+                                {"name": "Mount Everest", "height": 8848, "country": "Nepal"},
+                                {"name": "Mount Rushmore", "height": 18, "country": "USA"}
+                            ];
+
+
+                            function buildTable(data) {
+                                var table = document.createElement("table");
+                                table.className = "table table-hover mb-0";
+                                table.id = 'table-info';
+                                {#table.visible = false;#}
+                                table.style.display = "none";
+                                var thead = document.createElement("thead");
+                                var tbody = document.createElement("tbody");
+                                var headRow = document.createElement("tr");
+                                {#Object.keys(data[0]).forEach(function (el) {#}
+                                {#    var th = document.createElement("th");#}
+                                {#    th.appendChild(document.createTextNode(el));#}
+                                {#    headRow.appendChild(th);#}
+                                {# });#}
+                                thead.appendChild(headRow);
+                                table.appendChild(thead);
+                                data.forEach(function (el) {
+                                    var tr = document.createElement("tr");
+                                    for (var o in el) {
+                                        var td = document.createElement("td");
+                                        td.appendChild(document.createTextNode(o));
+                                        tr.appendChild(td);
+                                        var td = document.createElement("td");
+                                        td.appendChild(document.createTextNode(el[o]));
+                                        tr.appendChild(td);
+                                    }
+                                    tbody.appendChild(tr);
+                                });
+                                table.appendChild(tbody);
+                                return table;
+                            }
+
+                            {#swal("Успешно!", "Артикул(-ы): "+ data.result.join(' ;'), {#}
+                            {#    content: buildTable(MOUNTAINS)#}
+                            {#  }); #}
+
                             swal("Успешно!", "Артикул(-ы): "+ data.result.join(' ;'), {
+                                content: buildTable(data.info),
                                 buttons: {
                                     cancel: "Закрыть",
                                     catch: {
                                         text: "Показать информацию",
-                                        value: "select"
+                                        value: "select",
+                                        closeModal: false
                                     },
-                                    {#defeat: true,#}
+                                    defeat: true,
                                 }
                             }).then(function (value) {
                                 switch (value) {
 
                                     case "select":
-                                        swal("Gotcha!", "Информация о найденном продукте: " + data.info.join('; ') + "\n", "info");
+                                        console.log('press select');
+                                        $('#table-info').show('slow');
+                                        {#swal("Gotcha!", "Информация о найденном продукте: " + data.info.join('; ') + "\n", "info");#}
                                         break;
 
                                     default:
-                                    {#swal("Got away safely!");#}
-                                }
-                            });
+                                    swal("Got away safely!");
+                               }
+                                });
+
+                            {#alert(data.result.join(' ;'))     + data.result.join(' ;') #}
+                            {#swal("Успешно!", "Артикул(-ы): "+ data.result.join(' ;'), {#}
+                            {#    buttons: {#}
+                            {#        cancel: "Закрыть",#}
+                            {#        catch: {#}
+                            {#            text: "Показать информацию",#}
+                            {#            value: "select"#}
+                            {#        },#}
+                            {#        defeat: true,#}
+                            {#    }#}
+                            {#  }).then(function (value) {#}
+                            {#    switch (value) {#}
+                            {##}
+                            {#        case "select":#}
+                            {#            swal("Gotcha!", "Информация о найденном продукте: " + data.info.join('; ') + "\n", "info");#}
+                            {#            break;#}
+                            {##}
+                            {#        default:#}
+                            {#        swal("Got away safely!");#}
+                            {#   }#}
+                            {#    });#}
                         }
                         console.log('Success', data);
 

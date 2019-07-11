@@ -31,8 +31,8 @@ def get_product_info(product):
 	fix_attributes = product.fixed_attrs_vals.all()  # category.attributes.all()
 	unfix_attributes = product.unfixed_attrs_vals.all()  # category.attributes.all()
 	
-	info = ["{}: {}".format(attr.attribute.title, attr.value) for attr in unfix_attributes]
+	info = [{attr.attribute.title: attr.value} for attr in unfix_attributes]
 	for attr in fix_attributes:
-		info.append("{}: {}".format(attr.attribute.title, attr.value.title))
+		info.append({attr.attribute.title: attr.value.title})
 	
 	return info
