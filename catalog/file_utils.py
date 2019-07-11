@@ -3,6 +3,8 @@ from collections import OrderedDict
 
 from catalog.choices import *
 from catalog.models import *
+
+from django.contrib import messages
 from django.db import models
 
 
@@ -92,6 +94,8 @@ class ProcessingUploadData(object):
         
         for count, line in enumerate(self.body):
             if count % 100 == 0: print('Line #{}'.format(count))
+            messages.add_message(request, messages.INFO,
+                                 'Success processed {} lines'.format(count))
             if not line:
                 continue
             structured_product, attributes = {}, []
@@ -126,6 +130,7 @@ class ProcessingUploadData(object):
             else:
                 self.products.append(is_valid_data)
         print('Check correct and finish, start create products')
+        messages.add_message(request, messages.SUCCESS, 'Check correct and finish, start create products')
         self.create_products(request)
         return True, 'Success'
         
@@ -156,7 +161,11 @@ class ProcessingUploadData(object):
             else:
                 new_product.fixed_attrs_vals.add(attr_val)
                 
-        for product in self.products:
+        for count, product in enumerate(self.products):
+            if count % 100 == 0: print('Line #{}'.format(count))
+            messages.add_message(request, messages.INFO,
+                                 'Success added {} products'.format(count))
+            
             new_product = Product(article=product['article'],
                                   series=product.get('series', ""),
                                   additional_article=product.get('additional_article', ""),
