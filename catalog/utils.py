@@ -39,6 +39,7 @@ class SearchProducts(object):
 		elif method == 'max':
 			value = max(values_list, key=lambda x: x)
 		else:   # method = 'nearest
+			print(values_list, step_attr.value)
 			value = min(values_list, key=lambda x: abs(x - step_attr.value))
 		return value
 	
@@ -61,6 +62,9 @@ class SearchProducts(object):
 			self.founded_products = self.founded_products.filter(fixed_attrs_vals__value__pk=value,#attrs_vals__title=attribute.title,
 			                                                     fixed_attrs_vals__attribute=hrd_fix_attr.attribute)
 		# print('Count after HRD FIX search prdcts-> ', self.founded_products.count())
+		if not self.founded_products.exists():
+			return
+		
 		for hrd_unfix_attr in hrd_unfix_attributes:
 			if not default:
 				method = self.form.cleaned_data['extra_field_unfix{}'.format(hrd_unfix_attr.pk)]
