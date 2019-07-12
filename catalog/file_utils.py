@@ -162,9 +162,10 @@ class ProcessingUploadData(object):
                 new_product.fixed_attrs_vals.add(attr_val)
                 
         for count, product in enumerate(self.products):
-            if count % 100 == 0: print('Line #{}'.format(count))
-            messages.add_message(request, messages.INFO,
-                                 'Success added {} products'.format(count))
+            if count % 100 == 0:
+                print('Line #{}'.format(count))
+                messages.add_message(request, messages.INFO,
+                                     'Success added {} products'.format(count))
             
             new_product = Product(article=product['article'],
                                   series=product.get('series', ""),

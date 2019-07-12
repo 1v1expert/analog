@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from catalog.models import Product
+from catalog.models import Product, UnFixedAttributeValue
 import time
 from catalog.choices import TYPES
 
@@ -20,9 +20,18 @@ class SearchProducts(object):
 	
 	@staticmethod
 	def finding_the_closest_attribute_value(all_attr, step_attr, method, types='sft'):
-		values_list = [
-			attr.unfixed_attrs_vals.get(attribute__type=types, attribute__title=step_attr.attribute.title).value for attr
-			in all_attr]
+		# values_list = [
+		# 	attr.unfixed_attrs_vals.get(attribute__type=types, attribute__title=step_attr.attribute.title).value for attr
+		# 	in all_attr]
+		
+		values_list = []
+		for attr in all_attr:
+			try:
+				value = attr.unfixed_attrs_vals.get(attribute__type=types, attribute__title=step_attr.attribute.title).value
+			except UnFixedAttributeValue.DoesNotExist:
+				value = 0
+			values_list.append(value)
+		
 		# print(values_list)
 		
 		if method == 'min':
