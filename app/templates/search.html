@@ -338,15 +338,15 @@
                                         text: "Показать информацию",
                                         value: "select",
                                         closeModal: false
-                                    },
-                                    defeat: true,
+                                    }
+                                    {#defeat: true,#}
                                 }
                             }).then(function (value) {
                                 switch (value) {
 
                                     case "select":
-                                        console.log('press select');
                                         $('#table-info').show('slow');
+                                        swal.stopLoading();
                                         {#swal("Gotcha!", "Информация о найденном продукте: " + data.info.join('; ') + "\n", "info");#}
                                         break;
 
