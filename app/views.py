@@ -77,6 +77,8 @@ def check_in_view(request):
 	if request.method == 'POST':
 		if request.POST['password'] != request.POST['double_password']:
 			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': "Введённые пароли не совпадают"})
+		if len(request.POST['password']) < 8:
+			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': "Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов. "})
 		
 		user, created = models.User.objects.get_or_create(username=request.POST['username'],
 		                                                  defaults={
@@ -84,10 +86,12 @@ def check_in_view(request):
 			                                                  'email': request.POST['email'],
 			                                                  'is_active': False
 		                                                  })
-
 		if not created:
 			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'пользователь уже существует'})
 		else:
+			if not user.check_password(request.POST['password']):
+				user.delete()
+				return render(request, 'check_in.html', {'reg_form': reg_form, 'error': 'Введённый пароль состоит только из цифр, некорректен.'})
 			user.set_password(request.POST['password'])
 			user.save()
 			try:
