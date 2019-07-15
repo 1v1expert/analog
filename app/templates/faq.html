@@ -1,0 +1,413 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-fluid">
+
+            <!-- Title -->
+            <div class="row heading-bg">
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                    <h5 class="txt-dark">Интерфейс клиента</h5>
+                </div>
+                <!-- Breadcrumb -->
+                <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                    <ol class="breadcrumb">
+                        <li><a href="{% url 'app:home' %}">Главная</a></li>
+                        <li><a href="{% url 'app:search' %}">Поиск по артикулу</a></li>
+                        {#                        <li><a href="#"><span>table</span></a></li>#}
+                        {#                        <li class="active"><span>View</span></li>#}
+                    </ol>
+                </div>
+                <!-- /Breadcrumb -->
+            </div>
+            <!-- /Title -->
+
+
+            <!-- Main content -->
+            {% if form %}
+                <!-- Row -->
+                <div class="row">
+                    <div class="col-sm-5 col-sm-offset-3">
+                        <div class="panel panel-default card-view">
+                            <div class="panel-heading">
+                                <div class="pull-left">
+                                    <h6 class="panel-title txt-dark">Поиск аналогов по артикулу</h6>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="panel-wrapper collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <div class="form-wrap">
+                                                <form action="{% url 'api:search' %}" method="post" id="form">
+                                                    <div class="form-body">
+{#                                                        <h6 class="txt-dark text-uppercase"><i#}
+{#                                                                class="zmdi zmdi-info mr-10"></i>Основная информация#}
+{#                                                        </h6>#}
+{#                                                        <hr class="light-grey-hr"/>#}
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group {{ form.article.error_messages }}">
+                                                                    <label class="control-label mb-10">{{ form.article.label }}</label>
+                                                                    {{ form.article }}
+{#                                                                    <input type="text" id="firstName"#}
+{#                                                                           class="form-control"#}
+{#                                                                           placeholder="John doe">#}
+                                                                    <span class="help-block">{{ form.article.help_text}} </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <!--/span-->
+                                                            <div class="col-md-6">
+                                                                <div class="form-group"> <!-- has-error -->
+                                                                    <label class="control-label mb-10">{{ form.manufacturer_from.label }}</label>
+                                                                    {{ form.manufacturer_from }}
+{#                                                                    <input type="text" id="lastName"#}
+{#                                                                           class="form-control" placeholder="12n">#}
+                                                                    <span class="help-block"> {{ form.manufacturer_from.help_text }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group"><!-- has-error -->
+                                                                    <label class="control-label mb-10">{{ form.manufacturer_to.label }}</label>
+                                                                    {{ form.manufacturer_to }}
+                                                                    <span class="help-block"> {{ form.manufacturer_to.help_text }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <!--/span-->
+                                                        </div>
+
+                                                        <div class="form-actions mt-10">
+                                                            <input type="submit" class="btn btn-success mr-10"
+                                                                   value="Искать"/>
+                                                            <button type="button" id="showAdvancedForm" class="btn btn-default">Открыть расширенную форму
+                                                            </button>
+                                                        </div>
+                                                        <!-- /Row -->
+                                                        <div id="advForm">
+                                                            <div class="seprator-block"></div>
+
+                                                            <h6 class="txt-dark capitalize-font"><i
+                                                                    class="zmdi zmdi-account-box mr-10"></i>Расширенная
+                                                                информация</h6>
+                                                            <hr class="light-grey-hr"/>
+
+{#                                                            <div class="row">#}
+{#                                                                <div class="col-md-12">#}
+{#                                                                    <div class="form-group {{ form.article.error_messages }}">#}
+{#                                                                        <label class="control-label mb-10">{{ form.article.label }}</label>#}
+{#                                                                        {{ form.article }}#}
+{#                                                                        <span class="help-block">{{ form.article.help_text }} </span>#}
+{#                                                                    </div>#}
+{#                                                                </div>#}
+{#                                                            </div>#}
+                                                            <input type="submit" class="btn btn-success mr-10"
+                                                                   value="Искать"/>
+                                                        </div>
+
+
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+
+
+
+
+
+            {##}
+            {#                                            {% if form %}#}
+            {#                                                <form action="/search/" method="post">#}
+            {#                                                    {% csrf_token %}#}
+            {#                                                    {% for field in form %}#}
+            {#                                                        <div class="form-group">#}
+            {#                                                            {{ field.errors }}#}
+            {#                                                            <label class="control-label mb-10 text-left">{{ field.label }}</label>#}
+            {#                                                            {{ field }}#}
+            {#                                                        </div>#}
+            {#                                                    {% endfor %}#}
+            {#        <p>------------------</p>#}
+            {#        {% for field in advanced_form %}#}
+            {#            <div class="fieldWrapper">#}
+            {#                {{ field.errors }}#}
+            {#                {{ field.label_tag }} {{ field }}#}
+            {#            </div>#}
+            {#        {% endfor %}#}
+            {#                                                    <button type="submit" class="btn btn-success mr-10">Submit</button>#}
+            {#                                                    <input type="submit" class="btn btn-success mr-10" value="Искать"/>#}
+            {#                                                </form>#}
+            {#                                            {% endif %}#}
+            {##}
+            {##}
+            {#                                        </div>#}
+            {#                                    </div>#}
+            {#                                </div>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+
+            <!-- End main content -->
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block extra_css %}
+    <!-- Data table CSS -->
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock extra_css %}
+
+{% block extra_js %}
+    <!-- Data table JavaScript -->
+    <script src="{% static  'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/dataTables-data.js' %}"></script>
+    <!-- Owl JavaScript -->
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+
+    <!-- Switchery JavaScript -->
+    <script src="{% static 'js/switchery.min.js' %}"></script>
+
+    <!-- Fancy Dropdown JS -->
+    <script src="{% static 'js/dropdown-bootstrap-extended.js' %}"></script>
+{#    todo: copy js into local folder#}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        function Check_or_Get_ProductAttributes(form) {
+            var url = form.attr('action');
+            //console.log(form.serialize());
+            {#var formData = new FormData(form);#}
+            var html;
+            $.ajax({
+                type: "POST",
+                url: "{% url 'api:get_product' %}",//'/api/get_product/',
+                async: false,
+                data: form.serialize(), // serializes the form's elements.
+                success: function (data) {
+                    if (data.error) {
+                        {#alert(data.error);#}
+                        swal("Ошибка!", data.error, "info");
+                        {#response = false;#}
+                    }
+                    else {
+                        console.log(data);
+                        {# build result #}
+                        var result = {};
+                        for (var type in data.result.product_types){
+                            result[data.result.product_types[type]] = {'name': data.result.all_types[data.result.product_types[type]],
+                            'result': []}
+                        }
+
+                        result['pre_html'] = "<div class=\"seprator-block\"></div>\n" +
+                            "\n" +
+                            "<h4 class=\"txt-dark \"><i\n" + {# text-uppercase #}
+                            "class=\"zmdi zmdi-star-outline mr-10\"></i>Расширенная\n" +
+                            "информация</h4>\n";
+                            {#"<hr class=\"light-grey-hr\"/>";#}
+
+                        for (var elem in data.result.attributes) {
+                            var slct = "";
+                            for (var choice in data.result.attributes[elem].choices) {
+                                slct += "  <option value=\"" + data.result.attributes[elem].choices[choice][0] + "\">" + data.result.attributes[elem].choices[choice][1] + "</option>\n"
+                            }
+                            var row = "<div class=\"form-group col-md-4\">" +
+                                " <label class=\"control-label mb-10\">" + data.result.attributes[elem].title + "</label>" +
+                                "<select name=\"extra_field_" + elem + "\" class=\"form-control\" id=\"id_extra_field_" + elem + "\">\n" +
+                                slct +
+                                "</select>" +
+                                "<span class=\"help-block\"> </span></div>";
+                            result[data.result.attributes[elem].type].result.push(row);
+                        }
+                        result['post_html'] = "<input type=\"submit\" class=\"btn btn-success mr-10\"\n" +
+                            "                                                                   value=\"Искать\"/></div>";
+                        console.log(result);
+                        {# print result #}
+                        html = "";
+                        html += result.pre_html;
+                        for (var type in data.result.product_types){
+                            if (result[data.result.product_types[type]].result.length) {
+
+                                var res_type = data.result.product_types[type];
+                                var pre_div = "\n <div class=\"row\" style=\"display: none;\" >";
+
+                                if ((res_type === 'hrd') || (res_type === 'sft')) {
+                                    pre_div = "\n <hr class=\"light-grey-hr\"/>" +
+                                        "<div class=\"row\" style=\"display: block;\" >";
+                                }
+                                html += pre_div;
+                                html += result[data.result.product_types[type]].result.join("");
+                                html += "</div>"
+                            }
+                        }
+                    }
+                    // Build html
+
+                    {#console.log(dt.success);#}
+                    {#console.log(dt, JSON.parse(dt));#}
+                    {#alert(JSON.parse(data)); // show response from the php script.#}
+
+                },
+                error: function (data) {
+                    {#console.log(data);#}
+                    swal("Произошла ошибка", "Проверьте корректность формы и попробуйте снова", "error");
+
+                }
+            });
+            return html || null;
+        }
+    </script>
+    <script>
+        $(function () {
+            var form = $('#form');
+            var advform = $('#advForm');
+            advform.hide();
+
+            form.submit(function (e) {
+                var url = form.attr('action');
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: url,//'/api/get_product/',
+                    {#async: false,#}
+                    data: form.serialize(), // serializes the form's elements.
+                    success: function (data) {
+                        if (data.error){
+                            {#alert(data.error);#}
+                            swal("Ошибка!", data.error, "info");
+                        }
+                        else {
+                            var MOUNTAINS = [
+                                {"name": "Mount Everest", "height": 8848, "country": "Nepal"},
+                                {"name": "Mount Rushmore", "height": 18, "country": "USA"}
+                            ];
+
+
+                            function buildTable(data) {
+                                var table = document.createElement("table");
+                                table.className = "table table-hover mb-0";
+                                table.id = 'table-info';
+                                {#table.visible = false;#}
+                                table.style.display = "none";
+                                var thead = document.createElement("thead");
+                                var tbody = document.createElement("tbody");
+                                var headRow = document.createElement("tr");
+                                {#Object.keys(data[0]).forEach(function (el) {#}
+                                {#    var th = document.createElement("th");#}
+                                {#    th.appendChild(document.createTextNode(el));#}
+                                {#    headRow.appendChild(th);#}
+                                {# });#}
+                                thead.appendChild(headRow);
+                                table.appendChild(thead);
+                                data.forEach(function (el) {
+                                    var tr = document.createElement("tr");
+                                    for (var o in el) {
+                                        var td = document.createElement("td");
+                                        td.appendChild(document.createTextNode(o));
+                                        tr.appendChild(td);
+                                        var td = document.createElement("td");
+                                        td.appendChild(document.createTextNode(el[o]));
+                                        tr.appendChild(td);
+                                    }
+                                    tbody.appendChild(tr);
+                                });
+                                table.appendChild(tbody);
+                                return table;
+                            }
+
+                            {#swal("Успешно!", "Артикул(-ы): "+ data.result.join(' ;'), {#}
+                            {#    content: buildTable(MOUNTAINS)#}
+                            {#  }); #}
+
+                            swal("Успешно!", "Артикул(-ы): "+ data.result.join(' ;'), {
+                                content: buildTable(data.info),
+                                buttons: {
+                                    cancel: "Закрыть",
+                                    catch: {
+                                        text: "Показать информацию",
+                                        value: "select",
+                                        closeModal: false
+                                    }
+                                    {#defeat: true,#}
+                                }
+                            }).then(function (value) {
+                                switch (value) {
+
+                                    case "select":
+                                        $('#table-info').show('slow');
+                                        swal.stopLoading();
+                                        {#swal("Gotcha!", "Информация о найденном продукте: " + data.info.join('; ') + "\n", "info");#}
+                                        break;
+
+                                    default:
+                                    swal("Got away safely!");
+                               }
+                                });
+
+                            {#alert(data.result.join(' ;'))     + data.result.join(' ;') #}
+                            {#swal("Успешно!", "Артикул(-ы): "+ data.result.join(' ;'), {#}
+                            {#    buttons: {#}
+                            {#        cancel: "Закрыть",#}
+                            {#        catch: {#}
+                            {#            text: "Показать информацию",#}
+                            {#            value: "select"#}
+                            {#        },#}
+                            {#        defeat: true,#}
+                            {#    }#}
+                            {#  }).then(function (value) {#}
+                            {#    switch (value) {#}
+                            {##}
+                            {#        case "select":#}
+                            {#            swal("Gotcha!", "Информация о найденном продукте: " + data.info.join('; ') + "\n", "info");#}
+                            {#            break;#}
+                            {##}
+                            {#        default:#}
+                            {#        swal("Got away safely!");#}
+                            {#   }#}
+                            {#    });#}
+                        }
+                        console.log('Success', data);
+
+                    },
+                    error: function (data) {
+                        swal("Сбой поиска!", "Произошла системная ошибка", "warning");
+                        {#alert('Произошла системная ошибка');#}
+                        console.log('Error', data)
+                    }
+                });
+            });
+            {#var action = form.attr('action');#}
+            $('#showAdvancedForm').click(function (e) {
+                if ($('#advForm:visible').length) {
+                    //e.preventDefault();
+                    form.attr('action', "{% url 'api:search' %}");
+                    advform.hide('slow').html('');
+                    {#advform;#}
+                    $('#showAdvancedForm').text('Открыть расширенную форму')
+                } else {
+                    form.attr('action', "{% url 'api:advanced_search' %}");
+                    var insert_html = Check_or_Get_ProductAttributes(form);
+                    console.log(insert_html, 'insert_html');
+                    if (insert_html) {
+                        advform.html(insert_html).show('slow');
+                        $('#showAdvancedForm').text('Закрыть расширенную форму')
+                    }
+                }
+                {#alert('Show adnvanced form');#}
+
+            })
+        });
+
+    </script>
+{% endblock extra_js %}

@@ -133,6 +133,7 @@ def email_confirmation(request, verification_code, user_id):
 		user.save()
 		msg = 'E-mail подтверждён'
 		return render(request, 'email_confirmation.html', {'confirmation': True, 'user': user, 'msg': msg})
+	
 	elif verification_code == user_id:
 		confirmation_form = EmailConfirmationForm()
 		if request.method == 'POST':
