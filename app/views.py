@@ -118,6 +118,12 @@ def home_view(request):
 	return render(request, 'home.html', {'user': request.user})
 
 
+@login_required(login_url='/login')
+@a_decorator_passing_logs
+def faq_view(request):
+	return render(request, 'faq.html', {'user': request.user})
+
+
 @a_decorator_passing_logs
 def logout_view(request):
 	logout(request)
