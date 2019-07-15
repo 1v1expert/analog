@@ -2,6 +2,11 @@
 {% load staticfiles %}
 
 {% block content %}
+    <style>
+    .accordion-struct.panel-group .panel .panel-heading a {
+        text-transform: unset;
+    }
+    </style>
     <!-- Main Content -->
     <div class="page-wrapper">
         <div class="container-fluid">
@@ -70,7 +75,7 @@
                                         <div class="panel-heading" role="tab" id="headingSix">
                                             <a class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#accordion" href="#collapseSix" aria-expanded="false"
-                                               aria-controls="collapseSix">Поиск Товара-Аналога по Артикулу</a>
+                                               aria-controls="collapseSix">Поиск товара-аналога по артикулу</a>
                                         </div>
                                         <div id="collapseSix" class="panel-collapse collapse" role="tabpanel"
                                              aria-labelledby="headingSix">
@@ -101,7 +106,7 @@
                                             <a class="collapsed" role="button" data-toggle="collapse"
                                                href="#collapseSeven" aria-expanded="false"
                                                aria-controls="collapseSeven">Подбор товаров-аналогов по
-                                                Спецификации</a>
+                                                спецификации</a>
                                         </div>
                                         <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel"
                                              aria-labelledby="headingSeven">
