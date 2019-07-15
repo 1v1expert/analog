@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-fluid">
+
+            <!-- Title -->
+            <div class="row heading-bg">
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                    <h5 class="txt-dark">Контакты</h5>
+                </div>
+                <!-- Breadcrumb -->
+                <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                    <ol class="breadcrumb">
+                        <li><a href="{% url 'app:home' %}">Главная</a></li>
+                        <li><a href="{% url 'app:contacts_page' %}">Контакты</a></li>
+                        {#                        <li><a href="#"><span>table</span></a></li>#}
+                        {#                        <li class="active"><span>View</span></li>#}
+                    </ol>
+                </div>
+                <!-- /Breadcrumb -->
+            </div>
+            <!-- /Title -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-body pa-15"> Если не получается зарегистрироваться на сайте, либо если вы
+                            считаете, что
+                            полученный результат некорректен, либо если у вас есть интересные предложения по
+                            улучшению работы сервиса, пишите на user@analogpro.ru
+
+                            Если ваша компания заинтересована в работе с системой, и в целом по вопросам
+                            сотрудничества обращайтесь по адресу partners@analogpro.ru
+                            По другим вопросам пишите на info@analogpro.ru
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main content -->
+            <!-- Row -->
+            <div class="row">
+
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block extra_css %}
+    <!-- Data table CSS -->
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock extra_css %}
+
+{% block extra_js %}
+    <!-- Data table JavaScript -->
+    <script src="{% static  'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/dataTables-data.js' %}"></script>
+    <!-- Owl JavaScript -->
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+
+    <!-- Switchery JavaScript -->
+    <script src="{% static 'js/switchery.min.js' %}"></script>
+
+    <!-- Fancy Dropdown JS -->
+    <script src="{% static 'js/dropdown-bootstrap-extended.js' %}"></script>
+    {#    todo: copy js into local folder#}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock extra_js %}

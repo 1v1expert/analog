@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from django.contrib.auth import authenticate, login, logout, models
+from django.contrib.auth import authenticate, login, logout, models, forms
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.mail import get_connection, send_mail
@@ -74,6 +74,7 @@ def advanced_search(request):
 @a_decorator_passing_logs
 def check_in_view(request):
 	reg_form = MyRegistrationForm()
+	# reg_form = forms.UserCreationForm()
 	if request.method == 'POST':
 		if request.POST['password'] != request.POST['double_password']:
 			return render(request, 'check_in.html', {'reg_form': reg_form, 'error': "Введённые пароли не совпадают"})
@@ -122,6 +123,12 @@ def home_view(request):
 @a_decorator_passing_logs
 def faq_view(request):
 	return render(request, 'faq.html', {'user': request.user})
+
+
+@login_required(login_url='/login')
+@a_decorator_passing_logs
+def contacts_view(request):
+	return render(request, 'contacts.html', {'user': request.user})
 
 
 @a_decorator_passing_logs
