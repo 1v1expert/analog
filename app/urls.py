@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.contrib import admin
-from app.views import login_view, check_in_view, home_view, logout_view, search, search_from_file_view, email_confirmation, faq_view, contacts_view, partners_view
+from app.views import login_view, check_in_view, home_view, logout_view, search, search_from_file_view, email_confirmation, faq_view, contacts_view, partners_view, profile_view
 app_name = 'app'
 urlpatterns = [
 	url(r'^login/$', login_view, name='login'),
@@ -10,6 +10,7 @@ urlpatterns = [
 	# url(r'^search_from_file/$', search_from_file_view, name='search_from_file'),
 	url(r'^contacts', contacts_view, name='contacts_page'),
 	url(r'^partners', partners_view, name='partners_page'),
+	url(r'^profile/', profile_view, name='profile_page'),
 	url(r'^faq', faq_view, name='faq_page'),
 	url(r'^advanced_search/$', search, name='advanced_search'),
 	url(r'^logout/$', logout_view, name='logout'),

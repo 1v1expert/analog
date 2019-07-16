@@ -13,6 +13,7 @@ from catalog.handlers import loaded_search_file_handler
 
 from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile, EmailConfirmationForm
 from app.decorators import a_decorator_passing_logs
+from app.models import MainLog
 
 import hashlib
 
@@ -117,6 +118,21 @@ def check_in_view(request):
 @a_decorator_passing_logs
 def home_view(request):
 	return render(request, 'home.html', {'user': request.user})
+
+
+@login_required(login_url='/login')
+@a_decorator_passing_logs
+def profile_view(request):
+	return render(request,
+	              'profile.html',
+	              {
+		              'user': request.user,
+		              'actions_count': MainLog.objects.filter(user=request.user).count(),
+		              'search_count': MainLog.objects.filter(user=request.user, message__icontains='search')
+		          .filter(message__icontains='post').count(),
+		              'files_count': DataFile.objects.filter(created_by=request.user).count(),
+		              'files': DataFile.objects.filter(created_by=request.user)
+	              })
 
 
 @login_required(login_url='/login')
