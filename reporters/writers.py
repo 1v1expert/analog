@@ -8,7 +8,7 @@ class BookkeepingWriter(object):
         self.filename = name
         
     def dump(self, data):
-        self.write_top_header(**data['top_header'])
+        # self.write_top_header(**data['top_header'])
         self.write_table_header(data['table_header'].values())
         # FIXME: make use of `for k in data['table_header']`
         for row in data['table_data']:
@@ -17,11 +17,29 @@ class BookkeepingWriter(object):
     def write_top_header(self):
         pass
     
-    def write_table_header(self):
-        pass
+    def write_table_header(self, row):
+        base_opts = {'text_wrap': 1, 'align': 'left', 'valign': 'vcenter', 'left': 1, 'right': 1, 'top': 2,
+            'bottom': 2, }
+        default_format = self._wb.add_format(base_opts)
     
-    def write_table_row(self):
-        pass
+        for col, cell in enumerate(row):
+            new_format = None
+            if col == 0:
+                new_format = self._wb.add_format(base_opts)
+                new_format.set_left(2)
+            elif col == len(row) - 1:
+                new_format = self._wb.add_format(base_opts)
+                new_format.set_right(2)
+        
+            self._default_ws.set_column(col, col, min(15, len(str(cell))))
+            self._default_ws.write(self._row, col, cell, new_format or default_format)
+    
+        max_len = max(sorted([len(str(x)) for x in row]))
+        self._default_ws.set_row(self._row, (15 * max_len // 15) + 1)
+        self._row += 1
+    
+    def write_table_row(self, row):
+        self.writerow(row, self.formats['table_row'])
     
     def writerow(self, row, fmt):
         # TODO: this is way too ugly and must be rewritten.
