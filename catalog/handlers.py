@@ -16,7 +16,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 
 
-def loaded_search_file_handler(file, path, form, request):
+def loaded_search_file_handler(file, path, form, request, type='xls'):
 	content = XLSDocumentReader(path=path).parse_file()
 	manufacturer_from = form.cleaned_data['manufacturer_from']
 
@@ -40,12 +40,13 @@ def loaded_search_file_handler(file, path, form, request):
 			instance = SearchProducts(request, form, product)
 			instance.global_search(default=True)
 			
-			if instance.founded_products.count():
-				if instance.founded_products.count() == 1:
-					body.append(instance.founded_products.get().article)
-				else:
-					for f_pr in instance.founded_products:
-						body.append(f_pr.article)
+			if instance.founded_products.exist():
+				body.append(instance.founded_products.first().article)
+				# if instance.founded_products.count() == 1:
+				# 	body.append(instance.founded_products.get().article)
+				# else:
+				# 	for f_pr in instance.founded_products:
+				# 		body.append(f_pr.article)
 			else:
 				body.append('not found a product that meets the criteria')
 			
