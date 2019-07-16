@@ -162,24 +162,12 @@
     </div>
 {% endblock content %}
 
-
-{% block extra_css %}
-    <!-- Data table CSS -->
-    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" type="text/css"/>
-{% endblock extra_css %}
-
 {% block extra_js %}
-    <!-- Data table JavaScript -->
-    <script src="{% static  'js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'js/dataTables-data.js' %}"></script>
-    <!-- Owl JavaScript -->
-    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
 
     <!-- Switchery JavaScript -->
     <script src="{% static 'js/switchery.min.js' %}"></script>
 
     <!-- Fancy Dropdown JS -->
     <script src="{% static 'js/dropdown-bootstrap-extended.js' %}"></script>
-    {#    todo: copy js into local folder#}
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 {% endblock extra_js %}
