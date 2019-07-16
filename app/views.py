@@ -63,7 +63,7 @@ def search_from_file_view(request):
 			return response
 	else:
 		form = SearchFromFile()
-		return render(request, 'search_from_file.html', {'user': request.user, 'form': form})
+		return render(request, 'search_from_file.html', {'form': form})
 
 
 @a_decorator_passing_logs
@@ -117,40 +117,37 @@ def check_in_view(request):
 @login_required(login_url='/login')
 @a_decorator_passing_logs
 def home_view(request):
-	return render(request, 'home.html', {'user': request.user})
+	return render(request, 'home.html')
 
 
 @login_required(login_url='/login')
 @a_decorator_passing_logs
 def profile_view(request):
-	return render(request,
-	              'profile.html',
+	return render(request, 'profile.html',
 	              {
-		              'user': request.user,
 		              'actions_count': MainLog.objects.filter(user=request.user).count(),
-		              'search_count': MainLog.objects.filter(user=request.user, message__icontains='search')
-		          .filter(message__icontains='post').count(),
+		              'search_count': MainLog.objects.filter(user=request.user, message__icontains='search').filter(
+			              message__icontains='post').count(),
 		              'files_count': DataFile.objects.filter(created_by=request.user).count(),
-		              'files': DataFile.objects.filter(created_by=request.user)
-	              })
+		              'files': DataFile.objects.filter(created_by=request.user)})
 
 
 @login_required(login_url='/login')
 @a_decorator_passing_logs
 def faq_view(request):
-	return render(request, 'faq.html', {'user': request.user})
+	return render(request, 'faq.html')
 
 
 @login_required(login_url='/login')
 @a_decorator_passing_logs
 def partners_view(request):
-	return render(request, 'to_partners.html', {'user': request.user})
+	return render(request, 'to_partners.html')
 
 
 @login_required(login_url='/login')
 @a_decorator_passing_logs
 def contacts_view(request):
-	return render(request, 'contacts.html', {'user': request.user})
+	return render(request, 'contacts.html')
 
 
 @a_decorator_passing_logs
@@ -167,7 +164,7 @@ def email_confirmation(request, verification_code, user_id):
 		user.is_active = True
 		user.save()
 		msg = 'E-mail подтверждён'
-		return render(request, 'email_confirmation.html', {'confirmation': True, 'user': user, 'msg': msg})
+		return render(request, 'email_confirmation.html', {'confirmation': True, 'msg': msg})
 	
 	elif verification_code == user_id:
 		confirmation_form = EmailConfirmationForm()
@@ -178,7 +175,7 @@ def email_confirmation(request, verification_code, user_id):
 				user.save()
 				msg = 'E-mail подтверждён'
 				return render(request, 'email_confirmation.html',
-				              {'confirmation': True, 'user': user, 'msg': msg})
+				              {'confirmation': True, 'msg': msg})
 			else:
 				msg = 'Код неверен'
-		return render(request, 'email_confirmation.html', {'conf_form': confirmation_form, 'user': user, 'msg': msg})
+		return render(request, 'email_confirmation.html', {'conf_form': confirmation_form, 'msg': msg})

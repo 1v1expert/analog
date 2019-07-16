@@ -34,24 +34,24 @@
                                                 <input class="upload" type="file">
                                             </div>
                                         </div>
-                                        <h5 class="block mt-10 mb-5 weight-500 capitalize-font txt-info">{{ user.username }}</h5>
+                                        <h5 class="block mt-10 mb-5 weight-500 capitalize-font txt-info">{{ request.user.username }}</h5>
                                         <h6 class="block capitalize-font pb-20">Developer Geek</h6>
                                     </div>
                                     <div class="social-info">
                                         <div class="row">
                                             <div class="col-xs-4 text-center">
                                                 <span class="counts block head-font"><span
-                                                        class="counter-anim">{{ actions_count }}</span></span>
+                                                        class="counter-anim-user">{{ actions_count }}</span></span>
                                                 <span class="counts-text block">Активность</span>
                                             </div>
                                             <div class="col-xs-4 text-center">
                                                 <span class="counts block head-font"><span
-                                                        class="counter-anim">{{ search_count }}</span></span>
+                                                        class="counter-anim-user">{{ search_count }}</span></span>
                                                 <span class="counts-text block">Поисков</span>
                                             </div>
                                             <div class="col-xs-4 text-center">
                                                 <span class="counts block head-font"><span
-                                                        class="counter-anim">{{ files_count }}</span></span>
+                                                        class="counter-anim-user">{{ files_count }}</span></span>
                                                 <span class="counts-text block">Файла</span>
                                             </div>
                                         </div>
