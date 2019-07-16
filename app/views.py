@@ -127,6 +127,12 @@ def faq_view(request):
 
 @login_required(login_url='/login')
 @a_decorator_passing_logs
+def partners_view(request):
+	return render(request, 'to_partners.html', {'user': request.user})
+
+
+@login_required(login_url='/login')
+@a_decorator_passing_logs
 def contacts_view(request):
 	return render(request, 'contacts.html', {'user': request.user})
 

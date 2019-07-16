@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-fluid">
+
+            <!-- Title -->
+            <div class="row heading-bg">
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                    <h5 class="txt-dark">Партнерам</h5>
+                </div>
+                <!-- Breadcrumb -->
+                <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                    <ol class="breadcrumb">
+                        <li><a href="{% url 'app:home' %}">Главная</a></li>
+                        <li><a href="{% url 'app:partners_page' %}">Партнерам</a></li>
+                        {#                        <li><a href="#"><span>table</span></a></li>#}
+                        {#                        <li class="active"><span>View</span></li>#}
+                    </ol>
+                </div>
+                <!-- /Breadcrumb -->
+            </div>
+            <!-- /Title -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-body pa-15">
+                            Если вы заинтересованы в представлении Вашей продукции в БД нашего сервиса
+                            обращайтесь по адресу <a
+                                href="mailto:partners@analogpro.ru?subject=Вопрос/предложение по сервису">partners@analogpro.ru</a><br>
+                            Это бесплатно, однако, скорее всего, от Вас потребуется помощь с предоставлении
+                            корректных данных о вашей продукции.<br><br>
+
+                            О размещении рекламы
+                            Пока мы не планируем размещение рекламы, однако, в перспективе мы не
+                            отказываемся от такой возможности и готовы вести предварительное обсуждение по
+                            адресу <a
+                                href="mailto:partners@analogpro.ru?subject=Вопрос/предложение по сервису">partners@analogpro.ru</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main content -->
+            <!-- Row -->
+            <div class="row">
+
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block extra_js %}
+
+    <!-- Switchery JavaScript -->
+    <script src="{% static 'js/switchery.min.js' %}"></script>
+
+    <!-- Fancy Dropdown JS -->
+    <script src="{% static 'js/dropdown-bootstrap-extended.js' %}"></script>
+
+{% endblock extra_js %}
