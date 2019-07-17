@@ -105,7 +105,7 @@ def search_from_file_view(request):
 			                    created_by=request.user,
 			                    updated_by=request.user)
 			instance.save()
-			file_response = ProcessingSearchFile(request.FILES['file'], instance.file, form, request)
+			file_response = ProcessingSearchFile(request.FILES['file'], instance.file, form, request).csv_processing()
 			
 			# return file
 			# file_path = instance.file.path

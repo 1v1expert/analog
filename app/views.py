@@ -57,7 +57,7 @@ def search_from_file_view(request):
 			                    created_by=request.user,
 			                    updated_by=request.user)
 			instance.save()
-			file_response = ProcessingSearchFile(request.FILES['file'], instance.file, form, request)
+			file_response = ProcessingSearchFile(request.FILES['file'], instance.file, form, request).csv_processing()
 			response = HttpResponse(file_response, content_type='text/plain')
 			response['Content-Disposition'] = 'attachment; filename=' + file_response.name
 			return response

@@ -21,31 +21,28 @@ class ProcessingSearchFile:
 		self.path = path
 		self.form = form
 		self.request = request
-		content = XLSDocumentReader(path=path).parse_file()
+		self.content = XLSDocumentReader(path=path).parse_file()
 		self.manufacturer_from = form.cleaned_data['manufacturer_from']
-	
-		if type == 'xls':
-			pass
-		else:
-			return self.csv_processing(content)
 
 	@staticmethod
 	def check_product(article, manufacturer):
 		try:
 			product = Product.objects.get(article=article, manufacturer=manufacturer)
-			return product
+			return product, ''
 		except Product.DoesNotExist:
 			return None, 'Not found product with article {} and manufacturer {}'.format(article, manufacturer)
 		except Product.MultipleObjectsReturned:
 			return None, 'Found any product with article {} and manufacturer {}'.format(article, manufacturer)
 			
-	def csv_processing(self, data):
-		
+	def csv_processing(self, data=None):
+		if not data:
+			data = self.content
 		result_content = []
 		for i, rec in enumerate(data):
 			body = []
 			
 			body.append(rec.get(0))
+			body.append(rec.get(1))
 			product, err = self.check_product(rec.get(0), self.manufacturer_from)
 			
 			if not product:
@@ -56,19 +53,14 @@ class ProcessingSearchFile:
 			instance = SearchProducts(self.request, self.form, product)
 			instance.global_search(default=True)
 			
-			if instance.founded_products.exist():
+			if instance.founded_products.count():
 				body.append(instance.founded_products.first().article)
-				# if instance.founded_products.count() == 1:
-				# 	body.append(instance.founded_products.get().article)
-				# else:
-				# 	for f_pr in instance.founded_products:
-				# 		body.append(f_pr.article)
 			else:
 				body.append('not found a product that meets the criteria')
 			
 			result_content.append(body)
 			
-		filename = 'OUT_{}.csv'.format(self.path.name[6:-5])
+		filename = 'OUT_{}.xls'.format(self.path.name[6:-5])
 		
 		dump_csv(filename, result_content)
 		instance = DataFile(type=choices.TYPES_FILE[2][0], created_by=self.request.user, updated_by=self.request.user)

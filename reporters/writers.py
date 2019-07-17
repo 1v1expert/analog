@@ -76,6 +76,6 @@ class BookkeepingWriter(object):
 
 def dump_csv(name, data):
     with open('{}/{}'.format(settings.FILES_ROOT, name), 'w', newline='', encoding='utf-8') as csv_file:
-        writer = csv.writer(csv_file, dialect='excel')
+        writer = csv.writer(csv_file, dialect='excel', delimiter=';')
         for row in data:
             writer.writerow(row)
