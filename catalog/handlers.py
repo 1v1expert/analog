@@ -16,28 +16,44 @@ from django.shortcuts import render
 from django.http import JsonResponse
 
 
-def loaded_search_file_handler(file, path, form, request, type='xls'):
-	content = XLSDocumentReader(path=path).parse_file()
-	manufacturer_from = form.cleaned_data['manufacturer_from']
+class ProcessingSearchFile:
+	def __init__(self, file, path, form, request, type='csv'):
+		self.path = path
+		self.form = form
+		self.request = request
+		content = XLSDocumentReader(path=path).parse_file()
+		self.manufacturer_from = form.cleaned_data['manufacturer_from']
+	
+		if type == 'xls':
+			pass
+		else:
+			return self.csv_processing(content)
 
-	result_content = []
-	for i, rec in enumerate(content):
-		body = []
-		if i:
+	@staticmethod
+	def check_product(article, manufacturer):
+		try:
+			product = Product.objects.get(article=article, manufacturer=manufacturer)
+			return product
+		except Product.DoesNotExist:
+			return None, 'Not found product with article {} and manufacturer {}'.format(article, manufacturer)
+		except Product.MultipleObjectsReturned:
+			return None, 'Found any product with article {} and manufacturer {}'.format(article, manufacturer)
+			
+	def csv_processing(self, data):
+		
+		result_content = []
+		for i, rec in enumerate(data):
+			body = []
+			
 			body.append(rec.get(0))
-			try:
-				product = Product.objects.get(article=rec.get(0), manufacturer=manufacturer_from)
-			except Product.DoesNotExist:
-				body.append('Not found product with article {} and manufacturer {}'.format(rec.get(0), manufacturer_from))
-				result_content.append(body)
-				continue
-			except Product.MultipleObjectsReturned:
-				body.append(
-					'Found any product with article {} and manufacturer {}'.format(rec.get(0), manufacturer_from))
-				result_content.append(body)
+			product, err = self.check_product(rec.get(0), self.manufacturer_from)
+			
+			if not product:
+				body.append(err)
+				result_content.append(err)
 				continue
 			
-			instance = SearchProducts(request, form, product)
+			instance = SearchProducts(self.request, self.form, product)
 			instance.global_search(default=True)
 			
 			if instance.founded_products.exist():
@@ -52,23 +68,14 @@ def loaded_search_file_handler(file, path, form, request, type='xls'):
 			
 			result_content.append(body)
 			
-	filename = 'OUT_{}.csv'.format(path.name[6:-5])
-	
-	dump_csv(filename, result_content)
-	instance = DataFile(type=choices.TYPES_FILE[2][0], created_by=request.user, updated_by=request.user)
-	instance.file.name = 'files/{}'.format(filename)
-	instance.save()
-	
-	# with open('{}/{}'.format(settings.FILES_ROOT, filename), 'w', newline='', encoding='utf-8') as csvfile:
-	# 	writer = csv.writer(csvfile, dialect='excel')
-	# 	for row in result_content:
-	# 		writer.writerow(row)
-
-		# instance.file = csvfile
+		filename = 'OUT_{}.csv'.format(self.path.name[6:-5])
 		
-		# instance.file.path = '{}/{}'.format(settings.FILES_ROOT, filename)
-		# instance.save()
-	return instance.file
+		dump_csv(filename, result_content)
+		instance = DataFile(type=choices.TYPES_FILE[2][0], created_by=self.request.user, updated_by=self.request.user)
+		instance.file.name = 'files/{}'.format(filename)
+		instance.save()
+		
+		return instance.file
 
 
 def result_processing(instance, request, product, default=True):

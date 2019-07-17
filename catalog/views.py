@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from .forms import *
 from catalog.models import Product, FixedAttributeValue, UnFixedAttributeValue, FixedValue, Category, DataFile
 from catalog import choices
-from catalog.handlers import loaded_search_file_handler, result_processing
+from catalog.handlers import ProcessingSearchFile, result_processing
 from catalog.utils import SearchProducts
 import os
 from django.http import HttpResponse, Http404
@@ -105,7 +105,7 @@ def search_from_file_view(request):
 			                    created_by=request.user,
 			                    updated_by=request.user)
 			instance.save()
-			file_response = loaded_search_file_handler(request.FILES['file'], instance.file, form, request)
+			file_response = ProcessingSearchFile(request.FILES['file'], instance.file, form, request)
 			
 			# return file
 			# file_path = instance.file.path

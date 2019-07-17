@@ -8,7 +8,7 @@ from django.conf import settings
 
 from catalog.models import DataFile
 from catalog import choices
-from catalog.handlers import loaded_search_file_handler
+from catalog.handlers import ProcessingSearchFile
 
 
 from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile, EmailConfirmationForm
@@ -57,7 +57,7 @@ def search_from_file_view(request):
 			                    created_by=request.user,
 			                    updated_by=request.user)
 			instance.save()
-			file_response = loaded_search_file_handler(request.FILES['file'], instance.file, form, request)
+			file_response = ProcessingSearchFile(request.FILES['file'], instance.file, form, request)
 			response = HttpResponse(file_response, content_type='text/plain')
 			response['Content-Disposition'] = 'attachment; filename=' + file_response.name
 			return response

@@ -135,12 +135,21 @@
             <!-- Left Sidebar Menu -->
 		<div class="fixed-sidebar-left">
 			<ul class="nav navbar-nav side-nav nicescroll-bar">
-				<li class="navigation-header">
-					<span>Main</span>
-					<i class="zmdi zmdi-more"></i>
+                {% if request.user.is_staff %}
+                    <li class="navigation-header">
+                        <span>Admin</span>
+                        <i class="zmdi zmdi-more"></i>
+                    </li>
+                    <li>
+					<a href="{% url 'admin:index' %}"><div class="pull-left"><i class="zmdi zmdi-book mr-20"></i><span class="right-nav-text">Admin page</span></div><div class="clearfix"></div></a>
 				</li>
-				<li>
-					<a class="active" href="javascript:void(0);" data-toggle="collapse" data-target="#dashboard_dr"><div class="pull-left"><i class="zmdi zmdi-apps mr-20"></i><span class="right-nav-text">Поиск по:</span></div><div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div><div class="clearfix"></div></a>
+                {% endif %}
+                <li class="navigation-header">
+                    <span>Main</span>
+                    <i class="zmdi zmdi-more"></i>
+                </li>
+                <li>
+					<a class="active" href="javascript:void(0);" data-toggle="collapse" data-target="#dashboard_dr"><div class="pull-left"><i class="zmdi zmdi-apps mr-20"></i><span class="right-nav-text">Поиск по</span></div><div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div><div class="clearfix"></div></a>
 					<ul id="dashboard_dr" class="collapse collapse-level-1">
 						<li>
 							<a href="{% url 'app:search_from_file' %}">Cпецификации</a>
