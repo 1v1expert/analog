@@ -1,5 +1,57 @@
-from catalog.models import FixedValue
+from catalog.models import FixedValue, Product
 from catalog.choices import TYPES_SEARCH, TYPES_DICT, TYPES
+
+
+class DuplicateCheck(object):
+	
+	def __init__(self, product=None):
+		if not product:
+			self.global_search()
+		
+		self._product = product
+		# self.search_duplicates()
+	
+	@staticmethod
+	def global_search():
+		products = Product.objects.all()
+		for product in products:
+			product.refresh_from_db()
+			
+			if product.is_duplicate:
+				continue
+				
+			selection = Product.objects.filter(article=product.article)
+			if selection.count() > 1:
+				selection.update(is_duplicate=True)
+	
+	@staticmethod
+	def get_products(article: str):
+		return Product.objects.filter(article=article)
+	
+	def search_duplicates(self, api=False):
+		if isinstance(self._product, str):
+			products = self.get_products(self._product)
+			if not products.exists():
+				raise Exception('Not found product with article {}'.format(self._product))
+			
+			if api:
+				return products.values_list('article')
+			return products
+		
+		# return list()
+			
+			# str product articule
+
+
+class ProductInfo(object):
+	def __init__(self, product):
+		self.product = product
+	
+	def get_attributes(self):
+		pass
+	
+	def get_product_info(self):
+		pass
 
 
 def get_attributes(product, api=True):

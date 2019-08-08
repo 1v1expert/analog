@@ -181,7 +181,12 @@ class Product(Base):
     article = models.CharField(max_length=255, verbose_name='Артикул')
     additional_article = models.CharField(max_length=255, default="", blank=True, verbose_name='Доп. артикул')
     series = models.CharField(max_length=255, default="", blank=True, verbose_name='Серия')
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='products', limit_choices_to={'parent__isnull': False})
+    category = models.ForeignKey(Category, on_delete=models.PROTECT,
+                                 verbose_name="Класс", related_name='products', limit_choices_to={'parent__isnull': False})
+    
+    is_duplicate = models.BooleanField(verbose_name='Дубликат', default=False)
+    is_tried = models.BooleanField(verbose_name='Проверенный', default=False)
+    
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name="Производитель", related_name='products')
     fixed_attrs_vals = models.ManyToManyField('FixedAttributeValue', verbose_name="Фикс атрибуты")
     unfixed_attrs_vals = models.ManyToManyField('UnFixedAttributeValue', verbose_name="Нефикс атрибуты")
