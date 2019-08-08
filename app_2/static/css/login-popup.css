@@ -1,0 +1,240 @@
+
+
+body {font-family: 'Open Sans Bold', Arial, Helvetica, sans-serif; font-size: 14px; color: #666;}
+
+#login_container {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background: #000;
+    display: none;
+	 
+}
+
+.login-popupContainer{
+	position:absolute;
+	width:350px;
+	height: auto;
+	left:45%;
+	top:80px;
+	background: #FFF;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#login-menu
+ {margin:0px auto;
+  display:block;
+  }
+.login-main-icon
+{
+	width:100%; 
+	height:auto;
+	 margin:0 auto; 
+	 text-align:center;
+	
+}
+
+.social_login h1
+{
+	 color:#666; 
+	   font-family:Arial, Helvetica, sans-serif;
+	    font-size:16px;
+		 font-weight:bold;
+		 text-align:center;
+	 padding-bottom:15px;
+}
+.social_login p
+{
+	 color:#000; 
+	   font-family:Arial, Helvetica, sans-serif;
+	    font-size:14px;
+		 font-weight:normal;
+		 text-align:center;
+		
+
+}
+.login-btn {
+	padding:10px 20px; 
+	background: #F4F4F2;}
+.btn_blue
+ {background: #2fbbff;
+ padding: 10px 20px; 
+ color: #FFF;}
+
+.login-btn a:hover {
+	background: #2fbbff;
+	 color:#000;
+	 }
+	 
+	 
+	 a.login-btn
+ {color:#666; 
+ text-align: center; 
+ text-decoration: none;
+ }
+a:hover.login-btn{
+	color:#000; 
+	text-align: center; 
+	text-decoration: none;}
+	
+	
+	 
+
+
+	.back_btn {
+	padding:10px 20px;
+	 background: #F4F4F2;
+	 }
+	 a.back_btn {
+	color:#666; 
+	text-align: center;
+	 text-decoration: none;
+	 }
+a:hover.back_btn{
+	color:#000;
+	 text-align: center;
+	  text-decoration: none;
+	  }
+
+
+.first_half {
+	width:50%;
+	 display: block;
+	  float:left;
+	  }
+.first_half.last {
+	width:45%; 
+	margin-left:5%;}
+
+/* Popup Styles*/
+
+.popupHeader {
+	background:#F4F4F2;
+	 position:relative; 
+	 padding:10px 20px; 
+	 border-bottom:1px solid #DDD; 
+	 text-align:left;
+	   font-weight:bold;
+	   font-size:16px; 
+	text-transform: uppercase;
+	  color:#666;
+	  -webkit-border-radius: 4px 4px 0px 0px;
+	-moz-border-radius:  4px 4px 0px 0px;
+	border-radius:  4px 4px 0px 0px;
+	 
+	  }
+.popupHeader .modal_close {
+	position: absolute;
+	 right: 0; margin:0px; 
+	 top:0; padding:10px 15px;
+	  background:#E4E4E2;
+	   cursor: pointer; color:#aaa; font-size:16px;
+	   
+	   -webkit-border-radius: 0px 4px 0px 0px;
+	-moz-border-radius:  0px 4px 0px 0px;
+	border-radius:  0px 4px 0px 0px;
+	   
+	   }
+
+.popupBody {
+	padding:20px;
+	}
+
+
+
+.centeredText {
+	text-align:left;
+	 margin: 20px 0; 
+	 clear: both; 
+	 overflow: hidden;
+	  text-transform: uppercase; 
+	  color:#000;}
+
+.main_btns-container {
+	clear:both;
+	overflow: hidden;
+	}
+.main_btns-container a {
+	display: block;
+	}
+
+/* User Login Form */
+.user_login {
+	display: none;
+	}
+	.user_login label {display: block; text-align:left; margin-bottom:5px; color:#000; font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:normal;}
+
+.user_login input[type="text"], .user_login input[type="email"], .user_login input[type="password"] {
+	display: block;
+	 width:100%;
+	  padding: 10px;
+	   border:1px solid #DDD; 
+	   color:#000; 
+	   font-family:Arial, Helvetica, sans-serif;
+	    font-size:14px;
+		 font-weight:normal;
+		 border-radius: 4px ;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;}
+.user_login input[type="checkbox"] {
+	float:left;
+	 margin-right:5px;
+	 }
+.user_login input[type="checkbox"]+label {
+	float:left;
+	}
+
+.user_login .checkbox {
+	margin:0px 0px 10px 0px;
+	 clear: both; 
+	 overflow: hidden;
+	 }
+a.forgot_password {
+	display:block;
+	 margin: 20px 0 10px; 
+	 clear: both; 
+	 overflow: hidden; 
+	 text-decoration: none; 
+	 color:#ED6347;
+	  text-align:left;
+	  }
+
+/* User Register Form */
+.user_register 
+
+{
+	display: none;
+}
+
+.user_register label {display: block; margin-bottom:5px;color:#000; font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:normal; text-align:left;}
+
+.user_register input[type="text"], .user_register input[type="email"], .user_register input[type="password"] {display: block;
+ width:100%; 
+ padding: 10px; 
+ border:1px solid #DDD;
+   color:#000; 
+   font-family:Arial, Helvetica, sans-serif; 
+   font-size:14px; 
+   font-weight:normal;
+   border-radius: 4px ;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	}
+.user_register input[type="checkbox"] {
+	float:left;
+	 margin-right:5px;
+	 }
+.user_register input[type="checkbox"]+label {
+	float:left;
+	}
+
+.user_register .checkbox {
+	margin:0px 0px 10px 0px;
+	 clear: both; 
+	 overflow: hidden;
+	 }
