@@ -6,7 +6,9 @@ from catalog.choices import *
 from catalog.models import *
 
 from django.contrib import messages
+from django.contrib.auth import models as auth_md
 from django.db import models
+from django.db.models.functions import Lower
 
 
 class XLSDocumentReader(object):
@@ -252,8 +254,9 @@ class ProcessingUploadData(object):
 class KOKSDocumentReader(object):
     """
     /code/article/title/price
+    name sheet -> type
     """
-    def __init__(self, path=None, workbook=None):
+    def __init__(self, path=None, workbook=None, only_parse=True, user=None):
         assert path or workbook, "You should provide either path to file or XLS-object"
         
         if workbook:
@@ -269,22 +272,80 @@ class KOKSDocumentReader(object):
         # self.ws = self.workbook.active
         self.sheet = self.workbook.active
         self.sheets = self.workbook.get_sheet_names()
+        self.c_lines = 0
+        self.user = user
+        self.manufacturer = Manufacturer.objects.get(title='КОКС')
+        self.hrd_attributes = FixedValue.objects.annotate(title_lower=Lower('title'))\
+            .only('title').values_list('title_lower', flat=True).distinct()
+        if user is None:
+            user = auth_md.User.objects.get(is_staff=True, username='admin')
+        
+        self.products = []
+        print(self.hrd_attributes)
         
     # @staticmethod
     # def _get_data_from_line(row):
     #     for cell in row:
     #         yield str(cell.value)
     #
+    def create_products(self, article, title, additional_article=""):
+        product = Product(article=article,
+                          additional_article=additional_article,
+                          manufacturer=self.manufacturer,
+                          title=title,
+                          # category=product['category_obj'],
+                          created_by=self.user,
+                          updated_by=self.user)
+        self.products.append(product)
+        return product
+    
+    def _get_category(self):
+        pass
+    
+    def _create_attribute(self, fixed=False):
+        if fixed:
+            attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'])
+    
+        else:
+            attr_val = UnFixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'])
+        attr_val.created_at = self.user
+        attr_val.updated_by = self.user
+        attr_val.save()
+    
+    def line_processing(self, line, name_sheet=None):
+        if not name_sheet:
+            name_sheet = self.sheets[0]
+        code = line[0]
+        article = line[1]
+        title = line[2].lower()
+        price = line[3]
+        
+        if not article.strip() or article == 'None':
+            return
+        
+        self.c_lines += 1  # counter lines
+        
+        for attr in self.hrd_attributes:
+            if attr in title:  # entry check is not the right decision
+                print(attr)
+                break
+        
+        self.create_products(article, title, code)
+        print(self.c_lines, '--> ', article, title, name_sheet)
+        pass
+    
     def read_sheet(self):
         rows = self.sheet.rows
         for cnt, row in enumerate(rows):
+            if cnt in range(3):
+                continue
             yield [str(cell.value) for cell in row]
 
     def parse_file(self):
         for name_list in self.sheets[1:]:
             self.sheet = self.workbook.get_sheet_by_name(name_list)
             for line in self.read_sheet():
-                print(line, '\n')
+                self.line_processing(line, name_list)
         # self.pprint()
         
     # def pprint(self):
