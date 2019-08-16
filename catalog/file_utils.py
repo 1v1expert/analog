@@ -153,8 +153,8 @@ class ProcessingUploadData(object):
                 attr_val = UnFixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'],
                                                  created_by=request.user, updated_by=request.user)
             else:
-                attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'], created_by=request.user,
-                                               updated_by=request.user)
+                attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'],
+                                               created_by=request.user, updated_by=request.user)
                 
             attr_val.save()
             attr_val.products.add(new_product)
@@ -267,20 +267,24 @@ class KOKSDocumentReader(object):
                                                        read_only=True,
                                                        data_only=True)
             except InvalidFileException:
+                # make read file another reader
                 raise Exception('Invalid file')
         self.xlsx = path
         # self.ws = self.workbook.active
         self.sheet = self.workbook.active
         self.sheets = self.workbook.get_sheet_names()
+        self.only_parse = only_parse
         self.c_lines = 0
-        self.user = user
+        
+        self.user = user if user is not None else auth_md.User.objects.get(is_staff=True, username='admin')
+        
         self.manufacturer = Manufacturer.objects.get(title='КОКС')
         self.hrd_attributes = FixedValue.objects.annotate(title_lower=Lower('title'))\
             .only('title').values_list('title_lower', flat=True).distinct()
-        if user is None:
-            user = auth_md.User.objects.get(is_staff=True, username='admin')
         
         self.products = []
+        self.fix_attr_vals = {}
+        self.unfix_attr_vals = {}
         print(self.hrd_attributes)
         
     # @staticmethod
@@ -288,34 +292,49 @@ class KOKSDocumentReader(object):
     #     for cell in row:
     #         yield str(cell.value)
     #
-    def create_products(self, article, title, additional_article=""):
+    def create_products(self, article, title, category, additional_article=""):
         product = Product(article=article,
                           additional_article=additional_article,
                           manufacturer=self.manufacturer,
                           title=title,
-                          # category=product['category_obj'],
+                          category=category,
                           created_by=self.user,
                           updated_by=self.user)
         self.products.append(product)
-        return product
+        self.fix_attr_vals[article] = []
+        self.unfix_attr_vals[article] = []
+        
+        # return product
     
-    def _get_category(self):
+    def _get_category(self, title):
+        return None
+
+    def _finding_an_attribute(self, title, article):
+        for attr in self.hrd_attributes:
+            if attr in title:  # entry check is not the right decision
+                print(attr)
+                break
+        value = '' or object
+        attribute = '' or object
+        if not self.only_parse:
+            self._create_attribute(article, value, attribute, fixed=True or False)
         pass
     
-    def _create_attribute(self, fixed=False):
-        if fixed:
-            attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'])
-    
-        else:
-            attr_val = UnFixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'])
-        attr_val.created_at = self.user
-        attr_val.updated_by = self.user
-        attr_val.save()
+    def _create_attribute(self, article, value, attribute, fixed=False):
+        pass
+        # if fixed:
+        #     attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'])
+        #
+        # else:
+        #     attr_val = UnFixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'])
+        # attr_val.created_at = self.user
+        # attr_val.updated_by = self.user
+        # attr_val.save()
     
     def line_processing(self, line, name_sheet=None):
         if not name_sheet:
             name_sheet = self.sheets[0]
-        code = line[0]
+        additional_article = line[0]
         article = line[1]
         title = line[2].lower()
         price = line[3]
@@ -325,12 +344,8 @@ class KOKSDocumentReader(object):
         
         self.c_lines += 1  # counter lines
         
-        for attr in self.hrd_attributes:
-            if attr in title:  # entry check is not the right decision
-                print(attr)
-                break
-        
-        self.create_products(article, title, code)
+        category = self._get_category(title)
+        self.create_products(article, title, category, additional_article=additional_article)
         print(self.c_lines, '--> ', article, title, name_sheet)
         pass
     
