@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.contrib import admin
-from app_2.views import redirect_to_old_template
+from app_2.views import redirect_to_old_template, view_main_page
 app_name = 'app_2'
 urlpatterns = [
 	# url(r'^login/$', login_view, name='login'),
@@ -16,6 +16,7 @@ urlpatterns = [
 	# url(r'^logout/$', logout_view, name='logout'),
 	# url(r'^email_confirmation/(?P<verification_code>[0-9\w-]+)-(?P<user_id>[0-9]+)/$',
 	#     email_confirmation, name='email_confirmation'),
+	url(r'^home/$', view_main_page, name='new_home'),
 	url(r'^$', redirect_to_old_template, name='redirect_to_old_template'),
 	# url(r'^admin/', admin.site.urls),
 ]

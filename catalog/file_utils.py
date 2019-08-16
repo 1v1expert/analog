@@ -1,4 +1,5 @@
 import openpyxl
+from openpyxl.utils.exceptions import InvalidFileException
 from collections import OrderedDict
 
 from catalog.choices import *
@@ -246,3 +247,54 @@ class ProcessingUploadData(object):
         #
     def get_attribute(self):
         pass
+
+
+class KOKSDocumentReader(object):
+    """
+    /code/article/title/price
+    """
+    def __init__(self, path=None, workbook=None):
+        assert path or workbook, "You should provide either path to file or XLS-object"
+        
+        if workbook:
+            self.workbook = workbook
+        else:
+            try:
+                self.workbook = openpyxl.load_workbook(path,
+                                                       read_only=True,
+                                                       data_only=True)
+            except InvalidFileException:
+                raise Exception('Invalid file')
+        self.xlsx = path
+        # self.ws = self.workbook.active
+        self.sheet = self.workbook.active
+        self.sheets = self.workbook.get_sheet_names()
+        
+    # @staticmethod
+    # def _get_data_from_line(row):
+    #     for cell in row:
+    #         yield str(cell.value)
+    #
+    def read_sheet(self):
+        rows = self.sheet.rows
+        for cnt, row in enumerate(rows):
+            yield [str(cell.value) for cell in row]
+
+    def parse_file(self):
+        for name_list in self.sheets[1:]:
+            self.sheet = self.workbook.get_sheet_by_name(name_list)
+            for line in self.read_sheet():
+                print(line, '\n')
+        # self.pprint()
+        
+    # def pprint(self):
+    #     print(list(self.parse_file()))
+        # print(cnt, '-->', [value for value in self._get_data_from_line(row)])
+        # printrows
+    
+    
+def check_line(line, type='Оцинкова'):
+    line = line.lower()
+    if 'лоток' not in line:
+        return
+    pass

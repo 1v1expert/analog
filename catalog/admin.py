@@ -160,9 +160,10 @@ class ProductAdmin(BaseAdmin):
 #         super(LogEntryAdmin, self).__init__(*args, **kwargs)
 #         self.list_display_links = (None, )
 
+from catalog.file_utils import KOKSDocumentReader
 
 class FileUploadAdmin(admin.ModelAdmin):
-    actions = ['process_file']
+    actions = ['process_file', 'process_koks_file']
     list_display = ['file', 'type', 'file_link', 'created_at', 'created_by']
     
     def file_link(self, obj):
@@ -173,6 +174,16 @@ class FileUploadAdmin(admin.ModelAdmin):
 
     file_link.allow_tags = True
     file_link.short_description = 'Ссылка на скачивание'
+    
+    def process_koks_file(self, request, queryset):
+        if not len(queryset) == 1:
+            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
+            return
+        try:
+            KOKSDocumentReader(path=queryset[0].file.name).parse_file()
+        except FileNotFoundError:
+            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
+    process_koks_file.short_description = 'Импортировать шаблон(KOKs)'
     
     def process_file(self, request, queryset):
         print(request, vars(queryset[0].file), queryset)
@@ -189,7 +200,7 @@ class FileUploadAdmin(admin.ModelAdmin):
                 messages.add_message(request, messages.SUCCESS, 'Данные успешно загружены из {} файла в БД'.format(qq.file.name))
             else:
                 messages.add_message(request, messages.ERROR, error)
-    process_file.short_description = u'Импортировать данные'
+    process_file.short_description = u'Импортировать данные(общий шаблон)'
     
     def save_model(self, request, obj, form, change):
         if not change:
