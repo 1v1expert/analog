@@ -10,6 +10,13 @@ from django.contrib.auth import models as auth_md
 from django.db import models
 from django.db.models.functions import Lower
 
+import re
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger('analog')
+
 
 class XLSDocumentReader(object):
     
@@ -307,7 +314,32 @@ class KOKSDocumentReader(object):
         # return product
     
     def _get_category(self, title):
-        return None
+        result = re.findall(r'\w+\d+', title)  # choose sizes
+        result2 = re.findall(r'\w+', title)  # splite the line
+        required_samples = set()
+        for word in result2:
+            if len(word) <= 4:
+                continue
+            coincided = False
+            for size in result:
+                if size in word:
+                    coincided = True
+                    break
+            if not coincided:
+                required_samples.add(word)
+
+        selection = Category.objects.filter(title__icontains=required_samples.pop())
+        selection_c = selection.count()
+        if selection_c == 1:
+            return selection.get()
+        elif selection_c == 0:
+            return None
+        else:
+            for sample in required_samples:
+                n_selection = selection.filter(title__icontains=required_samples.pop())
+                pass
+       
+        print(title, result, result2, ' '.join(required_samples))
 
     def _finding_an_attribute(self, title, article):
         for attr in self.hrd_attributes:
@@ -345,8 +377,8 @@ class KOKSDocumentReader(object):
         self.c_lines += 1  # counter lines
         
         category = self._get_category(title)
-        self.create_products(article, title, category, additional_article=additional_article)
-        print(self.c_lines, '--> ', article, title, name_sheet)
+        # self.create_products(article, title, category, additional_article=additional_article)
+        logger.debug('line {}, - {} - {}'.format(self.c_lines, article, title))
         pass
     
     def read_sheet(self):
@@ -358,6 +390,7 @@ class KOKSDocumentReader(object):
 
     def parse_file(self):
         for name_list in self.sheets[1:]:
+            logger.debug('Sheet {}'.format(name_list))
             self.sheet = self.workbook.get_sheet_by_name(name_list)
             for line in self.read_sheet():
                 self.line_processing(line, name_list)
