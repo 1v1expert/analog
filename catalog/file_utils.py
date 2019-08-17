@@ -327,17 +327,24 @@ class KOKSDocumentReader(object):
                     break
             if not coincided:
                 required_samples.add(word)
-
-        selection = Category.objects.filter(title__icontains=required_samples.pop())
+                
+        copy_required_sample = required_samples.copy()
+        word_sample = required_samples.pop()
+        # print(word_sample)
+        selection = Product.objects.filter(title__icontains=word_sample)
         selection_c = selection.count()
         if selection_c == 1:
-            return selection.get()
+            return selection.get().category
         elif selection_c == 0:
             return None
         else:
-            for sample in required_samples:
-                n_selection = selection.filter(title__icontains=required_samples.pop())
-                pass
+            for sample in range(len(copy_required_sample)-1):
+                word_sample = required_samples.pop()
+                n_selection = selection.filter(title__icontains=word_sample)
+                if n_selection.count() == 0: return selection.first().category
+                else:
+                    selection = n_selection
+            return selection.first().category
        
         print(title, result, result2, ' '.join(required_samples))
 
@@ -378,7 +385,7 @@ class KOKSDocumentReader(object):
         
         category = self._get_category(title)
         # self.create_products(article, title, category, additional_article=additional_article)
-        logger.debug('line {}, - {} - {}'.format(self.c_lines, article, title))
+        logger.debug('------\nline {}, - {} - {}, category: {}'.format(self.c_lines, article, title,category))
         pass
     
     def read_sheet(self):
