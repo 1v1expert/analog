@@ -1,11 +1,16 @@
+from catalog.models import DataFile
+from catalog import choices
+
 import xlsxwriter
 import csv
 from django.conf import settings
 
 
 class BookkeepingWriter(object):
-    def __init__(self, name):
-        self.filename = name
+    def __init__(self, name, user):
+        self.filename = 'files/{}.xlsx'.format(name)
+        # self.filename = name
+        self.user = user
         
     def dump(self, data):
         # self.write_top_header(**data['top_header'])
@@ -52,6 +57,7 @@ class BookkeepingWriter(object):
         self._wb = xlsxwriter.Workbook(self.filename,
                                        {'default_date_format': 'dd.mm.yyyy'}
         )
+
         self._default_ws = self._wb.add_worksheet()
         self._row = 0
         self._col = 0
@@ -72,6 +78,14 @@ class BookkeepingWriter(object):
 
     def __exit__(self, _type, value, tb):
         self._wb.close()
+
+        # from openpyxl.writer.excel import save_virtual_workbook
+        # from django.core.files import File
+        # myfile = File(self._wb)
+        datafile = DataFile(type=choices.TYPES_FILE[3][0], created_by=self.user, updated_by=self.user)
+        # self.instance.file.save(self.filename, save_virtual_workbook(self._wb))
+        datafile.file.name = self.filename
+        datafile.save()
 
 
 def dump_csv(name, data):

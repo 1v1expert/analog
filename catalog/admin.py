@@ -1,11 +1,17 @@
 from django.contrib import admin
 from django.contrib import messages
+from django.contrib.admin.views.main import ChangeList
 
 from django.utils.safestring import mark_safe
 from django.contrib.admin.models import LogEntry
 
-from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, UnFixedAttributeValue, Specification, DataFile
-from catalog.file_utils import XLSDocumentReader, ProcessingUploadData
+from reporters.generators import DefaultGeneratorTemplate
+from reporters.writers import BookkeepingWriter
+
+from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, \
+    UnFixedAttributeValue, Specification, DataFile
+from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader
+from catalog.forms import ProductChangeListForm
 
 from app.models import MainLog
 
@@ -33,7 +39,7 @@ class BaseAdmin(admin.ModelAdmin):
     list_display = ['title', 'id','is_public', 'deleted','created_at','created_by','updated_at','updated_by']
     save_on_top = True
     actions = [mark_as_published, mark_as_unpublished]
-    list_filter = ['is_public', 'deleted','created_at','updated_at']
+    list_filter = ['is_public', 'deleted', 'created_at', 'updated_at']
     search_fields = ['id', 'title']
     
     def save_model(self, request, obj, form, change):
@@ -105,9 +111,7 @@ class AttrValAdmin(BaseAdmin):
     #         print(json.dumps(kwargs, indent=2))
     #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-from django.contrib.admin.views.main import ChangeList
-from .models import Product
-from .forms import ProductChangeListForm
+
 class ProductChangeList(ChangeList):
     def __init__(self, request, model, list_display, list_display_links,
                  list_filter, date_hierarchy, search_fields, list_select_related,
@@ -160,7 +164,18 @@ class ProductAdmin(BaseAdmin):
 #         super(LogEntryAdmin, self).__init__(*args, **kwargs)
 #         self.list_display_links = (None, )
 
-from catalog.file_utils import KOKSDocumentReader
+
+class ManufacturerAdmin(BaseAdmin):
+    list_display = ['title', 'id', 'created_at', 'created_by']
+    actions = ['export_data_to_xls']
+    
+    def export_data_to_xls(self, request, queryset):
+        print(self.actions, queryset)
+        data = DefaultGeneratorTemplate(queryset[0])
+        with BookkeepingWriter(str(queryset[0]), request.user) as writer:
+            writer.dump(data.generate())
+    export_data_to_xls.short_description = 'Выгрузить данные по данному производителю'
+
 
 class FileUploadAdmin(admin.ModelAdmin):
     actions = ['process_file', 'process_koks_file']
@@ -263,7 +278,8 @@ admin.site.register(FixedValue, FixValAdmin)
 # admin.site.register(FixedAttributeValue, AttrValAdmin)
 # admin.site.register(UnFixedAttributeValue, AttrValAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Manufacturer, BaseAdmin)
+# admin.site.register(Manufacturer, BaseAdmin)
+admin.site.register(Manufacturer, ManufacturerAdmin)
 admin.site.register(Attribute, AttrAdmin)
 admin.site.register(Specification, BaseAdmin)
 admin.site.register(DataFile, FileUploadAdmin)
