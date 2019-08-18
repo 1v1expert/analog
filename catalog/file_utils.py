@@ -280,7 +280,7 @@ class KOKSDocumentReader(object):
         # self.ws = self.workbook.active
         self.sheet = self.workbook.active
         self.sheets = self.workbook.get_sheet_names()
-        self.only_parse = only_parse
+        self.only_parse = False
         self.c_lines = 0
         
         self.user = user if user is not None else auth_md.User.objects.get(is_staff=True, username='admin')
@@ -290,6 +290,8 @@ class KOKSDocumentReader(object):
             .only('title').values_list('title_lower', flat=True).distinct()
         
         self.products = []
+        self.articles = set()
+        self.doubles_article = []
         # self.fix_attr_vals = {}
         # self.unfix_attr_vals = {}
         self.attr_vals = {}
@@ -372,12 +374,12 @@ class KOKSDocumentReader(object):
     
     def _create_attribute(self, article, value, attribute, fixed=False):
         if fixed:
-            attr_val = FixedAttributeValue(value=value, attribute=attribute)
+            attr_val = FixedAttributeValue(value=value, attribute=attribute, created_by=self.user, updated_by=self.user)
             # self.fix_attr_vals[article].append(attr_val)
             self.attr_vals[article]['fix'].append(attr_val)
             
         else:
-            attr_val = UnFixedAttributeValue(value=value, attribute=attribute)
+            attr_val = UnFixedAttributeValue(value=value, attribute=attribute, created_by=self.user, updated_by=self.user)
             # self.unfix_attr_vals[article].append(attr_val)
             self.attr_vals[article]['unfix'].append(attr_val)
         
@@ -398,6 +400,12 @@ class KOKSDocumentReader(object):
             return
         
         self.c_lines += 1  # counter lines
+        
+        # check_doubles
+        if article in self.articles:
+            self.doubles_article.append(article)
+            return
+        self.articles.add(article)
         
         category = self._get_category(title)
         if category:
@@ -427,33 +435,26 @@ class KOKSDocumentReader(object):
             self.sheet = self.workbook.get_sheet_by_name(name_list)
             for line in self.read_sheet():
                 self.line_processing(line, name_list)
+                
+        self._create_attributes_and_products()
     
     def _create_attributes_and_products(self):
         if not self.only_parse:
+            logger.debug('Start creating process: {}, {} products'.format(not self.only_parse, len(self.products)))
             Product.objects.bulk_create(self.products)
             
             for key in self.attr_vals.keys():
                 product = Product.objects.get(article=key, manufacturer=self.manufacturer)
+                for fix in self.attr_vals[key]['fix']:
+                    fix.save()
+                    fix.products.add(product)
+                    fix.save()
+                for unfix in self.attr_vals[key]['unfix']:
+                    unfix.save()
+                    unfix.products.add(product)
+                    unfix.save()
                 product.fixed_attrs_vals.set(self.attr_vals[key]['fix'])
                 product.unfixed_attrs_vals.set(self.attr_vals[key]['unfix'])
-                
-                
-            
-            for key in self.fix_attr_vals.keys():
-                product = Product.objects.get(article=key, manufacturer=self.manufacturer)
-                product.fixed_attrs_vals.set(self.fix_attr_vals[key])
-                for fix_attr in self.fix_attr_vals[key]:
-                    # fix_attr.save()
-                    fix_attr.products.add(product)
-                    fix_attr.save()
-            
-            for key in self.unfix_attr_vals.keys():
-                product = Product.objects.get(article=key, manufacturer=self.manufacturer)
-                product.unfixed_attrs_vals.set(self.unfix_attr_vals[key])
-                for unfix_attr in self.unfix_attr_vals[key]:
-                    # fix_attr.save()
-                    unfix_attr.products.add(product)
-                    unfix_attr.save()
                 
         # print('unfix attr val: ', self.unfix_attr_vals, 'fix attr val: ', self.fix_attr_vals)
         # self.pprint()

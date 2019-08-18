@@ -152,6 +152,7 @@ class FixedAttributeValue(Base):
     # title = models.CharField(max_length=255, verbose_name='Значение')
     attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="fixed_values")
     products = models.ManyToManyField('Product', blank=True)
+    is_tried = models.BooleanField(verbose_name='Проверенный', default=False)
     
     def __str__(self):
         return str(self.attribute) + ": " + self.value.title
@@ -169,6 +170,7 @@ class UnFixedAttributeValue(Base):
     # title = models.CharField(max_length=255, verbose_name='Значение')
     attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="unfixed_values")
     products = models.ManyToManyField('Product', blank=True)
+    is_tried = models.BooleanField(verbose_name='Проверенный', default=False)
     
     def __str__(self):
         return '{}: {}'.format(self.attribute, self.value)
