@@ -290,9 +290,9 @@ class KOKSDocumentReader(object):
             .only('title').values_list('title_lower', flat=True).distinct()
         
         self.products = []
-        self.fix_attr_vals = {}
-        self.unfix_attr_vals = {}
-        print(self.hrd_attributes)
+        # self.fix_attr_vals = {}
+        # self.unfix_attr_vals = {}
+        self.attr_vals = {}
         
     # @staticmethod
     # def _get_data_from_line(row):
@@ -309,8 +309,12 @@ class KOKSDocumentReader(object):
                           updated_by=self.user)
         logger.debug(product)
         self.products.append(product)
-        self.fix_attr_vals[article] = []
-        self.unfix_attr_vals[article] = []
+        self.attr_vals[article] = {
+            'fix': [],
+            'unfix': []
+        }
+        # self.fix_attr_vals[article] = []
+        # self.unfix_attr_vals[article] = []
         
         # return product
     
@@ -369,11 +373,13 @@ class KOKSDocumentReader(object):
     def _create_attribute(self, article, value, attribute, fixed=False):
         if fixed:
             attr_val = FixedAttributeValue(value=value, attribute=attribute)
-            self.fix_attr_vals[article].append(attr_val)
+            # self.fix_attr_vals[article].append(attr_val)
+            self.attr_vals[article]['fix'].append(attr_val)
             
         else:
             attr_val = UnFixedAttributeValue(value=value, attribute=attribute)
-            self.unfix_attr_vals[article].append(attr_val)
+            # self.unfix_attr_vals[article].append(attr_val)
+            self.attr_vals[article]['unfix'].append(attr_val)
         
         logger.debug(attr_val)
         attr_val.created_at = self.user
@@ -421,6 +427,34 @@ class KOKSDocumentReader(object):
             self.sheet = self.workbook.get_sheet_by_name(name_list)
             for line in self.read_sheet():
                 self.line_processing(line, name_list)
+    
+    def _create_attributes_and_products(self):
+        if not self.only_parse:
+            Product.objects.bulk_create(self.products)
+            
+            for key in self.attr_vals.keys():
+                product = Product.objects.get(article=key, manufacturer=self.manufacturer)
+                product.fixed_attrs_vals.set(self.attr_vals[key]['fix'])
+                product.unfixed_attrs_vals.set(self.attr_vals[key]['unfix'])
+                
+                
+            
+            for key in self.fix_attr_vals.keys():
+                product = Product.objects.get(article=key, manufacturer=self.manufacturer)
+                product.fixed_attrs_vals.set(self.fix_attr_vals[key])
+                for fix_attr in self.fix_attr_vals[key]:
+                    # fix_attr.save()
+                    fix_attr.products.add(product)
+                    fix_attr.save()
+            
+            for key in self.unfix_attr_vals.keys():
+                product = Product.objects.get(article=key, manufacturer=self.manufacturer)
+                product.unfixed_attrs_vals.set(self.unfix_attr_vals[key])
+                for unfix_attr in self.unfix_attr_vals[key]:
+                    # fix_attr.save()
+                    unfix_attr.products.add(product)
+                    unfix_attr.save()
+                
         # print('unfix attr val: ', self.unfix_attr_vals, 'fix attr val: ', self.fix_attr_vals)
         # self.pprint()
         
@@ -429,13 +463,6 @@ class KOKSDocumentReader(object):
         # print(cnt, '-->', [value for value in self._get_data_from_line(row)])
         # printrows
     
-    
-def check_line(line, type='Оцинкова'):
-    line = line.lower()
-    if 'лоток' not in line:
-        return
-    pass
-
 
 def is_digit(s):
     try:
