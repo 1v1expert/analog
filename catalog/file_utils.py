@@ -286,7 +286,7 @@ class KOKSDocumentReader(object):
         self.user = user if user is not None else auth_md.User.objects.get(is_staff=True, username='admin')
         
         self.manufacturer = Manufacturer.objects.get(title='КОКС')
-        self.hrd_attributes = FixedValue.objects.annotate(title_lower=Lower('title'))\
+        self.hrd_attributes = FixedValue.objects.filter(attribute__type='hrd').annotate(title_lower=Lower('title'))\
             .only('title').values_list('title_lower', flat=True).distinct()
         
         self.products = []
@@ -307,13 +307,15 @@ class KOKSDocumentReader(object):
                           category=category,
                           created_by=self.user,
                           updated_by=self.user)
+        logger.debug(product)
         self.products.append(product)
         self.fix_attr_vals[article] = []
         self.unfix_attr_vals[article] = []
         
         # return product
     
-    def _get_category(self, title):
+    @staticmethod
+    def _get_category(title):
         result = re.findall(r'\w+\d+', title)  # choose sizes
         result2 = re.findall(r'\w+', title)  # splite the line
         required_samples = set()
@@ -329,45 +331,53 @@ class KOKSDocumentReader(object):
                 required_samples.add(word)
                 
         copy_required_sample = required_samples.copy()
-        word_sample = required_samples.pop()
+        # word_sample = required_samples.pop()
         # print(word_sample)
-        selection = Product.objects.filter(title__icontains=word_sample)
-        selection_c = selection.count()
-        if selection_c == 1:
-            return selection.get().category
-        elif selection_c == 0:
-            return None
-        else:
-            for sample in range(len(copy_required_sample)-1):
-                word_sample = required_samples.pop()
-                n_selection = selection.filter(title__icontains=word_sample)
-                if n_selection.count() == 0: return selection.first().category
-                else:
-                    selection = n_selection
-            return selection.first().category
-       
-        print(title, result, result2, ' '.join(required_samples))
+        for word_sample in list(copy_required_sample):
+            selection = Product.objects.filter(title__icontains=word_sample)
+            if selection.count():
+                break
+        product = selection.first()
+        if product:
+            return product.category
+        else: return product
+        # selection_c = selection.count()
+        # if selection_c == 1:
+        #     return selection.get().category
+        # elif selection_c == 0:
+        #     return None
+        # else:  # narrowing the sample
+        #     for sample in copy_required_sample:
+        #         word_sample = required_samples.pop()
+        #         n_selection = selection.filter(title__icontains=word_sample)
+        #         if n_selection.count() == 0: return selection.first().category
+        #         else:
+        #             selection = n_selection
+        # return selection.first().category
 
-    def _finding_an_attribute(self, title, article):
+    def _finding_an_fix_attribute(self, title, article):
+        value, attribute = None, None
         for attr in self.hrd_attributes:
             if attr in title:  # entry check is not the right decision
-                print(attr)
+                value = attr
                 break
-        value = '' or object
-        attribute = '' or object
-        if not self.only_parse:
-            self._create_attribute(article, value, attribute, fixed=True or False)
+        if value is not None:
+            fixed_value = FixedValue.objects.get(title__iexact=value)
+            self._create_attribute(article, fixed_value, fixed_value.attribute, fixed=True)
         pass
     
     def _create_attribute(self, article, value, attribute, fixed=False):
-        pass
-        # if fixed:
-        #     attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'])
-        #
-        # else:
-        #     attr_val = UnFixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'])
-        # attr_val.created_at = self.user
-        # attr_val.updated_by = self.user
+        if fixed:
+            attr_val = FixedAttributeValue(value=value, attribute=attribute)
+            self.fix_attr_vals[article].append(attr_val)
+            
+        else:
+            attr_val = UnFixedAttributeValue(value=value, attribute=attribute)
+            self.unfix_attr_vals[article].append(attr_val)
+        
+        logger.debug(attr_val)
+        attr_val.created_at = self.user
+        attr_val.updated_by = self.user
         # attr_val.save()
     
     def line_processing(self, line, name_sheet=None):
@@ -376,7 +386,7 @@ class KOKSDocumentReader(object):
         additional_article = line[0]
         article = line[1]
         title = line[2].lower()
-        price = line[3]
+        price = line[3].replace(',', '.')
         
         if not article.strip() or article == 'None':
             return
@@ -384,8 +394,18 @@ class KOKSDocumentReader(object):
         self.c_lines += 1  # counter lines
         
         category = self._get_category(title)
-        # self.create_products(article, title, category, additional_article=additional_article)
-        logger.debug('------\nline {}, - {} - {}, category: {}'.format(self.c_lines, article, title,category))
+        if category:
+            self.create_products(article, title, category, additional_article=additional_article)
+            self._finding_an_fix_attribute(title, article)  # finding fixed attributes in the product name
+            if is_digit(price):  # create price attr
+                attribute = Attribute.objects.get(title='цена')
+                self._create_attribute(article, float(price), attribute, fixed=False)
+            
+            value = FixedValue.objects.get(title__icontains=sheet_names[name_sheet])
+            attribute = Attribute.objects.get(title='покрытие')
+            self._create_attribute(article, value, attribute, fixed=True)
+
+        logger.debug('line {}, - {} - {}, category: {}'.format(self.c_lines, article, title, category))
         pass
     
     def read_sheet(self):
@@ -396,11 +416,12 @@ class KOKSDocumentReader(object):
             yield [str(cell.value) for cell in row]
 
     def parse_file(self):
-        for name_list in self.sheets[1:]:
+        for name_list in self.sheets:
             logger.debug('Sheet {}'.format(name_list))
             self.sheet = self.workbook.get_sheet_by_name(name_list)
             for line in self.read_sheet():
                 self.line_processing(line, name_list)
+        # print('unfix attr val: ', self.unfix_attr_vals, 'fix attr val: ', self.fix_attr_vals)
         # self.pprint()
         
     # def pprint(self):
@@ -414,3 +435,18 @@ def check_line(line, type='Оцинкова'):
     if 'лоток' not in line:
         return
     pass
+
+
+def is_digit(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+    
+    
+sheet_names = {
+    'Нержавейка': 'нержавейка',
+    'Лестничные': 'лестничный',
+    'Оцинковка': 'хол. цинк'
+}
