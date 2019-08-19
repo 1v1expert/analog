@@ -170,11 +170,13 @@ class ManufacturerAdmin(BaseAdmin):
     actions = ['export_data_to_xls']
     
     def export_data_to_xls(self, request, queryset):
-        print(self.actions, queryset)
+        if not len(queryset) == 1:
+            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
+            return
         data = DefaultGeneratorTemplate(queryset[0])
         with BookkeepingWriter(str(queryset[0]), request.user) as writer:
             writer.dump(data.generate())
-    export_data_to_xls.short_description = 'Выгрузить данные по данному производителю'
+    export_data_to_xls.short_description = 'Выгрузить данные по производителю'
 
 
 class FileUploadAdmin(admin.ModelAdmin):
@@ -201,16 +203,11 @@ class FileUploadAdmin(admin.ModelAdmin):
     process_koks_file.short_description = 'Импортировать шаблон(KOKs)'
     
     def process_file(self, request, queryset):
-        print(request, vars(queryset[0].file), queryset)
-        start_time = time.time()
-
         for qq in queryset:
             created, error = ProcessingUploadData(
-                XLSDocumentReader(path=qq.file.name).parse_file()
+                XLSDocumentReader(path=qq.file.name).parse_file(), start_time=time.time()
             ).get_structured_data(request)
-            lead_time = time.time() - start_time
-            MainLog(user=request.user,
-                    message='Success: {}, processed data from file: {} in {}  seconds'.format(created, qq.file.name, lead_time)).save()
+            
             if created:
                 messages.add_message(request, messages.SUCCESS, 'Данные успешно загружены из {} файла в БД'.format(qq.file.name))
             else:

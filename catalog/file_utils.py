@@ -5,10 +5,14 @@ from collections import OrderedDict
 from catalog.choices import *
 from catalog.models import *
 
+from app.models import MainLog
+
 from django.contrib import messages
 from django.contrib.auth import models as auth_md
 from django.db import models
 from django.db.models.functions import Lower
+
+import time
 
 import re
 # import the logging library
@@ -72,8 +76,10 @@ class ProcessingUploadData(object):
         name: name
     }
     """
-    
-    def __init__(self, data):
+
+    def __init__(self, data, start_time=None):
+        if start_time is None:
+            self.start_time = time.time()
         self.ATTRIBUTE_LINE = 1
         self.OPTION_LINE = 3
         
@@ -86,14 +92,6 @@ class ProcessingUploadData(object):
         self.unique_type_attributes, self.unique_value_attributes = set(), set()
         
         self.products = []
-    
-    @staticmethod
-    def is_digit(s):
-        try:
-            float(s)
-            return True
-        except ValueError:
-            return False
         
     def get_structured_data(self, request):
         self.to_separate()
@@ -104,8 +102,8 @@ class ProcessingUploadData(object):
         
         for count, line in enumerate(self.body):
             if count % 100 == 0:
-                print('Line #{}'.format(count))
-                messages.add_message(request, messages.INFO, 'Success processed {} lines'.format(count))
+                logger.debug('Line #{}'.format(count))
+                # messages.add_message(request, messages.INFO, 'Success processed {} lines'.format(count))
             if not line:
                 continue
             structured_product, attributes = {}, []
@@ -126,8 +124,8 @@ class ProcessingUploadData(object):
                     attributes.append({
                         "type": TYPES_REV_DICT.get(self.attributes[key].lower()),
                         "name": self.options[key].lstrip().rstrip(),
-                        "value": float(line[key].replace(',', '.')) if self.is_digit(line[key].replace(',', '.')) else line[key].lstrip().rstrip(),
-                        "is_digit": self.is_digit(line[key].replace(',', '.'))
+                        "value": float(line[key].replace(',', '.')) if is_digit(line[key].replace(',', '.')) else line[key].lstrip().rstrip(),
+                        "is_digit": is_digit(line[key].replace(',', '.'))
                         })
             structured_product.update({
                 STRUCTURE_PRODUCT[7][1]: attributes
@@ -135,13 +133,14 @@ class ProcessingUploadData(object):
         
             is_valid_data = self.check_exists_types(structured_product)
             if isinstance(is_valid_data, str):
-                print(structured_product, 'reason: {}'.format(is_valid_data))
+                logger.debug('{}\n reason: {}'.format(structured_product, is_valid_data))
                 return False, is_valid_data
             else:
                 self.products.append(is_valid_data)
-        print('Check correct and finish, start create products')
-        messages.add_message(request, messages.SUCCESS, 'Check correct and finish, start create products')
+        logger.debug('Check correct and finish, start creating products')
+        # messages.add_message(request, messages.SUCCESS, 'Check correct and finish, start create products')
         self.create_products(request)
+        MainLog(user=request.user, message='Processing success in {}  seconds'.format(time.time()-self.start_time)).save()
         return True, 'Success'
         
         # TODO: make correctly check_exists
@@ -455,14 +454,6 @@ class KOKSDocumentReader(object):
                     unfix.save()
                 product.fixed_attrs_vals.set(self.attr_vals[key]['fix'])
                 product.unfixed_attrs_vals.set(self.attr_vals[key]['unfix'])
-                
-        # print('unfix attr val: ', self.unfix_attr_vals, 'fix attr val: ', self.fix_attr_vals)
-        # self.pprint()
-        
-    # def pprint(self):
-    #     print(list(self.parse_file()))
-        # print(cnt, '-->', [value for value in self._get_data_from_line(row)])
-        # printrows
     
 
 def is_digit(s):

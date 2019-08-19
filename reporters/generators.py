@@ -1,7 +1,7 @@
 from collections import OrderedDict, defaultdict
 import datetime
 
-from catalog.models import Product, Attribute, FixedAttributeValue, UnFixedAttributeValue
+from catalog.models import Product, Attribute
 
 
 class DefaultGeneratorTemplate(object):
@@ -73,33 +73,4 @@ class DefaultGeneratorTemplate(object):
 				list_attributes.append((i, ''))
 		
 		return list_attributes
-		
-		
-		
-		# list_attribute = []
-		# for attribute in Attribute.objects.all():
-		# 	list_attribute.append((attribute.id, self._get_attribute(product, attribute)))
-		# return list_attribute
-	
-	# @staticmethod
-	# def _get_attribute(product, attribute):
-	# 	def _get_unfix():
-	# 		try:
-	# 			return UnFixedAttributeValue.objects.get(product=product, attribute=attribute)
-	# 		except (UnFixedAttributeValue.DoesNotExist, UnFixedAttributeValue.MultipleObjectsReturned):
-	# 			return None
-	#
-	# 	def _get_fix():
-	# 		try:
-	# 			return FixedAttributeValue.objects.get(product=product, attribute=attribute)
-	# 		except (FixedAttributeValue.DoesNotExist, FixedAttributeValue.MultipleObjectsReturned):
-	# 			return None
-	#
-	# 	value_fix = _get_fix()
-	# 	if value_fix is not None:
-	# 		return value_fix.value.title
-	# 	value_unfix = _get_unfix()
-	# 	if value_unfix is not None:
-	# 		return value_unfix.value
-	# 	return ''
 
