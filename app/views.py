@@ -36,7 +36,7 @@ def login_view(request):
 
 
 @a_decorator_passing_logs
-@login_required(login_url='/login')
+@login_required(login_url='login/')
 def search(request):
 	form = AppSearchForm()
 
@@ -47,7 +47,7 @@ def search(request):
 	
 
 @a_decorator_passing_logs
-@login_required(login_url='/login')
+@login_required(login_url='login/')
 def search_from_file_view(request):
 	if request.method == 'POST':
 		form = SearchFromFile(request.POST, request.FILES)
@@ -67,7 +67,7 @@ def search_from_file_view(request):
 
 
 @a_decorator_passing_logs
-@login_required(login_url='/login')
+@login_required(login_url='login/')
 def advanced_search(request):
 	return redirect('catalog:search')
 
@@ -114,13 +114,14 @@ def check_in_view(request):
 	return render(request, 'check_in.html', {'reg_form': reg_form})
 
 
-@login_required(login_url='/login')
+# @login_required(redirect_field_name='app:login')
+@login_required(login_url='login/')
 @a_decorator_passing_logs
 def home_view(request):
 	return render(request, 'home.html')
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login/')
 @a_decorator_passing_logs
 def profile_view(request):
 	return render(request, 'profile.html',
@@ -132,19 +133,19 @@ def profile_view(request):
 		              'files': DataFile.objects.filter(created_by=request.user)})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login/')
 @a_decorator_passing_logs
 def faq_view(request):
 	return render(request, 'faq.html')
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login/')
 @a_decorator_passing_logs
 def partners_view(request):
 	return render(request, 'to_partners.html')
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login/')
 @a_decorator_passing_logs
 def contacts_view(request):
 	return render(request, 'contacts.html')

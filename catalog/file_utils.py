@@ -279,7 +279,7 @@ class KOKSDocumentReader(object):
         # self.ws = self.workbook.active
         self.sheet = self.workbook.active
         self.sheets = self.workbook.get_sheet_names()
-        self.only_parse = False
+        self.only_parse = True
         self.c_lines = 0
         
         self.user = user if user is not None else auth_md.User.objects.get(is_staff=True, username='admin')
@@ -323,7 +323,7 @@ class KOKSDocumentReader(object):
     def _get_category(title):
         result = re.findall(r'\w+\d+', title)  # choose sizes
         result2 = re.findall(r'\w+', title)  # splite the line
-        required_samples = set()
+        required_samples = list()
         for word in result2:
             if len(word) <= 4:
                 continue
@@ -333,12 +333,14 @@ class KOKSDocumentReader(object):
                     coincided = True
                     break
             if not coincided:
-                required_samples.add(word)
+                required_samples.append(word)
                 
-        copy_required_sample = required_samples.copy()
+        # not a line world list !! Attention !
+        # copy_required_sample = required_samples.copy()
+        # print(copy_required_sample, list(copy_required_sample)[::-1], title, result2)
         # word_sample = required_samples.pop()
         # print(word_sample)
-        for word_sample in list(copy_required_sample):
+        for word_sample in list(required_samples):
             selection = Product.objects.filter(title__icontains=word_sample)
             if selection.count():
                 break
