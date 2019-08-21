@@ -5,12 +5,11 @@ from django.contrib.admin.views.main import ChangeList
 from django.utils.safestring import mark_safe
 from django.contrib.admin.models import LogEntry
 
-from reporters.generators import DefaultGeneratorTemplate
-from reporters.writers import BookkeepingWriter
-
 from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, \
     UnFixedAttributeValue, Specification, DataFile
 from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader
+from catalog.reporters import writers, generators
+
 from catalog.forms import ProductChangeListForm
 
 from app.models import MainLog
@@ -126,10 +125,6 @@ class ProductChangeList(ChangeList):
         # self.list_editable = ['genre']
 
 
-# class ProductAdmin(admin.ModelAdmin):
-#
-
-
 class ProductAdmin(BaseAdmin):
     list_display = ['title', 'article', 'manufacturer', 'get_fix_attrs_vals', 'get_unfix_attrs_vals', 'category', 'is_public', 'deleted']
     # inlines = [PropertiesInline]
@@ -173,8 +168,8 @@ class ManufacturerAdmin(BaseAdmin):
         if not len(queryset) == 1:
             messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
             return
-        data = DefaultGeneratorTemplate(queryset[0])
-        with BookkeepingWriter(str(queryset[0]), request.user) as writer:
+        data = generators.DefaultGeneratorTemplate(queryset[0])
+        with writers.BookkeepingWriter(str(queryset[0]), request.user) as writer:
             writer.dump(data.generate())
     export_data_to_xls.short_description = 'Выгрузить данные по производителю'
 
@@ -197,7 +192,7 @@ class FileUploadAdmin(admin.ModelAdmin):
             messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
             return
         try:
-            KOKSDocumentReader(path=queryset[0].file.name).parse_file()
+            KOKSDocumentReader(path=queryset[0].file.name, only_parse=False).parse_file()
         except FileNotFoundError:
             messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
     process_koks_file.short_description = 'Импортировать шаблон(KOKs)'

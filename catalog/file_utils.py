@@ -279,7 +279,7 @@ class KOKSDocumentReader(object):
         # self.ws = self.workbook.active
         self.sheet = self.workbook.active
         self.sheets = self.workbook.get_sheet_names()
-        self.only_parse = True
+        self.only_parse = only_parse
         self.c_lines = 0
         
         self.user = user if user is not None else auth_md.User.objects.get(is_staff=True, username='admin')
@@ -340,6 +340,28 @@ class KOKSDocumentReader(object):
         # print(copy_required_sample, list(copy_required_sample)[::-1], title, result2)
         # word_sample = required_samples.pop()
         # print(word_sample)
+        
+        # -- search category from categories
+        
+        from catalog.dictionaries import vocabulary
+        
+        for word in required_samples:
+            for analogues in vocabulary:
+                if word in analogues:
+                    for analog in analogues:
+                        categories = Category.objects.filter(title__icontains=analog)
+                        if categories.count():
+                            return categories.first()
+            
+            categories = Category.objects.filter(title__icontains=word)
+            if categories.count():
+                return categories.first()
+            # elif categories.count() == 0:
+            #     continue
+            # elif categories.count() > 1:
+            #     pass
+            
+        # -- search category from category product
         for word_sample in list(required_samples):
             selection = Product.objects.filter(title__icontains=word_sample)
             if selection.count():
@@ -348,6 +370,8 @@ class KOKSDocumentReader(object):
         if product:
             return product.category
         else: return product
+        # -- end search from category product
+        
         # selection_c = selection.count()
         # if selection_c == 1:
         #     return selection.get().category
@@ -471,9 +495,3 @@ sheet_names = {
     'Лестничные': 'лестничный',
     'Оцинковка': 'хол. цинк'
 }
-
-
-def delete_all_is_not_tried_objects():
-    Product.objects.filter(is_tried=False).delete()
-    UnFixedAttributeValue.objects.filter(is_tried=False).delete()
-    FixedAttributeValue.objects.filter(is_tried=False).delete()
