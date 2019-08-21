@@ -471,3 +471,9 @@ sheet_names = {
     'Лестничные': 'лестничный',
     'Оцинковка': 'хол. цинк'
 }
+
+
+def delete_all_is_not_tried_objects():
+    Product.objects.filter(is_tried=False).delete()
+    UnFixedAttributeValue.objects.filter(is_tried=False).delete()
+    FixedAttributeValue.objects.filter(is_tried=False).delete()
