@@ -1,15 +1,18 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
-import json
+from django.core import serializers
+
+from catalog.utils import SearchProducts
+from catalog.handlers import result_api_processing
+from catalog.internal.utils import get_attributes
 from catalog.forms import SearchForm, AdvancedSearchForm
 from catalog.choices import TYPES_SEARCH, TYPES, TYPES_REV_DICT, TYPES_DICT
 from catalog.models import Product, FixedValue
-from django.core import serializers
-from catalog.utils import SearchProducts
-from catalog.handlers import result_api_processing
-from internal.utils import get_attributes
+
 from app.models import MainLog
 from app.decorators import a_decorator_passing_logs
+
+import json
 
 
 def check_product(article, manufacturer_from) -> dict:

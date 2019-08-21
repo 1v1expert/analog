@@ -2,12 +2,11 @@ from catalog.file_utils import XLSDocumentReader
 from catalog.models import Product, DataFile
 from catalog.utils import SearchProducts
 from catalog import choices
+from catalog.internal.utils import get_product_info
 
-from internal.utils import get_product_info
 from app.models import MainLog
 
-from reporters.writers import BookkeepingWriter
-from reporters.writers import dump_csv
+from catalog.reporters.writers import dump_csv, BookkeepingWriter
 
 import csv
 

@@ -5,7 +5,9 @@
 from django.db import models
 # import uuid
 from django.contrib.auth.models import User
-from .choices import TYPES, UNITS, TYPES_FILE
+from catalog.choices import TYPES, UNITS, TYPES_FILE
+
+from django.contrib.postgres import fields as pgfields
 
 import mptt
 from django.utils import timezone
@@ -197,6 +199,8 @@ class Product(Base):
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name="Производитель", related_name='products')
     fixed_attrs_vals = models.ManyToManyField('FixedAttributeValue', verbose_name="Фикс атрибуты")
     unfixed_attrs_vals = models.ManyToManyField('UnFixedAttributeValue', verbose_name="Нефикс атрибуты")
+    
+    raw = pgfields.JSONField(null=True, blank=True, verbose_name="Голые данные")
 
     def __str__(self):
         return self.title

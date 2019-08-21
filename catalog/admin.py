@@ -159,7 +159,7 @@ class ProductAdmin(BaseAdmin):
 #         super(LogEntryAdmin, self).__init__(*args, **kwargs)
 #         self.list_display_links = (None, )
 
-
+from datetime import datetime
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'created_at', 'created_by']
     actions = ['export_data_to_xls']
@@ -169,7 +169,7 @@ class ManufacturerAdmin(BaseAdmin):
             messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
             return
         data = generators.DefaultGeneratorTemplate(queryset[0])
-        with writers.BookkeepingWriter(str(queryset[0]), request.user) as writer:
+        with writers.BookkeepingWriter('{} - {}'.format(queryset[0], datetime.now().date()), request.user) as writer:
             writer.dump(data.generate())
     export_data_to_xls.short_description = 'Выгрузить данные по производителю'
 
