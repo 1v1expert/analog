@@ -300,7 +300,7 @@ class KOKSDocumentReader(object):
     #     for cell in row:
     #         yield str(cell.value)
     #
-    def create_products(self, article, title, category, additional_article=""):
+    def create_products(self, article, title, category, additional_article="", raw=None):
         product = Product(article=article,
                           additional_article=additional_article,
                           manufacturer=self.manufacturer,
@@ -308,6 +308,8 @@ class KOKSDocumentReader(object):
                           category=category,
                           created_by=self.user,
                           updated_by=self.user)
+        if raw is not None:
+            product.raw = raw
         logger.debug(product)
         self.products.append(product)
         self.attr_vals[article] = {
@@ -318,11 +320,63 @@ class KOKSDocumentReader(object):
         # self.unfix_attr_vals[article] = []
         
         # return product
-    
     @staticmethod
-    def _get_category(title):
+    def _get_category_from_product(required_samples, first_sign=None):
+        # -- search category from category product
+        products = Product.objects.filter(is_tried=True)
+        if first_sign is not None:
+            products = products.filter(title__icontains=first_sign)
+
+        preparatory = products
+        for word_sample in required_samples:
+            # preparatory = products
+            selection = products.filter(title__icontains=word_sample)
+            if selection.count() > 1:
+                products = selection
+            elif selection.count() == 1:
+                preparatory = selection
+                break
+            elif not selection.count():
+                continue
+            
+            if selection.count() < preparatory.count():
+                preparatory = selection
+            
+        product = preparatory.first()
+        if product:
+            return product.category
+        else:
+            return None
+        # -- end search from category product
+        
+    @staticmethod
+    def _get_category_from_categories(required_samples):
+        from catalog.dictionaries import vocabulary
+    
+        for word in required_samples:
+            for analogues in vocabulary:
+                if word in analogues:
+                    for analog in analogues:
+                        categories = Category.objects.filter(title__icontains=analog)
+                        if categories.count():
+                            logger.debug('found word in vc {}, categories: {}'.format(
+                                analogues,
+                                categories.values_list('title', flat=True)))
+                            return categories.first()
+        
+            categories = Category.objects.filter(title__icontains=word)
+            if categories.count():
+                logger.debug(categories.values_list('title', flat=True))
+                return categories.first()
+            
+        return None
+    
+    def _get_categories(self, title):
         result = re.findall(r'\w+\d+', title)  # choose sizes
-        result2 = re.findall(r'\w+', title)  # splite the line
+        result2 = re.findall(r'\w+', title)  # split the line word or numbers
+        result3 = title.split(' ')  # full split
+        first_sing = None  # sing '°'
+        
         required_samples = list()
         for word in result2:
             if len(word) <= 4:
@@ -334,58 +388,16 @@ class KOKSDocumentReader(object):
                     break
             if not coincided:
                 required_samples.append(word)
-                
+        
+        for word in result3:
+            if '°' in word:
+                first_sing = word
+        
+        logger.debug('result {}, result2: {}, result3: {}\n Required samples: {}'.format(result, result2, result3, required_samples))
+        
+        return self._get_category_from_categories(required_samples), self._get_category_from_product(required_samples, first_sign=first_sing)
         # not a line world list !! Attention !
-        # copy_required_sample = required_samples.copy()
-        # print(copy_required_sample, list(copy_required_sample)[::-1], title, result2)
-        # word_sample = required_samples.pop()
-        # print(word_sample)
         
-        # -- search category from categories
-        
-        from catalog.dictionaries import vocabulary
-        
-        for word in required_samples:
-            for analogues in vocabulary:
-                if word in analogues:
-                    for analog in analogues:
-                        categories = Category.objects.filter(title__icontains=analog)
-                        if categories.count():
-                            return categories.first()
-            
-            categories = Category.objects.filter(title__icontains=word)
-            if categories.count():
-                return categories.first()
-            # elif categories.count() == 0:
-            #     continue
-            # elif categories.count() > 1:
-            #     pass
-            
-        # -- search category from category product
-        for word_sample in list(required_samples):
-            selection = Product.objects.filter(title__icontains=word_sample)
-            if selection.count():
-                break
-        product = selection.first()
-        if product:
-            return product.category
-        else: return product
-        # -- end search from category product
-        
-        # selection_c = selection.count()
-        # if selection_c == 1:
-        #     return selection.get().category
-        # elif selection_c == 0:
-        #     return None
-        # else:  # narrowing the sample
-        #     for sample in copy_required_sample:
-        #         word_sample = required_samples.pop()
-        #         n_selection = selection.filter(title__icontains=word_sample)
-        #         if n_selection.count() == 0: return selection.first().category
-        #         else:
-        #             selection = n_selection
-        # return selection.first().category
-
     def _finding_an_fix_attribute(self, title, article):
         value, attribute = None, None
         for attr in self.hrd_attributes:
@@ -409,9 +421,6 @@ class KOKSDocumentReader(object):
             self.attr_vals[article]['unfix'].append(attr_val)
         
         logger.debug(attr_val)
-        attr_val.created_at = self.user
-        attr_val.updated_by = self.user
-        # attr_val.save()
     
     def line_processing(self, line, name_sheet=None):
         if not name_sheet:
@@ -432,9 +441,15 @@ class KOKSDocumentReader(object):
             return
         self.articles.add(article)
         
-        category = self._get_category(title)
+        category_from_categories, category_from_product = self._get_categories(title)
+        category = category_from_product
+        if category_from_categories:
+            category = category_from_categories
+            
         if category:
-            self.create_products(article, title, category, additional_article=additional_article)
+            self.create_products(article, title, category, additional_article=additional_article,
+                                 raw={'category_from_categories': str(category_from_categories),
+                                      'category_from_product': str(category_from_product)})
             self._finding_an_fix_attribute(title, article)  # finding fixed attributes in the product name
             if is_digit(price):  # create price attr
                 attribute = Attribute.objects.get(title='цена')

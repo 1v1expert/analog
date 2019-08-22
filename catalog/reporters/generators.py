@@ -22,7 +22,9 @@ class DefaultGeneratorTemplate(object):
 				                            ('article', 'Артикул'),
 				                            ('additional_article', 'Доп. артикул'),
 				                            ('series', 'Серия'),
-				                            ('category', 'Категория')
+				                            ('category', 'Категория'),
+				                            ('category_from_categories', 'Категория(перебор по словарю из классов)'),
+				                            ('category_from_product', 'Категория(смарт метод)'),
 			                            ] + list(Attribute.objects.values_list('id', 'title'))
 			                            ),
 			"table_data": self.do_products()
@@ -45,7 +47,9 @@ class DefaultGeneratorTemplate(object):
 				('article', product.article),
 				('additional_article', product.additional_article),
 				('series', product.series),
-				('category', product.category.title)
+				('category', product.category.title),
+				('category_from_categories', product.raw['category_from_categories']),
+				('category_from_product', product.raw['category_from_product'])
 			] + self._get_attributes(product))
 	
 	def _get_attributes(self, product):
