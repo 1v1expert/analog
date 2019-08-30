@@ -8,7 +8,7 @@
 
 <!--=========================== Bootstrap core CSS ===============================-->
 
-<link href="{% static 'css2/bootstrap.min.css' %}" rel="stylesheet" title="stylesheet">
+<link href="{% static 'css2/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
 
 <!--===========================main css for  web host page===============================-->
 
@@ -64,34 +64,34 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-4">
-          <div class="smo-icon"> <span>Follow us</span> <span><a href="#"><img src="{% static 'images/facebook.png' %}" alt=""/></a></span> <span><a href="#"><img src="{% static 'images/twitter.png' %}" alt=""/></a></span> <span><a href="#"><img src="{% static 'images/linkedin.png' %}" alt=""/></a></span> <span><a href="#"><img src="{% static 'images/googleplus.png' %}" alt=""/></a></span> </div>
+{#          <div class="smo-icon"> <span>Follow us</span> <span><a href="#"><img src="{% static 'images/facebook.png' %}" alt=""/></a></span> <span><a href="#"><img src="{% static 'images/twitter.png' %}" alt=""/></a></span> <span><a href="#"><img src="{% static 'images/linkedin.png' %}" alt=""/></a></span> <span><a href="#"><img src="{% static 'images/googleplus.png' %}" alt=""/></a></span> </div>#}
         </div>
         <div class="col-xs-12 col-sm-6 col-md-5">
           <div class="top-link">
             <ul>
-              <li><a href="#" class="info-ico"><span></span>info@webehost.com</a></li>
-              <li><a href="#" class="phone-ico"><span></span>8002-341-44550 </a></li>
-              <li><a href="#" class="chat-ico"><span></span>Live chat</a></li>
+              <li><a href="#" class="info-ico"><span></span>info@analogpro.ru</a></li>
+              <li><a href="#" class="phone-ico"><span></span>+7(985)-229-67-56 </a></li>
+{#              <li><a href="#" class="chat-ico"><span></span>Live chat</a></li>#}
             </ul>
           </div>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3">
           <div class="oder">
             <div class="oder-content">
-              <div class="container10"> <a id="login-menu" href="#modal" >Login or Sign up</a>
+              <div class="container10"> <a id="login-menu" href="#modal" >Ввойти или зарег.</a>
                 <div id="modal" class="login-popupContainer" style="display:none;">
                   <div class="popupHeader">
-                    <div class="header_title">Login</div>
+                    <div class="header_title">Авторизация</div>
                     <div class="modal_close"><i class="fa fa-times"></i></div>
                   </div>
                   <div class="popupBody">
                     <!-- Social Login -->
                     <div class="social_login">
                       <div class="login-main-icon"><img src="{% static 'images/login-icon.png' %}" alt=""/></div>
-                      <h1>Your Account</h1>
+                      <h1>Ваш аккаунт</h1>
                       <div class="main_btns-container">
-                        <div class="first_half"><a href="#" id="login_form" class="btn login-btn">Login</a></div>
-                        <div class="first_half last"><a href="#" id="register_form" class="btn login-btn">Signup</a></div>
+                        <div class="first_half"><a href="#" id="login_form" class="btn login-btn">Войти</a></div>
+                        <div class="first_half last"><a href="#" id="register_form" class="btn login-btn">Зарегистрироваться</a></div>
                       </div>
                     </div>
 
@@ -107,8 +107,8 @@
                           <label for="remember">Remember me on this computer</label>
                         </div>
                         <div class="main_btns-container">
-                          <div class="first_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
-                          <div class="first_half last"><a href="#" class="btn btn_blue">Login</a></div>
+                          <div class="first_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Назад</a></div>
+                          <div class="first_half last"><a href="#" class="btn btn_blue">Войти</a></div>
                         </div>
                       </form>
                       <a href="#" class="forgot_password">Forgot password?</a> </div>
@@ -137,7 +137,7 @@
               </div>
             </div>
             <div class="oder-content">l</div>
-            <div class="oder-content"><a href="#">Help</a></div>
+            <div class="oder-content"><a href="#">Помощь</a></div>
           </div>
         </div>
       </div>
@@ -149,23 +149,23 @@
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-          <a class="navbar-brand" href="#"><img src="{% static 'images/logo.png' %}" alt=""></a> </div>
+          <a class="navbar-brand" href="#"><img src="{% static 'images/logo_analogpro.jpg' %}" alt="" style="height: 50px"></a> </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="dropdown active"> <a href="#home" >Home </a> </li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#services">service</a></li>
-            <li><a href="#offer">Offer</a></li>
-            <li><a href="#web-hosting">Pricing</a></li>
-            <li><a href="#clients">Clients</a></li>
-            <li class="dropdown"> <a href="blog.html" class="dropdown-toggle" data-toggle="dropdown">Blog <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="blog.html">Blog List</a></li>
-                <li><a href="blog1.html">Blog small img List</a></li>
-                <li><a href="blog-post.html">Single Blog page</a></li>
-              </ul>
-            </li>
-            <li><a href="#contact">Contact</a></li>
+            <li class="dropdown active"> <a href="#home" >Главная </a> </li>
+{#            <li><a href="#features">Features</a></li>#}
+{#            <li><a href="#services">service</a></li>#}
+{#            <li><a href="#offer">Offer</a></li>#}
+{#            <li><a href="#web-hosting">Pricing</a></li>#}
+{#            <li><a href="#clients">Партнёрам</a></li>#}
+{#            <li class="dropdown"> <a href="blog.html" class="dropdown-toggle" data-toggle="dropdown">Blog <b class="caret"></b></a>#}
+{#              <ul class="dropdown-menu">#}
+{#                <li><a href="blog.html">Blog List</a></li>#}
+{#                <li><a href="blog1.html">Blog small img List</a></li>#}
+{#                <li><a href="blog-post.html">Single Blog page</a></li>#}
+{#              </ul>#}
+{#            </li>#}
+            <li><a href="#contact">Контакты</a></li>
           </ul>
         </div>
         <!--/.nav-collapse -->
@@ -176,8 +176,8 @@
 <!--=============================Banner=============================-->
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
-  <div id="lp-pom-block-10">
-    <div class="banner-dot">
+  <div id="lp-pom-block-10" style="height: 500px;">
+    <div class="banner-dot" style="height: 500px">
       <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <lie data-target="#myCarousel" data-slide-to="1"></lie>
@@ -188,16 +188,50 @@
           <div class="item active">
             <div class="container">
               <div class="carousel-caption">
-                <p class="main-image"><img src="{% static 'images/icon1.png' %}" alt="" /></p>
+{#                <p class="main-image"><img src="{% static 'images/icon1.png' %}" alt="" /></p>#}
                 <div class="letter-container">
-                  <h1><a href="#">World best space hosting</a></h1>
+                  <h1><a href="#">Лучший сервис по подбору аналогов</a></h1>
                 </div>
-                <h2>Fast and reliable</h2>
-                <p class="banner-text">A web hosting service is a type of Internet hosting service that allows individuals and organizations to make their website accessible via the World Wide Web.  Web hosts are companies that provide space on a server owned </p>
-                <p> <a class="green-button wobble-horizontal" href="#" role="button">MORE DETAILS</a> <a class="blue-button wobble-horizontal" href="#" role="button">ORDER NOW !</a> </p>
+                <h2>Быстрый и надёжный</h2>
+                <p class="banner-text">Система поиска позволяет по заданному товару (артикулу), найти товар-аналог другого производителя. Система ориентирована на поиск товаров-аналогов, с учетом технических характеристик </p>
+                <p> <a class="green-button wobble-horizontal" href="#" role="button">Подробнее </a> <a class="blue-button wobble-horizontal" href="#" role="button">Попробовать </a> </p>
               </div>
             </div>
           </div>
+            <div class="item">
+                <div class="container">
+                    <div class="carousel-caption">
+                        {#                <p class="main-image"><img src="{% static 'images/icon1.png' %}" alt="" /></p>#}
+                        <div class="letter-container">
+                            <h1><a href="#">Поиск аналога по артикулу</a></h1>
+                        </div>
+                        <h2></h2>
+                        {#                <div class="container">#}
+                        <div class="row" style="margin-top: 90px;">
+                            <div class="col-md-8 col-md-offset-2">
+                                <div class="input-append">
+                                    <input class="search" type="text" placeholder="Введите номер артикула">
+                                    <div class="btn-group">
+                                        <button class="btn dropdown-toggle" data-toggle="dropdown"> EAE <span
+                                                class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">EAE</a></li>
+                                            <li><a href="#">ДКС</a></li>
+                                            <li><a href="#">KM-профиль</a></li>
+                                            <li><a href="#">OSTEC</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <p class="search-area"><a href="#" class="search-btn">Искать </a></p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+            </div>
         </div>
       </div>
       <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
@@ -209,38 +243,38 @@
 </div>
 
 <!--============================Home=============================-->
-<div id="choose" class="choose-container" >
-  <div class="container">
-    <div class="row main-head">
-      <div class="col-md-6 col-md-offset-3">
-        <h1>Why choose our hosting</h1>
-        <h2>What we can offer</h2>
-      </div>
-    </div>
-    <div class="row choose">
-      <div class="col-sm-6 col-md-3">
-        <div class="round1"><a href="#"><img src="{% static 'images/live-support.png' %}" alt=""></a></div>
-        <h2>Live Support</h2>
-        <p class="space-text">Web hosts can also provide data center space and connectivity to the Internet for provide data center space</p>
-      </div>
-      <div class="col-sm-6 col-md-3">
-        <div class="round2"><a href="#"><img src="{% static 'images/online-security.png' %}" alt=""></a></div>
-        <h2>Online Security</h2>
-        <p class="space-text"> Web hosts are companies that provide space on a server owned or leased for use by clients server owned </p>
-      </div>
-      <div class="col-sm-6 col-md-3">
-        <div class="round3"><a href="#"><img src="{% static 'images/hosting-solution.png' %}" alt=""></a></div>
-        <h2>Hosting Solutions</h2>
-        <p>The most basic is web page and small-scale file hosting, where files can be uploaded via page and small-scale</p>
-      </div>
-      <div class="col-sm-6 col-md-3">
-        <div class="round4"><a href="#"><img src="{% static 'images/quick-install.png' %}" alt=""></a></div>
-        <h2>Quick Install</h2>
-        <p class="choose1"> The files are usually delivered to the Web "as is" or with minimal processing files are usually delivered to the . </p>
-      </div>
-    </div>
-  </div>
-</div>
+{#<div id="choose" class="choose-container" >#}
+{#  <div class="container">#}
+{#    <div class="row main-head">#}
+{#      <div class="col-md-6 col-md-offset-3">#}
+{#        <h1>Почему выбирают наш сервис?</h1>#}
+{#        <h2>Мы делаем мир лучше</h2>#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="row choose">#}
+{#      <div class="col-sm-6 col-md-3">#}
+{#        <div class="round1"><a href="#"><img src="{% static 'images/live-support.png' %}" alt=""></a></div>#}
+{#        <h2>Live Support</h2>#}
+{#        <p class="space-text">Web hosts can also provide data center space and connectivity to the Internet for provide data center space</p>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-3">#}
+{#        <div class="round2"><a href="#"><img src="{% static 'images/online-security.png' %}" alt=""></a></div>#}
+{#        <h2>Online Security</h2>#}
+{#        <p class="space-text"> Web hosts are companies that provide space on a server owned or leased for use by clients server owned </p>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-3">#}
+{#        <div class="round3"><a href="#"><img src="{% static 'images/hosting-solution.png' %}" alt=""></a></div>#}
+{#        <h2>Hosting Solutions</h2>#}
+{#        <p>The most basic is web page and small-scale file hosting, where files can be uploaded via page and small-scale</p>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-3">#}
+{#        <div class="round4"><a href="#"><img src="{% static 'images/quick-install.png' %}" alt=""></a></div>#}
+{#        <h2>Quick Install</h2>#}
+{#        <p class="choose1"> The files are usually delivered to the Web "as is" or with minimal processing files are usually delivered to the . </p>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
 
 <!--=============================Features=============================-->
 {#<div id="features" class="features-container">#}
@@ -538,32 +572,32 @@
 
 <!--================================Search domin=============================-->
 
-<div id="lp-pom-block-12">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 domin-head">
-        <h1>Search for a domain</h1>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2" >
-        <div class="input-append">
-          <input class="search" type="text" placeholder="Enter your domain name">
-          <div class="btn-group">
-            <button class="btn dropdown-toggle" data-toggle="dropdown"> .COM <span class="caret"></span> </button>
-            <ul class="dropdown-menu">
-              <li><a href="#">.COM</a></li>
-              <li><a href="#">.IN</a></li>
-              <li><a href="#">.UK</a></li>
-              <li><a href="#">.ME</a></li>
-            </ul>
-          </div>
-        </div>
-        <p class="search-area"> <a href="#" class="search-btn">Search Domain </a> </p>
-      </div>
-    </div>
-  </div>
-</div>
+{#<div id="lp-pom-block-12">#}
+{#  <div class="container">#}
+{#    <div class="row">#}
+{#      <div class="col-md-12 domin-head">#}
+{#        <h1>Поиск аналога по артикулу</h1>#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#      <div class="col-md-8 col-md-offset-2" >#}
+{#        <div class="input-append">#}
+{#          <input class="search" type="text" placeholder="Введите номер артикула">#}
+{#          <div class="btn-group">#}
+{#            <button class="btn dropdown-toggle" data-toggle="dropdown"> EAE <span class="caret"></span> </button>#}
+{#            <ul class="dropdown-menu">#}
+{#              <li><a href="#">EAE</a></li>#}
+{#              <li><a href="#">ДКС</a></li>#}
+{#              <li><a href="#">KM-профиль</a></li>#}
+{#              <li><a href="#">OSTEC</a></li>#}
+{#            </ul>#}
+{#          </div>#}
+{#        </div>#}
+{#        <p class="search-area"> <a href="#" class="search-btn">Искать </a> </p>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
 
 <!--==============================Get in touch=============================-->
 
@@ -571,8 +605,8 @@
   <div class="container">
     <div class="row main-head">
       <div class="col-md-12">
-        <h1>Get in touch</h1>
-        <h2>We would love to here about you </h2>
+        <h1>Связаться с нами</h1>
+        <h2>Мы рады видеть вас </h2>
       </div>
     </div>
     <div class="row">
@@ -582,22 +616,22 @@
             <fieldset>
               <div class="col-xs-12 col-sm-6"  >
                 <div class="form-group">
-                  <input type="text" class="form-control" name="name"  id="name"  placeholder="Full Name">
+                  <input type="text" class="form-control" name="name"  id="name"  placeholder="Имя">
                 </div>
                 <div class="form-group">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Email ID">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Email">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="mobile" id="mobile" placeholder="Mobile Number">
+                  <input type="text" class="form-control" name="mobile" id="mobile" placeholder="Номер телефона">
                 </div>
               </div>
               <div class="col-xs-12 col-sm-6" >
                 <div class="form-group">
-                  <textarea class="form-control textarea" rows="5" name="message" id="msg" placeholder="Your Message"></textarea>
+                  <textarea class="form-control textarea" rows="5" name="message" id="msg" placeholder="Ваше сообщение"></textarea>
                 </div>
               </div>
               <div class="relative fullwidth col-xs-12">
-                <button type="submit" class="form-btn wobble-horizontal">Send Message</button>
+                <button type="submit" class="form-btn wobble-horizontal">Отправить сообщение</button>
                 <span class="loading"></span> </div>
               <div class="clear"></div>
             </fieldset>
@@ -614,16 +648,16 @@
     <div class="row">
       <div class="col-sm-3 col-md-3" >
         <div class="newsletter"> <span class="newsletterIcon"></span>
-          <h2>Newsletter</h2>
-          <p>Sign up </p>
+          <h2>Подписаться</h2>
+          <p>на новости </p>
         </div>
       </div>
       <form class="form-search"  role="form" action="subscribe.php" id="subscribeForm" method="POST">
         <div class="col-sm-6 col-md-6" >
-          <input type="email" name="email" id="address"  required="required" class="newsletter-form" placeholder="Enter your email address" data-validate="validate(required, email)">
+          <input type="email" name="email" id="address"  required="required" class="newsletter-form" placeholder="Введите ваш email адрес" data-validate="validate(required, email)">
         </div>
         <div class="col-sm-3 col-md-3" >
-          <button type="submit" class="newsletter-btn">SUBSCRIBE</button>
+          <button type="submit" class="newsletter-btn">Подписаться</button>
           <span id="result" class="alertMsg"></span> </div>
       </form>
     </div>
@@ -681,27 +715,27 @@
 <div  class="footer-bottom">
   <div class="container">
     <div class="row">
-      <p>© 2014 webhost. All Rights Reserved</p>
+      <p>© 2019 analogpro.ru. All Rights Reserved</p>
     </div>
   </div>
 </div>
 <!--==============Theme box=================-->
 
-<div class="styles">
-  <p class="skins">Skins </p>
-  <ul>
-    <li class="bg1"> <a href="style=style" title="stylesheet" class="styleswitch"> </a></li>
-    <li class="bg2"> <a href="style=style1" title="stylesheet1" class="styleswitch"></a></li>
-    <li class="bg3"> <a href="style=style2" title="stylesheet2" class="styleswitch"></a></li>
-    <li class="bg4"> <a href="style=style3" title="stylesheet3" class="styleswitch"></a></li>
-    <li class="bg5"> <a href="style=style4" title="stylesheet4" class="styleswitch"></a></li>
-    <li class="bg6"> <a href="style=style5" title="stylesheet5" class="styleswitch"></a></li>
-    <li class="bg7"> <a href="style=style6" title="stylesheet6" class="styleswitch"></a></li>
-    <li class="bg8"> <a href="style=style7" title="stylesheet7" class="styleswitch"></a></li>
-  </ul>
-</div>
-<a class="styles-open"  href="#closeoptions"> </a>
-<div class="styles-closed " > <a href="#options"> </a> </div>
+{#<div class="styles">#}
+{#  <p class="skins">Skins </p>#}
+{#  <ul>#}
+{#    <li class="bg1"> <a href="style=style" title="stylesheet" class="styleswitch"> </a></li>#}
+{#    <li class="bg2"> <a href="style=style1" title="stylesheet1" class="styleswitch"></a></li>#}
+{#    <li class="bg3"> <a href="style=style2" title="stylesheet2" class="styleswitch"></a></li>#}
+{#    <li class="bg4"> <a href="style=style3" title="stylesheet3" class="styleswitch"></a></li>#}
+{#    <li class="bg5"> <a href="style=style4" title="stylesheet4" class="styleswitch"></a></li>#}
+{#    <li class="bg6"> <a href="style=style5" title="stylesheet5" class="styleswitch"></a></li>#}
+{#    <li class="bg7"> <a href="style=style6" title="stylesheet6" class="styleswitch"></a></li>#}
+{#    <li class="bg8"> <a href="style=style7" title="stylesheet7" class="styleswitch"></a></li>#}
+{#  </ul>#}
+{#</div>#}
+{#<a class="styles-open"  href="#closeoptions"> </a>#}
+{#<div class="styles-closed " > <a href="#options"> </a> </div>#}
 <script type="text/javascript">
 
 /*===================
@@ -723,7 +757,7 @@
 
 		owl.owlCarousel({
 			stopOnHover : true,
-			items : 5,
+			items : 2,
 			itemsCustom : false,
 			itemsDesktop : [1200,5],
 			itemsDesktopSmall : [1240,5],
