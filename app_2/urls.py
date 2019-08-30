@@ -17,6 +17,6 @@ urlpatterns = [
 	# url(r'^email_confirmation/(?P<verification_code>[0-9\w-]+)-(?P<user_id>[0-9]+)/$',
 	#     email_confirmation, name='email_confirmation'),
 	url(r'^home/$', view_main_page, name='new_home'),
-	url(r'^$', redirect_to_old_template, name='redirect_to_old_template'),
+	url(r'^$', view_main_page, name='redirect_to_old_template'),
 	# url(r'^admin/', admin.site.urls),
 ]

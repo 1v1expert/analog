@@ -8,27 +8,27 @@
 
 <!--=========================== Bootstrap core CSS ===============================-->
 
-<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="{% static 'css2/bootstrap.min.css' %}" rel="stylesheet" title="stylesheet">
 
 <!--===========================main css for  web host page===============================-->
 
-<link href="{%  static 'css/style.css' %}" rel="stylesheet" title="stylesheet" media="screen">
-<link href="{%  static 'css/style1.css' %}" rel="stylesheet" title="stylesheet1" media="screen">
-<link href="{%  static 'css/style2.css' %}" rel="stylesheet" title="stylesheet2" media="screen">
-<link href="{%  static 'css/style3.css' %}" rel="stylesheet" title="stylesheet3" media="screen">
-<link href="{%  static 'css/style4.css' %}" rel="stylesheet" title="stylesheet4" media="screen">
-<link href="{%  static 'css/style5.css' %}" rel="stylesheet" title="stylesheet5" media="screen">
-<link href="{%  static 'css/style6.css' %}" rel="stylesheet" title="stylesheet6" media="screen">
-<link href="{%  static 'css/style7.css' %}" rel="stylesheet" title="stylesheet7" media="screen">
+<link href="{%  static 'css2/style.css' %}" rel="stylesheet" title="stylesheet" media="screen">
+<link href="{%  static 'css2/style1.css' %}" rel="stylesheet" title="stylesheet1" media="screen">
+<link href="{%  static 'css2/style2.css' %}" rel="stylesheet" title="stylesheet2" media="screen">
+<link href="{%  static 'css2/style3.css' %}" rel="stylesheet" title="stylesheet3" media="screen">
+<link href="{%  static 'css2/style4.css' %}" rel="stylesheet" title="stylesheet4" media="screen">
+<link href="{%  static 'css2/style5.css' %}" rel="stylesheet" title="stylesheet5" media="screen">
+<link href="{%  static 'css2/style6.css' %}" rel="stylesheet" title="stylesheet6" media="screen">
+<link href="{%  static 'css2/style7.css' %}" rel="stylesheet" title="stylesheet7" media="screen">
 
 <!--==============THEME CSS=================-->
 
-<link href="demo/demo.css" rel="stylesheet" type="text/css">
-<link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="{% static 'css2/demo/demo.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'css2/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
 
 <!--==============Carousel CSS=================-->
 
-<link href="css/owl.carousel.css" rel="stylesheet" type="text/css">
+<link href="{% static 'css2/owl.carousel.css' %}" rel="stylesheet" type="text/css">
 
 <!--=================================GOOGLE FONT - OPEN SANS==============================-->
 
@@ -36,20 +36,20 @@
 
 <!--=============================jquery.js==============================-->
 
-<script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script src="{% static 'js2/jquery-1.10.2.min.js' %}" type="text/javascript"></script>
 
 <!--============================= login-popup ==============================-->
 
-<script type="text/javascript" src="js/jquery.leanModal.min.js"></script>
-<link type="text/css" rel="stylesheet" href="css/login-popup.css" />
+<script type="text/javascript" src="{% static 'js2/jquery.leanModal.min.js' %}"></script>
+<link type="text/css" rel="stylesheet" href="{% static 'css2/login-popup.css' %}" />
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="js2/ie8-responsive-file-warning.js"></script><![endif]-->
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
-      <script src="js/html5shiv.js"></script>
-      <script src="js/respond.min.js"></script>
+      <script src="js2/html5shiv.js"></script>
+      <script src="js2/respond.min.js"></script>
     <![endif]-->
 
 <!-- Custom styles for this template -->
@@ -64,7 +64,7 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-4">
-          <div class="smo-icon"> <span>Follow us</span> <span><a href="#"><img src="images/facebook.png" alt=""/></a></span> <span><a href="#"><img src="images/twitter.png" alt=""/></a></span> <span><a href="#"><img src="images/linkedin.png" alt=""/></a></span> <span><a href="#"><img src="images/googleplus.png" alt=""/></a></span> </div>
+          <div class="smo-icon"> <span>Follow us</span> <span><a href="#"><img src="{% static 'images/facebook.png' %}" alt=""/></a></span> <span><a href="#"><img src="{% static 'images/twitter.png' %}" alt=""/></a></span> <span><a href="#"><img src="{% static 'images/linkedin.png' %}" alt=""/></a></span> <span><a href="#"><img src="{% static 'images/googleplus.png' %}" alt=""/></a></span> </div>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-5">
           <div class="top-link">
@@ -87,7 +87,7 @@
                   <div class="popupBody">
                     <!-- Social Login -->
                     <div class="social_login">
-                      <div class="login-main-icon"><img src="images/login-icon.png" alt=""/></div>
+                      <div class="login-main-icon"><img src="{% static 'images/login-icon.png' %}" alt=""/></div>
                       <h1>Your Account</h1>
                       <div class="main_btns-container">
                         <div class="first_half"><a href="#" id="login_form" class="btn login-btn">Login</a></div>
@@ -149,7 +149,7 @@
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-          <a class="navbar-brand" href="#"><img src="images/logo.png" alt=""></a> </div>
+          <a class="navbar-brand" href="#"><img src="{% static 'images/logo.png' %}" alt=""></a> </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="dropdown active"> <a href="#home" >Home </a> </li>
@@ -180,7 +180,7 @@
     <div class="banner-dot">
       <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <lie data-target="#myCarousel" data-slide-to="1"></lie>
         <li data-target="#myCarousel" data-slide-to="2"></li>
       </ol>
       <div class="baaner-container">
@@ -188,7 +188,7 @@
           <div class="item active">
             <div class="container">
               <div class="carousel-caption">
-                <p class="main-image"><img src="images/icon1.png" alt="" /></p>
+                <p class="main-image"><img src="{% static 'images/icon1.png' %}" alt="" /></p>
                 <div class="letter-container">
                   <h1><a href="#">World best space hosting</a></h1>
                 </div>
@@ -198,65 +198,11 @@
               </div>
             </div>
           </div>
-          <div class="item">
-            <div class="container">
-              <div class="carousel-caption">
-                <div class="banner-inner-container">
-                  <div class="letter-container head-space">
-                    <h1><a href="#">Good prices unbeatable value</a></h1>
-                  </div>
-                  <h2>High performance web hosting</h2>
-                  <p class="banner-text1">A web hosting service is a type of Internet hosting service that allows individuals and organizations to make their website accessible via the World Wide Web.  Web hosts are companies that provide space on a server owned </p>
-                  <div class="row featurette">
-                    <div class="col-md-4 banner-icon hidden-xs hidden-sm"> <img src="images/icon2.png" alt="" /> </div>
-                    <div class="col-md-8">
-                      <div class="banner-nav">
-                        <ul>
-                          <li> We Provide fast, reliable and efficient services.</li>
-                          <li> Reliable & superfast site speeds</li>
-                          <li> We Helps in better utilization of human resources.</li>
-                          <li> Email, phone and social media support</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <p><a class="green-button wobble-horizontal" href="#" role="button">MORE DETAILS</a> <a class="blue-button wobble-horizontal" href="#" role="button">ORDER NOW !</a></p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="container">
-              <div class="carousel-caption">
-                <div class="banner-inner-container">
-                  <div class="letter-container head-space">
-                    <h1><a href="#">Web hosting control panel</a></h1>
-                  </div>
-                  <h2> Most powerfull hosting Package</h2>
-                  <p class="banner-text1">A web hosting service is a type of Internet hosting service that allows individuals and organizations to make their website accessible via the World Wide Web.  Web hosts are companies that provide space on a server owned </p>
-                  <div class="row featurette">
-                    <div class="col-md-4 banner-icon hidden-xs hidden-sm"> <img src="images/icon3.png" alt="" /> </div>
-                    <div class="col-md-8">
-                      <div class="banner-nav">
-                        <ul>
-                          <li> We Provide fast, reliable and efficient services.</li>
-                          <li> No setup fees or hidden charges</li>
-                          <li> We Helps in better utilization of human resources.</li>
-                          <li> 99.99% Uptime Guarantee & 24/7 Live Support</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <p><a class="green-button wobble-horizontal" href="#" role="button">MORE DETAILS</a> <a class="blue-button wobble-horizontal" href="#" role="button">ORDER NOW !</a></p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
       <div class="banner-arrow">
-        <p class="pulse"><a href="#choose"><img src="images/arrow-bottom.png" alt=""/></a></p>
+        <p class="pulse"><a href="#choose"><img src="{% static 'images/arrow-bottom.png' %}" alt=""/></a></p>
       </div>
     </div>
   </div>
@@ -273,22 +219,22 @@
     </div>
     <div class="row choose">
       <div class="col-sm-6 col-md-3">
-        <div class="round1"><a href="#"><img src="images/live-support.png" alt=""></a></div>
+        <div class="round1"><a href="#"><img src="{% static 'images/live-support.png' %}" alt=""></a></div>
         <h2>Live Support</h2>
         <p class="space-text">Web hosts can also provide data center space and connectivity to the Internet for provide data center space</p>
       </div>
       <div class="col-sm-6 col-md-3">
-        <div class="round2"><a href="#"><img src="images/online-security.png" alt=""></a></div>
+        <div class="round2"><a href="#"><img src="{% static 'images/online-security.png' %}" alt=""></a></div>
         <h2>Online Security</h2>
         <p class="space-text"> Web hosts are companies that provide space on a server owned or leased for use by clients server owned </p>
       </div>
       <div class="col-sm-6 col-md-3">
-        <div class="round3"><a href="#"><img src="images/hosting-solution.png" alt=""></a></div>
+        <div class="round3"><a href="#"><img src="{% static 'images/hosting-solution.png' %}" alt=""></a></div>
         <h2>Hosting Solutions</h2>
         <p>The most basic is web page and small-scale file hosting, where files can be uploaded via page and small-scale</p>
       </div>
       <div class="col-sm-6 col-md-3">
-        <div class="round4"><a href="#"><img src="images/quick-install.png" alt=""></a></div>
+        <div class="round4"><a href="#"><img src="{% static 'images/quick-install.png' %}" alt=""></a></div>
         <h2>Quick Install</h2>
         <p class="choose1"> The files are usually delivered to the Web "as is" or with minimal processing files are usually delivered to the . </p>
       </div>
@@ -297,298 +243,298 @@
 </div>
 
 <!--=============================Features=============================-->
-<div id="features" class="features-container">
-  <div class="container">
-    <div class="row main-head">
-      <div class="col-md-12">
-        <h1>What's features in our hosting</h1>
-        <h2>Its an good oppertunity </h2>
-        <p>The scope of web hosting services varies greatly. The most basic is web page and small-scale file hosting, where files can be uploaded via File Transfer Protocol or a Web interface. The files are usually delivered to the Web "as is" or with minimal processing. Personal web site hosting
-          is typically free, advertisement-sponsored, or inexpensive
-          is typically free, advertisement-sponsored, or inexpensive. </p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6 col-md-6" >
-        <div class="features"> <span class="featuresIcon1"></span>
-          <h2>Unlimited bandwidth</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-6" >
-        <div class="features"> <span class="featuresIcon2"></span>
-          <h2>Free domain names</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-6" >
-        <div class="features"> <span class="featuresIcon3"></span>
-          <h2>Unlimited email accounts</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-6" >
-        <div class="features"> <span class="featuresIcon4"></span>
-          <h2>99.9 % uptime guarantee</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-6" >
-        <div class="features"> <span class="featuresIcon5"></span>
-          <h2>Easy website builder</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-6" >
-        <div class="features"> <span class="featuresIcon6"></span>
-          <h2>E-commerce solutions</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{#<div id="features" class="features-container">#}
+{#  <div class="container">#}
+{#    <div class="row main-head">#}
+{#      <div class="col-md-12">#}
+{#        <h1>What's features in our hosting</h1>#}
+{#        <h2>Its an good oppertunity </h2>#}
+{#        <p>The scope of web hosting services varies greatly. The most basic is web page and small-scale file hosting, where files can be uploaded via File Transfer Protocol or a Web interface. The files are usually delivered to the Web "as is" or with minimal processing. Personal web site hosting#}
+{#          is typically free, advertisement-sponsored, or inexpensive#}
+{#          is typically free, advertisement-sponsored, or inexpensive. </p>#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#      <div class="col-sm-6 col-md-6" >#}
+{#        <div class="features"> <span class="featuresIcon1"></span>#}
+{#          <h2>Unlimited bandwidth</h2>#}
+{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
+{#        </div>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-6" >#}
+{#        <div class="features"> <span class="featuresIcon2"></span>#}
+{#          <h2>Free domain names</h2>#}
+{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
+{#        </div>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-6" >#}
+{#        <div class="features"> <span class="featuresIcon3"></span>#}
+{#          <h2>Unlimited email accounts</h2>#}
+{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
+{#        </div>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-6" >#}
+{#        <div class="features"> <span class="featuresIcon4"></span>#}
+{#          <h2>99.9 % uptime guarantee</h2>#}
+{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
+{#        </div>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-6" >#}
+{#        <div class="features"> <span class="featuresIcon5"></span>#}
+{#          <h2>Easy website builder</h2>#}
+{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
+{#        </div>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-6" >#}
+{#        <div class="features"> <span class="featuresIcon6"></span>#}
+{#          <h2>E-commerce solutions</h2>#}
+{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
 
 <!--==============================Services=============================-->
 
-<div id="services" class="service-container">
-  <div class="container">
-    <div class="row main-head">
-      <div class="col-md-12">
-        <h1>What's services we offer</h1>
-        <h2>We create new ground </h2>
-        <p>The scope of web hosting services varies greatly. The most basic is web page and small-scale file hosting, where files can be uploaded via File Transfer Protocol or a Web interface. The files are usually delivered to the Web "as is" or with minimal processing. Personal web site hosting
-          is typically free, advertisement-sponsored, or inexpensive
-          is typically free, advertisement-sponsored, or inexpensive. </p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-12 col-md-6 " >
-        <div class="service1"> <img src="images/service-image.png" alt=""> </div>
-      </div>
-      <div class="col-sm-12 col-md-6 service-text-area" >
-        <div class="service"> <span class="serviceIcon"></span>
-          <h2>Network Services</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae.consectetur adipiscing elit. </p>
-        </div>
-        <div class="service"> <span class="serviceIcon"></span>
-          <h2>Network Services</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>
-        </div>
-        <div class="service"> <span class="serviceIcon"></span>
-          <h2>Network Services</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{#<div id="services" class="service-container">#}
+{#  <div class="container">#}
+{#    <div class="row main-head">#}
+{#      <div class="col-md-12">#}
+{#        <h1>What's services we offer</h1>#}
+{#        <h2>We create new ground </h2>#}
+{#        <p>The scope of web hosting services varies greatly. The most basic is web page and small-scale file hosting, where files can be uploaded via File Transfer Protocol or a Web interface. The files are usually delivered to the Web "as is" or with minimal processing. Personal web site hosting#}
+{#          is typically free, advertisement-sponsored, or inexpensive#}
+{#          is typically free, advertisement-sponsored, or inexpensive. </p>#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#      <div class="col-sm-12 col-md-6 " >#}
+{#        <div class="service1"> <img src="{% static 'images/service-image.png' %}" alt=""> </div>#}
+{#      </div>#}
+{#      <div class="col-sm-12 col-md-6 service-text-area" >#}
+{#        <div class="service"> <span class="serviceIcon"></span>#}
+{#          <h2>Network Services</h2>#}
+{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae.consectetur adipiscing elit. </p>#}
+{#        </div>#}
+{#        <div class="service"> <span class="serviceIcon"></span>#}
+{#          <h2>Network Services</h2>#}
+{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
+{#        </div>#}
+{#        <div class="service"> <span class="serviceIcon"></span>#}
+{#          <h2>Network Services</h2>#}
+{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
 
 <!--==============================Offer==============================-->
 
-<div id="offer" >
-  <div id="lp-pom-block-11">
-    <div class="container">
-      <div class="row offer-head">
-        <div class="col-md-12">
-          <h1>Special hot offer</h1>
-          <h2>You can foster new social connections</h2>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 col-md-6" >
-          <div class="offer-box1">
-            <div class="offer-text">
-              <ul>
-                <li> Free Website Builde</li>
-                <li>Free Domain Registration</li>
-                <li> Dedicated hosting</li>
-                <li> Money Back Guarantee</li>
-                <li>24/7 Quality Support</li>
-                <li> Dedicated hosting</li>
-              </ul>
-            </div>
-            <div class="offer-image">
-              <div class="offer-image-box"><span>$2</span>.50
-                <p>Per month</p>
-              </div>
-            </div>
-          </div>
-          <div class="offer-boxhead">Small business web hosting<a href="#"><img src="images/more-arrow.png" alt=""/> </a></div>
-        </div>
-        <div class="col-sm-6 col-md-6" >
-          <div class="offer-box1">
-            <div class="offer-text">
-              <ul>
-                <li>Free Website Builde</li>
-                <li>Free Domain Registration</li>
-                <li> Dedicated hosting</li>
-                <li>Money Back Guarantee</li>
-                <li>24/7 Quality Support</li>
-                <li>Free Domain Registration</li>
-              </ul>
-            </div>
-            <div class="offer-image1">
-              <div class="offer-image-box"><span>$3</span>.50
-                <p>Per month</p>
-              </div>
-            </div>
-          </div>
-          <div class="offer-boxhead">Host your website <a href="#"><img src="images/more-arrow.png" alt=""/> </a> </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{#<div id="offer" >#}
+{#  <div id="lp-pom-block-11">#}
+{#    <div class="container">#}
+{#      <div class="row offer-head">#}
+{#        <div class="col-md-12">#}
+{#          <h1>Special hot offer</h1>#}
+{#          <h2>You can foster new social connections</h2>#}
+{#        </div>#}
+{#      </div>#}
+{#      <div class="row">#}
+{#        <div class="col-sm-6 col-md-6" >#}
+{#          <div class="offer-box1">#}
+{#            <div class="offer-text">#}
+{#              <ul>#}
+{#                <li> Free Website Builde</li>#}
+{#                <li>Free Domain Registration</li>#}
+{#                <li> Dedicated hosting</li>#}
+{#                <li> Money Back Guarantee</li>#}
+{#                <li>24/7 Quality Support</li>#}
+{#                <li> Dedicated hosting</li>#}
+{#              </ul>#}
+{#            </div>#}
+{#            <div class="offer-image">#}
+{#              <div class="offer-image-box"><span>$2</span>.50#}
+{#                <p>Per month</p>#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+{#          <div class="offer-boxhead">Small business web hosting<a href="#"><img src="{% static 'images/more-arrow.png' %}" alt=""/> </a></div>#}
+{#        </div>#}
+{#        <div class="col-sm-6 col-md-6" >#}
+{#          <div class="offer-box1">#}
+{#            <div class="offer-text">#}
+{#              <ul>#}
+{#                <li>Free Website Builde</li>#}
+{#                <li>Free Domain Registration</li>#}
+{#                <li> Dedicated hosting</li>#}
+{#                <li>Money Back Guarantee</li>#}
+{#                <li>24/7 Quality Support</li>#}
+{#                <li>Free Domain Registration</li>#}
+{#              </ul>#}
+{#            </div>#}
+{#            <div class="offer-image1">#}
+{#              <div class="offer-image-box"><span>$3</span>.50#}
+{#                <p>Per month</p>#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+{#          <div class="offer-boxhead">Host your website <a href="#"><img src="{% static 'images/more-arrow.png' %}" alt=""/> </a> </div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
 
 <!--==============================Pricing tables=============================-->
 
-<div id="web-hosting" class="price-container">
-  <div class="container">
-    <div class="row main-head">
-      <div class="col-md-12">
-        <h1>Our pricing tables</h1>
-        <h2>Solutions to everyone </h2>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6 col-md-3" >
-        <div class="main-table">
-          <div class="price-table-top"> <a class="price-table-topbg ">
-            <h3>Basic Plan</h3>
-            </a> <a class="price-circle">
-            <p class="price">$100</p>
-            <p class="month">Monthly</p>
-            </a> </div>
-          <ul class="price-plans">
-            <li class="price-plan">5 bonus points every month</li>
-            <li class="price-plan">2 Months Support</li>
-            <li class="price-plan">10 Subdomains</li>
-            <li class="price-plan">10 Subdomains</li>
-          </ul>
-          <a href="#" class="price-buy-now">Buy Now</a> </div>
-      </div>
-      <div class="col-sm-6 col-md-3" >
-        <div class="main-table">
-          <div class="price-table-top"> <a class="price-table-topbg ">
-            <h3>Business Plan</h3>
-            </a> <a class="price-circle">
-            <p class="price">$150</p>
-            <p class="month">Monthly</p>
-            </a> </div>
-          <ul class="price-plans">
-            <li class="price-plan">5 bonus points every month</li>
-            <li class="price-plan">2 Months Support</li>
-            <li class="price-plan">10 Subdomains</li>
-            <li class="price-plan">10 Subdomains</li>
-          </ul>
-          <a href="#" class="price-buy-now">Buy Now</a> </div>
-      </div>
-      <div class="col-sm-6 col-md-3" >
-        <div class="main-table">
-          <div class="price-table-top"> <a class="price-table-topbg ">
-            <h3>Advanced Plan</h3>
-            </a> <a class="price-circle">
-            <p class="price">$290</p>
-            <p class="month">Monthly</p>
-            </a> </div>
-          <ul class="price-plans">
-            <li class="price-plan">5 bonus points every month</li>
-            <li class="price-plan">2 Months Support</li>
-            <li class="price-plan">10 Subdomains</li>
-            <li class="price-plan">10 Subdomains</li>
-          </ul>
-          <a href="#" class="price-buy-now active">Buy Now</a> </div>
-      </div>
-      <div class="col-sm-6 col-md-3" >
-        <div class="main-table">
-          <div class="price-table-top"> <a class="price-table-topbg ">
-            <h3>Unlimited Plan</h3>
-            </a> <a class="price-circle">
-            <p class="price">$390</p>
-            <p class="month">Monthly</p>
-            </a> </div>
-          <ul class="price-plans">
-            <li class="price-plan">5 bonus points every month</li>
-            <li class="price-plan">2 Months Support</li>
-            <li class="price-plan">10 Subdomains</li>
-            <li class="price-plan">10 Subdomains</li>
-          </ul>
-          <a href="#" class="price-buy-now">Buy Now</a> </div>
-      </div>
-    </div>
-  </div>
-</div>
+{#<div id="web-hosting" class="price-container">#}
+{#  <div class="container">#}
+{#    <div class="row main-head">#}
+{#      <div class="col-md-12">#}
+{#        <h1>Our pricing tables</h1>#}
+{#        <h2>Solutions to everyone </h2>#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#      <div class="col-sm-6 col-md-3" >#}
+{#        <div class="main-table">#}
+{#          <div class="price-table-top"> <a class="price-table-topbg ">#}
+{#            <h3>Basic Plan</h3>#}
+{#            </a> <a class="price-circle">#}
+{#            <p class="price">$100</p>#}
+{#            <p class="month">Monthly</p>#}
+{#            </a> </div>#}
+{#          <ul class="price-plans">#}
+{#            <li class="price-plan">5 bonus points every month</li>#}
+{#            <li class="price-plan">2 Months Support</li>#}
+{#            <li class="price-plan">10 Subdomains</li>#}
+{#            <li class="price-plan">10 Subdomains</li>#}
+{#          </ul>#}
+{#          <a href="#" class="price-buy-now">Buy Now</a> </div>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-3" >#}
+{#        <div class="main-table">#}
+{#          <div class="price-table-top"> <a class="price-table-topbg ">#}
+{#            <h3>Business Plan</h3>#}
+{#            </a> <a class="price-circle">#}
+{#            <p class="price">$150</p>#}
+{#            <p class="month">Monthly</p>#}
+{#            </a> </div>#}
+{#          <ul class="price-plans">#}
+{#            <li class="price-plan">5 bonus points every month</li>#}
+{#            <li class="price-plan">2 Months Support</li>#}
+{#            <li class="price-plan">10 Subdomains</li>#}
+{#            <li class="price-plan">10 Subdomains</li>#}
+{#          </ul>#}
+{#          <a href="#" class="price-buy-now">Buy Now</a> </div>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-3" >#}
+{#        <div class="main-table">#}
+{#          <div class="price-table-top"> <a class="price-table-topbg ">#}
+{#            <h3>Advanced Plan</h3>#}
+{#            </a> <a class="price-circle">#}
+{#            <p class="price">$290</p>#}
+{#            <p class="month">Monthly</p>#}
+{#            </a> </div>#}
+{#          <ul class="price-plans">#}
+{#            <li class="price-plan">5 bonus points every month</li>#}
+{#            <li class="price-plan">2 Months Support</li>#}
+{#            <li class="price-plan">10 Subdomains</li>#}
+{#            <li class="price-plan">10 Subdomains</li>#}
+{#          </ul>#}
+{#          <a href="#" class="price-buy-now active">Buy Now</a> </div>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-3" >#}
+{#        <div class="main-table">#}
+{#          <div class="price-table-top"> <a class="price-table-topbg ">#}
+{#            <h3>Unlimited Plan</h3>#}
+{#            </a> <a class="price-circle">#}
+{#            <p class="price">$390</p>#}
+{#            <p class="month">Monthly</p>#}
+{#            </a> </div>#}
+{#          <ul class="price-plans">#}
+{#            <li class="price-plan">5 bonus points every month</li>#}
+{#            <li class="price-plan">2 Months Support</li>#}
+{#            <li class="price-plan">10 Subdomains</li>#}
+{#            <li class="price-plan">10 Subdomains</li>#}
+{#          </ul>#}
+{#          <a href="#" class="price-buy-now">Buy Now</a> </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
 <!--==============================Our clients============================-->
 
-<div id="clients" class="client-container">
-  <div class="container">
-    <div class="row main-head">
-      <div class="col-md-12">
-        <h1>Our clients</h1>
-        <h2>Some of our satisfied clients </h2>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2" >
-        <div class="client">
-          <div id="owl-sponsors" class="owl-carousel">
-            <div class="item"> <a target="_blank" href="#"><img src="images/client-logo1.png" alt="Themeforest" width="260" height="80"></a> </div>
-            <div class="item"> <a target="_blank" href="#"><img src="images/client-logo2.png" alt="Photodune" width="260" height="80"></a> </div>
-            <div class="item"> <a target="_blank" href="#"><img src="images/client-logo3.png" alt="Themeforest" width="260" height="80"></a> </div>
-            <div class="item"> <a target="_blank" href="#"><img src="images/client-logo4.png" alt="AudioJungle" width="260" height="80"></a> </div>
-            <div class="item"> <a target="_blank" href="#"><img src="images/client-logo5.png" alt="Graphicriver" width="260" height="80"></a> </div>
-            <div class="item"> <a target="_blank" href="#"><img src="images/client-logo2.png" alt="Photodune" width="260" height="80"></a> </div>
-            <div class="item"> <a target="_blank" href="#"><img src="images/client-logo3.png" alt="Themeforest" width="260" height="80"></a> </div>
-            <div class="item"> <a target="_blank" href="#"><img src="images/client-logo4.png" alt="AudioJungle" width="260" height="80"></a> </div>
-          </div>
-          <div class="sponsor-title-nav">
-            <div class="owl-Navigation"> <a class="btn prev"><img src="images/prev-arrow.png" alt=""/></a> <a class="btn next"><img src="images/next-arrow.png" alt=""/></a> </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{#<div id="clients" class="client-container">#}
+{#  <div class="container">#}
+{#    <div class="row main-head">#}
+{#      <div class="col-md-12">#}
+{#        <h1>Our clients</h1>#}
+{#        <h2>Some of our satisfied clients </h2>#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#      <div class="col-md-8 col-md-offset-2" >#}
+{#        <div class="client">#}
+{#          <div id="owl-sponsors" class="owl-carousel">#}
+{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo1.png' %}" alt="Themeforest" width="260" height="80"></a> </div>#}
+{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo2.png' %}" alt="Photodune" width="260" height="80"></a> </div>#}
+{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo3.png' %}" alt="Themeforest" width="260" height="80"></a> </div>#}
+{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo4.png' %}" alt="AudioJungle" width="260" height="80"></a> </div>#}
+{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo5.png' %}" alt="Graphicriver" width="260" height="80"></a> </div>#}
+{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo2.png' %}" alt="Photodune" width="260" height="80"></a> </div>#}
+{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo3.png' %}" alt="Themeforest" width="260" height="80"></a> </div>#}
+{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo4.png' %}" alt="AudioJungle" width="260" height="80"></a> </div>#}
+{#          </div>#}
+{#          <div class="sponsor-title-nav">#}
+{#            <div class="owl-Navigation"> <a class="btn prev"><img src="{% static 'images/prev-arrow.png' %}" alt=""/></a> <a class="btn next"><img src="{% static 'images/next-arrow.png' %}" alt=""/></a> </div>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
 
 <!--================================Client reviews=============================-->
 
-<div class="clientreview-container">
-  <div class="container">
-    <div class="row main-head">
-      <div class="col-md-12">
-        <h1>Client Reviews</h1>
-        <h2>Few words from our satisfied customers </h2>
-      </div>
-    </div>
-    <div class="col-lg-12 ">
-      <div class="wpb_text_column wpb_content_element ">
-        <div class="wpb_wrapper">
-          <div class="testimonial ">
-            <ul class="row">
-              <li class="col-sm-6 col-md-6">
-                <blockquote class="">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid consequuntur unde quae totam recusandae<span class="arrowbubble"></span></blockquote>
-                <div class="testiimg"><img width="100" height="100" src="images/client-image.png" alt="testimonial1" ></div>
-                <div class="testiinfo">
-                  <h4 class="testititle">Catherine Grace</h4>
-                  <span>CEO Digitalcraft</span> </div>
-                <div class="clearfix"></div>
-              </li>
-              <li class="col-sm-6 col-md-6">
-                <blockquote class="">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid consequuntur unde quae totam recusandae.<span class="arrowbubble"></span></blockquote>
-                <div class="testiimg"><img width="100" height="100" src="images/client-image.png"  alt="testimonial2"></div>
-                <div class="testiinfo">
-                  <h4 >Jane Doe</h4>
-                  <span> Themotiko Developer </span></div>
-                <div class="clearfix"></div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{#<div class="clientreview-container">#}
+{#  <div class="container">#}
+{#    <div class="row main-head">#}
+{#      <div class="col-md-12">#}
+{#        <h1>Client Reviews</h1>#}
+{#        <h2>Few words from our satisfied customers </h2>#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="col-lg-12 ">#}
+{#      <div class="wpb_text_column wpb_content_element ">#}
+{#        <div class="wpb_wrapper">#}
+{#          <div class="testimonial ">#}
+{#            <ul class="row">#}
+{#              <li class="col-sm-6 col-md-6">#}
+{#                <blockquote class="">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid consequuntur unde quae totam recusandae<span class="arrowbubble"></span></blockquote>#}
+{#                <div class="testiimg"><img width="100" height="100" src="{% static 'images/client-image.png' %}" alt="testimonial1" ></div>#}
+{#                <div class="testiinfo">#}
+{#                  <h4 class="testititle">Catherine Grace</h4>#}
+{#                  <span>CEO Digitalcraft</span> </div>#}
+{#                <div class="clearfix"></div>#}
+{#              </li>#}
+{#              <li class="col-sm-6 col-md-6">#}
+{#                <blockquote class="">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid consequuntur unde quae totam recusandae.<span class="arrowbubble"></span></blockquote>#}
+{#                <div class="testiimg"><img width="100" height="100" src="{% static 'images/client-image.png' %}"  alt="testimonial2"></div>#}
+{#                <div class="testiinfo">#}
+{#                  <h4 >Jane Doe</h4>#}
+{#                  <span> Themotiko Developer </span></div>#}
+{#                <div class="clearfix"></div>#}
+{#              </li>#}
+{#            </ul>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
 
 <!--================================Search domin=============================-->
 
@@ -684,48 +630,48 @@
   </div>
 </div>
 <!--==============================Footer============================-->
-<div  class="footer-container">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-6 col-md-3" >
-        <h2>Support/help</h2>
-        <ul class="list">
-          <li><a href="#"><i class="fa fa-angle-right"></i> Terms Of Use </a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> Privacy Policy</a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> Return Policy</a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> My Account</a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> Single and Portfolios</a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> Recent Blogs or News</a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> Ordering and Tracking</a></li>
-        </ul>
-      </div>
-      <div class="col-sm-6 col-md-3" >
-        <h2>Contact info</h2>
-        <p> Street str, 12345 Amsterdam, Duis venenatis neque, Lorem ipsum, venenatis ipsum, neque 56478 Australia<br>
-          <br>
-          Phone : +38 068 123-45-67  |  +38 068 987-65-43<br>
-          <br>
-          E-mail: info@carrots-desgmail.com </p>
-      </div>
-      <div class="col-sm-6 col-md-3" >
-        <h2>Our policies</h2>
-        <ul class="list">
-          <li><a href="#"><i class="fa fa-angle-right"></i> Terms Of Use </a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> Privacy Policy</a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> Return Policy</a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> My Account</a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> Single and Portfolios</a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> Recent Blogs or News</a></li>
-          <li><a href="#"><i class="fa fa-angle-right"></i> Ordering and Tracking</a></li>
-        </ul>
-      </div>
-      <div class="col-sm-6 col-md-3" >
-        <h2>Payment methods</h2>
-        <div class="payment-area"> <a href="#" target="_blank" title=""><img src="images/maestro.png" alt=""></a> <a href="#" target="_blank" title=""><img src="images/visa.png" alt=""></a> <a href="#" target="_blank" title=""><img src="images/master-card.png" alt=""></a> <a href="#" target="_blank" title=""><img src="images/paypal.png" alt=""></a> <a href="#" target="_blank" title=""><img src="images/debit.png" alt=""></a> <a href="#" target="_blank" title=""><img src="images/express.png" alt=""></a> </div>
-      </div>
-    </div>
-  </div>
-</div>
+{#<div  class="footer-container">#}
+{#  <div class="container">#}
+{#    <div class="row">#}
+{#      <div class="col-sm-6 col-md-3" >#}
+{#        <h2>Support/help</h2>#}
+{#        <ul class="list">#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Terms Of Use </a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Privacy Policy</a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Return Policy</a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> My Account</a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Single and Portfolios</a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Recent Blogs or News</a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Ordering and Tracking</a></li>#}
+{#        </ul>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-3" >#}
+{#        <h2>Contact info</h2>#}
+{#        <p> Street str, 12345 Amsterdam, Duis venenatis neque, Lorem ipsum, venenatis ipsum, neque 56478 Australia<br>#}
+{#          <br>#}
+{#          Phone : +38 068 123-45-67  |  +38 068 987-65-43<br>#}
+{#          <br>#}
+{#          E-mail: info@carrots-desgmail.com </p>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-3" >#}
+{#        <h2>Our policies</h2>#}
+{#        <ul class="list">#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Terms Of Use </a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Privacy Policy</a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Return Policy</a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> My Account</a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Single and Portfolios</a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Recent Blogs or News</a></li>#}
+{#          <li><a href="#"><i class="fa fa-angle-right"></i> Ordering and Tracking</a></li>#}
+{#        </ul>#}
+{#      </div>#}
+{#      <div class="col-sm-6 col-md-3" >#}
+{#        <h2>Payment methods</h2>#}
+{#        <div class="payment-area"> <a href="#" target="_blank" title=""><img src="{% static 'images/maestro.png' %}" alt=""></a> <a href="#" target="_blank" title=""><img src="{% static 'images/visa.png' %}" alt=""></a> <a href="#" target="_blank" title=""><img src="{% static 'images/master-card.png' %}" alt=""></a> <a href="#" target="_blank" title=""><img src="{% static 'images/paypal.png' %}" alt=""></a> <a href="#" target="_blank" title=""><img src="{% static 'images/debit.png' %}" alt=""></a> <a href="#" target="_blank" title=""><img src="{% static 'images/express.png' %}" alt=""></a> </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
 
 <!--===========================Goto top============================-->
 <a href="#" id="go-top"></a>
@@ -803,38 +749,38 @@
 
 <!--============== Form validation JS=================-->
 
-<script src="js/contact_form.js" type="text/javascript"></script>
+<script src="{% static 'js2/contact_form.js' %}" type="text/javascript"></script>
 
 <!--============================Sticky.js===========================-->
 
-<script src="js/jquery.sticky.js" type="text/javascript"></script>
+<script src="{% static 'js2/jquery.sticky.js' %}" type="text/javascript"></script>
 
 <!--============================Main.js===========================-->
 
-<script src="js/main.js" type="text/javascript"></script>
+<script src="{% static 'js2/main.js' %}" type="text/javascript"></script>
 
 <!--=========================Scroll.js=========================-->
 
-<script src="js/scroll.js" type="text/javascript"></script>
+<script src="{% static 'js2/scroll.js' %}" type="text/javascript"></script>
 
 <!--========================Lettering.js========================-->
 
-<script type="text/javascript" src="js/jquery.lettering.js"></script>
+<script type="text/javascript" src="{% static 'js2/jquery.lettering.js' %}"></script>
 
 <!--========================Carousel.js slider=======================-->
 
-<script src="js/owl.carousel.js" type="text/javascript"></script>
+<script src="{% static 'js2/owl.carousel.js' %}" type="text/javascript"></script>
 
 <!--====================Theme change js=========================-->
 
-<script type="text/javascript" src="demo/styleswitch.js"></script>
+<script type="text/javascript" src="{% static 'css2/demo/styleswitch.js' %}"></script>
 
 <!--==============Ketchup=================-->
 
-<script src="js/ketchup.all.js" type="text/javascript"></script>
+<script src="{% static 'js2/ketchup.all.js' %}" type="text/javascript"></script>
 
 <!--============================Bootstrap==========================-->
 
-<script src="js/bootstrap.min.js" type="text/javascript"></script>
+<script src="{% static 'js2/bootstrap.min.js' %}" type="text/javascript"></script>
 </body>
 </html>

@@ -1,0 +1,65 @@
+.styles { background-color:#212121; height:228px; width:115px; display:block; padding:35px 6px 0; position:fixed; top:200px; left:-250px; z-index:100; padding:10px 20px;
+
+ -webkit-border-top-right-radius: 4px;
+-webkit-border-bottom-right-radius: 4px;
+-moz-border-radius-topright: 4px;
+-moz-border-radius-bottomright: 4px;
+border-top-right-radius: 4px;
+border-bottom-right-radius: 4px;
+	
+	
+	
+	}
+.styles-open  { background:url(styles-open.png) no-repeat; height:32px; width:22px; display:block;   position:fixed; top:206px; left:-115px; z-index:9000;}
+.styles p { padding:20px 0 10px; font-weight:600;}
+.styles p.skins { padding:20px 0 5px; clear:both; color:#fff; }
+.styles li { float:left;  }
+
+.boxed a, .wide a { background-color:#bdbdbd; color:#fff; float:left; border:1px #cccccc; height:20px; width:80px; display:block; padding:8px 0px; text-align:center;  margin:5px 0 0; }
+.wide a { margin:5px 10px 0; }
+
+
+
+
+
+.bg1 a { background:#2fbbff; height:24px; width:24px; display:block;margin:5px;}
+.bg2 a { background:#b1cb35; height:24px; width:24px; display:block;margin:5px;}
+.bg3 a { background:#3fcc37; height:24px; width:24px; display:block;margin:5px;}
+.bg4 a { background:#0088cc; height:24px; width:24px; display:block;margin:5px;}
+.bg5 a { background:#00c2a9; height:24px; width:24px; display:block;margin:5px;}
+.bg6 a { background:#ff7a29; height:24px; width:24px; display:block;margin:5px;}
+.bg7 a { background:#fbd81a; height:24px; width:24px; display:block;margin:5px;}
+.bg8 a { background:#d62d11; height:24px; width:24px; display:block;margin:5px;}
+
+
+
+.styles-closed  { width:60px; height:60px;  background:url(styles-closed.png) no-repeat;  position:fixed; top:200px; left:0px; display:block; z-index:100; }
+.styles-closed a  { width:51px; height:47px;  position:fixed; top:200px; left:0px; }
+
+.main-intro {  
+	background: url("img/bg-highlight.html") repeat #191919;
+    min-height:1080px;
+   
+    width: 100%;
+    color:#fff;
+}
+.main-intro h1 {  
+	margin:0; padding:100px 0 30px
+}
+.intr { position:relative;  margin-top:80px; min-height:150px; max-width:100%;  width:200px;}
+a:focus { outline:0; }
+.styles li.clear { clear:both; width:100%;   }
+
+ ul
+{
+	list-style:none;
+	padding:0px;
+	margin:0px;
+}
+
+
+.menu-sub-link
+{
+	float:left;
+	 padding-top:16px;
+}
