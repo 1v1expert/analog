@@ -37,6 +37,8 @@ def formalize_products():
 		title = product.title
 		if title:
 			raw = product.raw
+			if not raw:
+				raw = {}
 			raw['formalized_title'] = ntwrk.remove_stop_words(title.lower())
 			product.raw = raw
 			product.save(update_fields='raw')
