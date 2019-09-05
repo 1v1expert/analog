@@ -31,14 +31,18 @@ import re
 import ssl
 
 
+def training_the_entire_base():
+	pass
+
+
 def formalize_products(force=False):
 	products = Product.objects.all()
 	if not force:
 		products = products.filter(formalized_title=None)
 	ntwrk = NeuralNetworkOption2()
-	for product in Product.objects.filter():
+	for product in products:
 		if product.title:
-			product.formalized_title = ntwrk.remove_stop_words(product.title.lower())
+			product.formalized_title = ntwrk.remove_stop_words(product.title)
 			product.save()
 
 
@@ -59,7 +63,10 @@ class NeuralNetworkOption2(object):
 
 	"""
 	
-	def __init__(self):
+	def __init__(self, percent=100):
+		if percent > 100 or percent < 0:
+			raise Exception('Error percent')
+		
 		nltk.download('stopwords')
 		# stop = set(stopwords.words('russian', ))
 		# инициализируем стоп слова и символы
@@ -69,22 +76,29 @@ class NeuralNetworkOption2(object):
 		self.Y_raw = Product.objects.filter(is_tried=True).select_related('category').values_list('category__title',
 		                                                                                          flat=True)
 		
-		self.X_raw = Product.objects.filter(is_tried=True).values_list('title', flat=True)
+		self.X_raw = Product.objects.filter(is_tried=True).values_list('formalized_title', flat=True)
 		
 		self.count_raw = self.X_raw.count()
-		self.length = int(self.count_raw - self.count_raw / 10)  # 10%
+		self.length = int(self.count_raw - self.count_raw / 100 * (100-percent))  # 10%
 		
 		self.X_raw_train = self.X_raw[:self.length]
 		self.Y_raw_train = self.Y_raw[:self.length]
 		self.num_classes = self.Y_raw_train.count()
 	
 	def remove_stop_words(self, query):
-		formalized_query = re.sub(r'[^\w\s]+|[\d]+', r'', query).strip()
+		lower_query = query.lower()
+		percent = None
+		result = re.findall(r'\d{2}°|\d{3}°', lower_query)
+		if len(result):
+			percent = result[0]
+		formalized_query = re.sub(r'[^\w\s]+|[\d]+', r'', lower_query).strip()
 		string = ''
 		for i in wordpunct_tokenize(formalized_query):
-			if i not in self.stop and not i.isdigit() and len(i) > 2:
+			if i not in self.stop and not i.isdigit() and len(i) > 3:
 				string = string + i + ' '
 		
+		if percent is not None:
+			string += percent
 		return string.rstrip()
 	
 	def _fit(self):
@@ -123,19 +137,16 @@ class NeuralNetworkOption2(object):
 	def predict(self, str_query, numwords):
 		model = load_model('classifier.h5')
 		tokenizer = Tokenizer(num_words=numwords)
-		X_raw_test = [str_query]
-		# df = pd.read_csv('cleaned_dataset.csv', delimiter=';', encoding="utf-8").astype(str)
-		# X_raw = df['запрос'].values
+		formalized = self.remove_stop_words(str_query)
+		X_raw_test = [formalized]
 		X_raw = self.X_raw_train
 		tokenizer.fit_on_texts(X_raw)
 		x_test = tokenizer.texts_to_matrix(X_raw_test, mode='binary')
 		prediction = model.predict(np.array(x_test))
-		class_num = np.argmax(prediction[0])
+		print(prediction)
+		class_num = int(np.argmax(prediction[0]))
+		# Product.objects.filter(is_tried=True).select_related('category').distinct('category__title').values_list('category__title', flat=True)[
 		return class_num
-# sys.stderr = stderr
-# for name, index in classes.items():
-# 	if index == class_num:
-# 		print(name)
 
 
 class NeuralNetworkOption1(object):
