@@ -34,8 +34,10 @@ import ssl
 def formalize_products():
 	ntwrk = NeuralNetworkOption2()
 	for product in Product.objects.all():
-		product.raw['formalized_title'] = ntwrk.remove_stop_words(product.title.lower())
-		product.save(update_fields='raw')
+		title = product.title
+		if title:
+			product.raw['formalized_title'] = ntwrk.remove_stop_words(title.lower())
+			product.save(update_fields='raw')
 
 
 class NeuralNetworkOption2(object):
