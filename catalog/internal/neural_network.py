@@ -41,7 +41,7 @@ def formalize_products():
 				raw = {}
 			raw['formalized_title'] = ntwrk.remove_stop_words(title.lower())
 			product.raw = raw
-			product.save(update_fields='raw')
+			product.save()
 
 
 class NeuralNetworkOption2(object):
