@@ -36,7 +36,9 @@ def formalize_products():
 	for product in Product.objects.all():
 		title = product.title
 		if title:
-			product.raw['formalized_title'] = ntwrk.remove_stop_words(title.lower())
+			raw = product.raw
+			raw['formalized_title'] = ntwrk.remove_stop_words(title.lower())
+			product.raw = raw
 			product.save(update_fields='raw')
 
 
