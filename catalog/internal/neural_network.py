@@ -31,16 +31,14 @@ import re
 import ssl
 
 
-def formalize_products():
+def formalize_products(force=False):
+	products = Product.objects.all()
+	if not force:
+		products = products.filter(formalized_title=None)
 	ntwrk = NeuralNetworkOption2()
-	for product in Product.objects.all():
-		title = product.title
-		if title:
-			raw = product.raw
-			if not raw:
-				raw = {}
-			raw['formalized_title'] = ntwrk.remove_stop_words(title.lower())
-			product.raw = raw
+	for product in Product.objects.filter():
+		if product.title:
+			product.formalized_title = ntwrk.remove_stop_words(product.title.lower())
 			product.save()
 
 
@@ -84,10 +82,10 @@ class NeuralNetworkOption2(object):
 		formalized_query = re.sub(r'[^\w\s]+|[\d]+', r'', query).strip()
 		string = ''
 		for i in wordpunct_tokenize(formalized_query):
-			if i not in self.stop and not i.isdigit():
+			if i not in self.stop and not i.isdigit() and len(i) > 2:
 				string = string + i + ' '
 		
-		return string
+		return string.rstrip()
 	
 	def _fit(self):
 		# трансформируем текст запросов в матрицы
