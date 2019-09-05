@@ -199,6 +199,8 @@ class Product(Base):
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name="Производитель", related_name='products')
     fixed_attrs_vals = models.ManyToManyField('FixedAttributeValue', verbose_name="Фикс атрибуты")
     unfixed_attrs_vals = models.ManyToManyField('UnFixedAttributeValue', verbose_name="Нефикс атрибуты")
+
+    formalized_title = models.CharField(max_length=255, null=True, verbose_name='Формализованные данные')
     
     raw = pgfields.JSONField(null=True, blank=True, verbose_name="Голые данные")
 
