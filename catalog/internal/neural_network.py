@@ -10,7 +10,6 @@ from nltk.tokenize import wordpunct_tokenize
 from nltk.corpus import stopwords
 import nltk
 
-import ssl
 
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Activation, Dropout, Embedding
@@ -26,6 +25,17 @@ from keras.models import load_model
 import numpy as np
 from keras.preprocessing.text import Tokenizer
 import pandas as pd
+
+import re
+
+import ssl
+
+
+def formalize_products():
+	ntwrk = NeuralNetworkOption2()
+	for product in Product.objects.all():
+		product.raw['formalized_title'] = ntwrk.remove_stop_words(product.title.lower())
+		product.save('raw')
 
 
 class NeuralNetworkOption2(object):
@@ -65,8 +75,9 @@ class NeuralNetworkOption2(object):
 		self.num_classes = self.Y_raw_train.count()
 	
 	def remove_stop_words(self, query):
+		formalized_query = re.sub(r'[^\w\s]+|[\d]+', r'', query).strip()
 		string = ''
-		for i in wordpunct_tokenize(query):
+		for i in wordpunct_tokenize(formalized_query):
 			if i not in self.stop and not i.isdigit():
 				string = string + i + ' '
 		
@@ -116,7 +127,6 @@ class NeuralNetworkOption2(object):
 		x_test = tokenizer.texts_to_matrix(X_raw_test, mode='binary')
 		prediction = model.predict(np.array(x_test))
 		class_num = np.argmax(prediction[0])
-		print(class_num)
 		return class_num
 # sys.stderr = stderr
 # for name, index in classes.items():
