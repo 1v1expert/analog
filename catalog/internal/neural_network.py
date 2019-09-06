@@ -34,7 +34,7 @@ import re
 import ssl
 
 
-def get_category_to_not_tried_products():
+def filling_in_categories_for_is_not_tried_products():
 	products = Product.objects.filter(is_tried=False)
 	count, i = products.count(), 0
 	for product in products:
