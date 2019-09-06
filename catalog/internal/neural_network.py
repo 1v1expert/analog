@@ -113,6 +113,8 @@ class NeuralNetworkOption2(object):
 		self.X_raw_train = self.X_raw[:self.length]
 		self.Y_raw_train = self.Y_raw[:self.length]
 		self.num_classes = self.Y_raw_train.count()
+		
+		self.category_numbers = Product.objects.filter(is_tried=True).select_related('category').distinct('category__title').values_list('category__title', flat=True)
 	
 	def remove_stop_words(self, query):
 		lower_query = query.lower()
@@ -172,12 +174,14 @@ class NeuralNetworkOption2(object):
 		X_raw = self.X_raw_train
 		tokenizer.fit_on_texts(X_raw)
 		x_test = tokenizer.texts_to_matrix(X_raw_test, mode='binary')
-		prediction = model.predict(np.array(x_test))
+		prediction = self.model.predict(np.array(x_test))
 		# print(prediction)
 		class_num = int(np.argmax(prediction[0]))
-		name_category = Product.objects.filter(is_tried=True).select_related('category').distinct('category__title').values_list('category__title', flat=True)[class_num]
-		K.clear_session()
+		name_category = self.category_numbers[class_num]
 		return name_category
+	
+	def __exit__(self, exc_type, exc_val, exc_tb):
+		K.clear_session()
 
 
 class NeuralNetworkOption1(object):
