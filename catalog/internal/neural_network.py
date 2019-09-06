@@ -26,10 +26,28 @@ import numpy as np
 from keras.preprocessing.text import Tokenizer
 import pandas as pd
 
-import re
+from time import sleep
 
+import re
 import ssl
 
+
+def get_category_to_not_tried_products():
+	products = Product.objects.filter(is_tried=False)
+	network = NeuralNetworkOption2()
+	count, i = products.count(), 0
+	for product in products:
+		name_category = network.predict(product.title, 1000)
+		raw = product.raw
+		if not raw:
+			raw = {}
+		raw['category_from_neural_network'] = name_category
+		product.raw = raw
+		product.save()
+		i += 1
+		print('{} product processed from {}'.format(i, count))
+		sleep(2)
+		
 
 def training_the_entire_base():
 	pass
@@ -143,10 +161,10 @@ class NeuralNetworkOption2(object):
 		tokenizer.fit_on_texts(X_raw)
 		x_test = tokenizer.texts_to_matrix(X_raw_test, mode='binary')
 		prediction = model.predict(np.array(x_test))
-		print(prediction)
+		# print(prediction)
 		class_num = int(np.argmax(prediction[0]))
-		# Product.objects.filter(is_tried=True).select_related('category').distinct('category__title').values_list('category__title', flat=True)[
-		return class_num
+		name_category = Product.objects.filter(is_tried=True).select_related('category').distinct('category__title').values_list('category__title', flat=True)[class_num]
+		return name_category
 
 
 class NeuralNetworkOption1(object):
