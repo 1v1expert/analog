@@ -34,13 +34,14 @@ import ssl
 
 def get_category_to_not_tried_products():
 	products = Product.objects.filter(is_tried=False)
-	network = NeuralNetworkOption2()
 	count, i = products.count(), 0
 	for product in products:
 		raw = product.raw
 		i += 1
 		if raw.get('category_from_neural_network'):
 			continue
+			
+		network = NeuralNetworkOption2()
 		name_category = network.predict(product.title, 1000)
 		if not raw:
 			raw = {}
