@@ -38,6 +38,7 @@ def get_category_to_not_tried_products():
 	count, i = products.count(), 0
 	for product in products:
 		raw = product.raw
+		i += 1
 		if raw.get('category_from_neural_network'):
 			continue
 		name_category = network.predict(product.title, 1000)
@@ -46,7 +47,6 @@ def get_category_to_not_tried_products():
 		raw['category_from_neural_network'] = name_category
 		product.raw = raw
 		product.save()
-		i += 1
 		print('{} product processed from {}'.format(i, count))
 		sleep(5)
 		
