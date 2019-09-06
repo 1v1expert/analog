@@ -49,7 +49,7 @@ def get_category_to_not_tried_products():
 		product.raw = raw
 		product.save()
 		print('{} product processed from {}'.format(i, count))
-		sleep(5)
+		# sleep(5)
 		
 
 def training_the_entire_base():
