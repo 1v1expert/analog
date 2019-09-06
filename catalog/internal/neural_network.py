@@ -15,6 +15,8 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dense, Activation, Dropout, Embedding
 import pandas as pd
 import keras.utils
+from keras import backend as K
+
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing import sequence
 from sklearn.preprocessing import LabelEncoder
@@ -167,6 +169,7 @@ class NeuralNetworkOption2(object):
 		# print(prediction)
 		class_num = int(np.argmax(prediction[0]))
 		name_category = Product.objects.filter(is_tried=True).select_related('category').distinct('category__title').values_list('category__title', flat=True)[class_num]
+		K.clear_session()
 		return name_category
 
 
