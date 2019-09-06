@@ -43,7 +43,7 @@ def get_category_to_not_tried_products():
 		if raw.get('category_from_neural_network'):
 			continue
 			
-		network = NeuralNetworkOption2()
+		network = NeuralNetworkOption2(loadmodel=True)
 		name_category = network.predict(product.title, 1000)
 		if not raw:
 			raw = {}
@@ -86,9 +86,15 @@ class NeuralNetworkOption2(object):
 
 	"""
 	
-	def __init__(self, percent=100):
+	def __init__(self, percent=100, loadmodel=False):
 		if percent > 100 or percent < 0:
 			raise Exception('Error percent')
+		
+		if loadmodel:
+			try:
+				self.model = load_model('classifier.h5')
+			except OSError:
+				self.model = None
 		
 		nltk.download('stopwords')
 		# stop = set(stopwords.words('russian', ))
@@ -158,7 +164,8 @@ class NeuralNetworkOption2(object):
 		model.save('classifier.h5')
 	
 	def predict(self, str_query, numwords):
-		model = load_model('classifier.h5')
+		if self.model is None:
+			raise Exception('Model classifier not loaded')
 		tokenizer = Tokenizer(num_words=numwords)
 		formalized = self.remove_stop_words(str_query)
 		X_raw_test = [formalized]
