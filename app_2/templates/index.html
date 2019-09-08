@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>web host</title>
+<title>AnalogPro</title>
 
 <!--=========================== Bootstrap core CSS ===============================-->
 
@@ -55,7 +55,64 @@
 <!-- Custom styles for this template -->
 
 </head>
+{# color: #44abd1  #323232  #e4e4e4 #}
+<style>
+    .service-container {
+        background-color: #fafafa;
+    }
+    .carousel .item {
+        height: 400px;
+    }
+    .letter-container h1 a {
+            color: #666;
+    }
+    .top-area {
+        background-color: #323232;  {##fafafa;#}
+    }
+    #main-nav {
+        border-top: none;
+        border-bottom: solid 2px #323232;    {# #0088cc; #}
+    }
+    #menu-icon:after {
+            border-bottom-color: #323232;
+    }
+    #lp-pom-block-10 {
+        background-color: #fafafa;
+        background-image: none;
+    }
+    .banner-text {
+        color: #333;
+    }
+    .banner-dot {
+        background: none;
+    }
+    .top-link ul li a {
+        color: #666;
+    }
+    .oder a {
+        color: #666;
+    }
 
+    .search-btn {
+        background-color: #666;
+    }
+    .input-append .btn-group:last-child>.dropdown-toggle {
+        background: #666;
+    }
+    .carousel-indicators li {
+            border: 1px solid #666;
+    }
+    .carousel-indicators .active {
+            background-color: #666;
+    }
+    .carousel-indicators {
+        bottom: 40px;
+    }
+    .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+        font-weight: bolder;
+        color: #666;
+    }
+</style>
 <body>
 <!--==============================Header=============================-->
 
@@ -78,7 +135,7 @@
         <div class="col-xs-12 col-sm-6 col-md-3">
           <div class="oder">
             <div class="oder-content">
-              <div class="container10"> <a id="login-menu" href="#modal" >Ввойти или зарег.</a>
+              <div class="container10"> <a id="login-menu" href="#modal" >Войти или зарег.</a>
                 <div id="modal" class="login-popupContainer" style="display:none;">
                   <div class="popupHeader">
                     <div class="header_title">Авторизация</div>
@@ -149,7 +206,11 @@
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-          <a class="navbar-brand" href="#"><img src="{% static 'images/logo_analogpro.jpg' %}" alt="" style="height: 50px"></a> </div>
+          <a class="navbar-brand" href="#">
+              <h4>AnalogPro</h4>
+{#              <img src="{% static 'images/logo_analogpro.jpg' %}" alt="" style="height: 50px;padding-bottom: 10px;">#}
+          </a>
+        </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="dropdown active"> <a href="#home" >Главная </a> </li>
@@ -176,12 +237,12 @@
 <!--=============================Banner=============================-->
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
-  <div id="lp-pom-block-10" style="height: 500px;">
-    <div class="banner-dot" style="height: 500px">
+  <div id="lp-pom-block-10" style="height: 400px;">
+    <div class="banner-dot" style="height: 400px">
       <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <lie data-target="#myCarousel" data-slide-to="1"></lie>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+{#        <li data-target="#myCarousel" data-slide-to="2"></li>#}
       </ol>
       <div class="baaner-container">
         <div class="carousel-inner">
@@ -189,12 +250,20 @@
             <div class="container">
               <div class="carousel-caption">
 {#                <p class="main-image"><img src="{% static 'images/icon1.png' %}" alt="" /></p>#}
-                <div class="letter-container">
-                  <h1><a href="#">Лучший сервис по подбору аналогов</a></h1>
+                  <div class="letter-container">
+                  <h1><a href="#">Подбор аналогов в категории кабельных лотков</a></h1>
                 </div>
-                <h2>Быстрый и надёжный</h2>
+{#                <div class="letter-container">#}
+{#                  <h1><a href="#">Подбор аналогов в категории кабельных лотков</a></h1>#}
+{#                </div>#}
+{#                <h2>Быстрый и надёжный</h2>#}
                 <p class="banner-text">Система поиска позволяет по заданному товару (артикулу), найти товар-аналог другого производителя. Система ориентирована на поиск товаров-аналогов, с учетом технических характеристик </p>
-                <p> <a class="green-button wobble-horizontal" href="#" role="button">Подробнее </a> <a class="blue-button wobble-horizontal" href="#" role="button">Попробовать </a> </p>
+                <p>
+                    <a class="blue-button wobble-horizontal" href="#" role="button">Подробнее </a>
+                    <a class="blue-button hvr-icon-wobble-horizontal" href="#" role="button">Попробовать <i class="fa fa-arrow-right hvr-icon"></i> </a>
+{#                    <a class="green-button wobble-horizontal" href="#" role="button">Подробнее </a>#}
+{#                    <a class="blue-button wobble-horizontal" href="#" role="button">Попробовать </a>#}
+                </p>
               </div>
             </div>
           </div>
@@ -235,13 +304,14 @@
         </div>
       </div>
       <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-      <div class="banner-arrow">
-        <p class="pulse"><a href="#choose"><img src="{% static 'images/arrow-bottom.png' %}" alt=""/></a></p>
-      </div>
+{#      <div class="banner-arrow">#}
+{#        <p class="pulse"><a href="#choose"><img src="{% static 'images/arrow-bottom.png' %}" alt=""/></a></p>#}
+{#      </div>#}
     </div>
   </div>
 </div>
 
+<div class="seprator-block" style="height: 20px;"></div>
 <!--============================Home=============================-->
 {#<div id="choose" class="choose-container" >#}
 {#  <div class="container">#}
@@ -742,10 +812,10 @@
    Letter effect
     ===================*/
 
-  $(function() {
-					$(".letter-container h1 a").lettering();
-
-				});
+  {#$(function() {#}
+	{#				$(".letter-container h1 a").lettering();#}
+  {##}
+	{#			});#}
 
 
   /*===================
