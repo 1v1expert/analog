@@ -7,4 +7,4 @@ class SearchForm(forms.Form):
 	                                                        'placeholder': "Введите номер артикула",
 	                                                        'data-toggle': 'dropdown'
 	                                                        }))
-	manufacturer_to = forms.ModelChoiceField(queryset=Manufacturer.objects.all(), empty_label=None)
+	manufacturer_to = forms.ModelChoiceField(queryset=Manufacturer.objects.all(), widget=forms.Select(), empty_label=None)

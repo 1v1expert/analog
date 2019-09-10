@@ -52,13 +52,13 @@
 {#                                                <input class="search" type="text" placeholder="Введите номер артикула">#}
                                                 <div class="btn-group">
 
-                                                    <button class="btn dropdown-toggle" data-toggle="dropdown"> EAE
+                                                    <button class="btn dropdown-toggle" data-toggle="dropdown">
                                                         <span
                                                                 class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         {% for manufacturer in  form.manufacturer_to %}
-                                                        <li><a href="#"> {{ manufacturer }} </a> </li>
+                                                        <li><a href="#"> {{ manufacturer.choice_label }} </a> </li>
 {#                                                        <li><a href="#">EAE</a></li>#}
 {#                                                        <li><a href="#">ДКС</a></li>#}
 {#                                                        <li><a href="#">KM-профиль</a></li>#}
