@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from app_2.forms import SearchForm
 
 
 def redirect_to_old_template(request):
@@ -6,4 +7,7 @@ def redirect_to_old_template(request):
 
 
 def view_main_page(request):
-	return render(request, 'index.html', {})
+	form = SearchForm()
+	return render(request, 'main.html', {'form': form})
+
+# https://ianlunn.github.io/Hover/
