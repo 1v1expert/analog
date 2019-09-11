@@ -19,8 +19,8 @@ urlpatterns = [
     url(r'^jet/', include('jet.urls', 'jet')),
     url(r'^admin/search/', include('catalog.urls')),
     url(r'^api/', include('api.urls')),
-    url(r'^', include('app_2.urls')),
-    url(r'^old/', include('app.urls')),
+    url(r'^', include('app.urls')),
+    # url(r'^old/', include('app.urls')),
     url(r'^admin/', admin.site.urls),
     
 ] + static(settings.FILES_URL, document_root=settings.FILES_ROOT)

@@ -180,3 +180,8 @@ def email_confirmation(request, verification_code, user_id):
 			else:
 				msg = 'Код неверен'
 		return render(request, 'email_confirmation.html', {'conf_form': confirmation_form, 'msg': msg})
+
+
+def landing_page_view(request):
+	# https://ianlunn.github.io/Hover/
+	return render(request, 'landing_page.html', {})
