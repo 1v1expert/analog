@@ -84,8 +84,16 @@ def result_processing(instance, request, product, default=True):
 		              {'Results': instance.founded_products, 'Product': product, 'Error': error, 'Lead_time': instance.lead_time})
 
 
-def result_api_processing(instance, request, product, default=True):
+def result_api_processing(instance, request, default=True):
+	# try:
 	instance.global_search(default=default)
+	# except Exception as e:
+	# 	print(e)
+	if instance.error:
+		error = 'Ошибка'
+		return JsonResponse(
+			{'result': [], 'error': error}, content_type='application/json')
+		
 	number_of_products_found = instance.founded_products.count()
 	if number_of_products_found:
 		# if number_of_products_found == 1:

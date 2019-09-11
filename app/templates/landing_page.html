@@ -283,6 +283,9 @@
                                         <div class="col-md-10 col-md-offset-1">
                                             <form action="{% url 'api:search' %}" method="post" id="form">
                                                 {% csrf_token %}
+{#                                            <input type="hidden" name="advanced_search" value="False">#}
+                                            <input type="hidden" name="manufacturer_to" id="manufacturer_to" value="{{ manufacturers.first.id }}">
+{#                                            <input type="hidden" name="manufacturer_from" id="manufacturer_from" value="{{ manufacturers.first.id }}">#}
                                                 <div class="input-append">
                                                     <input class="search" type="text" name="article"
                                                            placeholder="Введите номер артикула">
@@ -473,14 +476,24 @@ $(function () {
      ==================*/
     var form = $('#form');
     form.submit(function (e) {
-        console.log(form.serialize())
+        console.log(form.serialize());
         e.preventDefault();
         $.ajax({
             type: "POST",
             url: "{% url 'api:search' %}",
+            {#async: false,#}
             data: form.serialize(),
-            success: function (data) {
-                console.log(data)
+            success: function (response) {
+                console.log(response);
+                if (!response.error){
+                    alert(response.result[0])
+                }
+                else {alert(response.error)}
+                {#alert(response);#}
+            },
+            error: function (error) {
+                console.log(error);
+                alert('Ошибка поиска');
             }
         })
     });
@@ -495,7 +508,8 @@ $(function () {
     manufactures.click(function (self) {
         console.log(self.target.id, self);
         $('#btn_manufacturer').html(self.target.text + '<span class="caret"></span>')
-            .attr('data-id_manufacturer', self.target.id)
+            .attr('data-id_manufacturer', self.target.id);
+        $('#manufacturer_to').val(self.target.id);
     })
 });
 

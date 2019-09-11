@@ -6,17 +6,20 @@ from catalog.choices import TYPES
 
 
 class SearchProducts(object):
-	def __init__(self, request, form, product):
+	def __init__(self, request, form):
 
 		self.request = request
 		self.form = form
-		# self.manufacturer_from = form.cleaned_data['manufacturer_from']
+		# self.manufacturer_to = form.cleaned_data['manufacturer_to']
+		self.manufacturer_from = None
+		self.product = None
 		self.manufacturer_to = form.cleaned_data['manufacturer_to']
-		# self.article = form.cleaned_data['article']
-		self.product = product
+		self.article = form.cleaned_data['article']
+		# self.product = product
 		self.founded_products = None
 		self.start_time = time.time()
 		self.lead_time = 0
+		self.error = False
 	
 	@staticmethod
 	def finding_the_closest_attribute_value(all_attr, step_attr, method, types='sft'):
@@ -135,10 +138,23 @@ class SearchProducts(object):
 			if count == 1:
 				self.founded_products = middle_results
 				return
-
-	def global_search(self, default=True):
+	
+	def check_product(self):
+		self.manufacturer_from = self.form.cleaned_data.get('manufacturer_from')
+		if self.manufacturer_from:
+			self.product = Product.objects.filter(article=self.article, manufacturer=self.manufacturer_from).first()
+		else:
+			self.product = Product.objects.filter(article=self.article).first()
 		
-		self.founded_products = Product.objects.filter(manufacturer=self.manufacturer_to, category=self.product.category)
+		if not self.product:
+			self.error = True
+		
+		return not self.error
+		
+	def global_search(self, default=True):
+		if not self.check_product():
+			return self
+		self.founded_products = Product.objects.filter(manufacturer=self.manufacturer_to, category=self.product.category).prefetch_related('fixed_attrs_vals', 'unfixed_attrs_vals')
 		if self.founded_products.exists():
 			# print('Count fnd prdcts-> ', self.founded_products.count())
 			self.smart_attribute_search(default=default)

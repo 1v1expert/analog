@@ -276,7 +276,7 @@
 
             form.submit(function (e) {
                 var url = form.attr('action');
-                {#console.log(form.serialize());#}
+                console.log(form.serialize());
                 e.preventDefault();
                 $.ajax({
                     type: "POST",

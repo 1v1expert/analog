@@ -24,12 +24,12 @@ def check_product(article, manufacturer_from) -> dict:
 		        'product': product}
 		
 	except Product.DoesNotExist as e:
-		response['correctly'] = False
+		# response['correctly'] = False
 		response['error_system'] = 'article: {}; manufacturer_from: {}; {}'.format(article, manufacturer_from, e)
 		response['error'] = 'По артикулу: {} и производителю: {} товара не найдено'.format(article, manufacturer_from)
 		
 	except Product.MultipleObjectsReturned as e:
-		response['correctly'] = False
+		# response['correctly'] = False
 		response['error_system'] = 'article: {}; manufacturer_from: {}; {}'.format(article, manufacturer_from, e)
 		response['error'] = "Найдено несколько продуктов, уточните поиск"
 	
@@ -38,23 +38,27 @@ def check_product(article, manufacturer_from) -> dict:
 
 @a_decorator_passing_logs
 def search_from_form(request):
+	# print(vars(request), request.method, request.method.POST)
 	if request.method == 'POST':
 		form = SearchForm(request.POST)
+		print( 'POST')
 		if form.is_valid():
-			article = form.cleaned_data['article']
-			manufacturer_from = form.cleaned_data['manufacturer_from']
+			# article = form.cleaned_data['article']
+			# manufacturer_from = form.cleaned_data['manufacturer_from']
 			
-			resp = check_product(article, manufacturer_from)
+			# resp = check_product(article, manufacturer_from)
 			
-			if resp['correctly']:
-				result = SearchProducts(request, form, resp['product'])
-				return result_api_processing(result, request, resp['product'], default=True)
-			else:
-				MainLog(user=request.user, message=resp['error_system']
-				        ).save()
-				return JsonResponse(resp, content_type='application/json')
+			# if resp.get('correctly'):
 			
-		return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
+			result = SearchProducts(request, form)
+			return result_api_processing(result, request, default=True)
+			# else:
+				# MainLog(user=request.user, message=resp['error_system']
+				#         ).save()
+				# return JsonResponse(resp, content_type='application/json')
+			
+		return JsonResponse({'error':'not valid form'}, content_type='application/json')
+		# return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
 	
 	return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"}, content_type='application/json')
 
