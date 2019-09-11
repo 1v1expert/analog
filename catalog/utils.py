@@ -10,7 +10,7 @@ class SearchProducts(object):
 
 		self.request = request
 		self.form = form
-		self.manufacturer_from = form.cleaned_data['manufacturer_from']
+		# self.manufacturer_from = form.cleaned_data['manufacturer_from']
 		self.manufacturer_to = form.cleaned_data['manufacturer_to']
 		# self.article = form.cleaned_data['article']
 		self.product = product
@@ -136,7 +136,6 @@ class SearchProducts(object):
 				self.founded_products = middle_results
 				return
 
-	
 	def global_search(self, default=True):
 		
 		self.founded_products = Product.objects.filter(manufacturer=self.manufacturer_to, category=self.product.category)

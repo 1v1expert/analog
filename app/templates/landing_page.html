@@ -230,18 +230,6 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="dropdown active"> <a href="#home" >Главная </a> </li>
-{#            <li><a href="#features">Features</a></li>#}
-{#            <li><a href="#services">service</a></li>#}
-{#            <li><a href="#offer">Offer</a></li>#}
-{#            <li><a href="#web-hosting">Pricing</a></li>#}
-{#            <li><a href="#clients">Партнёрам</a></li>#}
-{#            <li class="dropdown"> <a href="blog.html" class="dropdown-toggle" data-toggle="dropdown">Blog <b class="caret"></b></a>#}
-{#              <ul class="dropdown-menu">#}
-{#                <li><a href="blog.html">Blog List</a></li>#}
-{#                <li><a href="blog1.html">Blog small img List</a></li>#}
-{#                <li><a href="blog-post.html">Single Blog page</a></li>#}
-{#              </ul>#}
-{#            </li>#}
             <li><a href="#contact">Контакты</a></li>
           </ul>
         </div>
@@ -269,10 +257,6 @@
                                     <div class="letter-container">
                                         <h1><a href="#">Подбор аналогов в категории кабельных лотков</a></h1>
                                     </div>
-                                    {#                <div class="letter-container">#}
-                                    {#                  <h1><a href="#">Подбор аналогов в категории кабельных лотков</a></h1>#}
-                                    {#                </div>#}
-                                    {#                <h2>Быстрый и надёжный</h2>#}
                                     <p class="banner-text">Система поиска позволяет по заданному товару (артикулу),
                                         найти товар-аналог другого производителя. Система ориентирована на поиск
                                         товаров-аналогов, с учетом технических характеристик </p>
@@ -297,33 +281,33 @@
                                     {#                <div class="container">#}
                                     <div class="row" style="margin-top: 40px;">
                                         <div class="col-md-10 col-md-offset-1">
-                                            <div class="input-append">
-{#{{ form.article }}#}
-                                                <input class="search" type="text" placeholder="Введите номер артикула">
-                                                <div class="btn-group">
-{#                                                {{ form.manufacturer_to }}#}
-
-                                                    <button class="btn dropdown-toggle" data-toggle="dropdown" data-id_manufacturer=false id="btn_manufacturer" style="min-width: 150px;"> {{ manufacturers.first }} <span class="caret"></span></button>
-                                                    <ul class="dropdown-menu">
-                                                        {% for manufacturer in  manufacturers %}
-                                                        <li><a href="#" class="manufacturers" id="{{ manufacturer.id }}"> {{ manufacturer }} </a> </li>
-{#                                                        <li><a href="#">EAE</a></li>#}
-{#                                                        <li><a href="#">ДКС</a></li>#}
-{#                                                        <li><a href="#">KM-профиль</a></li>#}
-{#                                                        <li><a href="#">OSTEC</a></li>#}
-                                                        {% endfor %}
-                                                    </ul>
+                                            <form action="{% url 'api:search' %}" method="post" id="form">
+                                                {% csrf_token %}
+                                                <div class="input-append">
+                                                    <input class="search" type="text" name="article"
+                                                           placeholder="Введите номер артикула">
+                                                    <div class="btn-group">
+                                                        <button class="btn dropdown-toggle" data-toggle="dropdown"
+                                                                data-id_manufacturer=false id="btn_manufacturer"
+                                                                style="min-width: 150px;"> {{ manufacturers.first }}
+                                                            <span class="caret"></span></button>
+                                                        <ul class="dropdown-menu">
+                                                            {% for manufacturer in  manufacturers %}
+                                                                <li><a href="#" class="manufacturers"
+                                                                       id="{{ manufacturer.id }}"> {{ manufacturer }} </a>
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <p class="search-area"><a href="#" class="search-btn">Искать </a></p>
+                                                <input type="submit" class="search-area search-btn"
+                                                       value="Искать"/>
+{#                                                <p class="search-area"><a href="#" class="search-btn">Искать </a></p>#}
+                                            </form>
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -339,362 +323,6 @@
         </div>
     </div>
 <div class="seprator-block" style="height: 20px;"></div>
-<!--============================Home=============================-->
-{#<div id="choose" class="choose-container" >#}
-{#  <div class="container">#}
-{#    <div class="row main-head">#}
-{#      <div class="col-md-6 col-md-offset-3">#}
-{#        <h1>Почему выбирают наш сервис?</h1>#}
-{#        <h2>Мы делаем мир лучше</h2>#}
-{#      </div>#}
-{#    </div>#}
-{#    <div class="row choose">#}
-{#      <div class="col-sm-6 col-md-3">#}
-{#        <div class="round1"><a href="#"><img src="{% static 'images/live-support.png' %}" alt=""></a></div>#}
-{#        <h2>Live Support</h2>#}
-{#        <p class="space-text">Web hosts can also provide data center space and connectivity to the Internet for provide data center space</p>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-3">#}
-{#        <div class="round2"><a href="#"><img src="{% static 'images/online-security.png' %}" alt=""></a></div>#}
-{#        <h2>Online Security</h2>#}
-{#        <p class="space-text"> Web hosts are companies that provide space on a server owned or leased for use by clients server owned </p>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-3">#}
-{#        <div class="round3"><a href="#"><img src="{% static 'images/hosting-solution.png' %}" alt=""></a></div>#}
-{#        <h2>Hosting Solutions</h2>#}
-{#        <p>The most basic is web page and small-scale file hosting, where files can be uploaded via page and small-scale</p>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-3">#}
-{#        <div class="round4"><a href="#"><img src="{% static 'images/quick-install.png' %}" alt=""></a></div>#}
-{#        <h2>Quick Install</h2>#}
-{#        <p class="choose1"> The files are usually delivered to the Web "as is" or with minimal processing files are usually delivered to the . </p>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
-
-<!--=============================Features=============================-->
-{#<div id="features" class="features-container">#}
-{#  <div class="container">#}
-{#    <div class="row main-head">#}
-{#      <div class="col-md-12">#}
-{#        <h1>What's features in our hosting</h1>#}
-{#        <h2>Its an good oppertunity </h2>#}
-{#        <p>The scope of web hosting services varies greatly. The most basic is web page and small-scale file hosting, where files can be uploaded via File Transfer Protocol or a Web interface. The files are usually delivered to the Web "as is" or with minimal processing. Personal web site hosting#}
-{#          is typically free, advertisement-sponsored, or inexpensive#}
-{#          is typically free, advertisement-sponsored, or inexpensive. </p>#}
-{#      </div>#}
-{#    </div>#}
-{#    <div class="row">#}
-{#      <div class="col-sm-6 col-md-6" >#}
-{#        <div class="features"> <span class="featuresIcon1"></span>#}
-{#          <h2>Unlimited bandwidth</h2>#}
-{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
-{#        </div>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-6" >#}
-{#        <div class="features"> <span class="featuresIcon2"></span>#}
-{#          <h2>Free domain names</h2>#}
-{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
-{#        </div>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-6" >#}
-{#        <div class="features"> <span class="featuresIcon3"></span>#}
-{#          <h2>Unlimited email accounts</h2>#}
-{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
-{#        </div>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-6" >#}
-{#        <div class="features"> <span class="featuresIcon4"></span>#}
-{#          <h2>99.9 % uptime guarantee</h2>#}
-{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
-{#        </div>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-6" >#}
-{#        <div class="features"> <span class="featuresIcon5"></span>#}
-{#          <h2>Easy website builder</h2>#}
-{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
-{#        </div>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-6" >#}
-{#        <div class="features"> <span class="featuresIcon6"></span>#}
-{#          <h2>E-commerce solutions</h2>#}
-{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
-{#        </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
-
-<!--==============================Services=============================-->
-
-{#<div id="services" class="service-container">#}
-{#  <div class="container">#}
-{#    <div class="row main-head">#}
-{#      <div class="col-md-12">#}
-{#        <h1>What's services we offer</h1>#}
-{#        <h2>We create new ground </h2>#}
-{#        <p>The scope of web hosting services varies greatly. The most basic is web page and small-scale file hosting, where files can be uploaded via File Transfer Protocol or a Web interface. The files are usually delivered to the Web "as is" or with minimal processing. Personal web site hosting#}
-{#          is typically free, advertisement-sponsored, or inexpensive#}
-{#          is typically free, advertisement-sponsored, or inexpensive. </p>#}
-{#      </div>#}
-{#    </div>#}
-{#    <div class="row">#}
-{#      <div class="col-sm-12 col-md-6 " >#}
-{#        <div class="service1"> <img src="{% static 'images/service-image.png' %}" alt=""> </div>#}
-{#      </div>#}
-{#      <div class="col-sm-12 col-md-6 service-text-area" >#}
-{#        <div class="service"> <span class="serviceIcon"></span>#}
-{#          <h2>Network Services</h2>#}
-{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae.consectetur adipiscing elit. </p>#}
-{#        </div>#}
-{#        <div class="service"> <span class="serviceIcon"></span>#}
-{#          <h2>Network Services</h2>#}
-{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
-{#        </div>#}
-{#        <div class="service"> <span class="serviceIcon"></span>#}
-{#          <h2>Network Services</h2>#}
-{#          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, lectus tempus placerat mollis, orci augue vitae. </p>#}
-{#        </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
-
-<!--==============================Offer==============================-->
-
-{#<div id="offer" >#}
-{#  <div id="lp-pom-block-11">#}
-{#    <div class="container">#}
-{#      <div class="row offer-head">#}
-{#        <div class="col-md-12">#}
-{#          <h1>Special hot offer</h1>#}
-{#          <h2>You can foster new social connections</h2>#}
-{#        </div>#}
-{#      </div>#}
-{#      <div class="row">#}
-{#        <div class="col-sm-6 col-md-6" >#}
-{#          <div class="offer-box1">#}
-{#            <div class="offer-text">#}
-{#              <ul>#}
-{#                <li> Free Website Builde</li>#}
-{#                <li>Free Domain Registration</li>#}
-{#                <li> Dedicated hosting</li>#}
-{#                <li> Money Back Guarantee</li>#}
-{#                <li>24/7 Quality Support</li>#}
-{#                <li> Dedicated hosting</li>#}
-{#              </ul>#}
-{#            </div>#}
-{#            <div class="offer-image">#}
-{#              <div class="offer-image-box"><span>$2</span>.50#}
-{#                <p>Per month</p>#}
-{#              </div>#}
-{#            </div>#}
-{#          </div>#}
-{#          <div class="offer-boxhead">Small business web hosting<a href="#"><img src="{% static 'images/more-arrow.png' %}" alt=""/> </a></div>#}
-{#        </div>#}
-{#        <div class="col-sm-6 col-md-6" >#}
-{#          <div class="offer-box1">#}
-{#            <div class="offer-text">#}
-{#              <ul>#}
-{#                <li>Free Website Builde</li>#}
-{#                <li>Free Domain Registration</li>#}
-{#                <li> Dedicated hosting</li>#}
-{#                <li>Money Back Guarantee</li>#}
-{#                <li>24/7 Quality Support</li>#}
-{#                <li>Free Domain Registration</li>#}
-{#              </ul>#}
-{#            </div>#}
-{#            <div class="offer-image1">#}
-{#              <div class="offer-image-box"><span>$3</span>.50#}
-{#                <p>Per month</p>#}
-{#              </div>#}
-{#            </div>#}
-{#          </div>#}
-{#          <div class="offer-boxhead">Host your website <a href="#"><img src="{% static 'images/more-arrow.png' %}" alt=""/> </a> </div>#}
-{#        </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
-
-<!--==============================Pricing tables=============================-->
-
-{#<div id="web-hosting" class="price-container">#}
-{#  <div class="container">#}
-{#    <div class="row main-head">#}
-{#      <div class="col-md-12">#}
-{#        <h1>Our pricing tables</h1>#}
-{#        <h2>Solutions to everyone </h2>#}
-{#      </div>#}
-{#    </div>#}
-{#    <div class="row">#}
-{#      <div class="col-sm-6 col-md-3" >#}
-{#        <div class="main-table">#}
-{#          <div class="price-table-top"> <a class="price-table-topbg ">#}
-{#            <h3>Basic Plan</h3>#}
-{#            </a> <a class="price-circle">#}
-{#            <p class="price">$100</p>#}
-{#            <p class="month">Monthly</p>#}
-{#            </a> </div>#}
-{#          <ul class="price-plans">#}
-{#            <li class="price-plan">5 bonus points every month</li>#}
-{#            <li class="price-plan">2 Months Support</li>#}
-{#            <li class="price-plan">10 Subdomains</li>#}
-{#            <li class="price-plan">10 Subdomains</li>#}
-{#          </ul>#}
-{#          <a href="#" class="price-buy-now">Buy Now</a> </div>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-3" >#}
-{#        <div class="main-table">#}
-{#          <div class="price-table-top"> <a class="price-table-topbg ">#}
-{#            <h3>Business Plan</h3>#}
-{#            </a> <a class="price-circle">#}
-{#            <p class="price">$150</p>#}
-{#            <p class="month">Monthly</p>#}
-{#            </a> </div>#}
-{#          <ul class="price-plans">#}
-{#            <li class="price-plan">5 bonus points every month</li>#}
-{#            <li class="price-plan">2 Months Support</li>#}
-{#            <li class="price-plan">10 Subdomains</li>#}
-{#            <li class="price-plan">10 Subdomains</li>#}
-{#          </ul>#}
-{#          <a href="#" class="price-buy-now">Buy Now</a> </div>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-3" >#}
-{#        <div class="main-table">#}
-{#          <div class="price-table-top"> <a class="price-table-topbg ">#}
-{#            <h3>Advanced Plan</h3>#}
-{#            </a> <a class="price-circle">#}
-{#            <p class="price">$290</p>#}
-{#            <p class="month">Monthly</p>#}
-{#            </a> </div>#}
-{#          <ul class="price-plans">#}
-{#            <li class="price-plan">5 bonus points every month</li>#}
-{#            <li class="price-plan">2 Months Support</li>#}
-{#            <li class="price-plan">10 Subdomains</li>#}
-{#            <li class="price-plan">10 Subdomains</li>#}
-{#          </ul>#}
-{#          <a href="#" class="price-buy-now active">Buy Now</a> </div>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-3" >#}
-{#        <div class="main-table">#}
-{#          <div class="price-table-top"> <a class="price-table-topbg ">#}
-{#            <h3>Unlimited Plan</h3>#}
-{#            </a> <a class="price-circle">#}
-{#            <p class="price">$390</p>#}
-{#            <p class="month">Monthly</p>#}
-{#            </a> </div>#}
-{#          <ul class="price-plans">#}
-{#            <li class="price-plan">5 bonus points every month</li>#}
-{#            <li class="price-plan">2 Months Support</li>#}
-{#            <li class="price-plan">10 Subdomains</li>#}
-{#            <li class="price-plan">10 Subdomains</li>#}
-{#          </ul>#}
-{#          <a href="#" class="price-buy-now">Buy Now</a> </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
-<!--==============================Our clients============================-->
-
-{#<div id="clients" class="client-container">#}
-{#  <div class="container">#}
-{#    <div class="row main-head">#}
-{#      <div class="col-md-12">#}
-{#        <h1>Our clients</h1>#}
-{#        <h2>Some of our satisfied clients </h2>#}
-{#      </div>#}
-{#    </div>#}
-{#    <div class="row">#}
-{#      <div class="col-md-8 col-md-offset-2" >#}
-{#        <div class="client">#}
-{#          <div id="owl-sponsors" class="owl-carousel">#}
-{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo1.png' %}" alt="Themeforest" width="260" height="80"></a> </div>#}
-{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo2.png' %}" alt="Photodune" width="260" height="80"></a> </div>#}
-{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo3.png' %}" alt="Themeforest" width="260" height="80"></a> </div>#}
-{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo4.png' %}" alt="AudioJungle" width="260" height="80"></a> </div>#}
-{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo5.png' %}" alt="Graphicriver" width="260" height="80"></a> </div>#}
-{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo2.png' %}" alt="Photodune" width="260" height="80"></a> </div>#}
-{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo3.png' %}" alt="Themeforest" width="260" height="80"></a> </div>#}
-{#            <div class="item"> <a target="_blank" href="#"><img src="{% static 'images/client-logo4.png' %}" alt="AudioJungle" width="260" height="80"></a> </div>#}
-{#          </div>#}
-{#          <div class="sponsor-title-nav">#}
-{#            <div class="owl-Navigation"> <a class="btn prev"><img src="{% static 'images/prev-arrow.png' %}" alt=""/></a> <a class="btn next"><img src="{% static 'images/next-arrow.png' %}" alt=""/></a> </div>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
-
-<!--================================Client reviews=============================-->
-
-{#<div class="clientreview-container">#}
-{#  <div class="container">#}
-{#    <div class="row main-head">#}
-{#      <div class="col-md-12">#}
-{#        <h1>Client Reviews</h1>#}
-{#        <h2>Few words from our satisfied customers </h2>#}
-{#      </div>#}
-{#    </div>#}
-{#    <div class="col-lg-12 ">#}
-{#      <div class="wpb_text_column wpb_content_element ">#}
-{#        <div class="wpb_wrapper">#}
-{#          <div class="testimonial ">#}
-{#            <ul class="row">#}
-{#              <li class="col-sm-6 col-md-6">#}
-{#                <blockquote class="">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid consequuntur unde quae totam recusandae<span class="arrowbubble"></span></blockquote>#}
-{#                <div class="testiimg"><img width="100" height="100" src="{% static 'images/client-image.png' %}" alt="testimonial1" ></div>#}
-{#                <div class="testiinfo">#}
-{#                  <h4 class="testititle">Catherine Grace</h4>#}
-{#                  <span>CEO Digitalcraft</span> </div>#}
-{#                <div class="clearfix"></div>#}
-{#              </li>#}
-{#              <li class="col-sm-6 col-md-6">#}
-{#                <blockquote class="">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid consequuntur unde quae totam recusandae.<span class="arrowbubble"></span></blockquote>#}
-{#                <div class="testiimg"><img width="100" height="100" src="{% static 'images/client-image.png' %}"  alt="testimonial2"></div>#}
-{#                <div class="testiinfo">#}
-{#                  <h4 >Jane Doe</h4>#}
-{#                  <span> Themotiko Developer </span></div>#}
-{#                <div class="clearfix"></div>#}
-{#              </li>#}
-{#            </ul>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
-
-<!--================================Search domin=============================-->
-
-{#<div id="lp-pom-block-12">#}
-{#  <div class="container">#}
-{#    <div class="row">#}
-{#      <div class="col-md-12 domin-head">#}
-{#        <h1>Поиск аналога по артикулу</h1>#}
-{#      </div>#}
-{#    </div>#}
-{#    <div class="row">#}
-{#      <div class="col-md-8 col-md-offset-2" >#}
-{#        <div class="input-append">#}
-{#          <input class="search" type="text" placeholder="Введите номер артикула">#}
-{#          <div class="btn-group">#}
-{#            <button class="btn dropdown-toggle" data-toggle="dropdown"> EAE <span class="caret"></span> </button>#}
-{#            <ul class="dropdown-menu">#}
-{#              <li><a href="#">EAE</a></li>#}
-{#              <li><a href="#">ДКС</a></li>#}
-{#              <li><a href="#">KM-профиль</a></li>#}
-{#              <li><a href="#">OSTEC</a></li>#}
-{#            </ul>#}
-{#          </div>#}
-{#        </div>#}
-{#        <p class="search-area"> <a href="#" class="search-btn">Искать </a> </p>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
 
 <!--==============================Get in touch=============================-->
 
@@ -838,10 +466,28 @@
 {#<a class="styles-open"  href="#closeoptions"> </a>#}
 {#<div class="styles-closed " > <a href="#options"> </a> </div>#}
 <script type="text/javascript">
-/*==================
+
+$(function () {
+    /*==================
+     Analogue search
+     ==================*/
+    var form = $('#form');
+    form.submit(function (e) {
+        console.log(form.serialize())
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'api:search' %}",
+            data: form.serialize(),
+            success: function (data) {
+                console.log(data)
+            }
+        })
+    });
+
+    /*==================
      Select manufacturer
      ==================*/
-$(function () {
     var manufactures = $('.manufacturers');
     $('#btn_manufacturer').attr('data-id_manufacturer', manufactures[0].id)
         .html(manufactures[0].text + '<span class="caret"></span>');
@@ -851,7 +497,7 @@ $(function () {
         $('#btn_manufacturer').html(self.target.text + '<span class="caret"></span>')
             .attr('data-id_manufacturer', self.target.id)
     })
-})
+});
 
 /*===================
    Letter effect

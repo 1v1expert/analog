@@ -37,7 +37,7 @@ def check_product(article, manufacturer_from) -> dict:
 	
 
 @a_decorator_passing_logs
-def search(request):
+def search_from_form(request):
 	if request.method == 'POST':
 		form = SearchForm(request.POST)
 		if form.is_valid():
