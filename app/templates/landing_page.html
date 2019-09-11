@@ -57,6 +57,19 @@
 </head>
 {# color: #44abd1  #323232  #e4e4e4 #}
 <style>
+    @media (min-width: 992px) {
+        .blue-button {
+            width: 300px;
+            padding: 20px 30px 20px 30px;
+            background-image: none;
+        }
+    }
+    .dropdown-menu {
+        min-width: 125px;
+    }
+    .input-append .btn-group:last-child>.dropdown-toggle {
+        font-size: 15px;
+    }
     .search {
         border: 1px solid rgb(102, 102, 102);
     }
@@ -264,8 +277,8 @@
                                         найти товар-аналог другого производителя. Система ориентирована на поиск
                                         товаров-аналогов, с учетом технических характеристик </p>
                                     <p>
-                                        <a class="blue-button wobble-horizontal" href="#" role="button">Подробнее </a>
-                                        <a class="blue-button hvr-icon-wobble-horizontal" href="#" role="button">Попробовать
+                                        <a class="blue-button wobble-horizontal" href="#" role="button"><i class="fa fa-arrow-left hvr-icon"></i> Поиск по спецификации </a>
+                                        <a class="blue-button hvr-icon-wobble-horizontal" href="#" role="button">Поиск по артикулу
                                             <i class="fa fa-arrow-right hvr-icon"></i> </a>
                                         {#                    <a class="green-button wobble-horizontal" href="#" role="button">Подробнее </a>#}
                                         {#                    <a class="blue-button wobble-horizontal" href="#" role="button">Попробовать </a>#}
@@ -282,25 +295,24 @@
                                     </div>
                                     <h2></h2>
                                     {#                <div class="container">#}
-
-                                    <div class="row" style="margin-top: 90px;">
-                                        <div class="col-md-8 col-md-offset-2">
+                                    <div class="row" style="margin-top: 40px;">
+                                        <div class="col-md-10 col-md-offset-1">
                                             <div class="input-append">
-{{ form.article }}
-{#                                                <input class="search" type="text" placeholder="Введите номер артикула">#}
+{#{{ form.article }}#}
+                                                <input class="search" type="text" placeholder="Введите номер артикула">
                                                 <div class="btn-group">
-                                                {{ form.manufacturer_to }}
+{#                                                {{ form.manufacturer_to }}#}
 
-{#                                                    <button class="btn dropdown-toggle" data-toggle="dropdown"> ss <span class="caret"></span></button>#}
-{#                                                    <ul class="dropdown-menu">#}
-{#                                                        {% for manufacturer in  form.manufacturer_to %}#}
-{#                                                        <li><a href="#"> {{ manufacturer.choice_label }} </a> </li>#}
+                                                    <button class="btn dropdown-toggle" data-toggle="dropdown" data-id_manufacturer=false id="btn_manufacturer" style="min-width: 150px;"> {{ manufacturers.first }} <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        {% for manufacturer in  manufacturers %}
+                                                        <li><a href="#" class="manufacturers" id="{{ manufacturer.id }}"> {{ manufacturer }} </a> </li>
 {#                                                        <li><a href="#">EAE</a></li>#}
 {#                                                        <li><a href="#">ДКС</a></li>#}
 {#                                                        <li><a href="#">KM-профиль</a></li>#}
 {#                                                        <li><a href="#">OSTEC</a></li>#}
-{#                                                        {% endfor %}#}
-{#                                                    </ul>#}
+                                                        {% endfor %}
+                                                    </ul>
                                                 </div>
                                             </div>
                                             <p class="search-area"><a href="#" class="search-btn">Искать </a></p>
@@ -826,6 +838,20 @@
 {#<a class="styles-open"  href="#closeoptions"> </a>#}
 {#<div class="styles-closed " > <a href="#options"> </a> </div>#}
 <script type="text/javascript">
+/*==================
+     Select manufacturer
+     ==================*/
+$(function () {
+    var manufactures = $('.manufacturers');
+    $('#btn_manufacturer').attr('data-id_manufacturer', manufactures[0].id)
+        .html(manufactures[0].text + '<span class="caret"></span>');
+
+    manufactures.click(function (self) {
+        console.log(self.target.id, self);
+        $('#btn_manufacturer').html(self.target.text + '<span class="caret"></span>')
+            .attr('data-id_manufacturer', self.target.id)
+    })
+})
 
 /*===================
    Letter effect
@@ -872,7 +898,7 @@
 
 <!--============== Form validation JS=================-->
 
-<script src="{% static 'js2/contact_form.js' %}" type="text/javascript"></script>
+{#<script src="{% static 'landing_js/contact_form.js' %}" type="text/javascript"></script>#}
 
 <!--============================Sticky.js===========================-->
 
@@ -880,30 +906,30 @@
 
 <!--============================Main.js===========================-->
 
-<script src="{% static 'js2/main.js' %}" type="text/javascript"></script>
+<script src="{% static 'landing_js/main.js' %}" type="text/javascript"></script>
 
 <!--=========================Scroll.js=========================-->
 
-<script src="{% static 'js2/scroll.js' %}" type="text/javascript"></script>
+<script src="{% static 'landing_js/scroll.js' %}" type="text/javascript"></script>
 
 <!--========================Lettering.js========================-->
 
-<script type="text/javascript" src="{% static 'js2/jquery.lettering.js' %}"></script>
+{#<script type="text/javascript" src="{% static 'js2/jquery.lettering.js' %}"></script>#}
 
 <!--========================Carousel.js slider=======================-->
 
-<script src="{% static 'js2/owl.carousel.js' %}" type="text/javascript"></script>
+<script src="{% static 'landing_js/owl.carousel.js' %}" type="text/javascript"></script>
 
 <!--====================Theme change js=========================-->
 
-<script type="text/javascript" src="{% static 'css2/demo/styleswitch.js' %}"></script>
+<script type="text/javascript" src="{% static 'landing_css/demo/styleswitch.js' %}"></script>
 
 <!--==============Ketchup=================-->
 
-<script src="{% static 'js2/ketchup.all.js' %}" type="text/javascript"></script>
+<script src="{% static 'landing_js/ketchup.all.js' %}" type="text/javascript"></script>
 
 <!--============================Bootstrap==========================-->
 
-<script src="{% static 'js2/bootstrap.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'landing_js/bootstrap.min.js' %}" type="text/javascript"></script>
 </body>
 </html>

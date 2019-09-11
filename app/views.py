@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.core.mail import get_connection, send_mail
 from django.conf import settings
 
-from catalog.models import DataFile
+from catalog.models import DataFile, Manufacturer
 from catalog import choices
 from catalog.handlers import ProcessingSearchFile
 
@@ -184,4 +184,5 @@ def email_confirmation(request, verification_code, user_id):
 
 def landing_page_view(request):
 	# https://ianlunn.github.io/Hover/
-	return render(request, 'landing_page.html', {})
+	manufacturers = Manufacturer.objects.all()
+	return render(request, 'landing_page.html', {'manufacturers': manufacturers})
