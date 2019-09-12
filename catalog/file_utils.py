@@ -518,6 +518,7 @@ class IEKDocumentReader(KOKSDocumentReader):
         article = line[0]
         title = line[1]
         price = line[9]
+        formalized_title = self.network.remove_stop_words(title)
         
         if not title:
             return
