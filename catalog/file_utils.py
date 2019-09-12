@@ -510,6 +510,10 @@ class KOKSDocumentReader(object):
     
 
 class IEKDocumentReader(KOKSDocumentReader):
+    def __init__(self, path=None, workbook=None, only_parse=True, user=None):
+        super().__init__(path=path, workbook=workbook, only_parse=only_parse, user=user)
+        self.manufacturer = Manufacturer.objects.get(title='IEK')
+
     def line_processing(self, line, name_sheet=None):
         article = line[0]
         title = line[1]
