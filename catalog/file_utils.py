@@ -523,7 +523,7 @@ class IEKDocumentReader(KOKSDocumentReader):
         # if not title:
         #     return
 
-        if not article.strip() or article == 'None' or not title:
+        if not article.strip() or title.strip().lower() == 'none' or not title:
             return
 
         self.c_lines += 1  # counter lines
