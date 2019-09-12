@@ -34,8 +34,9 @@ import re
 import ssl
 
 
-def filling_in_categories_for_is_not_tried_products():
-	products = Product.objects.filter(is_tried=False)
+def filling_in_categories_for_is_not_tried_products(products=None):
+	if products is None:
+		products = Product.objects.filter(is_tried=False)
 	count, i = products.count(), 0
 	for product in products:
 		raw = product.raw
@@ -102,10 +103,10 @@ class NeuralNetworkOption2(object):
 		self.stop = set(stopwords.words('russian'))
 		self.stop.update(['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}', '#', '№'])
 		
-		self.Y_raw = Product.objects.filter(is_tried=True).select_related('category').values_list('category__title',
+		self.Y_raw = Product.objects.filter(is_base=True).select_related('category').values_list('category__title',
 		                                                                                          flat=True)
 		
-		self.X_raw = Product.objects.filter(is_tried=True).values_list('formalized_title', flat=True)
+		self.X_raw = Product.objects.filter(is_base=True).values_list('formalized_title', flat=True)
 		
 		self.count_raw = self.X_raw.count()
 		self.length = int(self.count_raw - self.count_raw / 100 * (100-percent))  # 10%
@@ -114,7 +115,7 @@ class NeuralNetworkOption2(object):
 		self.Y_raw_train = self.Y_raw[:self.length]
 		self.num_classes = self.Y_raw_train.count()
 		
-		self.category_numbers = Product.objects.filter(is_tried=True).select_related('category').distinct('category__title').values_list('category__title', flat=True)
+		self.category_numbers = Product.objects.filter(is_base=True).select_related('category').distinct('category__title').values_list('category__title', flat=True)
 	
 	def remove_stop_words(self, query):
 		lower_query = query.lower()
@@ -143,7 +144,7 @@ class NeuralNetworkOption2(object):
 		encoder.fit(self.Y_raw_train)
 		
 		encoded_Y = encoder.transform(self.Y_raw_train)
-		print(encoded_Y)
+		# print(encoded_Y)
 		y_train = keras.utils.to_categorical(encoded_Y, self.num_classes)
 		
 		# строим модель
@@ -201,9 +202,9 @@ class NeuralNetworkOption1(object):
 			('clf', clf())
 		])
 		
-		self.texts_labels = Product.objects.filter(is_tried=True).select_related('category').values_list('category__id',
+		self.texts_labels = Product.objects.filter(is_base=True).select_related('category').values_list('category__id',
 		                                                                                                 flat=True)
-		self.texts = Product.objects.filter(is_tried=True).values_list('title', flat=True)
+		self.texts = Product.objects.filter(is_base=True).values_list('title', flat=True)
 		
 		self.count_text = self.texts.count()
 		self.length = int(self.count_text - self.count_text / 10)  # 10%
@@ -213,7 +214,7 @@ class NeuralNetworkOption1(object):
 	def _fit(self):
 		self.text_clf.fit(self.texts[:self.length], self.texts_labels[:self.length])
 	
-	def prediction_check(self):
+	def _prediction_check(self):
 		
 		truth, untruth = 0, 0
 		

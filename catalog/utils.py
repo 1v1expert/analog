@@ -42,7 +42,7 @@ class SearchProducts(object):
 		elif method == 'max':
 			value = max(values_list, key=lambda x: x)
 		else:   # method = 'nearest
-			print(values_list, step_attr.value)
+			# print(values_list, step_attr.value)
 			value = min(values_list, key=lambda x: abs(x - step_attr.value))
 		return value
 	

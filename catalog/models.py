@@ -187,6 +187,8 @@ class Product(Base):
     Модель товара
     """
     title = models.CharField(max_length=255, verbose_name='Наименование')
+    formalized_title = models.CharField(max_length=255, null=True, verbose_name='Формализованное наименование')
+    
     article = models.CharField(max_length=255, verbose_name='Артикул')
     additional_article = models.CharField(max_length=255, default="", blank=True, verbose_name='Доп. артикул')
     series = models.CharField(max_length=255, default="", blank=True, verbose_name='Серия')
@@ -197,19 +199,21 @@ class Product(Base):
     is_tried = models.BooleanField(verbose_name='Проверенный', default=False)
     
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name="Производитель", related_name='products')
+    
     fixed_attrs_vals = models.ManyToManyField('FixedAttributeValue', verbose_name="Фикс атрибуты")
     unfixed_attrs_vals = models.ManyToManyField('UnFixedAttributeValue', verbose_name="Нефикс атрибуты")
 
-    formalized_title = models.CharField(max_length=255, null=True, verbose_name='Формализованные данные')
-    
     raw = pgfields.JSONField(null=True, blank=True, verbose_name="Голые данные")
-
+    
+    is_base = models.BooleanField(verbose_name='Базовый', default=False)
+    
     def __str__(self):
         return self.title
 
     class Meta:
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
+        ordering = ('created_at', )
 
 
 # class ProductProperty(Base):

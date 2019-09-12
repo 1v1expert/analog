@@ -256,7 +256,7 @@ class ProcessingUploadData(object):
     def get_attribute(self):
         pass
 
-
+from catalog.internal.neural_network import NeuralNetworkOption2
 class KOKSDocumentReader(object):
     """
     /code/article/title/price
@@ -288,12 +288,15 @@ class KOKSDocumentReader(object):
         self.hrd_attributes = FixedValue.objects.filter(attribute__type='hrd').annotate(title_lower=Lower('title'))\
             .only('title').values_list('title_lower', flat=True).distinct()
         
+        self.formalized_title = None
         self.products = []
         self.articles = set()
         self.doubles_article = []
         # self.fix_attr_vals = {}
         # self.unfix_attr_vals = {}
         self.attr_vals = {}
+        
+        self.network = NeuralNetworkOption2(loadmodel=True)
         
     # @staticmethod
     # def _get_data_from_line(row):
@@ -305,6 +308,7 @@ class KOKSDocumentReader(object):
                           additional_article=additional_article,
                           manufacturer=self.manufacturer,
                           title=title,
+                          formalized_title=self.formalized_title,
                           category=category,
                           created_by=self.user,
                           updated_by=self.user)
@@ -348,7 +352,11 @@ class KOKSDocumentReader(object):
         else:
             return None
         # -- end search from category product
-        
+    
+    def _get_category_with_neural_network(self):
+        name_category = self.network.predict(self.formalized_title, 1000)
+        return Category.objects.filter(title=name_category).first()
+       
     @staticmethod
     def _get_category_from_categories(required_samples):
         from catalog.dictionaries import vocabulary
@@ -395,7 +403,9 @@ class KOKSDocumentReader(object):
         
         logger.debug('result {}, result2: {}, result3: {}\n Required samples: {}'.format(result, result2, result3, required_samples))
         
-        return self._get_category_from_categories(required_samples), self._get_category_from_product(required_samples, first_sign=first_sing)
+        return self._get_category_from_categories(required_samples), \
+               self._get_category_from_product(required_samples, first_sign=first_sing), \
+               self._get_category_with_neural_network()
         # not a line world list !! Attention !
         
     def _finding_an_fix_attribute(self, title, article):
@@ -427,8 +437,9 @@ class KOKSDocumentReader(object):
             name_sheet = self.sheets[0]
         additional_article = line[0]
         article = line[1]
-        title = line[2].lower()
+        title = line[2]
         price = line[3].replace(',', '.')
+        self.formalized_title = self.network.remove_stop_words(title)
         
         if not article.strip() or article == 'None':
             return
@@ -441,11 +452,11 @@ class KOKSDocumentReader(object):
             return
         self.articles.add(article)
         
-        category_from_categories, category_from_product = self._get_categories(title)
-        category = category_from_product
-        if category_from_categories:
-            category = category_from_categories
-            
+        category_from_categories, category_from_product, category_from_neural = self._get_categories(title)
+        category = category_from_neural
+        # if category_from_categories:
+        #     category = category_from_categories
+        
         if category:
             self.create_products(article, title, category, additional_article=additional_article,
                                  raw={'category_from_categories': str(category_from_categories),
