@@ -520,8 +520,20 @@ class IEKDocumentReader(KOKSDocumentReader):
         price = line[9]
         formalized_title = self.network.remove_stop_words(title)
         
-        if not title:
+        # if not title:
+        #     return
+
+        if not article.strip() or article == 'None' or not title:
             return
+
+        self.c_lines += 1  # counter lines
+
+        # check_doubles
+        if article in self.articles:
+            self.doubles_article.append(article)
+            return
+        self.articles.add(article)
+        
         category_from_categories, category_from_product, category_from_neural = self._get_categories(title)
         category = category_from_neural
         
