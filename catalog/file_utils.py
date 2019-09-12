@@ -4,6 +4,7 @@ from collections import OrderedDict
 
 from catalog.choices import *
 from catalog.models import *
+from catalog.internal.neural_network import NeuralNetworkOption2
 
 from app.models import MainLog
 
@@ -256,7 +257,7 @@ class ProcessingUploadData(object):
     def get_attribute(self):
         pass
 
-from catalog.internal.neural_network import NeuralNetworkOption2
+
 class KOKSDocumentReader(object):
     """
     /code/article/title/price
@@ -288,7 +289,7 @@ class KOKSDocumentReader(object):
         self.hrd_attributes = FixedValue.objects.filter(attribute__type='hrd').annotate(title_lower=Lower('title'))\
             .only('title').values_list('title_lower', flat=True).distinct()
         
-        self.formalized_title = None
+        # self.formalized_title = None
         self.products = []
         self.articles = set()
         self.doubles_article = []
@@ -303,12 +304,12 @@ class KOKSDocumentReader(object):
     #     for cell in row:
     #         yield str(cell.value)
     #
-    def create_products(self, article, title, category, additional_article="", raw=None):
+    def create_products(self, article, title, formalized_title, category, additional_article="", raw=None):
         product = Product(article=article,
                           additional_article=additional_article,
                           manufacturer=self.manufacturer,
                           title=title,
-                          formalized_title=self.formalized_title,
+                          formalized_title=formalized_title,
                           category=category,
                           created_by=self.user,
                           updated_by=self.user)
@@ -353,8 +354,8 @@ class KOKSDocumentReader(object):
             return None
         # -- end search from category product
     
-    def _get_category_with_neural_network(self):
-        name_category = self.network.predict(self.formalized_title, 1000)
+    def _get_category_with_neural_network(self, title):
+        name_category = self.network.predict(title, 1000)
         return Category.objects.filter(title=name_category).first()
        
     @staticmethod
@@ -405,7 +406,7 @@ class KOKSDocumentReader(object):
         
         return self._get_category_from_categories(required_samples), \
                self._get_category_from_product(required_samples, first_sign=first_sing), \
-               self._get_category_with_neural_network()
+               self._get_category_with_neural_network(title)
         # not a line world list !! Attention !
         
     def _finding_an_fix_attribute(self, title, article):
@@ -439,7 +440,7 @@ class KOKSDocumentReader(object):
         article = line[1]
         title = line[2]
         price = line[3].replace(',', '.')
-        self.formalized_title = self.network.remove_stop_words(title)
+        formalized_title = self.network.remove_stop_words(title)
         
         if not article.strip() or article == 'None':
             return
@@ -458,7 +459,7 @@ class KOKSDocumentReader(object):
         #     category = category_from_categories
         
         if category:
-            self.create_products(article, title, category, additional_article=additional_article,
+            self.create_products(article, title, formalized_title, category, additional_article=additional_article,
                                  raw={'category_from_categories': str(category_from_categories),
                                       'category_from_product': str(category_from_product)})
             self._finding_an_fix_attribute(title, article)  # finding fixed attributes in the product name
@@ -507,6 +508,27 @@ class KOKSDocumentReader(object):
                 product.fixed_attrs_vals.set(self.attr_vals[key]['fix'])
                 product.unfixed_attrs_vals.set(self.attr_vals[key]['unfix'])
     
+
+class IEKDocumentReader(KOKSDocumentReader):
+    def line_processing(self, line, name_sheet=None):
+        article = line[0]
+        title = line[1]
+        price = line[9]
+
+        category_from_categories, category_from_product, category_from_neural = self._get_categories(title)
+        category = category_from_neural
+        
+        if category:
+            self.create_products(article, title, formalized_title, category,
+                                 raw={'category_from_categories': str(category_from_categories),
+                                      'category_from_product': str(category_from_product),
+                                      'raw_line': str(line)})
+            self._finding_an_fix_attribute(title, article)
+            if is_digit(price):  # create price attr
+                attribute = Attribute.objects.get(title='цена')
+                self._create_attribute(article, float(price), attribute, fixed=False)
+
+
 
 def is_digit(s):
     try:

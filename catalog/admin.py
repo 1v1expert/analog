@@ -7,7 +7,7 @@ from django.contrib.admin.models import LogEntry
 
 from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, \
     UnFixedAttributeValue, Specification, DataFile
-from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader
+from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader
 from catalog.reporters import writers, generators
 
 from catalog.forms import ProductChangeListForm
@@ -186,6 +186,16 @@ class FileUploadAdmin(admin.ModelAdmin):
 
     file_link.allow_tags = True
     file_link.short_description = 'Ссылка на скачивание'
+    
+    def process_iek_file(self, request, queryset):
+        if not len(queryset) == 1:
+            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
+            return
+        try:
+            IEKDocumentReader(path=queryset[0].file.name, only_parse=False).parse_file()
+        except FileNotFoundError:
+            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
+    process_iek_file.short_description = 'Импортировать шаблон(IEK)'
     
     def process_koks_file(self, request, queryset):
         if not len(queryset) == 1:
