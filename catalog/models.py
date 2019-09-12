@@ -213,7 +213,7 @@ class Product(Base):
     class Meta:
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
-        ordering = ('created_at', )
+        # ordering = ('created_at', )
 
 
 # class ProductProperty(Base):
