@@ -514,7 +514,9 @@ class IEKDocumentReader(KOKSDocumentReader):
         article = line[0]
         title = line[1]
         price = line[9]
-
+        
+        if not title:
+            return
         category_from_categories, category_from_product, category_from_neural = self._get_categories(title)
         category = category_from_neural
         
@@ -527,7 +529,6 @@ class IEKDocumentReader(KOKSDocumentReader):
             if is_digit(price):  # create price attr
                 attribute = Attribute.objects.get(title='цена')
                 self._create_attribute(article, float(price), attribute, fixed=False)
-
 
 
 def is_digit(s):
