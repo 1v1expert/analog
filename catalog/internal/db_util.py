@@ -86,7 +86,7 @@ def filling_attr_for_products(products=None):
 					product.fixed_attrs_vals.set(attr_val)
 					
 			if file_utils.is_digit(thickness):
-				attr_values = product.unfixed_attrs_vals.get(attribute__title='толщина')
+				attr_values = product.unfixed_attrs_vals.filter(attribute__title='толщина')
 				if not attr_values.count():
 					attribute = Attribute.objects.get(title='толщина')
 					attr_val = UnFixedAttributeValue(value=float(thickness), attribute=attribute, created_by=user, updated_by=user)
