@@ -52,7 +52,8 @@ def filling_in_categories_for_is_not_tried_products(products=None):
 def filling_attr_for_products(products=None):
 	if products is None:
 		products = Product.objects.filter(is_tried=False)
-		
+	print(products)
+	
 	user = auth_md.User.objects.get(is_staff=True, username='admin')
 	
 	for product in products:
