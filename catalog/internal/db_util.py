@@ -66,10 +66,10 @@ def filling_attr_for_products(products=None):
 			
 			if file_utils.is_digit(board_height):
 				try:
-					product.fixed_attrs_vals.get(attribute__title='высота борта')
-				except FixedAttributeValue.DoesNotExist:
+					product.unfixed_attrs_vals.get(attribute__title='высота борта')
+				except UnFixedAttributeValue.DoesNotExist:
 					attribute = Attribute.objects.get(title='высота борта')
-					attr_val = FixedAttributeValue(value=float(board_height), attribute=attribute, created_by=user, updated_by=user)
+					attr_val = UnFixedAttributeValue(value=float(board_height), attribute=attribute, created_by=user, updated_by=user)
 					attr_val.save()
 					attr_val.products.add(product)
 					attr_val.save()
@@ -77,10 +77,10 @@ def filling_attr_for_products(products=None):
 			
 			if file_utils.is_digit(width):
 				try:
-					product.fixed_attrs_vals.get(attribute__title='ширина')
-				except FixedAttributeValue.DoesNotExist:
+					product.unfixed_attrs_vals.get(attribute__title='ширина')
+				except UnFixedAttributeValue.DoesNotExist:
 					attribute = Attribute.objects.get(title='ширина')
-					attr_val = FixedAttributeValue(value=float(width), attribute=attribute, created_by=user, updated_by=user)
+					attr_val = UnFixedAttributeValue(value=float(width), attribute=attribute, created_by=user, updated_by=user)
 					attr_val.save()
 					attr_val.products.add(product)
 					attr_val.save()
@@ -88,10 +88,10 @@ def filling_attr_for_products(products=None):
 					
 			if file_utils.is_digit(thickness):
 				try:
-					product.fixed_attrs_vals.get(attribute__title='толщина')
+					product.unfixed_attrs_vals.get(attribute__title='толщина')
 				except FixedAttributeValue.DoesNotExist:
 					attribute = Attribute.objects.get(title='толщина')
-					attr_val = FixedAttributeValue(value=float(thickness), attribute=attribute, created_by=user, updated_by=user)
+					attr_val = UnFixedAttributeValue(value=float(thickness), attribute=attribute, created_by=user, updated_by=user)
 					attr_val.save()
 					attr_val.products.add(product)
 					attr_val.save()
