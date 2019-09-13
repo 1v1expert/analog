@@ -34,27 +34,6 @@ import re
 import ssl
 
 
-def filling_in_categories_for_is_not_tried_products(products=None):
-	if products is None:
-		products = Product.objects.filter(is_tried=False)
-	count, i = products.count(), 0
-	for product in products:
-		raw = product.raw
-		i += 1
-		if raw.get('category_from_neural_network'):
-			continue
-			
-		network = NeuralNetworkOption2(loadmodel=True)
-		name_category = network.predict(product.title, 1000)
-		if not raw:
-			raw = {}
-		raw['category_from_neural_network'] = name_category
-		product.raw = raw
-		product.save()
-		print('{} product processed from {}'.format(i, count))
-		# sleep(5)
-		
-
 def training_the_entire_base():
 	pass
 
