@@ -63,7 +63,7 @@ def filling_attr_for_products(products=None):
 			board_height = parameter[0][0]
 			width = parameter[0][1]
 			thickness = parameter[0][2]
-			
+			values = []
 			if file_utils.is_digit(board_height):
 				attr_values = product.unfixed_attrs_vals.filter(attribute__title='высота борта')
 				if not attr_values.count():
@@ -73,7 +73,8 @@ def filling_attr_for_products(products=None):
 					attr_val.save()
 					attr_val.products.add(product)
 					attr_val.save()
-					product.fixed_attrs_vals.set(attr_val)
+					values.append(attr_val)
+					# product.unfixed_attrs_vals.set(attr_val)
 			
 			if file_utils.is_digit(width):
 				attr_values = product.unfixed_attrs_vals.filter(attribute__title='ширина')
@@ -83,7 +84,8 @@ def filling_attr_for_products(products=None):
 					attr_val.save()
 					attr_val.products.add(product)
 					attr_val.save()
-					product.fixed_attrs_vals.set(attr_val)
+					values.append(attr_val)
+					# product.unfixed_attrs_vals.set(attr_val)
 					
 			if file_utils.is_digit(thickness):
 				attr_values = product.unfixed_attrs_vals.filter(attribute__title='толщина')
@@ -93,4 +95,6 @@ def filling_attr_for_products(products=None):
 					attr_val.save()
 					attr_val.products.add(product)
 					attr_val.save()
-					product.fixed_attrs_vals.set(attr_val)
+					values.append(attr_val)
+					
+			product.unfixed_attrs_vals.set(values)
