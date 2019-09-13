@@ -58,6 +58,7 @@ def filling_attr_for_products(products=None):
 	
 	for product in products:
 		parameter = re.findall(r'(\d{,5})[х*x](\d{,5})[х*x](\d{,5})', product.title)
+		print(product.title, parameter, len(parameter))
 		if len(parameter) == 3:
 			board_height = parameter[0]
 			width = parameter[1]
