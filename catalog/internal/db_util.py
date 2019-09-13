@@ -65,9 +65,9 @@ def filling_attr_for_products(products=None):
 			thickness = parameter[0][2]
 			
 			if file_utils.is_digit(board_height):
-				try:
-					product.unfixed_attrs_vals.get(attribute__title='высота борта')
-				except UnFixedAttributeValue.DoesNotExist:
+				attr_values = product.unfixed_attrs_vals.filter(attribute__title='высота борта')
+				if not attr_values.count():
+				
 					attribute = Attribute.objects.get(title='высота борта')
 					attr_val = UnFixedAttributeValue(value=float(board_height), attribute=attribute, created_by=user, updated_by=user)
 					attr_val.save()
@@ -76,9 +76,8 @@ def filling_attr_for_products(products=None):
 					product.fixed_attrs_vals.set(attr_val)
 			
 			if file_utils.is_digit(width):
-				try:
-					product.unfixed_attrs_vals.get(attribute__title='ширина')
-				except UnFixedAttributeValue.DoesNotExist:
+				attr_values = product.unfixed_attrs_vals.filter(attribute__title='ширина')
+				if not attr_values.count():
 					attribute = Attribute.objects.get(title='ширина')
 					attr_val = UnFixedAttributeValue(value=float(width), attribute=attribute, created_by=user, updated_by=user)
 					attr_val.save()
@@ -87,9 +86,8 @@ def filling_attr_for_products(products=None):
 					product.fixed_attrs_vals.set(attr_val)
 					
 			if file_utils.is_digit(thickness):
-				try:
-					product.unfixed_attrs_vals.get(attribute__title='толщина')
-				except FixedAttributeValue.DoesNotExist:
+				attr_values = product.unfixed_attrs_vals.get(attribute__title='толщина')
+				if not attr_values.count():
 					attribute = Attribute.objects.get(title='толщина')
 					attr_val = UnFixedAttributeValue(value=float(thickness), attribute=attribute, created_by=user, updated_by=user)
 					attr_val.save()
