@@ -23,9 +23,9 @@ class DefaultGeneratorTemplate(object):
 				                            ('additional_article', 'Доп. артикул'),
 				                            ('series', 'Серия'),
 				                            ('category', 'Категория'),
-				                            ('category_from_categories', 'Категория(перебор по словарю из классов)'),
-				                            ('category_from_product', 'Категория(смарт метод)'),
-				                            ('category_from_neural_network', 'категория(нейро-сеть)'),
+				                            # ('category_from_categories', 'Категория(перебор по словарю из классов)'),
+				                            # ('category_from_product', 'Категория(смарт метод)'),
+				                            # ('category_from_neural_network', 'категория(нейро-сеть)'),
 			                            ] + list(Attribute.objects.values_list('id', 'title'))
 			                            ),
 			"table_data": self.do_products()
@@ -49,9 +49,9 @@ class DefaultGeneratorTemplate(object):
 				('additional_article', product.additional_article),
 				('series', product.series),
 				('category', product.category.title),
-				('category_from_categories', product.raw['category_from_categories']),
-				('category_from_product', product.raw['category_from_product']),
-				('category_from_neural_network', product.raw['category_from_neural_network']),
+				# ('category_from_categories', product.raw['category_from_categories']),
+				# ('category_from_product', product.raw['category_from_product']),
+				# ('category_from_neural_network', product.raw['category_from_neural_network']),
 			] + self._get_attributes(product))
 	
 	def _get_attributes(self, product):
