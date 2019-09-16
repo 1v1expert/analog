@@ -86,6 +86,9 @@ def result_processing(instance, request, product, default=True):
 
 def result_api_processing(instance, request, default=True):
 	# try:
+	user = request.user
+	if str(request.user) == 'AnonymousUser':
+		user = None
 	instance.global_search(default=default)
 	# except Exception as e:
 	# 	print(e)
@@ -102,7 +105,7 @@ def result_api_processing(instance, request, default=True):
 		# 	error = False
 			# error = 'Найдено более одного продукта, подходящего по параметрам поиска'
 		
-		MainLog(user=request.user, message='Поиск выполнился за {}c., найдено {}'.format(instance.lead_time,
+		MainLog(user=user, message='Поиск выполнился за {}c., найдено {}'.format(instance.lead_time,
 		                                                                                 [prod.article for prod in
 		                                                                                  instance.founded_products])).save()
 		# founded products must be one
@@ -112,7 +115,7 @@ def result_api_processing(instance, request, default=True):
 			# {'result': [prod.article for prod in instance.founded_products[:1]],
 			 'error': False, 'Lead_time': instance.lead_time}, content_type='application/json')
 	else:
-		MainLog(user=request.user,
+		MainLog(user=user,
 		        message='Поиск выполнился за {}c., продуктов, удовлетворяющих параметрам поиска, не найдено'.format(instance.lead_time)).save()
 		error = 'Продукты, удовлетворяющие параметрам поиска, не найдены'
 		return JsonResponse(

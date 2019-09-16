@@ -41,7 +41,7 @@ def search_from_form(request):
 	# print(vars(request), request.method, request.method.POST)
 	if request.method == 'POST':
 		form = SearchForm(request.POST)
-		print( 'POST')
+		# print( 'POST')
 		if form.is_valid():
 			# article = form.cleaned_data['article']
 			# manufacturer_from = form.cleaned_data['manufacturer_from']

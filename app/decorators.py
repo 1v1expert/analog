@@ -1,4 +1,5 @@
 from app.models import MainLog
+from django.contrib.auth.models import AnonymousUser
 
 
 def a_decorator_passing_logs(func):
