@@ -609,6 +609,7 @@
                                 buttons: {
                                     cancel: "Закрыть",
                                     catch: {
+                                        id: "22",
                                         text: "Показать информацию",
                                         value: "select",
                                         closeModal: false
@@ -621,13 +622,12 @@
                                     case "select":
                                         $('#table-info').show('slow');
                                         swal.stopLoading();
-                                        {#swal("Gotcha!", "Информация о найденном продукте: " + data.info.join('; ') + "\n", "info");#}
+                                        $('.swal-button--catch').css('display', 'none')
                                         break;
 
                                     default:
                                         swal.close();
                                         break;
-                                    {#swal("Got away safely!");#}
                                }
                                 });
                         }
@@ -642,20 +642,20 @@
         })
     });
 
-    /*==================
-     Select manufacturer
-     ==================*/
-    var manufactures = $('.manufacturers');
-    $('#btn_manufacturer').attr('data-id_manufacturer', manufactures[0].id)
-        .html(manufactures[0].text + '<span class="caret"></span>');
+        /*==================
+         Select manufacturer
+         ==================*/
+        var manufactures = $('.manufacturers');
+        $('#btn_manufacturer').attr('data-id_manufacturer', manufactures[0].id)
+            .html(manufactures[0].text + '<span class="caret"></span>');
 
-    manufactures.click(function (self) {
-        console.log(self.target.id, self);
-        $('#btn_manufacturer').html(self.target.text + '<span class="caret"></span>')
-            .attr('data-id_manufacturer', self.target.id);
-        $('#manufacturer_to').val(self.target.id);
-    })
-});
+        manufactures.click(function (self) {
+            console.log(self.target.id, self);
+            $('#btn_manufacturer').html(self.target.text + '<span class="caret"></span>')
+                .attr('data-id_manufacturer', self.target.id);
+            $('#manufacturer_to').val(self.target.id);
+        })
+    });
 </script>
 </body>
 </html>
