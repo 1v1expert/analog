@@ -625,7 +625,9 @@
                                         break;
 
                                     default:
-                                    swal("Got away safely!");
+                                        swal.close();
+                                        break;
+                                    {#swal("Got away safely!");#}
                                }
                                 });
                         }
