@@ -583,11 +583,11 @@ class GeneralDocumentReader(KOKSDocumentReader):
             attribute = Attribute.objects.get(title='цена')
             self._create_attribute(article, float(price), attribute, fixed=False)
 
-        value = FixedValue.objects.get(title__icontains=covering)
+        value = FixedValue.objects.get(title=covering)
         attribute = Attribute.objects.get(title='покрытие')
         self._create_attribute(article, value, attribute, fixed=True)
 
-        value = FixedValue.objects.get(title__icontains=species)
+        value = FixedValue.objects.get(title=species)
         attribute = Attribute.objects.get(title='вид')
         self._create_attribute(article, value, attribute, fixed=True)
         
