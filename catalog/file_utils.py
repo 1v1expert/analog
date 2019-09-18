@@ -578,7 +578,7 @@ class GeneralDocumentReader(KOKSDocumentReader):
             return
         self.articles.add(article)
         # print(title, article, species, covering)
-        print(article, category_name)
+        # print(article, category_name)
         category = Category.objects.get(title=category_name)
         self.create_products(article, title, formalized_title, category, additional_article=additional_article)
         
