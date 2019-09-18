@@ -7,7 +7,7 @@ from django.contrib.admin.models import LogEntry
 
 from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, \
     UnFixedAttributeValue, Specification, DataFile
-from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader
+from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader, GeneralDocumentReader
 from catalog.reporters import writers, generators
 
 from catalog.forms import ProductChangeListForm
@@ -175,7 +175,7 @@ class ManufacturerAdmin(BaseAdmin):
 
 
 class FileUploadAdmin(admin.ModelAdmin):
-    actions = ['process_file', 'process_koks_file', 'process_iek_file']
+    actions = ['process_file', 'process_koks_file', 'process_iek_file', 'process_general_file']
     list_display = ['file', 'type', 'file_link', 'created_at', 'created_by']
     
     def file_link(self, obj):
@@ -206,6 +206,16 @@ class FileUploadAdmin(admin.ModelAdmin):
         except FileNotFoundError:
             messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
     process_koks_file.short_description = 'Импортировать шаблон(KOKs)'
+    
+    def process_general_file(self, request, queryset):
+        if not len(queryset) == 1:
+            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
+            return
+        try:
+            GeneralDocumentReader(path=queryset[0].file.name, only_parse=False).parse_file()
+        except FileNotFoundError:
+            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
+    process_general_file.short_description = 'Импортировать шаблон(Обработанный)'
     
     def process_file(self, request, queryset):
         for qq in queryset:

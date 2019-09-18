@@ -548,6 +548,78 @@ class IEKDocumentReader(KOKSDocumentReader):
                 self._create_attribute(article, float(price), attribute, fixed=False)
 
 
+class GeneralDocumentReader(KOKSDocumentReader):
+    
+    def line_processing(self, line, name_sheet=None):
+        title = line[0].strip()
+        article = line[1].strip()
+        additional_article = line[2].strip()
+        category_name = line[3].strip()
+        species = line[4]
+        covering = line[5]
+        price = line[6].strip()
+        length = line[7].strip()
+        depth = line[8].strip()
+        board_height = line[9].strip()
+        width = line[10].strip()
+
+        formalized_title = self.network.remove_stop_words(title)
+        
+        if not article.strip() or title.strip().lower() == 'none' or not title:
+            return
+        
+        self.c_lines += 1  # counter lines
+        
+        # check_doubles
+        if article in self.articles:
+            self.doubles_article.append(article)
+            return
+        self.articles.add(article)
+        
+        category = Category.objects.get(title=category_name)
+        self.create_products(article, title, formalized_title, category, additional_article=additional_article)
+        
+        if is_digit(price) and price:  # create price attr
+            attribute = Attribute.objects.get(title='цена')
+            self._create_attribute(article, float(price), attribute, fixed=False)
+
+        value = FixedValue.objects.get(title__icontains=covering)
+        attribute = Attribute.objects.get(title='покрытие')
+        self._create_attribute(article, value, attribute, fixed=True)
+
+        value = FixedValue.objects.get(title__icontains=species)
+        attribute = Attribute.objects.get(title='вид')
+        self._create_attribute(article, value, attribute, fixed=True)
+        
+        if is_digit(length) and length:
+            attribute = Attribute.objects.get(title='длина')
+            self._create_attribute(article, float(length), attribute, fixed=False)
+        
+        if is_digit(depth) and depth:
+            attribute = Attribute.objects.get(title='толщина')
+            self._create_attribute(article, float(depth), attribute, fixed=False)
+            
+        if is_digit(board_height) and board_height:
+            attribute = Attribute.objects.get(title='высота борта')
+            self._create_attribute(article, float(board_height), attribute, fixed=False)
+        
+        if is_digit(width) and width:
+            attribute = Attribute.objects.get(title='ширина')
+            self._create_attribute(article, float(width), attribute, fixed=False)
+
+    def parse_file(self):
+        for name_list in self.sheets:
+            self.manufacturer = Manufacturer.objects.get(title=name_list)
+            logger.debug('Sheet {}'.format(name_list))
+            self.sheet = self.workbook.get_sheet_by_name(name_list)
+            for i, line in enumerate(self.read_sheet()):
+                if not i:
+                    continue
+                self.line_processing(line)
+    
+        self._create_attributes_and_products()
+
+
 def is_digit(s):
     try:
         float(s)
