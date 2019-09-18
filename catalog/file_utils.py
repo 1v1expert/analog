@@ -623,6 +623,8 @@ class GeneralDocumentReader(KOKSDocumentReader):
                 self.line_processing(line)
     
         self._create_attributes_and_products()
+        
+        return self
 
 
 def is_digit(s):
