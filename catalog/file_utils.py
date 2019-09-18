@@ -553,15 +553,15 @@ class GeneralDocumentReader(KOKSDocumentReader):
     def line_processing(self, line, name_sheet=None):
         title = line[0].strip()
         article = line[1].strip()
-        additional_article = line[2].strip()
+        additional_article = line[2].strip() if line[2] is not 'None' else ''
         category_name = line[3].strip()
-        species = line[4]
-        covering = line[5]
-        price = line[6].strip()
-        length = line[7].strip()
-        depth = line[8].strip()
-        board_height = line[9].strip()
-        width = line[10].strip()
+        species = line[4] if line[4] is not 'None' else ''
+        covering = line[5] if line[5] is not 'None' else ''
+        price = line[6].strip() if line[6] is not 'None' else ''
+        length = line[7].strip() if line[7] is not 'None' else ''
+        depth = line[8].strip() if line[8] is not 'None' else ''
+        board_height = line[9].strip() if line[9] is not 'None' else ''
+        width = line[10].strip() if line[10] is not 'None' else ''
 
         formalized_title = self.network.remove_stop_words(title)
         
@@ -575,21 +575,23 @@ class GeneralDocumentReader(KOKSDocumentReader):
             self.doubles_article.append(article)
             return
         self.articles.add(article)
-        
+        print(title, article, species, covering)
         category = Category.objects.get(title=category_name)
         self.create_products(article, title, formalized_title, category, additional_article=additional_article)
         
         if is_digit(price) and price:  # create price attr
             attribute = Attribute.objects.get(title='цена')
             self._create_attribute(article, float(price), attribute, fixed=False)
+        
+        if covering:
+            value = FixedValue.objects.get(title=covering)
+            attribute = Attribute.objects.get(title='покрытие')
+            self._create_attribute(article, value, attribute, fixed=True)
 
-        value = FixedValue.objects.get(title=covering)
-        attribute = Attribute.objects.get(title='покрытие')
-        self._create_attribute(article, value, attribute, fixed=True)
-
-        value = FixedValue.objects.get(title=species)
-        attribute = Attribute.objects.get(title='вид')
-        self._create_attribute(article, value, attribute, fixed=True)
+        if species:
+            value = FixedValue.objects.get(title=species)
+            attribute = Attribute.objects.get(title='вид')
+            self._create_attribute(article, value, attribute, fixed=True)
         
         if is_digit(length) and length:
             attribute = Attribute.objects.get(title='длина')
