@@ -555,13 +555,13 @@ class GeneralDocumentReader(KOKSDocumentReader):
         article = line[1].strip()
         additional_article = line[2].strip() if line[2] is not 'None' else ''
         category_name = line[3].strip()
-        species = line[4] if line[4] is not 'None' else ''
-        covering = line[5] if line[5] is not 'None' else ''
-        price = line[6].strip() if line[6] is not 'None' else ''
-        length = line[7].strip() if line[7] is not 'None' else ''
-        depth = line[8].strip() if line[8] is not 'None' else ''
-        board_height = line[9].strip() if line[9] is not 'None' else ''
-        width = line[10].strip() if line[10] is not 'None' else ''
+        species = line[4] if line[4] != 'None' else ''
+        covering = line[5] if line[5] != 'None' else ''
+        price = line[6].strip() if line[6] != 'None' else ''
+        length = line[7].strip() if line[7] != 'None' else ''
+        depth = line[8].strip() if line[8] != 'None' else ''
+        board_height = line[9].strip() if line[9] != 'None' else ''
+        width = line[10].strip() if line[10] != 'None' else ''
 
         formalized_title = self.network.remove_stop_words(title)
         
@@ -575,7 +575,7 @@ class GeneralDocumentReader(KOKSDocumentReader):
             self.doubles_article.append(article)
             return
         self.articles.add(article)
-        print(title, article, species, covering)
+        # print(title, article, species, covering)
         category = Category.objects.get(title=category_name)
         self.create_products(article, title, formalized_title, category, additional_article=additional_article)
         
