@@ -123,7 +123,7 @@ class NeuralNetworkOption2(object):
         
         encoded_Y = encoder.transform(self.Y_raw_train)
         # print(encoded_Y)
-        y_train = keras.utils.to_categorical(encoded_Y, self.num_classes)
+        y_train = keras.utils.to_categorical(encoded_Y, self.num_classes, dtype='float64')
         
         # строим модель
         model = Sequential()
