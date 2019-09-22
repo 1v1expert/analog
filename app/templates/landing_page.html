@@ -71,6 +71,11 @@
             background-image: none;
         }
     }
+
+    input[type=file] {
+        display: initial;
+    }
+
     .dropdown-menu {
         min-width: 125px;
     }
@@ -184,14 +189,14 @@
                         <br />
                         <div class="checkbox">
                           <input id="remember" type="checkbox" />
-                          <label for="remember">Remember me on this computer</label>
+                          <label for="remember">Запомнить меня</label>
                         </div>
                         <div class="main_btns-container">
                           <div class="first_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Назад</a></div>
                           <div class="first_half last"><a href="#" class="btn btn_blue">Войти</a></div>
                         </div>
                       </form>
-                      <a href="#" class="forgot_password">Forgot password?</a> </div>
+                      <a href="#" class="forgot_password">Забыл пароль ?</a> </div>
 
                     <!-- Register Form -->
                     <div class="user_register">
@@ -207,8 +212,8 @@
                           <label for="send_updates">Send me occasional email updates</label>
                         </div>
                         <div class="main_btns-container">
-                          <div class="first_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
-                          <div class="first_half last"><a href="#" class="btn btn_blue">Signup</a></div>
+                          <div class="first_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Назад</a></div>
+                          <div class="first_half last"><a href="#" class="btn btn_blue">Войти</a></div>
                         </div>
                       </form>
                     </div>
@@ -341,7 +346,7 @@
                                             <input type="hidden" name="manufacturer_to" id="manufacturer_to" value="{{ manufacturers.first.id }}">
 {#                                            <input type="hidden" name="manufacturer_from" id="manufacturer_from" value="{{ manufacturers.first.id }}">#}
                                                 <div class="input-append">
-                                                    <input class="search" type="text" name="article"
+                                                    <input class="search" type="file" name="file" accept=".xls, .xlsx,"
                                                            placeholder="Введите номер артикула">
                                                     <div class="btn-group">
                                                         <button class="btn dropdown-toggle" data-toggle="dropdown"

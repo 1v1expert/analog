@@ -81,6 +81,9 @@ def get_attributes(product, api=True):
 
 
 def get_product_info(product):
+    info = []
+    info.append({"наименование": product.title})
+    
     fix_attributes = product.fixed_attrs_vals \
         .all() \
         .exclude(attribute__title='ед.изм') \
@@ -90,8 +93,13 @@ def get_product_info(product):
         .exclude(attribute__title='цена') \
         .select_related('attribute')  # category.attributes.all()
     
-    info = [{attr.attribute.title: attr.value} for attr in unfix_attributes]
+    # additional_info = [{attr.attribute.title: attr.value} for attr in ]
+    for attr in unfix_attributes:
+        info.append({attr.attribute.title: attr.value})
+    
     for attr in fix_attributes:
         info.append({attr.attribute.title: attr.value.title})
+    
+    info.append({"производитель": product.manufacturer.title})
     
     return info
