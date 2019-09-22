@@ -57,6 +57,13 @@
 </head>
 {# color: #44abd1  #323232  #e4e4e4 #}
 <style>
+    @media (min-width: 1200px) {
+
+        .letter-container h1 a {
+            font-size: 30px;
+        }
+
+    }
     @media (min-width: 992px) {
         .blue-button {
             width: 300px;
@@ -102,12 +109,12 @@
     .banner-dot {
         background: none;
     }
-    .top-link ul li a {
-        color: #666;
-    }
-    .oder a {
-        color: #666;
-    }
+    {#.top-link ul li a {#}
+    {#    color: #666;#}
+    {# } #}
+    {#.oder a {#}
+    {#    color: #666;#}
+    {# }#}
 
     .search-btn {
         background-color: #666;
@@ -122,7 +129,7 @@
             background-color: #666;
     }
     .carousel-indicators {
-        bottom: 40px;
+        bottom: 20px;
     }
     .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
         font-weight: bolder;
@@ -143,7 +150,7 @@
           <div class="top-link">
             <ul>
               <li><a href="#" class="info-ico"><span></span>info@analogpro.ru</a></li>
-              <li><a href="#" class="phone-ico"><span></span>+7(985)-229-67-56 </a></li>
+              <li><a href="#" class="phone-ico"><span></span>+7(916)-176-06-65 </a></li>
 {#              <li><a href="#" class="chat-ico"><span></span>Live chat</a></li>#}
             </ul>
           </div>
@@ -255,11 +262,13 @@
                                 <div class="carousel-caption">
                                     {#                <p class="main-image"><img src="{% static 'images/icon1.png' %}" alt="" /></p>#}
                                     <div class="letter-container">
-                                        <h1><a href="#">Подбор аналогов в категории кабельных лотков</a></h1>
+                                        <h1><a>Подбор аналогов в категории кабельных лотков</a></h1>
                                     </div>
                                     <p class="banner-text">Система поиска позволяет по заданному товару (артикулу),
-                                        найти товар-аналог другого производителя. Система ориентирована на поиск
-                                        товаров-аналогов, с учетом технических характеристик </p>
+                                        найти товар-аналог другого производителя.
+                                        Система предлагает товар-аналог,
+                                        с учетом технических характеристик
+                                        </p>
                                     <p>
                                         <a class="blue-button wobble-horizontal" role="button" href="#myCarousel" data-slide="prev">
                                             <i class="fa fa-arrow-left hvr-icon"></i> Поиск по спецификации
@@ -559,7 +568,7 @@
 
 <!--============== Form validation JS=================-->
 
-{#<script src="{% static 'landing_js/contact_form.js' %}" type="text/javascript"></script>#}
+<script src="{% static 'landing_js/contact_form.js' %}" type="text/javascript"></script>
 
 <!--============================Sticky.js===========================-->
 
