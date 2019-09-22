@@ -567,78 +567,78 @@
             {#async: false,#}
             data: form.serialize(),
             success: function (data) {
-                if (data.error){
-                            {#alert(data.error);#}
-                            swal("Ошибка!", data.error, "info");
-                        }
-                        else {
-                            function buildTable(data) {
-                                var table = document.createElement("table");
-                                table.className = "table table-hover mb-0";
-                                table.id = 'table-info';
-                                {#table.visible = false;#}
-                                table.style.display = "none";
-                                var thead = document.createElement("thead");
-                                var tbody = document.createElement("tbody");
-                                var headRow = document.createElement("tr");
-                                {#Object.keys(data[0]).forEach(function (el) {#}
-                                {#    var th = document.createElement("th");#}
-                                {#    th.appendChild(document.createTextNode(el));#}
-                                {#    headRow.appendChild(th);#}
-                                {# });#}
-                                thead.appendChild(headRow);
-                                table.appendChild(thead);
-                                data.forEach(function (el) {
-                                    var tr = document.createElement("tr");
-                                    for (var o in el) {
-                                        var td = document.createElement("td");
-                                        td.appendChild(document.createTextNode(o));
-                                        tr.appendChild(td);
-                                        var td = document.createElement("td");
-                                        td.appendChild(document.createTextNode(el[o]));
-                                        tr.appendChild(td);
-                                    }
-                                    tbody.appendChild(tr);
-                                });
-                                table.appendChild(tbody);
-                                return table;
+                if (data.error) {
+                    {#alert(data.error);#}
+                    swal("Ошибка!", data.error, "info");
+                }
+                else {
+                    function buildTable(data) {
+                        var table = document.createElement("table");
+                        table.className = "table table-hover mb-0";
+                        table.id = 'table-info';
+                        {#table.visible = false;#}
+                        table.style.display = "none";
+                        var thead = document.createElement("thead");
+                        var tbody = document.createElement("tbody");
+                        var headRow = document.createElement("tr");
+                        {#Object.keys(data[0]).forEach(function (el) {#}
+                        {#    var th = document.createElement("th");#}
+                        {#    th.appendChild(document.createTextNode(el));#}
+                        {#    headRow.appendChild(th);#}
+                        {# });#}
+                        thead.appendChild(headRow);
+                        table.appendChild(thead);
+                        data.forEach(function (el) {
+                            var tr = document.createElement("tr");
+                            for (var o in el) {
+                                var td = document.createElement("td");
+                                td.appendChild(document.createTextNode(o));
+                                tr.appendChild(td);
+                                var td = document.createElement("td");
+                                td.appendChild(document.createTextNode(el[o]));
+                                tr.appendChild(td);
                             }
-
-                            swal("Успешно!", "Артикул(-ы): "+ data.result.join(' ;'), {
-                                content: buildTable(data.info),
-                                buttons: {
-                                    cancel: "Закрыть",
-                                    catch: {
-                                        id: "22",
-                                        text: "Показать информацию",
-                                        value: "select",
-                                        closeModal: false
-                                    }
-                                    {#defeat: true,#}
-                                }
-                            }).then(function (value) {
-                                switch (value) {
-
-                                    case "select":
-                                        $('#table-info').show('slow');
-                                        swal.stopLoading();
-                                        $('.swal-button--catch').css('display', 'none')
-                                        break;
-
-                                    default:
-                                        swal.close();
-                                        break;
-                               }
-                                });
-                        }
-                        console.log('Success', data);
-
-                    },
-                    error: function (data) {
-                        swal("Сбой поиска!", "Произошла системная ошибка", "warning");
-                        {#alert('Произошла системная ошибка');#}
-                        console.log('Error', data)
+                            tbody.appendChild(tr);
+                        });
+                        table.appendChild(tbody);
+                        return table;
                     }
+
+                    swal("Артикул: " + data.result.join(' ;'), {
+                        content: buildTable(data.info),
+                        buttons: {
+                            cancel: "Закрыть",
+                            catch: {
+                                id: "22",
+                                text: "Показать информацию",
+                                value: "select",
+                                closeModal: false
+                            }
+                            {#defeat: true,#}
+                        }
+                    }).then(function (value) {
+                        switch (value) {
+
+                            case "select":
+                                $('#table-info').show('slow');
+                                swal.stopLoading();
+                                $('.swal-button--catch').css('display', 'none')
+                                break;
+
+                            default:
+                                swal.close();
+                                break;
+                        }
+                    });
+                }
+                console.log('Success', data);
+
+            },
+            error: function (data) {
+                swal("Сбой поиска!", "Произошла системная ошибка", "warning");
+                {#alert('Произошла системная ошибка');#}
+                console.log('Error', data)
+            }
         })
     });
 
