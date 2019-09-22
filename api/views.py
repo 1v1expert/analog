@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
 
 from catalog.utils import SearchProducts
 from catalog.handlers import result_api_processing
@@ -36,6 +37,7 @@ def check_product(article, manufacturer_from) -> dict:
     return response
 
 
+@csrf_exempt
 @a_decorator_passing_logs
 def search_from_form(request):
     # print(vars(request), request.method, request.method.POST)
