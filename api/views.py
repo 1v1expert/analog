@@ -7,13 +7,10 @@ from catalog.utils import SearchProducts
 from catalog.handlers import result_api_processing
 from catalog.internal.utils import get_attributes
 from catalog.forms import SearchForm, AdvancedSearchForm
-from catalog.choices import TYPES_SEARCH, TYPES, TYPES_REV_DICT, TYPES_DICT
 from catalog.models import Product, FixedValue
 
 from app.models import MainLog
 from app.decorators import a_decorator_passing_logs
-
-import json
 
 
 def check_product(article, manufacturer_from) -> dict:
@@ -95,8 +92,8 @@ def advanced_search(request):
                         message='По артикулу: {} и производителю: {} запрошен расширенный поиск: {}'.format(article,
                                                                                                             manufacturer_from,
                                                                                                             advanced_form.cleaned_data)).save()
-                result = SearchProducts(request, advanced_form, product)
-                return result_api_processing(result, request, product, default=False)
+                result = SearchProducts(request, advanced_form)
+                return result_api_processing(result, request, default=False)
             else:
                 MainLog(user=request.user,
                         message='Произошла ошибка при расширенном поиске по артикулу: {} и производителю: {}'.format(
