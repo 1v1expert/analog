@@ -34,7 +34,7 @@ def check_product(article, manufacturer_from) -> dict:
     return response
 
 
-@csrf_exempt
+# @csrf_exempt
 @a_decorator_passing_logs
 def search_from_form(request):
     # print(vars(request), request.method, request.method.POST)
