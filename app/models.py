@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres import fields as pgfields
 from django.utils import timezone
 from django.utils.translation import gettext, gettext_lazy as _
 from django.conf import settings
@@ -22,11 +23,21 @@ ACTION_FLAG_CHOICES = (
 )
 
 
+class FeedBack(models.Model):
+    action_time = models.DateTimeField(_('action time'), default=timezone.now, editable=False, )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, blank=True, null=True, verbose_name=_('user'), )
+    name = models.TextField(max_length=50, blank=True, null=True, verbose_name="Имя")
+    email = models.TextField(max_length=100, blank=True, null=True, verbose_name="Почта")
+    phone = models.TextField(max_length=40, blank=True, null=True, verbose_name="Телефон")
+    text = models.TextField(max_length=500, blank=True, null=True, verbose_name="Текст")
+    
+
 class MainLog(models.Model):
     action_time = models.DateTimeField(_('action time'), default=timezone.now, editable=False, )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, blank=True, null=True, verbose_name=_('user'),)
     client_address = models.TextField(max_length=200, blank=True, null=True, verbose_name="Адрес клиента")
     message = models.TextField(_('message'), blank=True)
+    raw = pgfields.JSONField(null=True, blank=True, verbose_name="Голые данные")
     # action_flag = models.PositiveSmallIntegerField(_('action flag'), choices=ACTION_FLAG_CHOICES)
     
     class Meta:

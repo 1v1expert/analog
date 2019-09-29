@@ -22,6 +22,13 @@ class SearchForm(forms.Form):
     manufacturer_to = forms.ModelChoiceField(label='Необходимый производитель', empty_label=None, queryset=Manufacturer.objects.all())
     advanced_search = forms.BooleanField(label='Расширенный поиск', widget=forms.CheckboxInput, required=False)
     
+    
+class FeedBackForm(forms.Form):
+    name = forms.CharField(label='Имя')
+    email = forms.EmailField(label='Email')
+    phone = forms.CharField(label='Телефон')
+    text = forms.CharField(label='Текст')
+
 
 class AdvancedSearchForm(forms.Form):
     article = forms.CharField(label='Артикул', widget=forms.TextInput(attrs={'readonly':'readonly'}))#, disabled=True, required=False)

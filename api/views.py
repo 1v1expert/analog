@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 
 from catalog.utils import SearchProducts
 from catalog.handlers import result_api_processing
-from catalog.internal.utils import get_attributes
+from catalog.internal.utils import get_attributes, ProductInfo
 from catalog.forms import SearchForm, AdvancedSearchForm
 from catalog.models import Product, FixedValue
 
@@ -13,25 +13,25 @@ from app.models import MainLog
 from app.decorators import a_decorator_passing_logs
 
 
-def check_product(article, manufacturer_from) -> dict:
-    response = {'result': []}
-    
-    try:
-        product = Product.objects.get(article=article, manufacturer=manufacturer_from)
-        return {'correctly': True,
-                'product': product}
-    
-    except Product.DoesNotExist as e:
-        # response['correctly'] = False
-        response['error_system'] = 'article: {}; manufacturer_from: {}; {}'.format(article, manufacturer_from, e)
-        response['error'] = 'По артикулу: {} и производителю: {} товара не найдено'.format(article, manufacturer_from)
-    
-    except Product.MultipleObjectsReturned as e:
-        # response['correctly'] = False
-        response['error_system'] = 'article: {}; manufacturer_from: {}; {}'.format(article, manufacturer_from, e)
-        response['error'] = "Найдено несколько продуктов, уточните поиск"
-    
-    return response
+# def check_product(article, manufacturer_from) -> dict:
+#     response = {'result': []}
+#
+#     try:
+#         product = Product.objects.get(article=article, manufacturer=manufacturer_from)
+#         return {'correctly': True,
+#                 'product': product}
+#
+#     except Product.DoesNotExist as e:
+#         # response['correctly'] = False
+#         response['error_system'] = 'article: {}; manufacturer_from: {}; {}'.format(article, manufacturer_from, e)
+#         response['error'] = 'По артикулу: {} и производителю: {} товара не найдено'.format(article, manufacturer_from)
+#
+#     except Product.MultipleObjectsReturned as e:
+#         # response['correctly'] = False
+#         response['error_system'] = 'article: {}; manufacturer_from: {}; {}'.format(article, manufacturer_from, e)
+#         response['error'] = "Найдено несколько продуктов, уточните поиск"
+#
+#     return response
 
 
 @csrf_exempt
@@ -83,7 +83,7 @@ def advanced_search(request):
                                                                                                        manufacturer_from)).save()
                 return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"},
                                     content_type='application/json')
-            attributes_array = get_attributes(product)
+            attributes_array = ProductInfo(product=product).get_attributes()
             advanced_form = AdvancedSearchForm(request.POST, extra=attributes_array.get('attributes'))
             if advanced_form.is_valid():
                 advanced_form.cleaned_data['manufacturer_from'] = product.manufacturer
@@ -123,16 +123,15 @@ def check_product_and_get_attributes(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
-            article = form.cleaned_data['article']
-            manufacturer_from = form.cleaned_data['manufacturer_from']
-            
-            resp = check_product(article, manufacturer_from)
-            
-            if resp['correctly']:
-                attributes_array = get_attributes(resp['product'])
-                return JsonResponse({'result': attributes_array, 'error': False}, content_type='application/json')
-            else:
-                MainLog(user=request.user, message=resp['error_system']).save()
-                return JsonResponse(resp, content_type='application/json')
+            pi = ProductInfo(form=form)
+            try:
+                return JsonResponse({'result': pi.get_attributes(), 'error': False}, content_type='application/json')
+            except Product.DoesNotExist:
+                return JsonResponse({'error': 'Не найдено продукта, удовл. критериям'}, content_type='application/json')
+            except Product.MultipleObjectsReturned:
+                return JsonResponse({'error': 'Найдено несколько продуктов, уточн. поиск'}, content_type='application/json')
+            except Exception as e:
+                MainLog.objects.create(user=request.user, raw={'error': e})
+                return JsonResponse({'error': 'Произошла ошибка, обратитесь в тех. поддержку'}, content_type='application/json')
     
-    return JsonResponse({"success": True}, content_type='application/json')
+    return HttpResponseBadRequest()

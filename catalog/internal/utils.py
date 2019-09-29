@@ -45,39 +45,67 @@ class DuplicateCheck(object):
 
 
 class ProductInfo(object):
-    def __init__(self, product):
+    def __init__(self, product=None, form=None, article=None):
         self.product = product
+        self.form = form
+        self.article = article
+        
+        if product is None:
+            self.product = self._get_product()
+        
+    def _get_product(self):
+        product = None
+        if self.article is not None:
+            product = Product.objects.get(article=self.article)
+            
+        if self.product is None and self.form is not None:
+            product = self._get_product_from_form()
+            
+        return product
+        
+    def _get_product_from_form(self):
+        article = self.form.cleaned_data.get('article')
+        manufacturer_from = self.form.cleaned_data.get('manufacturer_from')
+        
+        if manufacturer_from:
+            product = Product.objects.get(article=article, manufacturer=manufacturer_from)
+        else:
+            product = Product.objects.get(article=article)
+        return product
+    
+    def _serialize_fix_attribute(self):
+        fix_attributes = self.product.fixed_attrs_vals.all()
+        return {'fix' + str(attr.pk): {'title': attr.attribute.title,
+                                       'type_display': attr.attribute.get_type_display(),
+                                       'choices': [(at.pk, at.title) for at in FixedValue.objects.filter(attribute=attr.attribute)],
+                                       'type': attr.attribute.type
+                                       } for attr in fix_attributes}
+    
+    def _serialize_unfix_attribute(self):
+        unfix_attributes = self.product.unfixed_attrs_vals.all()
+        return {
+            'unfix' + str(attr.pk): {'title': attr.attribute.title,
+                                     'type_display': attr.attribute.get_type_display(),
+                                     'choices': TYPES_SEARCH,
+                                     'type': attr.attribute.type
+                                     } for attr in unfix_attributes}
     
     def get_attributes(self):
-        pass
+        attributes = {}
+    
+        attributes.update(self._serialize_fix_attribute())
+        attributes.update(self._serialize_unfix_attribute())
+
+        response = {'attributes': attributes, 'product_types': list((type_[0] for type_ in TYPES))[::-1],
+                    'all_types': TYPES_DICT}
+        return response
     
     def get_product_info(self):
         pass
 
 
 def get_attributes(product, api=True):
-    fix_attributes = product.fixed_attrs_vals.all()  # category.attributes.all()
-    unfix_attributes = product.unfixed_attrs_vals.all()  # category.attributes.all()
-    attributes_array = {
-        'fix' + str(attr.pk): {'title': attr.attribute.title, 'type_display': attr.attribute.get_type_display(),
-                               'choices': [(at.pk, at.title) for at in
-                                           FixedValue.objects.filter(attribute=attr.attribute)]
-                               # serializers.serialize('json',
-                               #                             FixedValue.objects.filter(attribute=attr.attribute),
-                               #                             fields=('pk', 'title'))
-                               # .values_list('pk', 'title'))
-            ,  # 'choices': [attribute.title for attribute in FixedValue.objects.filter(attribute=attr.attribute)],
-                               'type': attr.attribute.type} for attr in fix_attributes}
-    unfix_attributes_array = {
-        'unfix' + str(attr.pk): {'title': attr.attribute.title, 'type_display': attr.attribute.get_type_display(),
-                                 'choices': TYPES_SEARCH, 'type': attr.attribute.type} for attr in unfix_attributes}
-    
-    attributes_array.update(unfix_attributes_array)
-    
-    # types = set(product.category.attributes.all().values_list('type',  flat=True))
-    response = {'attributes': attributes_array, 'product_types': list((type_[0] for type_ in TYPES))[::-1],
-                'all_types': TYPES_DICT}
-    return response
+    pass
 
 
 def get_product_info(product):
