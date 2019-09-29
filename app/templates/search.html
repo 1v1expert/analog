@@ -193,7 +193,7 @@
             $.ajax({
                 type: "POST",
                 url: "{% url 'api:get_product' %}",//'/api/get_product/',
-                async: true,
+                async: false,
                 data: form.serialize(), // serializes the form's elements.
                 success: function (data) {
                     if (data.error) {
@@ -232,7 +232,7 @@
                         }
                         result['post_html'] = "<input type=\"submit\" class=\"btn btn-success mr-10\"\n" +
                             "                                                                   value=\"Искать\"/></div>";
-                        console.log(result);
+                        {#console.log(result);#}
                         {# print result #}
                         html = "";
                         html += result.pre_html;
@@ -258,6 +258,8 @@
                     {#console.log(dt, JSON.parse(dt));#}
                     {#alert(JSON.parse(data)); // show response from the php script.#}
 
+                    console.log(html);
+
                 },
                 error: function (data) {
                     {#console.log(data);#}
@@ -281,7 +283,7 @@
                 $.ajax({
                     type: "POST",
                     url: url,//'/api/get_product/',
-                    {#async: false,#}
+                    async: false,
                     data: form.serialize(), // serializes the form's elements.
                     success: function (data) {
                         if (data.error){
