@@ -57,6 +57,9 @@
 </head>
 {# color: #44abd1  #323232  #e4e4e4 #}
 <style>
+    .dropdown-menu {
+        font-size: 11px;
+    }
     .features ol {
         list-style: circle;
     }
@@ -335,7 +338,7 @@
                                 <h2></h2>
                                 {#                <div class="container">#}
                                 <div class="row" style="margin-top: 40px;">
-                                    <div class="col-md-10 col-md-offset-1">
+                                    <div class="col-md-11 col-md-offset-1">
                                         <form action="{% url 'api:search' %}" method="post" id="form">
                                             {% csrf_token %}
                                             {#                                            <input type="hidden" name="advanced_search" value="False">#}
@@ -378,7 +381,7 @@
                                 <h2></h2>
                                 {#                <div class="container">#}
                                 <div class="row" style="margin-top: 40px;">
-                                    <div class="col-md-10 col-md-offset-1">
+                                    <div class="col-md-11 col-md-offset-1">
                                         <form action="{% url 'api:search' %}" method="post" id="form">
                                             {% csrf_token %}
                                             {#                                            <input type="hidden" name="advanced_search" value="False">#}
