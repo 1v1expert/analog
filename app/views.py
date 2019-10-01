@@ -10,7 +10,8 @@ from catalog.models import DataFile, Manufacturer
 from catalog import choices
 from catalog.handlers import ProcessingSearchFile
 
-from app.forms import MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile, EmailConfirmationForm
+from app.forms import \
+    MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile, EmailConfirmationForm, FeedBackForm
 from app.decorators import a_decorator_passing_logs
 from app.models import MainLog
 
@@ -187,5 +188,6 @@ def email_confirmation(request, verification_code, user_id):
 
 def landing_page_view(request):
     # https://ianlunn.github.io/Hover/
+    feedback_form = FeedBackForm()
     manufacturers = Manufacturer.objects.all()
-    return render(request, 'landing_page.html', {'manufacturers': manufacturers})
+    return render(request, 'landing_page.html', {'manufacturers': manufacturers, 'feedback': feedback_form})

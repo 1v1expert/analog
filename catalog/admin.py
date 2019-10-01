@@ -7,7 +7,7 @@ from django.contrib.admin.models import LogEntry
 
 from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, \
     UnFixedAttributeValue, Specification, DataFile
-from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader, GeneralDocumentReader
+from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader, GeneralDocumentReader, BettermannDocumentReader
 from catalog.reporters import writers, generators
 
 from catalog.forms import ProductChangeListForm
@@ -16,6 +16,7 @@ from app.models import MainLog
 
 from feincms.admin import tree_editor
 
+from datetime import datetime
 import time
 
 
@@ -159,7 +160,7 @@ class ProductAdmin(BaseAdmin):
 #         super(LogEntryAdmin, self).__init__(*args, **kwargs)
 #         self.list_display_links = (None, )
 
-from datetime import datetime
+
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'created_at', 'created_by']
     actions = ['export_data_to_xls']
@@ -175,7 +176,7 @@ class ManufacturerAdmin(BaseAdmin):
 
 
 class FileUploadAdmin(admin.ModelAdmin):
-    actions = ['process_file', 'process_koks_file', 'process_iek_file', 'process_general_file']
+    actions = ['process_file', 'process_koks_file', 'process_iek_file', 'process_bettermann_file', 'process_general_file']
     list_display = ['file', 'type', 'file_link', 'created_at', 'created_by']
     
     def file_link(self, obj):
@@ -196,6 +197,16 @@ class FileUploadAdmin(admin.ModelAdmin):
         except FileNotFoundError:
             messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
     process_iek_file.short_description = 'Импортировать шаблон(IEK)'
+    
+    def process_bettermann_file(self, request, queryset):
+        if not len(queryset) == 1:
+            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
+            return
+        try:
+            BettermannDocumentReader(path=queryset[0].file.name, only_parse=False).parse_file()
+        except FileNotFoundError:
+            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
+    process_bettermann_file.short_description = 'Импортировать шаблон(bettermann)'
     
     def process_koks_file(self, request, queryset):
         if not len(queryset) == 1:

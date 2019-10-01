@@ -9,8 +9,9 @@ from catalog.internal.utils import get_attributes, ProductInfo
 from catalog.forms import SearchForm, AdvancedSearchForm
 from catalog.models import Product, FixedValue
 
-from app.models import MainLog
+from app.models import MainLog, FeedBack
 from app.decorators import a_decorator_passing_logs
+from app.forms import FeedBackForm
 
 
 # def check_product(article, manufacturer_from) -> dict:
@@ -135,3 +136,23 @@ def check_product_and_get_attributes(request):
                 return JsonResponse({'error': 'Произошла ошибка, обратитесь в тех. поддержку'}, content_type='application/json')
     
     return HttpResponseBadRequest()
+
+
+@a_decorator_passing_logs
+def feedback(request):
+    if request.method == 'POST':
+        form = FeedBackForm(request.POST)
+        if form.is_valid():
+            try:
+                FeedBack.objects.create(user=request.user,
+                                        text=form.cleaned_data.get('text', ''),
+                                        email=form.cleaned_data.get('email', ''),
+                                        name=form.cleaned_data.get('name', ''),
+                                        phone=form.cleaned_data.get('phone', ''),
+                                        )
+                return JsonResponse({}, content_type='application/json')
+            except Exception as e:
+                MainLog.objects.create(user=request.user, raw={'error': e})
+                return HttpResponseBadRequest()
+    return HttpResponseBadRequest()
+    # return JsonResponse({'error': 'error'}, content_type='application/json')

@@ -485,7 +485,9 @@ class KOKSDocumentReader(object):
         for name_list in self.sheets:
             logger.debug('Sheet {}'.format(name_list))
             self.sheet = self.workbook.get_sheet_by_name(name_list)
-            for line in self.read_sheet():
+            for i, line in enumerate(self.read_sheet()):
+                if not i:
+                    continue
                 self.line_processing(line, name_list)
                 
         self._create_attributes_and_products()
@@ -624,6 +626,57 @@ class GeneralDocumentReader(KOKSDocumentReader):
         self._create_attributes_and_products()
         
         return self
+
+
+class BettermannDocumentReader(KOKSDocumentReader):
+    def __init__(self, path=None, workbook=None, only_parse=True, user=None):
+        super().__init__(path=path, workbook=workbook, only_parse=only_parse, user=user)
+        self.manufacturer = Manufacturer.objects.get(title='Bettermann')
+
+    def _get_categories(self, title):
+        return self._get_category_with_neural_network(title)
+    
+    def line_processing(self, line, name_sheet=None):
+        article = line[2].strip() if line[2] != 'None' else ''
+        title = line[4].strip() if line[4] != 'None' else ''
+        units = line[5].strip() if line[5] != 'None' else ''
+        price = line[8].strip() if line[8] != 'None' else ''
+
+        formalized_title = self.network.remove_stop_words(title)
+        
+        # if not title:
+        #     return
+        
+        if not article.strip() or title.strip().lower() == 'none' or not title:
+            return
+        
+        self.c_lines += 1  # counter lines
+        if self.c_lines % 100 == 0:
+            print(self.c_lines)
+        # check_doubles
+        if article in self.articles:
+            self.doubles_article.append(article)
+            return
+        self.articles.add(article)
+        
+        category_from_neural = self._get_categories(title)
+        category = category_from_neural
+        
+        try:
+            if category:
+                self.create_products(article, title, formalized_title, category,
+                                     raw={'raw_line': str(line)})
+                self._finding_an_fix_attribute(title, article)
+                if is_digit(price) and price:  # create price attr
+                    attribute = Attribute.objects.get(title='цена')
+                    self._create_attribute(article, float(price), attribute, fixed=False)
+    
+                if units:
+                    value = FixedValue.objects.get(title=units)
+                    attribute = Attribute.objects.get(title='ед.изм')
+                    self._create_attribute(article, value, attribute, fixed=True)
+        except Exception as e:
+            print(line, '\n', e)
 
 
 def is_digit(s):

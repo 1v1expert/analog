@@ -541,25 +541,30 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <div class="contact-form" id="contact-us">
-                    <form id="phpcontactform" role="form">
+                    <form id="feedback_form" role="form" action="{% url 'api:feedback' %}">
+                        {% csrf_token %}
                         <fieldset>
                             <div class="col-xs-12 col-sm-6">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="name" id="name" placeholder="Имя">
+                                    {{ feedback.name }}
+{#                                    <input type="text" class="form-control" name="name" id="name" placeholder="Имя">#}
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control" name="email" id="email"
-                                           placeholder="Email">
+                                    {{ feedback.email }}
+{#                                    <input type="email" class="form-control" name="email" id="email"#}
+{#                                           placeholder="Email">#}
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="mobile" id="mobile"
-                                           placeholder="Номер телефона">
+                                    {{ feedback.phone }}
+{#                                    <input type="text" class="form-control" name="mobile" id="mobile"#}
+{#                                           placeholder="Номер телефона">#}
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6">
                                 <div class="form-group">
-                                        <textarea class="form-control textarea" rows="5" name="message" id="msg"
-                                                  placeholder="Ваше сообщение"></textarea>
+                                    {{ feedback.text }}
+{#                                        <textarea class="form-control textarea" rows="5" name="message" id="msg"#}
+{#                                                  placeholder="Ваше сообщение"></textarea>#}
                                 </div>
                             </div>
                             <div class="relative fullwidth col-xs-12">

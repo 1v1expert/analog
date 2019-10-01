@@ -66,6 +66,26 @@ class AppSearchForm(forms.Form):
                                              widget=forms.Select(attrs={'class': 'form-control'}))
 
 
+class FeedBackForm(forms.Form):
+    name = forms.CharField(label='Имя', widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': "Имя"
+    }))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': "Email"
+    }))
+    phone = forms.CharField(label='Телефон', widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': "Номер телефона"
+    }))
+    text = forms.CharField(label='Текст', widget=forms.Textarea(attrs={
+        'class': 'form-control textarea',
+        'rows': 5,
+        'placeholder': "Ваше сообщение"
+    }))
+    
+
 class LoginForm(forms.ModelForm):
     class Meta:
         model = Profile
