@@ -189,5 +189,12 @@ def email_confirmation(request, verification_code, user_id):
 def landing_page_view(request):
     # https://ianlunn.github.io/Hover/
     feedback_form = FeedBackForm()
+    auth_form = MyAuthenticationForm(request)
+    reg_form = MyRegistrationForm()
     manufacturers = Manufacturer.objects.all()
-    return render(request, 'landing_page.html', {'manufacturers': manufacturers, 'feedback': feedback_form})
+    return render(request, 'landing_page.html', {
+        'manufacturers': manufacturers,
+        'feedback': feedback_form,
+        'auth_form': auth_form,
+        'reg_form': reg_form
+    })

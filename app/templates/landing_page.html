@@ -60,6 +60,7 @@
     .dropdown-menu {
         font-size: 11px;
     }
+
     .features ol {
         list-style: circle;
     }
@@ -189,75 +190,170 @@
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3">
                     <div class="oder">
-                        <div class="oder-content">
-                            <div class="container10"><a id="login-menu" href="#modal">Войти или зарег.</a>
-                                <div id="modal" class="login-popupContainer" style="display:none;">
-                                    <div class="popupHeader">
-                                        <div class="header_title">Авторизация</div>
-                                        <div class="modal_close"><i class="fa fa-times"></i></div>
-                                    </div>
-                                    <div class="popupBody">
-                                        <!-- Social Login -->
-                                        <div class="social_login">
-                                            <div class="login-main-icon"><img src="{% static 'images/login-icon.png' %}"
-                                                                              alt=""/></div>
-                                            <h1>Ваш аккаунт</h1>
-                                            <div class="main_btns-container">
-                                                <div class="first_half"><a href="#" id="login_form"
-                                                                           class="btn login-btn">Войти</a></div>
-                                                <div class="first_half last"><a href="#" id="register_form"
-                                                                                class="btn login-btn">Зарегистрироваться</a>
+                        {% if request.user.is_authenticated %}
+                            <div class="oder-content">
+                                <div class="container10"><a id="login-menu"
+                                                            href="#modal">{{ request.user.username }}</a>
+                                    {#                            <div class="container10"><a id="login-menu" href="#modal">Войти или зарег.</a>#}
+                                    <div id="modal" class="login-popupContainer" style="display:none;">
+                                        <div class="popupHeader">
+                                            <div class="header_title">Авторизация</div>
+                                            <div class="modal_close"><i class="fa fa-times"></i></div>
+                                        </div>
+                                        <div class="popupBody">
+                                            <!-- Social Login -->
+                                            <div class="social_login">
+                                                <div class="login-main-icon"><img
+                                                        src="{% static 'images/login-icon.png' %}"
+                                                        alt=""/></div>
+                                                <h1>Ваш аккаунт</h1>
+                                                <div class="main_btns-container">
+                                                    <div class="first_half"><a href="#" id="login_form"
+                                                                               class="btn login-btn">Войти</a></div>
+                                                    <div class="first_half last"><a href="#" id="register_form"
+                                                                                    class="btn login-btn">Зарегистрироваться</a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Username & Password Login form -->
-                                        <div class="user_login">
-                                            <form>
-                                                <input type="text" placeholder="Email / Username"/>
-                                                <br/>
-                                                <input type="password" placeholder="Password"/>
-                                                <br/>
-                                                <div class="checkbox">
-                                                    <input id="remember" type="checkbox"/>
-                                                    <label for="remember">Запомнить меня</label>
-                                                </div>
-                                                <div class="main_btns-container">
-                                                    <div class="first_half"><a href="#" class="btn back_btn"><i
-                                                            class="fa fa-angle-double-left"></i> Назад</a></div>
-                                                    <div class="first_half last"><a href="#"
-                                                                                    class="btn btn_blue">Войти</a></div>
-                                                </div>
-                                            </form>
-                                            <a href="#" class="forgot_password">Забыл пароль ?</a></div>
+                                            <!-- Username & Password Login form -->
+                                            <div class="user_login">
+                                                <form>
+                                                    <input type="text" placeholder="Email / Username"/>
+                                                    <br/>
+                                                    <input type="password" placeholder="Password"/>
+                                                    <br/>
+                                                    <div class="checkbox">
+                                                        <input id="remember" type="checkbox"/>
+                                                        <label for="remember">Запомнить меня</label>
+                                                    </div>
+                                                    <div class="main_btns-container">
+                                                        <div class="first_half"><a href="#" class="btn back_btn"><i
+                                                                class="fa fa-angle-double-left"></i> Назад</a></div>
+                                                        <div class="first_half last"><a href="#"
+                                                                                        class="btn btn_blue">Войти</a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <a href="#" class="forgot_password">Забыл пароль ?</a></div>
 
-                                        <!-- Register Form -->
-                                        <div class="user_register">
-                                            <form>
-                                                <input type="text" placeholder="Full Name"/>
-                                                <br/>
-                                                <input type="email" placeholder="Email Address"/>
-                                                <br/>
-                                                <input type="password" placeholder="Password"/>
-                                                <br/>
-                                                <div class="checkbox">
-                                                    <input id="send_updates" type="checkbox"/>
-                                                    <label for="send_updates">Send me occasional email updates</label>
-                                                </div>
-                                                <div class="main_btns-container">
-                                                    <div class="first_half"><a href="#" class="btn back_btn"><i
-                                                            class="fa fa-angle-double-left"></i> Назад</a></div>
-                                                    <div class="first_half last"><a href="#"
-                                                                                    class="btn btn_blue">Войти</a></div>
-                                                </div>
-                                            </form>
+                                            <!-- Register Form -->
+                                            <div class="user_register">
+                                                <form>
+                                                    <input type="text" placeholder="Full Name"/>
+                                                    <br/>
+                                                    <input type="email" placeholder="Email Address"/>
+                                                    <br/>
+                                                    <input type="password" placeholder="Password"/>
+                                                    <br/>
+                                                    <div class="checkbox">
+                                                        <input id="send_updates" type="checkbox"/>
+                                                        <label for="send_updates">Send me occasional email
+                                                            updates</label>
+                                                    </div>
+                                                    <div class="main_btns-container">
+                                                        <div class="first_half"><a href="#" class="btn back_btn"><i
+                                                                class="fa fa-angle-double-left"></i> Назад</a></div>
+                                                        <div class="first_half last"><a href="#"
+                                                                                        class="btn btn_blue">Войти</a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="oder-content">l</div>
-                        <div class="oder-content"><a href="#">Помощь</a></div>
+                            <div class="oder-content">l</div>
+                            <div class="oder-content"><a href="{% url 'api:logout' %}">Выйти</a></div>
+{#                            <div class="oder-content"><a href="#">Помощь</a></div>#}
+                        {% else %}
+                            <div class="oder-content">
+                                <div class="container10">
+                                    <a id="login-menu" href="#modal">Войти или зарег.</a>
+                                    <div id="modal" class="login-popupContainer" style="display:none;">
+                                        <div class="popupHeader">
+                                            <div class="header_title">Авторизация</div>
+                                            <div class="modal_close"><i class="fa fa-times"></i></div>
+                                        </div>
+                                        <div class="popupBody">
+                                            <!-- Social Login -->
+                                            <div class="social_login">
+                                                <div class="login-main-icon"><img
+                                                        src="{% static 'images/login-icon.png' %}"
+                                                        alt=""/></div>
+                                                <h1>Ваш аккаунт</h1>
+                                                <div class="main_btns-container">
+                                                    <div class="first_half"><a href="#" id="login_form"
+                                                                               class="btn login-btn">Войти</a></div>
+                                                    <div class="first_half last"><a href="#" id="register_form"
+                                                                                    class="btn login-btn">Зарегистрироваться</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Username & Password Login form -->
+                                            <div class="user_login">
+                                                <form action="{% url 'api:login' %}" method="post">
+                                                    {% csrf_token %}
+                                                    {{ auth_form.username }}
+{#                                                    <input type="text" placeholder="Email / Username"/>#}
+{#                                                    <br/>#}
+                                                    {{ auth_form.password }}
+{#                                                    <input type="password" placeholder="Password"/>#}
+{#                                                    <br/>#}
+                                                    <div class="checkbox">
+                                                        <input id="remember" type="checkbox"/>
+                                                        <label for="remember">Запомнить меня</label>
+                                                    </div>
+                                                    <div class="main_btns-container">
+                                                        <div class="first_half">
+                                                            <a href="#" class="btn back_btn"><i
+                                                                class="fa fa-angle-double-left"></i> Назад</a></div>
+                                                        <div class="first_half last">
+                                                            <button href="#" type="submit" class="btn btn_blue">Войти</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <a href="#" onclick="swal('Печаль');$('#modal').hide()" class="forgot_password">Забыл пароль ?</a></div>
+
+                                            <!-- Register Form -->
+                                            <div class="user_register">
+                                                <form>
+                                                    {% csrf_token %}
+{#                                                    <input type="text" placeholder="Full Name"/>#}
+                                                    {{ reg_form.username }}
+{#                                                    <br/>#}
+{#                                                    <input type="email" placeholder="Email Address"/>#}
+                                                    {{ reg_form.email }}
+{#                                                    <br/>#}
+{#                                                    <input type="password" placeholder="Password"/>#}
+                                                    {{ reg_form.password }}
+{#                                                    <br/>#}
+                                                    {{ reg_form.double_password }}
+{#                                                    <br/>#}
+                                                    <div class="checkbox">
+                                                        <input id="send_updates" type="checkbox"/>
+                                                        <label for="send_updates">Send me occasional email
+                                                            updates</label>
+                                                    </div>
+                                                    <div class="main_btns-container">
+                                                        <div class="first_half"><a href="#" class="btn back_btn"><i
+                                                                class="fa fa-angle-double-left"></i> Назад</a></div>
+                                                        <div class="first_half last"><a href="#"
+                                                                                        class="btn btn_blue">Войти</a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+{#                            <div class="oder-content">l</div>#}
+{#                            <div class="oder-content"><a href="#">Выйти</a></div>#}
+{#                            <div class="oder-content"><a href="#">Помощь</a></div>#}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -550,24 +646,24 @@
                             <div class="col-xs-12 col-sm-6">
                                 <div class="form-group">
                                     {{ feedback.name }}
-{#                                    <input type="text" class="form-control" name="name" id="name" placeholder="Имя">#}
+                                    {#                                    <input type="text" class="form-control" name="name" id="name" placeholder="Имя">#}
                                 </div>
                                 <div class="form-group">
                                     {{ feedback.email }}
-{#                                    <input type="email" class="form-control" name="email" id="email"#}
-{#                                           placeholder="Email">#}
+                                    {#                                    <input type="email" class="form-control" name="email" id="email"#}
+                                    {#                                           placeholder="Email">#}
                                 </div>
                                 <div class="form-group">
                                     {{ feedback.phone }}
-{#                                    <input type="text" class="form-control" name="mobile" id="mobile"#}
-{#                                           placeholder="Номер телефона">#}
+                                    {#                                    <input type="text" class="form-control" name="mobile" id="mobile"#}
+                                    {#                                           placeholder="Номер телефона">#}
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6">
                                 <div class="form-group">
                                     {{ feedback.text }}
-{#                                        <textarea class="form-control textarea" rows="5" name="message" id="msg"#}
-{#                                                  placeholder="Ваше сообщение"></textarea>#}
+                                    {#                                        <textarea class="form-control textarea" rows="5" name="message" id="msg"#}
+                                    {#                                                  placeholder="Ваше сообщение"></textarea>#}
                                 </div>
                             </div>
                             <div class="relative fullwidth col-xs-12">

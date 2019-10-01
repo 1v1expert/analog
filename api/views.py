@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import logout, authenticate, login
 
 from catalog.utils import SearchProducts
 from catalog.handlers import result_api_processing
@@ -11,7 +12,8 @@ from catalog.models import Product, FixedValue
 
 from app.models import MainLog, FeedBack
 from app.decorators import a_decorator_passing_logs
-from app.forms import FeedBackForm
+from app.forms import FeedBackForm, MyAuthenticationForm
+from app.views import landing_page_view
 
 
 # def check_product(article, manufacturer_from) -> dict:
@@ -156,3 +158,27 @@ def feedback(request):
                 return HttpResponseBadRequest()
     return HttpResponseBadRequest()
     # return JsonResponse({'error': 'error'}, content_type='application/json')
+
+
+@a_decorator_passing_logs
+def logout_view(request):
+    logout(request)
+    return redirect('app:landing_home')
+
+
+@a_decorator_passing_logs
+def login_view(request):
+    auth_form = MyAuthenticationForm(request)
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect('app:landing_home')
+        return render(request, 'landing_page.html', {'auth_form': auth_form, 'error': 'Неверно введён логин или пароль'})
+
+    return HttpResponseBadRequest()
+    # maybe use do redirect
+    # return landing_page_view(request)
