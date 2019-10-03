@@ -192,76 +192,77 @@
                     <div class="oder">
                         {% if request.user.is_authenticated %}
                             <div class="oder-content">
-                                <div class="container10"><a id="login-menu"
-                                                            href="#modal">{{ request.user.username }}</a>
+                                <div class="container10">
+{#                                    <a id="login-menu" href="#modal">#}
+                                    <a>{{ request.user.username }}</a>
                                     {#                            <div class="container10"><a id="login-menu" href="#modal">Войти или зарег.</a>#}
-                                    <div id="modal" class="login-popupContainer" style="display:none;">
-                                        <div class="popupHeader">
-                                            <div class="header_title">Авторизация</div>
-                                            <div class="modal_close"><i class="fa fa-times"></i></div>
-                                        </div>
-                                        <div class="popupBody">
-                                            <!-- Social Login -->
-                                            <div class="social_login">
-                                                <div class="login-main-icon"><img
-                                                        src="{% static 'images/login-icon.png' %}"
-                                                        alt=""/></div>
-                                                <h1>Ваш аккаунт</h1>
-                                                <div class="main_btns-container">
-                                                    <div class="first_half"><a href="#" id="login_form"
-                                                                               class="btn login-btn">Войти</a></div>
-                                                    <div class="first_half last"><a href="#" id="register_form"
-                                                                                    class="btn login-btn">Зарегистрироваться</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Username & Password Login form -->
-                                            <div class="user_login">
-                                                <form>
-                                                    <input type="text" placeholder="Email / Username"/>
-                                                    <br/>
-                                                    <input type="password" placeholder="Password"/>
-                                                    <br/>
-                                                    <div class="checkbox">
-                                                        <input id="remember" type="checkbox"/>
-                                                        <label for="remember">Запомнить меня</label>
-                                                    </div>
-                                                    <div class="main_btns-container">
-                                                        <div class="first_half"><a href="#" class="btn back_btn"><i
-                                                                class="fa fa-angle-double-left"></i> Назад</a></div>
-                                                        <div class="first_half last"><a href="#"
-                                                                                        class="btn btn_blue">Войти</a>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                                <a href="#" class="forgot_password">Забыл пароль ?</a></div>
-
-                                            <!-- Register Form -->
-                                            <div class="user_register">
-                                                <form>
-                                                    <input type="text" placeholder="Full Name"/>
-                                                    <br/>
-                                                    <input type="email" placeholder="Email Address"/>
-                                                    <br/>
-                                                    <input type="password" placeholder="Password"/>
-                                                    <br/>
-                                                    <div class="checkbox">
-                                                        <input id="send_updates" type="checkbox"/>
-                                                        <label for="send_updates">Send me occasional email
-                                                            updates</label>
-                                                    </div>
-                                                    <div class="main_btns-container">
-                                                        <div class="first_half"><a href="#" class="btn back_btn"><i
-                                                                class="fa fa-angle-double-left"></i> Назад</a></div>
-                                                        <div class="first_half last"><a href="#"
-                                                                                        class="btn btn_blue">Войти</a>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+{#                                    <div id="modal" class="login-popupContainer" style="display:none;">#}
+{#                                        <div class="popupHeader">#}
+{#                                            <div class="header_title">Авторизация</div>#}
+{#                                            <div class="modal_close"><i class="fa fa-times"></i></div>#}
+{#                                        </div>#}
+{#                                        <div class="popupBody">#}
+{#                                            <!-- Social Login -->#}
+{#                                            <div class="social_login">#}
+{#                                                <div class="login-main-icon"><img#}
+{#                                                        src="{% static 'images/login-icon.png' %}"#}
+{#                                                        alt=""/></div>#}
+{#                                                <h1>Ваш аккаунт</h1>#}
+{#                                                <div class="main_btns-container">#}
+{#                                                    <div class="first_half"><a href="#" id="login_form"#}
+{#                                                                               class="btn login-btn">Войти</a></div>#}
+{#                                                    <div class="first_half last"><a href="#" id="register_form"#}
+{#                                                                                    class="btn login-btn">Зарегистрироваться</a>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{##}
+{#                                            <!-- Username & Password Login form -->#}
+{#                                            <div class="user_login">#}
+{#                                                <form>#}
+{#                                                    <input type="text" placeholder="Email / Username"/>#}
+{#                                                    <br/>#}
+{#                                                    <input type="password" placeholder="Password"/>#}
+{#                                                    <br/>#}
+{#                                                    <div class="checkbox">#}
+{#                                                        <input id="remember" type="checkbox"/>#}
+{#                                                        <label for="remember">Запомнить меня</label>#}
+{#                                                    </div>#}
+{#                                                    <div class="main_btns-container">#}
+{#                                                        <div class="first_half"><a href="#" class="btn back_btn"><i#}
+{#                                                                class="fa fa-angle-double-left"></i> Назад</a></div>#}
+{#                                                        <div class="first_half last"><a href="#"#}
+{#                                                                                        class="btn btn_blue">Войти</a>#}
+{#                                                        </div>#}
+{#                                                    </div>#}
+{#                                                </form>#}
+{#                                                <a href="#" class="forgot_password">Забыл пароль ?</a></div>#}
+{##}
+{#                                            <!-- Register Form -->#}
+{#                                            <div class="user_register">#}
+{#                                                <form>#}
+{#                                                    <input type="text" placeholder="Full Name"/>#}
+{#                                                    <br/>#}
+{#                                                    <input type="email" placeholder="Email Address"/>#}
+{#                                                    <br/>#}
+{#                                                    <input type="password" placeholder="Password"/>#}
+{#                                                    <br/>#}
+{#                                                    <div class="checkbox">#}
+{#                                                        <input id="send_updates" type="checkbox"/>#}
+{#                                                        <label for="send_updates">Send me occasional email#}
+{#                                                            updates</label>#}
+{#                                                    </div>#}
+{#                                                    <div class="main_btns-container">#}
+{#                                                        <div class="first_half"><a href="#" class="btn back_btn"><i#}
+{#                                                                class="fa fa-angle-double-left"></i> Назад</a></div>#}
+{#                                                        <div class="first_half last"><a href="#"#}
+{#                                                                                        class="btn btn_blue">Войти</a>#}
+{#                                                        </div>#}
+{#                                                    </div>#}
+{#                                                </form>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
                                 </div>
                             </div>
                             <div class="oder-content">l</div>
@@ -293,8 +294,8 @@
                                             </div>
 
                                             <!-- Username & Password Login form -->
-                                            <div class="user_login">
-                                                <form action="{% url 'api:login' %}" method="post">
+                                            <div class="user_login" >
+                                                <form action="{% url 'api:login' %}" method="post" id="user_login_form">
                                                     {% csrf_token %}
                                                     {{ auth_form.username }}
 {#                                                    <input type="text" placeholder="Email / Username"/>#}
@@ -315,6 +316,7 @@
                                                         </div>
                                                     </div>
                                                 </form>
+                                                <label id="error_user_login_form"></label>
                                                 <a href="#" onclick="swal('Печаль');$('#modal').hide()" class="forgot_password">Забыл пароль ?</a></div>
 
                                             <!-- Register Form -->
@@ -333,15 +335,15 @@
                                                     {{ reg_form.double_password }}
 {#                                                    <br/>#}
                                                     <div class="checkbox">
-                                                        <input id="send_updates" type="checkbox"/>
-                                                        <label for="send_updates">Send me occasional email
-                                                            updates</label>
+{#                                                        <input id="send_updates" type="checkbox"/>#}
+{#                                                        <label for="send_updates">Send me occasional email#}
+{#                                                            updates</label>#}
                                                     </div>
                                                     <div class="main_btns-container">
                                                         <div class="first_half"><a href="#" class="btn back_btn"><i
                                                                 class="fa fa-angle-double-left"></i> Назад</a></div>
                                                         <div class="first_half last"><a href="#"
-                                                                                        class="btn btn_blue">Войти</a>
+                                                                                        class="btn btn_blue">Зарегистрироваться</a>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -857,6 +859,70 @@
 <!--============================Sweetalert==========================-->
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script type="text/javascript">
+     /*===================
+   3.popup sign in & register
+    ===================*/
+
+
+	$("#login-menu").leanModal({top : 130, overlay : 0.6, closeButton: ".modal_close" });
+
+	$(function(){
+		// Calling Login Form
+		$("#login_form").click(function(){
+			$(".social_login").hide();
+			$(".user_login").show();
+			return false;
+		});
+
+		// Calling Register Form
+		$("#register_form").click(function(){
+			$(".social_login").hide();
+			$(".user_register").show();
+			$(".header_title").text('Регистрация');
+			return false;
+		});
+
+		// Going back to Social Forms
+		$(".back_btn").click(function(){
+			$(".user_login").hide();
+			$(".user_register").hide();
+			$(".social_login").show();
+			$(".header_title").text('Авторизация');
+			return false;
+		});
+
+	})
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        /*===================
+        User login form
+         ====================*/
+        var login_form = $('#user_login_form');
+        login_form.submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'api:login' %}",
+                data: login_form.serialize(),
+                success: function (response) {
+                    if (response.OK){
+                        location.reload();
+                    }
+                    else {
+                        $('#error_user_login_form').text(response.error)
+                    }
+                },
+                error: function (error) {
+                    $('#error_user_login_form').text("Произошла ошибка.")
+                }
+            })
+        })
+    })
+</script>
 
 <script type="text/javascript">
     $(function () {
