@@ -934,7 +934,7 @@
                 url: "{% url 'api:registration' %}",
                 data: register_form.serialize(),
                 success: function (response) {
-                    alert(response.OK)
+                    console.log(response)
                     if (response.OK){
                         location.reload();
                     }
@@ -943,7 +943,6 @@
                     }
                 },
                 error: function (error) {
-                    alert(error.OK)
                     $('#error_user_login_form').text("Произошла ошибка.")
                 }
             })
@@ -1056,6 +1055,23 @@
             $('#manufacturer_to').val(self.target.id);
         })
     });
+</script>
+
+<script type="text/javascript">
+        $(function () {
+            /*==================
+         Check registration
+         ==================*/
+            {% if confirm_email %}
+                swal('{{ request.user }}, ваш аккаунт подтверждён');
+                function redirect() {
+                    window.location.href = "{% url 'app:landing_home' %}";
+                }
+
+                setTimeout(redirect, 3000);
+
+            {% endif %}
+        })
 </script>
 </body>
 </html>

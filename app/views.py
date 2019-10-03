@@ -190,7 +190,8 @@ def landing_confirm_mail_page(request, verification_code, user_id):
         'confirm_email': True
         # 'error': error
     }
-    if verification_code == check_code:
+    if verification_code == check_code and user:
+        login(request, user)
         return render(request, 'landing_page.html', args)
     else:
         args['confirm_email'] = False

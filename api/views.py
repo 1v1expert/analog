@@ -164,7 +164,6 @@ def login_view(request):
     
 @a_decorator_passing_logs
 def registration_view(request):
-    print(vars(request))
     if request.method == 'POST':
         suc, text = registration(request=request)
         if suc:
