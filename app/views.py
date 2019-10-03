@@ -153,6 +153,11 @@ def email_confirmation(request, verification_code, user_id):
             else:
                 msg = 'Код неверен'
         return render(request, 'email_confirmation.html', {'conf_form': confirmation_form, 'msg': msg})
+    return render(request, 'email_confirmation.html', {'msg': "Ошибка подтверждения email'a"})
+
+#  ========================
+#  Landing page, new design
+#  ========================
 
 
 def landing_page_view(request):
@@ -168,3 +173,25 @@ def landing_page_view(request):
         'reg_form': reg_form,
         # 'error': error
     })
+
+
+def landing_confirm_mail_page(request, verification_code, user_id):
+    user = get_object_or_404(models.User, pk=user_id)
+    check_code = hashlib.md5('{}'.format(user.pk).encode()).hexdigest()
+    feedback_form = FeedBackForm()
+    auth_form = MyAuthenticationForm(request)
+    reg_form = MyRegistrationForm()
+    manufacturers = Manufacturer.objects.all()
+    args = {
+        'manufacturers': manufacturers,
+        'feedback': feedback_form,
+        'auth_form': auth_form,
+        'reg_form': reg_form,
+        'confirm_email': True
+        # 'error': error
+    }
+    if verification_code == check_code:
+        return render(request, 'landing_page.html', args)
+    else:
+        args['confirm_email'] = False
+        return render(request, 'landing_page.html', args)

@@ -321,7 +321,7 @@
 
                                             <!-- Register Form -->
                                             <div class="user_register">
-                                                <form>
+                                                <form id="user_register_form">
                                                     {% csrf_token %}
 {#                                                    <input type="text" placeholder="Full Name"/>#}
                                                     {{ reg_form.username }}
@@ -342,8 +342,10 @@
                                                     <div class="main_btns-container">
                                                         <div class="first_half"><a href="#" class="btn back_btn"><i
                                                                 class="fa fa-angle-double-left"></i> Назад</a></div>
-                                                        <div class="first_half last"><a href="#"
-                                                                                        class="btn btn_blue">Зарегистрироваться</a>
+                                                        <div class="first_half last">
+{#                                                            <a href="#"#}
+{#                                                                                        class="btn btn_blue">Зарегистрироваться</a>#}
+                                                            <button href="#" type="submit" class="btn btn_blue">Зарегистрироваться</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -921,6 +923,32 @@
                 }
             })
         })
+        /*===================
+        User registration form
+         ====================*/
+        var register_form = $('#user_register_form');
+        register_form.submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'api:registration' %}",
+                data: register_form.serialize(),
+                success: function (response) {
+                    alert(response.OK)
+                    if (response.OK){
+                        location.reload();
+                    }
+                    else {
+                        $('#error_user_login_form').text(response.error)
+                    }
+                },
+                error: function (error) {
+                    alert(error.OK)
+                    $('#error_user_login_form').text("Произошла ошибка.")
+                }
+            })
+        })
+
     })
 </script>
 

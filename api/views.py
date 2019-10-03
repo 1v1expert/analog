@@ -8,34 +8,12 @@ from catalog.utils import SearchProducts
 from catalog.handlers import result_api_processing
 from catalog.internal.utils import get_attributes, ProductInfo
 from catalog.forms import SearchForm, AdvancedSearchForm
-from catalog.models import Product, FixedValue
+from catalog.models import Product
 
 from app.models import MainLog, FeedBack
 from app.decorators import a_decorator_passing_logs
-from app.forms import FeedBackForm, MyAuthenticationForm, MyRegistrationForm
+from app.forms import FeedBackForm
 from catalog.internal.auth_actions import registration
-from app.views import landing_page_view
-
-
-# def check_product(article, manufacturer_from) -> dict:
-#     response = {'result': []}
-#
-#     try:
-#         product = Product.objects.get(article=article, manufacturer=manufacturer_from)
-#         return {'correctly': True,
-#                 'product': product}
-#
-#     except Product.DoesNotExist as e:
-#         # response['correctly'] = False
-#         response['error_system'] = 'article: {}; manufacturer_from: {}; {}'.format(article, manufacturer_from, e)
-#         response['error'] = 'По артикулу: {} и производителю: {} товара не найдено'.format(article, manufacturer_from)
-#
-#     except Product.MultipleObjectsReturned as e:
-#         # response['correctly'] = False
-#         response['error_system'] = 'article: {}; manufacturer_from: {}; {}'.format(article, manufacturer_from, e)
-#         response['error'] = "Найдено несколько продуктов, уточните поиск"
-#
-#     return response
 
 
 @csrf_exempt
@@ -185,7 +163,8 @@ def login_view(request):
 
     
 @a_decorator_passing_logs
-def registration(request):
+def registration_view(request):
+    print(vars(request))
     if request.method == 'POST':
         suc, text = registration(request=request)
         if suc:

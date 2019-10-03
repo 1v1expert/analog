@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from app.views import login_view, check_in_view, home_view, logout_view, search, search_from_file_view, \
-    email_confirmation, faq_view, contacts_view, partners_view, profile_view, landing_page_view
+    email_confirmation, faq_view, contacts_view, partners_view, profile_view, landing_page_view, landing_confirm_mail_page
 
 app_name = 'app'
 urlpatterns = [
@@ -16,8 +16,8 @@ urlpatterns = [
     url(r'^old/faq', faq_view, name='faq_page'),
     url(r'^old/advanced_search/$', search, name='advanced_search'),
     url(r'^old/logout/$', logout_view, name='logout'),
-    url(r'^old/email_confirmation/(?P<verification_code>[0-9\w-]+)-(?P<user_id>[0-9]+)/$',
-        email_confirmation, name='email_confirmation'),
+    url(r'^email_confirmation/(?P<verification_code>[0-9\w-]+)-(?P<user_id>[0-9]+)/$',
+        landing_confirm_mail_page, name='email_confirmation'),
     url(r'^old/', home_view, name='home'),
     url(r'^$', landing_page_view, name='landing_home')
     # url(r'^admin/', admin.site.urls),

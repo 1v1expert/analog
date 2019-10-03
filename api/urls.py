@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from api.views import check_product_and_get_attributes, search_from_form, advanced_search, \
-    feedback, logout_view, login_view
+    feedback, logout_view, login_view, registration_view
 
 app_name = 'api'
 urlpatterns = [
@@ -10,4 +10,7 @@ urlpatterns = [
     url(r'^feedback/$', feedback, name='feedback'),
     url(r'^logout/$', logout_view, name='logout'),
     url(r'^login/$', login_view, name='login'),
+    url(r'^register/$', registration_view, name='registration'),
+    # url(r'^old/email_confirmation/(?P<verification_code>[0-9\w-]+)-(?P<user_id>[0-9]+)/$',
+    #     email_confirmation, name='email_confirmation'),
 ]

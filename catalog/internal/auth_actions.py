@@ -1,5 +1,5 @@
 from django.contrib.auth import models
-from catalog.internal.messages import send_email
+from catalog.internal.messages import send_email_with_connection
 
 import hashlib
 
@@ -22,9 +22,9 @@ def registration(request=None):
     if not created:
         return False, "пользователь уже существует"
     
-    if not user.check_password(request.POST['password']):
-        user.delete()
-        return False, 'Введённый пароль состоит только из цифр, некорректен.'
+    # if not user.check_password(request.POST['password']):
+    #     user.delete()
+    #     return False, 'Введённый пароль некорректен'
     
     user.set_password(request.POST['password'])
     user.save()
@@ -34,7 +34,12 @@ def registration(request=None):
     header = 'Подтверждение почты'
     msg = 'Ваш верификационный код - {}, введите его или перейдите по ссылке: {}\n'.format(verification_code, href)
     try:
-        send_email(header, msg, [request.POST['email']])
+        send_email_with_connection(header, msg, [request.POST['email']])
         return True, user
     except Exception as e:
+        print(e)
         return False, 'Произошла проблема при отправке email'
+    
+
+def confirm_email(verification):
+    pass
