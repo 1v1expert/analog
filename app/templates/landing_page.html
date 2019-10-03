@@ -778,6 +778,28 @@
 {#</div>#}
 {#<a class="styles-open"  href="#closeoptions"> </a>#}
 {#<div class="styles-closed " > <a href="#options"> </a> </div>#}
+
+<script type="text/javascript">
+    {#Working with cookie#}
+
+    function createCookie(cookieName, cookieValue, daysToExpire) {
+        var date = new Date();
+        date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+        document.cookie = cookieName + "=" + cookieValue + "; expires=" + date.toGMTString();
+    }
+
+    function accessCookie(cookieName) {
+        var name = cookieName + "=";
+        var allCookieArray = document.cookie.split(';');
+        for (var i = 0; i < allCookieArray.length; i++) {
+            var temp = allCookieArray[i].trim();
+            if (temp.indexOf(name) == 0)
+                return temp.substring(name.length, temp.length);
+        }
+        return "";
+    }
+</script>
+
 <script type="text/javascript">
     /*===================
        Letter effect
@@ -934,7 +956,7 @@
                 url: "{% url 'api:registration' %}",
                 data: register_form.serialize(),
                 success: function (response) {
-                    console.log(response)
+                    console.log(response);
                     if (response.OK){
                         location.reload();
                     }
@@ -956,10 +978,23 @@
         /*==================
          Analogue search
          ==================*/
+
+
         var form = $('#form');
         form.submit(function (e) {
             console.log(form.serialize());
             e.preventDefault();
+
+            var attempt_count = +accessCookie('attempt_count');
+            {% if not request.user.is_authenticated %}
+            if (attempt_count > 3)
+            {
+                swal("Ошибка!", "Пожалуйста, авторизуйтесь, чтобы продолжить пользоваться сервисом", "info");
+                {#$('#modal').modal("toggle");#}
+                return '';
+            }
+            {% endif %}
+
             $.ajax({
                 type: "POST",
                 url: "{% url 'api:search' %}",
@@ -971,6 +1006,7 @@
                         swal("Ошибка!", data.error, "info");
                     }
                     else {
+                        createCookie("attempt_count", attempt_count+1, 10);
                         function buildTable(data) {
                             var table = document.createElement("table");
                             table.className = "table table-hover mb-0";
