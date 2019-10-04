@@ -90,13 +90,13 @@ def check_in_view(request):
 # @login_required(redirect_field_name='app:login')
 @login_required(login_url='login/')
 @a_decorator_passing_logs
-def home_view(request):
+def home_view(request) -> HttpResponse:
     return render(request, 'home.html')
 
 
 @login_required(login_url='login/')
 @a_decorator_passing_logs
-def profile_view(request):
+def profile_view(request) -> HttpResponse:
     return render(request, 'profile.html',
                   {
                       'actions_count': MainLog.objects.filter(user=request.user).count(),
@@ -108,24 +108,24 @@ def profile_view(request):
 
 @login_required(login_url='login/')
 @a_decorator_passing_logs
-def faq_view(request):
+def faq_view(request) -> HttpResponse:
     return render(request, 'faq.html')
 
 
 @login_required(login_url='login/')
 @a_decorator_passing_logs
-def partners_view(request):
+def partners_view(request) -> HttpResponse:
     return render(request, 'to_partners.html')
 
 
 @login_required(login_url='login/')
 @a_decorator_passing_logs
-def contacts_view(request):
+def contacts_view(request) -> HttpResponse:
     return render(request, 'contacts.html')
 
 
 @a_decorator_passing_logs
-def logout_view(request):
+def logout_view(request) -> HttpResponse:
     logout(request)
     return redirect('app:login')
 
@@ -160,7 +160,8 @@ def email_confirmation(request, verification_code, user_id):
 #  ========================
 
 
-def landing_page_view(request):
+def landing_page_view(request) -> HttpResponse:
+    """  The function renders the main project page """
     # https://ianlunn.github.io/Hover/
     feedback_form = FeedBackForm()
     auth_form = MyAuthenticationForm(request)
@@ -175,7 +176,8 @@ def landing_page_view(request):
     })
 
 
-def landing_confirm_mail_page(request, verification_code, user_id):
+def landing_confirm_mail_page(request, verification_code, user_id) -> HttpResponse:
+    """  The function renders the main project page with mail confirmation """
     user = get_object_or_404(models.User, pk=user_id)
     check_code = hashlib.md5('{}'.format(user.pk).encode()).hexdigest()
     feedback_form = FeedBackForm()
