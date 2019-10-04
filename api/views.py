@@ -152,6 +152,10 @@ def login_view(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
+        
+        if not user.is_active:
+            return JsonResponse({'OK': False, 'error': 'Учётная запись не подтверждена'})
+        
         if user is not None:
             if user.is_active:
                 login(request, user)
