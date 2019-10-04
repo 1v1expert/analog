@@ -18,7 +18,7 @@ from catalog.internal.auth_actions import registration
 
 @csrf_exempt
 @a_decorator_passing_logs
-def search_from_form(request):
+def search_from_form(request) -> HttpResponse:
     # print(vars(request), request.method, request.method.POST)
     if request.method == 'POST':
         form = SearchForm(request.POST)
@@ -45,7 +45,7 @@ def search_from_form(request):
                         content_type='application/json')
 
 
-def advanced_search(request):
+def advanced_search(request) -> HttpResponse:
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -101,7 +101,7 @@ def advanced_search(request):
 #               {'advanced_form': advanced_form, 'product': product, 'manufacturer_to': manufacturer_to})
 
 
-def check_product_and_get_attributes(request):
+def check_product_and_get_attributes(request) -> HttpResponse:
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -120,7 +120,7 @@ def check_product_and_get_attributes(request):
 
 
 @a_decorator_passing_logs
-def feedback(request):
+def feedback(request) -> HttpResponse:
     if request.method == 'POST':
         form = FeedBackForm(request.POST)
         if form.is_valid():
@@ -140,13 +140,13 @@ def feedback(request):
 
 
 @a_decorator_passing_logs
-def logout_view(request):
+def logout_view(request) -> HttpResponse:
     logout(request)
     return redirect('app:landing_home')
 
 
 @a_decorator_passing_logs
-def login_view(request):
+def login_view(request) -> HttpResponse:
     # auth_form = MyAuthenticationForm(request)
     if request.method == 'POST':
         username = request.POST['username']
@@ -167,7 +167,7 @@ def login_view(request):
 
     
 @a_decorator_passing_logs
-def registration_view(request):
+def registration_view(request) -> HttpResponse:
     if request.method == 'POST':
         suc, text = registration(request=request)
         if suc:
