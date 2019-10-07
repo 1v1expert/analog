@@ -715,10 +715,13 @@
                     <p>на новости </p>
                 </div>
             </div>
-            <form class="form-search" role="form" action="subscribe.php" id="subscribeForm" method="POST">
+{#            <form class="form-search" role="form" action="subscribe.php" id="subscribeForm" method="POST">#}
+            <form class="form-search" id="subscribeForm" method="POST">
                 <div class="col-sm-6 col-md-6">
-                    <input type="email" name="email" id="address" required="required" class="newsletter-form"
-                           placeholder="Введите ваш email адрес" data-validate="validate(required, email)">
+                    {% csrf_token %}
+                    {{ subscribe_form.email }}
+{#                    <input type="email" name="email" id="address" required="required" class="newsletter-form"#}
+{#                           placeholder="Введите ваш email адрес" data-validate="validate(required, email)">#}
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <button type="submit" class="newsletter-btn">Подписаться</button>
@@ -945,6 +948,30 @@
 <script type="text/javascript">
     $(function () {
         /*===================
+        User subscribe form
+         ====================*/
+        var subscribe_form = $('#subscribeForm');
+        subscribe_form.submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'api:subscriber' %}",
+                data: subscribe_form.serialize(),
+                success: function (response) {
+                    if (response.OK){
+                        $('#result').html('Спасибо, вы успешно подписаны.');
+                    }
+                    else {
+                        $('#result').html(response.error);
+                    }
+                },
+                error: function (error) {
+                    $('#result').html("Произошла ошибка.");
+                }
+            })
+        })
+
+        /*===================
         User login form
          ====================*/
         var login_form = $('#user_login_form');
@@ -967,6 +994,7 @@
                 }
             })
         })
+
         /*===================
         User registration form
          ====================*/

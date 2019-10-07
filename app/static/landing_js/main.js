@@ -181,32 +181,32 @@ return false;
     ===================*/
 
 
-$(document).ready(function() {
-  $('#subscribeForm').ketchup().submit(function() {
-      if ($(this).ketchup('isValid')) {
-          var action = $(this).attr('action');
-          $.ajax({
-              url: action,
-              type: 'POST',
-              data: {
-                  email: $('#address').val()
-              },
-              success: function(data){
-                  $('#result').html(data);
-              },
-              error: function() {
-                  $('#result').html('Sorry, an error occurred.');
-              }
-          });
-      }
-      return false;
-  });
-
-
-
-
-
-
-});
+// $(document).ready(function() {
+//   $('#subscribeForm').ketchup().submit(function() {
+//       if ($(this).ketchup('isValid')) {
+//           var action = $(this).attr('action');
+//           $.ajax({
+//               url: action,
+//               type: 'POST',
+//               data: {
+//                   email: $('#address').val()
+//               },
+//               success: function(data){
+//                   $('#result').html(data);
+//               },
+//               error: function() {
+//                   $('#result').html('Sorry, an error occurred.');
+//               }
+//           });
+//       }
+//       return false;
+//   });
+//
+//
+//
+//
+//
+//
+// });
 
 })(jQuery);

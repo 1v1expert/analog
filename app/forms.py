@@ -84,6 +84,13 @@ class FeedBackForm(forms.Form):
         'rows': 5,
         'placeholder': "Ваше сообщение"
     }))
+
+    
+class SubscribeForm(forms.Form):
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': "Email"
+    }))
     
 
 class LoginForm(forms.ModelForm):

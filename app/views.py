@@ -12,7 +12,7 @@ from catalog.handlers import ProcessingSearchFile
 from catalog.internal.auth_actions import registration
 
 from app.forms import \
-    MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile, EmailConfirmationForm, FeedBackForm
+    MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile, EmailConfirmationForm, FeedBackForm, SubscribeForm
 from app.decorators import a_decorator_passing_logs
 from app.models import MainLog
 
@@ -166,12 +166,14 @@ def landing_page_view(request) -> HttpResponse:
     feedback_form = FeedBackForm()
     auth_form = MyAuthenticationForm(request)
     reg_form = MyRegistrationForm()
+    subscribe_form = SubscribeForm()
     manufacturers = Manufacturer.objects.all()
     return render(request, 'landing_page.html', {
         'manufacturers': manufacturers,
         'feedback': feedback_form,
         'auth_form': auth_form,
         'reg_form': reg_form,
+        'subscribe_form': subscribe_form,
         # 'error': error
     })
 

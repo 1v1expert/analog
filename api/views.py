@@ -12,7 +12,7 @@ from catalog.models import Product
 
 from app.models import MainLog, FeedBack
 from app.decorators import a_decorator_passing_logs
-from app.forms import FeedBackForm
+from app.forms import FeedBackForm, SubscribeForm
 from catalog.internal.auth_actions import registration
 
 
@@ -123,9 +123,12 @@ def check_product_and_get_attributes(request) -> HttpResponse:
 def feedback(request) -> HttpResponse:
     if request.method == 'POST':
         form = FeedBackForm(request.POST)
+        user = request.user
+        if str(request.user) == 'AnonymousUser':
+            user = None
         if form.is_valid():
             try:
-                FeedBack.objects.create(user=request.user,
+                FeedBack.objects.create(user=user,
                                         text=form.cleaned_data.get('text', ''),
                                         email=form.cleaned_data.get('email', ''),
                                         name=form.cleaned_data.get('name', ''),
@@ -133,10 +136,30 @@ def feedback(request) -> HttpResponse:
                                         )
                 return JsonResponse({}, content_type='application/json')
             except Exception as e:
-                MainLog.objects.create(user=request.user, raw={'error': e})
+                MainLog.objects.create(user=user, raw={'error': e}, has_errors=True)
                 return HttpResponseBadRequest()
     return HttpResponseBadRequest()
     # return JsonResponse({'error': 'error'}, content_type='application/json')
+
+
+@a_decorator_passing_logs
+def subscriber(request) -> HttpResponse:
+    if request.method == 'POST':
+        form = SubscribeForm(request.POST)
+        user = request.user
+        if str(request.user) == 'AnonymousUser':
+            user = None
+        if form.is_valid():
+            try:
+                FeedBack.objects.create(user=user,
+                                        email=form.cleaned_data.get('email', ''),
+                                        is_subscriber=True
+                                        )
+                return JsonResponse({"OK": True}, content_type='application/json')
+            except Exception as e:
+                MainLog.objects.create(user=user, raw={'error': e}, has_errors=True)
+                return HttpResponseBadRequest()
+    return HttpResponseBadRequest()
 
 
 @a_decorator_passing_logs
