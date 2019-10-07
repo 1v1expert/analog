@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="yandex-verification" content="e1c7be80f029b1a1" />
     <title>AnalogPro</title>
 
     <!--=========================== Bootstrap core CSS ===============================-->
@@ -49,10 +50,31 @@
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="{% static 'landing_js/html5shiv.js' %}"></script>
-      <script src="{% static 'js2/respond.min.js' %}"></script>
+      <script src="{% static 'landing_js/respond.min.js' %}"></script>
     <![endif]-->
-
     <!-- Custom styles for this template -->
+
+    <!--=========================== Yandex.Metrika counter ===============================-->
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () {
+                (m[i].a = m[i].a || []).push(arguments)
+            };
+            m[i].l = 1 * new Date();
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(55644364, "init", {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true
+        });
+    </script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/55644364" style="position:absolute; left:-9999px;" alt=""/></div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
 
 </head>
 {# color: #44abd1  #323232  #e4e4e4 #}
