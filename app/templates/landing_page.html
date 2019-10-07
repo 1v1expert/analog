@@ -1004,12 +1004,11 @@
 
         var form = $('#form');
         form.submit(function (e) {
-            console.log(form.serialize());
             e.preventDefault();
 
             var attempt_count = +accessCookie('attempt_count');
             {% if not request.user.is_authenticated %}
-            if (attempt_count > 3)
+            if (attempt_count > 10)
             {
                 swal("Ошибка!", "Пожалуйста, авторизуйтесь, чтобы продолжить пользоваться сервисом", "info");
                 {#$('#modal').modal("toggle");#}
