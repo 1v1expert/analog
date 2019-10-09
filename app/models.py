@@ -30,7 +30,7 @@ class FeedBack(models.Model):
     email = models.TextField(max_length=100, blank=True, null=True, verbose_name="Почта")
     phone = models.TextField(max_length=40, blank=True, null=True, verbose_name="Телефон")
     text = models.TextField(max_length=500, blank=True, null=True, verbose_name="Текст")
-    is_subscriber = models.BooleanField(default=False, null=True)
+    is_subscriber = models.BooleanField(default=False, null=True, verbose_name="Подписчик")
     
     class Meta:
         verbose_name = "Обратная связь"

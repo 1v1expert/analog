@@ -160,6 +160,7 @@ def email_confirmation(request, verification_code, user_id):
 #  ========================
 
 
+@a_decorator_passing_logs
 def landing_page_view(request) -> HttpResponse:
     """  The function renders the main project page """
     # https://ianlunn.github.io/Hover/
@@ -178,6 +179,7 @@ def landing_page_view(request) -> HttpResponse:
     })
 
 
+@a_decorator_passing_logs
 def landing_confirm_mail_page(request, verification_code, user_id) -> HttpResponse:
     """  The function renders the main project page with mail confirmation """
     user = get_object_or_404(models.User, pk=user_id)

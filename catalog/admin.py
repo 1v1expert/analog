@@ -36,7 +36,7 @@ mark_as_unpublished.short_description = u"Снять с публикации"
 
 class BaseAdmin(admin.ModelAdmin):
 
-    list_display = ['title', 'id','is_public', 'deleted','created_at','created_by','updated_at','updated_by']
+    list_display = ['title', 'id','is_public', 'deleted', 'created_at', 'created_by', 'updated_at','updated_by']
     save_on_top = True
     actions = [mark_as_published, mark_as_unpublished]
     list_filter = ['is_public', 'deleted', 'created_at', 'updated_at']
@@ -166,11 +166,8 @@ class ManufacturerAdmin(BaseAdmin):
     actions = ['export_data_to_xls']
     
     def export_data_to_xls(self, request, queryset):
-        if not len(queryset) == 1:
-            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
-            return
-        data = generators.DefaultGeneratorTemplate(queryset[0])
-        with writers.BookkeepingWriter('{} - {}'.format(queryset[0], datetime.now().date()), request.user) as writer:
+        data = generators.DefaultGeneratorTemplate(queryset)
+        with writers.BookkeepingWriter('{} - {}'.format(queryset, datetime.now().date()), request.user) as writer:
             writer.dump(data.generate())
     export_data_to_xls.short_description = 'Выгрузить данные по производителю'
 
