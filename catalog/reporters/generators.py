@@ -29,7 +29,7 @@ class DefaultGeneratorTemplate(object):
                                             # ('category_from_neural_network', 'категория(нейро-сеть)'),
                                         ] + list(Attribute.objects.values_list('id', 'title'))
                                         ),
-            "table_data": self.do_products()
+            "table_data": self.do_products(manufacturer)
         }
         data["top_header"]["spread"] = len(data['table_header'])
     
@@ -39,9 +39,9 @@ class DefaultGeneratorTemplate(object):
         for manufacturer in self.manufactures:
             yield self._get_data(manufacturer)
         
-    def do_products(self) -> OrderedDict:
+    def do_products(self, manufacturer) -> OrderedDict:
         for seq, product in enumerate(
-                Product.objects.filter(manufacturer=self.manufacturer).prefetch_related('fixed_attrs_vals',
+                Product.objects.filter(manufacturer=manufacturer).prefetch_related('fixed_attrs_vals',
                                                                                         'fixed_attrs_vals__value',
                                                                                         'fixed_attrs_vals__attribute',
                                                                                         'unfixed_attrs_vals',
