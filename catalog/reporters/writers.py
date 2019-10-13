@@ -10,11 +10,16 @@ class BookkeepingWriter(object):
     def __init__(self, name, user):
         self.filename = 'files/{}.xlsx'.format(name)
         # self.filename = name
+        self._default_ws = None
         self.user = user
-        
+    
+    def write_page(self, name):
+        pass
+    
     def dump(self, book):
         # self.write_top_header(**data['top_header'])
         for data in book:
+            self._default_ws = self._wb.add_worksheet(data['top_header']['name'])
             self.write_table_header(data['table_header'].values())
             # FIXME: make use of `for k in data['table_header']`
             for row in data['table_data']:
@@ -59,7 +64,6 @@ class BookkeepingWriter(object):
                                        {'default_date_format': 'dd.mm.yyyy'}
         )
 
-        self._default_ws = self._wb.add_worksheet()
         self._row = 0
         self._col = 0
         self.formats = {
