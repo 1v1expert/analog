@@ -167,7 +167,7 @@ class ManufacturerAdmin(BaseAdmin):
     
     def export_full_dump(self, request, queryset):
         data = generators.DefaultGeneratorTemplate(queryset)
-        meta_data = generators.AdditionalGeneratorTemplate()
+        meta_data = generators.AdditionalGeneratorTemplate(Manufacturer)
         with writers.BookkeepingWriter('Dump data {}'.format(datetime.now().date()), request.user) as writer:
             writer.dump(data.generate())
             writer.dump(meta_data.generate())
