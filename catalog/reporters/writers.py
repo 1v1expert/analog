@@ -16,14 +16,15 @@ class BookkeepingWriter(object):
     def write_page(self, name):
         pass
     
-    def dump(self, data):
+    def dump(self, book):
         # self.write_top_header(**data['top_header'])
         # for data in book:
-        self._default_ws = self._wb.add_worksheet(data['top_header']['name'])
-        self.write_table_header(data['table_header'].values())
-        # FIXME: make use of `for k in data['table_header']`
-        for row in data['table_data']:
-            self.write_table_row(row.values())
+        for data in book:
+            self._default_ws = self._wb.add_worksheet(data['top_header']['name'])
+            self.write_table_header(data['table_header'].values())
+            # FIXME: make use of `for k in data['table_header']`
+            for row in data['table_data']:
+                self.write_table_row(row.values())
     
     def write_top_header(self):
         pass

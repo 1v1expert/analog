@@ -168,8 +168,7 @@ class ManufacturerAdmin(BaseAdmin):
     def export_data_to_xls(self, request, queryset):
         data = generators.DefaultGeneratorTemplate(queryset)
         with writers.BookkeepingWriter('Dump data {}'.format(datetime.now().date()), request.user) as writer:
-            for dt in data.generate():
-                writer.dump(dt)
+            writer.dump(data.generate())
     export_data_to_xls.short_description = 'Выгрузить данные по производителю'
 
 
