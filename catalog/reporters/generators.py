@@ -51,7 +51,7 @@ class DefaultGeneratorTemplate(object):
             yield OrderedDict([
                                   ('seq', seq),
                                   ('title', product.title),
-                                  ('manufacturer', product.manufacturer),
+                                  ('manufacturer', product.manufacturer.title),
                                   ('article', product.article),
                                   ('additional_article', product.additional_article),
                                   ('series', product.series),
