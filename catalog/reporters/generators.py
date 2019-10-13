@@ -20,6 +20,7 @@ class DefaultGeneratorTemplate(object):
             "table_header": OrderedDict([
                                             ('seq', '№ п/п'),
                                             ('title', 'Наименование'),
+                                            ('manufacturer', 'Производитель'),
                                             ('article', 'Артикул'),
                                             ('additional_article', 'Доп. артикул'),
                                             ('series', 'Серия'),
@@ -50,6 +51,7 @@ class DefaultGeneratorTemplate(object):
             yield OrderedDict([
                                   ('seq', seq),
                                   ('title', product.title),
+                                  ('manufacturer', product.manufacturer),
                                   ('article', product.article),
                                   ('additional_article', product.additional_article),
                                   ('series', product.series),
