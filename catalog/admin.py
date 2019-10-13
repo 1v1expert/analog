@@ -163,13 +163,22 @@ class ProductAdmin(BaseAdmin):
 
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'created_at', 'created_by']
-    actions = ['export_data_to_xls']
+    actions = ['export_data_to_xls', 'export_full_dump']
+    
+    def export_full_dump(self, request, queryset):
+        data = generators.DefaultGeneratorTemplate(queryset)
+        meta_data = generators.AdditionalGeneratorTemplate()
+        with writers.BookkeepingWriter('Dump data {}'.format(datetime.now().date()), request.user) as writer:
+            writer.dump(data.generate())
+            writer.dump(meta_data.generate())
+
+    export_full_dump.short_description = 'Выгрузить базу'
     
     def export_data_to_xls(self, request, queryset):
         data = generators.DefaultGeneratorTemplate(queryset)
         with writers.BookkeepingWriter('Dump data {}'.format(datetime.now().date()), request.user) as writer:
             writer.dump(data.generate())
-    export_data_to_xls.short_description = 'Выгрузить данные по производителю'
+    export_data_to_xls.short_description = 'Выгрузить продукты производителя(-ей)'
 
 
 class FileUploadAdmin(admin.ModelAdmin):
