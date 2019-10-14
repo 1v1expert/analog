@@ -34,7 +34,6 @@ class BookkeepingWriter(object):
             self.write_table_header(data['table_header'].values())
             # FIXME: make use of `for k in data['table_header']`
             for row in data['table_data']:
-                print(row)
                 try:
                     if isinstance(row, OrderedDict):
                         self.write_table_row(row.values())
