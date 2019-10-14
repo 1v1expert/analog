@@ -2,8 +2,14 @@ from catalog.models import DataFile
 from catalog import choices
 
 import xlsxwriter
+
+from collections import OrderedDict
+from datetime import datetime
+
 import csv
+
 from django.conf import settings
+from django.utils.functional import LazyObject, SimpleLazyObject
 
 
 class BookkeepingWriter(object):
@@ -28,7 +34,10 @@ class BookkeepingWriter(object):
             self.write_table_header(data['table_header'].values())
             # FIXME: make use of `for k in data['table_header']`
             for row in data['table_data']:
-                self.write_table_row(row.values())
+                if isinstance(row, OrderedDict):
+                    self.write_table_row(row.values())
+                elif isinstance(row, tuple):
+                    self.write_table_row(row)
     
     def write_top_header(self):
         pass
@@ -49,7 +58,7 @@ class BookkeepingWriter(object):
         
             self._default_ws.set_column(col, col, min(15, len(str(cell))))
             self._default_ws.write(self._row, col, cell, new_format or default_format)
-    
+        
         max_len = max(sorted([len(str(x)) for x in row]))
         self._default_ws.set_row(self._row, (15 * max_len // 15) + 1)
         self._row += 1
@@ -61,7 +70,15 @@ class BookkeepingWriter(object):
         # TODO: this is way too ugly and must be rewritten.
         for col, item in enumerate(row):
             c_fmt = fmt
-            self._default_ws.write(self._row, col, item, c_fmt)
+            
+            if isinstance(item, datetime):
+                c_item = item.strftime("%Y-%m-%d-%H.%M.%S")
+            elif isinstance(item, (LazyObject, SimpleLazyObject)):
+                c_item = '-----'
+            else:
+                c_item = str(item)
+            
+            self._default_ws.write(self._row, col, c_item, c_fmt)
         self._row += 1
     
     def __enter__(self):

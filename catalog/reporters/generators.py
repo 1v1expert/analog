@@ -89,23 +89,28 @@ class DefaultGeneratorTemplate(object):
 
 
 class AdditionalGeneratorTemplate(object):
-    def __init__(self, cls):
-        self.cls = cls
-        self.local_fields = OrderedDict([(field['name'], field['verbose_name']) for field in cls._meta.local_fields])
-    
-    def generate(self):
+    def __init__(self, classes):
+        self.classes = classes
+        self.local_fields = None
+        
+    def _get_data(self, cls_obj):
         data = {
             "top_header": {
                 'spread': None,
                 'row': [],
-                'name': self.cls._meta.verbose_name
+                'name': str(cls_obj._meta.verbose_name),
             },
-            "table_header": self.local_fields,
-            "table_data": self.do_positions()
+            "table_header": OrderedDict([(field.name, field.verbose_name) for field in cls_obj._meta.local_fields]),
+            "table_data": self.values(cls_obj),
         }
         data["top_header"]["spread"] = len(data['table_header'])
-    
+        
         return data
     
-    def do_positions(self):
-        return self.cls.objects
+    def generate(self):
+        for cls_obj in self.classes:
+            yield self._get_data(cls_obj)
+    
+    @staticmethod
+    def values(cls_obj):
+        return cls_obj.objects.values_list()

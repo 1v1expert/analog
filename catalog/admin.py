@@ -160,16 +160,16 @@ class ProductAdmin(BaseAdmin):
 #         super(LogEntryAdmin, self).__init__(*args, **kwargs)
 #         self.list_display_links = (None, )
 
-
+from django.contrib.auth.models import User
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'created_at', 'created_by']
     actions = ['export_data_to_xls', 'export_full_dump']
     
     def export_full_dump(self, request, queryset):
-        data = generators.DefaultGeneratorTemplate(queryset)
-        meta_data = generators.AdditionalGeneratorTemplate(Manufacturer)
-        with writers.BookkeepingWriter('Dump data {}'.format(datetime.now().date()), request.user) as writer:
-            writer.dump(data.generate())
+        # data = generators.DefaultGeneratorTemplate(queryset)
+        meta_data = generators.AdditionalGeneratorTemplate((Manufacturer, Category, Attribute, FixedValue))
+        with writers.BookkeepingWriter('Dump another data {}'.format(datetime.now().date()), request.user) as writer:
+            # writer.dump(data.generate())
             writer.dump(meta_data.generate())
 
     export_full_dump.short_description = 'Выгрузить базу'
