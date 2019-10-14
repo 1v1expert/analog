@@ -34,10 +34,14 @@ class BookkeepingWriter(object):
             self.write_table_header(data['table_header'].values())
             # FIXME: make use of `for k in data['table_header']`
             for row in data['table_data']:
-                if isinstance(row, OrderedDict):
-                    self.write_table_row(row.values())
-                elif isinstance(row, tuple):
-                    self.write_table_row(row)
+                print(row)
+                try:
+                    if isinstance(row, OrderedDict):
+                        self.write_table_row(row.values())
+                    elif isinstance(row, tuple):
+                        self.write_table_row(row)
+                except Exception as e:
+                    print(e, row)
     
     def write_top_header(self):
         pass
@@ -57,7 +61,7 @@ class BookkeepingWriter(object):
                 new_format.set_right(2)
         
             self._default_ws.set_column(col, col, min(15, len(str(cell))))
-            self._default_ws.write(self._row, col, cell, new_format or default_format)
+            self._default_ws.write(self._row, col, str(cell), new_format or default_format)
         
         max_len = max(sorted([len(str(x)) for x in row]))
         self._default_ws.set_row(self._row, (15 * max_len // 15) + 1)
@@ -77,6 +81,9 @@ class BookkeepingWriter(object):
                 c_item = '-----'
             else:
                 c_item = str(item)
+
+            if col == len(row) - 1:
+                c_fmt.set_right(2)
             
             self._default_ws.write(self._row, col, c_item, c_fmt)
         self._row += 1

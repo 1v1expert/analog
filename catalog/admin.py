@@ -4,6 +4,7 @@ from django.contrib.admin.views.main import ChangeList
 
 from django.utils.safestring import mark_safe
 from django.contrib.admin.models import LogEntry
+from django.contrib.auth.models import User
 
 from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, \
     UnFixedAttributeValue, Specification, DataFile
@@ -121,7 +122,7 @@ class ProductChangeList(ChangeList):
                  list_per_page, list_max_show_all, list_editable, model_admin, sortable_by)
     
         # these need to be defined here, and not in MovieAdmin
-        self.list_display=['title', 'article', 'manufacturer', 'attrs_vals', 'category','is_public', 'deleted']
+        self.list_display = ['title', 'article', 'manufacturer', 'attrs_vals', 'category','is_public', 'deleted']
         self.list_display_links = ['attrs_vals']
         # self.list_editable = ['genre']
 
@@ -160,16 +161,14 @@ class ProductAdmin(BaseAdmin):
 #         super(LogEntryAdmin, self).__init__(*args, **kwargs)
 #         self.list_display_links = (None, )
 
-from django.contrib.auth.models import User
+
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'created_at', 'created_by']
     actions = ['export_data_to_xls', 'export_full_dump']
     
     def export_full_dump(self, request, queryset):
-        # data = generators.DefaultGeneratorTemplate(queryset)
-        meta_data = generators.AdditionalGeneratorTemplate((Manufacturer, Category, Attribute, FixedValue))
+        meta_data = generators.AdditionalGeneratorTemplate((User, Manufacturer, Category, Attribute, FixedValue))
         with writers.BookkeepingWriter('Dump another data {}'.format(datetime.now().date()), request.user) as writer:
-            # writer.dump(data.generate())
             writer.dump(meta_data.generate())
 
     export_full_dump.short_description = 'Выгрузить базу'
