@@ -35,10 +35,10 @@ class Command(BaseCommand):
             MainLog.objects.create(user=user, raw={'error': e}, has_errors=True, message=name)
 
         msg = EmailMessage(
-            subject='Subject of the Email',
-            body='Body of the email',
+            subject='Insatiable',
+            body=' It’s good to see you again!\n%s' % name,
             from_email='info@analogpro.ru',
-            to=['1v1expert@gmail.com'],
+            to=['1v1expert@gmail.com', 'mojaev-a@yandex.ru'],
             connection=_get_connection())
         if filename:
             msg.attach_file(filename, 'application/xls')
