@@ -679,6 +679,75 @@ class BettermannDocumentReader(KOKSDocumentReader):
             print(line, '\n', e)
 
 
+class PKT(GeneralDocumentReader):
+    
+    def line_processing(self, line, name_sheet=None):
+        title = line[0].strip()
+        article = line[1].strip()
+        units = line[2].strip() if line[2] != 'None' else ''  #единицы измерения
+        packaging_multiplicity = line[3].strip() if line[3] != 'None' else ''  #кратность упаковки
+        price = line[4].strip() if line[4] != 'None' else ''
+        weight = line[5].strip() if line[5] != 'None' else ''  #вес
+        dimension = line[6].strip() if line[6] != 'None' else ''  #объем
+        species = line[7] if line[7] != 'None' else ''  #вид | перфорированный | неперфорированный
+        depth = line[8].strip() if line[8] != 'None' else ''  #толщина
+        category_name = line[9].strip()  #подкласс
+        board_height = line[10].strip() if line[10] != 'None' else ''
+        width = line[11].strip() if line[11] != 'None' else ''  #ширина
+        additional_width = line[12].strip() if line[12] != 'None' else ''  #доп. ширина
+        
+        formalized_title = self.network.remove_stop_words(title)
+        
+        if not article.strip() or title.strip().lower() == 'none' or not title:
+            return
+        if not category_name.strip() or category_name.strip().lower() == 'none' or not category_name:
+            return
+        
+        self.c_lines += 1  # counter lines
+        
+        # check_doubles
+        if article in self.articles:
+            self.doubles_article.append(article)
+            return
+        self.articles.add(article)
+        
+        category = Category.objects.get(title=category_name)
+        self.create_products(article, title, formalized_title, category,
+                             raw={'packaging_multiplicity': packaging_multiplicity,
+                                  'weight': weight,
+                                  'dimension': dimension})
+        
+        if is_digit(price) and price:  # create price attr
+            attribute = Attribute.objects.get(title='цена')
+            self._create_attribute(article, float(price), attribute, fixed=False)
+        
+        if species:
+            value = FixedValue.objects.get(title=species)
+            attribute = Attribute.objects.get(title='вид')
+            self._create_attribute(article, value, attribute, fixed=True)
+            
+        if units:
+            value = FixedValue.objects.get(title=units)
+            attribute = Attribute.objects.get(title='ед.изм')
+            self._create_attribute(article, value, attribute, fixed=True)
+        
+        if is_digit(depth) and depth:
+            attribute = Attribute.objects.get(title='толщина')
+            self._create_attribute(article, float(depth), attribute, fixed=False)
+        
+        if is_digit(board_height) and board_height:
+            attribute = Attribute.objects.get(title='высота борта')
+            self._create_attribute(article, float(board_height), attribute, fixed=False)
+        
+        if is_digit(width) and width:
+            attribute = Attribute.objects.get(title='ширина')
+            self._create_attribute(article, float(width), attribute, fixed=False)
+            
+        if is_digit(additional_width) and additional_width:
+            attribute = Attribute.objects.get(title='ширина доп.')
+            self._create_attribute(article, float(additional_width), attribute, fixed=False)
+
+
 def is_digit(s):
     try:
         float(s)

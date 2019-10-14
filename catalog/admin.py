@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, \
     UnFixedAttributeValue, Specification, DataFile
-from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader, GeneralDocumentReader, BettermannDocumentReader
+from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader, GeneralDocumentReader, BettermannDocumentReader, PKT
 from catalog.reporters import writers, generators
 
 from catalog.forms import ProductChangeListForm
@@ -233,6 +233,17 @@ class FileUploadAdmin(admin.ModelAdmin):
         except FileNotFoundError:
             messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
     process_general_file.short_description = 'Импортировать шаблон(Обработанный)'
+    
+    def process_pkt_file(self, request, queryset):
+        if not len(queryset) == 1:
+            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
+            return
+        try:
+            document = PKT(path=queryset[0].file.name, only_parse=False).parse_file()
+            messages.add_message(request, messages.SUCCESS, 'Файл {} загружен, {} позиций'.format(queryset[0].file.name, document.c_lines))
+        except FileNotFoundError:
+            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
+    process_pkt_file.short_description = 'Импортировать шаблон(PKT)'
     
     def process_file(self, request, queryset):
         for qq in queryset:
