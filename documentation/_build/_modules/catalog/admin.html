@@ -1,0 +1,529 @@
+
+
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>catalog.admin &mdash; Документация Система Analog 0.2</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.min.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a class="site-nav-toggle hidden-lg-up"><i class="icon-menu"></i></a>
+            <a class="site-title" href="../../index.html">
+                Система Analog
+            </a>
+        </div>
+    </header>
+
+
+<div class="breadcrumbs-outer hidden-xs-down">
+    <div class="container">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a></li>
+        
+          <li><a href="../index.html">Код модуля</a></li>
+        
+      <li>catalog.admin</li>
+    
+    
+      <li class="breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+</div>
+    </div>
+</div>
+    <div class="main-outer">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-3 site-nav">
+                    
+<div role="search">
+    <form class="search" action="../../search.html" method="get">
+        <div class="icon-input">
+            <input type="text" name="q" placeholder="Search" />
+            <span class="icon-search"></span>
+        </div>
+        <input type="submit" value="Искать" class="d-hidden" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+                    <div class="site-nav-tree">
+                        
+
+                            
+                            
+                                <p class="caption"><span class="caption-text">Оглавление:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Система Analog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#id1">Краткое описание</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#id2">Разворачивание проекта разработчиком</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../techspec.html">Функциональные требования к Системе Analog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id1">1. Общее описание</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id2">1.1. описание процесса «как есть сейчас»</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id3">1.2. какой результат нужен</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id4">1.3. требования к ПО и разработчику</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id5">2. Описание отдельных процедур и частей алгоритма</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id6">2.1. первоначальная Загрузка и обновление БД</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id7">2.2. структура данных</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id8">2.3. какие значения могут быть у атрибута:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id9">2.4. загрзка спецификации</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id10">2.5. форма запроса</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id11">2.6. алгоритм поиска</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id12">2.7. сохранение результатов</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dettechspec.html">Проектное решение по разработке Системы Analog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id1">1. Определения, сокращения и аббревиатуры</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id2">2. Общие сведения</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id3">3. Бизнес-процессы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id4">4. Декомпозиция архитектуры</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id5">4.1 АРМ Пользователя</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id6">4.2 АРМ Администратора</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id7">5. Сущности</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id8">5.1 прикладные сущности</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id9">5.2 Системные сущности</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id10">6. Представления</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id11">6.1 таблица/перечень</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id12">6.2 карточка экземпляра сущности</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id13">6.3 форма запроса параметров подбора спецификации-аналога</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id14">7. Группы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id15">8. Справочники и классификаторы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id16">9. Требования к отказоустойчивости</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id17">10. Требования к хостингу и инфраструктура хостинга</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Исходный код</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../catalog.html">catalog package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../core.html">core package</a></li>
+</ul>
+</li>
+</ul>
+
+                            
+                        
+<a href="genindex.html">Алфавитный указатель</a>
+<a href="py-modindex.html">Состав модулей</a>
+
+                    </div>
+                </div>
+                <div class="col-12 col-lg-9">
+                    <div class="document">
+                        
+                            
+  <h1>Исходный код catalog.admin</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">messages</span>
+<span class="kn">from</span> <span class="nn">django.contrib.admin.views.main</span> <span class="k">import</span> <span class="n">ChangeList</span>
+
+<span class="kn">from</span> <span class="nn">django.utils.safestring</span> <span class="k">import</span> <span class="n">mark_safe</span>
+<span class="kn">from</span> <span class="nn">django.contrib.admin.models</span> <span class="k">import</span> <span class="n">LogEntry</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="k">import</span> <span class="n">User</span>
+
+<span class="kn">from</span> <span class="nn">catalog.models</span> <span class="k">import</span> <span class="n">Category</span><span class="p">,</span> <span class="n">Product</span><span class="p">,</span> <span class="n">Manufacturer</span><span class="p">,</span> <span class="n">Attribute</span><span class="p">,</span> <span class="n">FixedAttributeValue</span><span class="p">,</span> <span class="n">FixedValue</span><span class="p">,</span> \
+    <span class="n">UnFixedAttributeValue</span><span class="p">,</span> <span class="n">Specification</span><span class="p">,</span> <span class="n">DataFile</span>
+<span class="kn">from</span> <span class="nn">catalog.file_utils</span> <span class="k">import</span> <span class="n">XLSDocumentReader</span><span class="p">,</span> <span class="n">ProcessingUploadData</span><span class="p">,</span> <span class="n">KOKSDocumentReader</span><span class="p">,</span> <span class="n">IEKDocumentReader</span><span class="p">,</span> <span class="n">GeneralDocumentReader</span><span class="p">,</span> <span class="n">BettermannDocumentReader</span><span class="p">,</span> <span class="n">PKT</span>
+<span class="kn">from</span> <span class="nn">catalog.reporters</span> <span class="k">import</span> <span class="n">writers</span><span class="p">,</span> <span class="n">generators</span>
+
+<span class="kn">from</span> <span class="nn">catalog.forms</span> <span class="k">import</span> <span class="n">ProductChangeListForm</span>
+
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="k">import</span> <span class="n">MainLog</span>
+
+<span class="kn">from</span> <span class="nn">feincms.admin</span> <span class="k">import</span> <span class="n">tree_editor</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<div class="viewcode-block" id="mark_as_published"><a class="viewcode-back" href="../../catalog.html#catalog.admin.mark_as_published">[документация]</a><span class="k">def</span> <span class="nf">mark_as_published</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">queryset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">is_public</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+    
+    
+<span class="n">mark_as_published</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;Опубликовать&quot;</span>
+
+
+<div class="viewcode-block" id="mark_as_unpublished"><a class="viewcode-back" href="../../catalog.html#catalog.admin.mark_as_unpublished">[документация]</a><span class="k">def</span> <span class="nf">mark_as_unpublished</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">queryset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">is_public</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+    
+    
+<span class="n">mark_as_unpublished</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;Снять с публикации&quot;</span>
+
+
+<div class="viewcode-block" id="BaseAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.BaseAdmin">[документация]</a><span class="k">class</span> <span class="nc">BaseAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="s1">&#39;is_public&#39;</span><span class="p">,</span> <span class="s1">&#39;deleted&#39;</span><span class="p">,</span> <span class="s1">&#39;created_at&#39;</span><span class="p">,</span> <span class="s1">&#39;created_by&#39;</span><span class="p">,</span> <span class="s1">&#39;updated_at&#39;</span><span class="p">,</span><span class="s1">&#39;updated_by&#39;</span><span class="p">]</span>
+    <span class="n">save_on_top</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">mark_as_published</span><span class="p">,</span> <span class="n">mark_as_unpublished</span><span class="p">]</span>
+    <span class="n">list_filter</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;is_public&#39;</span><span class="p">,</span> <span class="s1">&#39;deleted&#39;</span><span class="p">,</span> <span class="s1">&#39;created_at&#39;</span><span class="p">,</span> <span class="s1">&#39;updated_at&#39;</span><span class="p">]</span>
+    <span class="n">search_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">]</span>
+    
+<div class="viewcode-block" id="BaseAdmin.save_model"><a class="viewcode-back" href="../../catalog.html#catalog.admin.BaseAdmin.save_model">[документация]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">change</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">created_by</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">updated_by</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BaseAdmin.save_formset"><a class="viewcode-back" href="../../catalog.html#catalog.admin.BaseAdmin.save_formset">[документация]</a>    <span class="k">def</span> <span class="nf">save_formset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">formset</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="n">instances</span> <span class="o">=</span> <span class="n">formset</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">change</span><span class="p">:</span>
+                <span class="n">instance</span><span class="o">.</span><span class="n">created_by</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">updated_by</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="SubCatValInline"><a class="viewcode-back" href="../../catalog.html#catalog.admin.SubCatValInline">[документация]</a><span class="k">class</span> <span class="nc">SubCatValInline</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">TabularInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Category</span></div>
+
+
+<div class="viewcode-block" id="AttributeshipInline"><a class="viewcode-back" href="../../catalog.html#catalog.admin.AttributeshipInline">[документация]</a><span class="k">class</span> <span class="nc">AttributeshipInline</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">TabularInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">through</span></div>
+
+
+<div class="viewcode-block" id="CategoryAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.CategoryAdmin">[документация]</a><span class="k">class</span> <span class="nc">CategoryAdmin</span><span class="p">(</span><span class="n">tree_editor</span><span class="o">.</span><span class="n">TreeEditor</span><span class="p">,</span> <span class="n">BaseAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;get_attributes&#39;</span><span class="p">)</span>
+    
+    <span class="c1">#inlines = [AttributeshipInline]</span>
+    <span class="c1">#exclude = (&#39;attributes&#39;, )</span>
+
+<div class="viewcode-block" id="CategoryAdmin.save_model"><a class="viewcode-back" href="../../catalog.html#catalog.admin.CategoryAdmin.save_model">[документация]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">change</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">created_by</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">updated_by</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">parent</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">all</span><span class="p">()))</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">all</span><span class="p">()))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+        
+    <span class="c1"># @staticmethod</span>
+<div class="viewcode-block" id="CategoryAdmin.get_attributes"><a class="viewcode-back" href="../../catalog.html#catalog.admin.CategoryAdmin.get_attributes">[документация]</a>    <span class="k">def</span> <span class="nf">get_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Атрибуты&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">title</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">all</span><span class="p">()])</span></div>
+    <span class="n">get_attributes</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Атрибуты&#39;</span></div>
+    
+
+<span class="c1"># class CategoryAdmin(BaseAdmin):</span>
+<span class="c1">#     autocomplete_fields = [&#39;parent&#39;]</span>
+<span class="c1">#     inlines=[SubCatValInline]</span>
+
+
+<div class="viewcode-block" id="AttrAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.AttrAdmin">[документация]</a><span class="k">class</span> <span class="nc">AttrAdmin</span><span class="p">(</span><span class="n">BaseAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;priority&#39;</span><span class="p">,</span> <span class="s1">&#39;is_public&#39;</span><span class="p">,</span> <span class="s1">&#39;deleted&#39;</span><span class="p">]</span></div>
+    <span class="c1">#&#39;category&#39;</span>
+    <span class="c1">#autocomplete_fields = [&#39;category&#39;]</span>
+
+
+<div class="viewcode-block" id="AttrValAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.AttrValAdmin">[документация]</a><span class="k">class</span> <span class="nc">AttrValAdmin</span><span class="p">(</span><span class="n">BaseAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;attribute&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;is_public&#39;</span><span class="p">,</span> <span class="s1">&#39;deleted&#39;</span><span class="p">]</span>
+    
+    <span class="c1">#autocomplete_fields = [&#39;attribute&#39;]</span>
+    <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;products&#39;</span><span class="p">,)</span></div>
+    
+    <span class="c1"># def formfield_for_foreignkey(self, db_field, request, **kwargs):</span>
+    <span class="c1">#     if db_field.name == &quot;attribute&quot;:</span>
+    <span class="c1">#         print(json.dumps(kwargs, indent=2))</span>
+    <span class="c1">#     return super().formfield_for_foreignkey(db_field, request, **kwargs)</span>
+
+
+<div class="viewcode-block" id="ProductChangeList"><a class="viewcode-back" href="../../catalog.html#catalog.admin.ProductChangeList">[документация]</a><span class="k">class</span> <span class="nc">ProductChangeList</span><span class="p">(</span><span class="n">ChangeList</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">list_display</span><span class="p">,</span> <span class="n">list_display_links</span><span class="p">,</span>
+                 <span class="n">list_filter</span><span class="p">,</span> <span class="n">date_hierarchy</span><span class="p">,</span> <span class="n">search_fields</span><span class="p">,</span> <span class="n">list_select_related</span><span class="p">,</span>
+                 <span class="n">list_per_page</span><span class="p">,</span> <span class="n">list_max_show_all</span><span class="p">,</span> <span class="n">list_editable</span><span class="p">,</span> <span class="n">model_admin</span><span class="p">,</span> <span class="n">sortable_by</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ProductChangeList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">list_display</span><span class="p">,</span> <span class="n">list_display_links</span><span class="p">,</span>
+                 <span class="n">list_filter</span><span class="p">,</span> <span class="n">date_hierarchy</span><span class="p">,</span> <span class="n">search_fields</span><span class="p">,</span> <span class="n">list_select_related</span><span class="p">,</span>
+                 <span class="n">list_per_page</span><span class="p">,</span> <span class="n">list_max_show_all</span><span class="p">,</span> <span class="n">list_editable</span><span class="p">,</span> <span class="n">model_admin</span><span class="p">,</span> <span class="n">sortable_by</span><span class="p">)</span>
+    
+        <span class="c1"># these need to be defined here, and not in MovieAdmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;article&#39;</span><span class="p">,</span> <span class="s1">&#39;manufacturer&#39;</span><span class="p">,</span> <span class="s1">&#39;attrs_vals&#39;</span><span class="p">,</span> <span class="s1">&#39;category&#39;</span><span class="p">,</span><span class="s1">&#39;is_public&#39;</span><span class="p">,</span> <span class="s1">&#39;deleted&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_display_links</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;attrs_vals&#39;</span><span class="p">]</span></div>
+        <span class="c1"># self.list_editable = [&#39;genre&#39;]</span>
+
+
+<div class="viewcode-block" id="ProductAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.ProductAdmin">[документация]</a><span class="k">class</span> <span class="nc">ProductAdmin</span><span class="p">(</span><span class="n">BaseAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;article&#39;</span><span class="p">,</span> <span class="s1">&#39;manufacturer&#39;</span><span class="p">,</span> <span class="s1">&#39;get_fix_attrs_vals&#39;</span><span class="p">,</span> <span class="s1">&#39;get_unfix_attrs_vals&#39;</span><span class="p">,</span> <span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;is_public&#39;</span><span class="p">,</span> <span class="s1">&#39;deleted&#39;</span><span class="p">]</span>
+    <span class="c1"># inlines = [PropertiesInline]</span>
+    <span class="c1">#filter_horizontal = [&#39;attrs_vals&#39;]</span>
+    <span class="n">autocomplete_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;manufacturer&#39;</span><span class="p">,]</span>
+    
+    <span class="c1"># @staticmethod</span>
+<div class="viewcode-block" id="ProductAdmin.get_fix_attrs_vals"><a class="viewcode-back" href="../../catalog.html#catalog.admin.ProductAdmin.get_fix_attrs_vals">[документация]</a>    <span class="k">def</span> <span class="nf">get_fix_attrs_vals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">attribute</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">title</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">fixed_attrs_vals</span><span class="o">.</span><span class="n">all</span><span class="p">()])</span></div>
+
+    <span class="n">get_fix_attrs_vals</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Фиксированные атрибуты&#39;</span>
+    
+<div class="viewcode-block" id="ProductAdmin.get_unfix_attrs_vals"><a class="viewcode-back" href="../../catalog.html#catalog.admin.ProductAdmin.get_unfix_attrs_vals">[документация]</a>    <span class="k">def</span> <span class="nf">get_unfix_attrs_vals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">attribute</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">unfixed_attrs_vals</span><span class="o">.</span><span class="n">all</span><span class="p">()])</span></div>
+
+    <span class="n">get_unfix_attrs_vals</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Нефиксированные атрибуты&#39;</span></div>
+    <span class="c1"># def get_changelist(self, request, **kwargs):</span>
+    <span class="c1">#     return ProductChangeList</span>
+    <span class="c1">#</span>
+    <span class="c1"># def get_changelist_form(self, request, **kwargs):</span>
+    <span class="c1">#     return ProductChangeListForm</span>
+    <span class="c1"># exclude = (&#39;attrs_vals&#39;, )</span>
+
+<span class="c1"># class ListingAdmin(BaseAdmin):</span>
+<span class="c1">#     actions = None</span>
+<span class="c1">#     search_fields = [&#39;=user__username&#39;, ]</span>
+<span class="c1">#     fieldsets = [</span>
+<span class="c1">#         (None, {&#39;fields&#39;:()}),</span>
+<span class="c1">#         ]</span>
+
+<span class="c1">#     def __init__(self, *args, **kwargs):</span>
+<span class="c1">#         super(LogEntryAdmin, self).__init__(*args, **kwargs)</span>
+<span class="c1">#         self.list_display_links = (None, )</span>
+
+
+<div class="viewcode-block" id="ManufacturerAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.ManufacturerAdmin">[документация]</a><span class="k">class</span> <span class="nc">ManufacturerAdmin</span><span class="p">(</span><span class="n">BaseAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;created_at&#39;</span><span class="p">,</span> <span class="s1">&#39;created_by&#39;</span><span class="p">]</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;export_data_to_xls&#39;</span><span class="p">,</span> <span class="s1">&#39;export_full_dump&#39;</span><span class="p">]</span>
+    
+<div class="viewcode-block" id="ManufacturerAdmin.export_full_dump"><a class="viewcode-back" href="../../catalog.html#catalog.admin.ManufacturerAdmin.export_full_dump">[документация]</a>    <span class="k">def</span> <span class="nf">export_full_dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+        <span class="n">meta_data</span> <span class="o">=</span> <span class="n">generators</span><span class="o">.</span><span class="n">AdditionalGeneratorTemplate</span><span class="p">((</span><span class="n">User</span><span class="p">,</span> <span class="n">Manufacturer</span><span class="p">,</span> <span class="n">Category</span><span class="p">,</span> <span class="n">Attribute</span><span class="p">,</span> <span class="n">FixedValue</span><span class="p">))</span>
+        <span class="k">with</span> <span class="n">writers</span><span class="o">.</span><span class="n">BookkeepingWriter</span><span class="p">(</span><span class="s1">&#39;Dump another data </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()),</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">meta_data</span><span class="o">.</span><span class="n">generate</span><span class="p">())</span></div>
+
+    <span class="n">export_full_dump</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Выгрузить базу&#39;</span>
+    
+<div class="viewcode-block" id="ManufacturerAdmin.export_data_to_xls"><a class="viewcode-back" href="../../catalog.html#catalog.admin.ManufacturerAdmin.export_data_to_xls">[документация]</a>    <span class="k">def</span> <span class="nf">export_data_to_xls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">generators</span><span class="o">.</span><span class="n">DefaultGeneratorTemplate</span><span class="p">(</span><span class="n">queryset</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">writers</span><span class="o">.</span><span class="n">BookkeepingWriter</span><span class="p">(</span><span class="s1">&#39;Dump data </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()),</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">generate</span><span class="p">())</span></div>
+    <span class="n">export_data_to_xls</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Выгрузить продукты производителя(-ей)&#39;</span></div>
+
+
+<div class="viewcode-block" id="FileUploadAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FileUploadAdmin">[документация]</a><span class="k">class</span> <span class="nc">FileUploadAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;process_file&#39;</span><span class="p">,</span> <span class="s1">&#39;process_koks_file&#39;</span><span class="p">,</span> <span class="s1">&#39;process_iek_file&#39;</span><span class="p">,</span> <span class="s1">&#39;process_bettermann_file&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;process_general_file&#39;</span><span class="p">,</span> <span class="s1">&#39;process_pkt_file&#39;</span><span class="p">]</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;file_link&#39;</span><span class="p">,</span> <span class="s1">&#39;created_at&#39;</span><span class="p">,</span> <span class="s1">&#39;created_by&#39;</span><span class="p">]</span>
+    
+<div class="viewcode-block" id="FileUploadAdmin.file_link"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FileUploadAdmin.file_link">[документация]</a>    <span class="k">def</span> <span class="nf">file_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mark_safe</span><span class="p">(</span><span class="s2">&quot;&lt;a href=&#39;/</span><span class="si">%s</span><span class="s2">&#39;&gt;скачать&lt;/a&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">url</span><span class="p">,))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;No attachment&quot;</span></div>
+
+    <span class="n">file_link</span><span class="o">.</span><span class="n">allow_tags</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">file_link</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Ссылка на скачивание&#39;</span>
+    
+<div class="viewcode-block" id="FileUploadAdmin.process_iek_file"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FileUploadAdmin.process_iek_file">[документация]</a>    <span class="k">def</span> <span class="nf">process_iek_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryset</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="s1">&#39;Пожалуйста, выберите один файл&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">IEKDocumentReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">only_parse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">parse_file</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="s1">&#39;Файл </span><span class="si">{}</span><span class="s1"> не найден&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
+    <span class="n">process_iek_file</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Импортировать шаблон(IEK)&#39;</span>
+    
+<div class="viewcode-block" id="FileUploadAdmin.process_bettermann_file"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FileUploadAdmin.process_bettermann_file">[документация]</a>    <span class="k">def</span> <span class="nf">process_bettermann_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryset</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="s1">&#39;Пожалуйста, выберите один файл&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">BettermannDocumentReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">only_parse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">parse_file</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="s1">&#39;Файл </span><span class="si">{}</span><span class="s1"> не найден&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
+    <span class="n">process_bettermann_file</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Импортировать шаблон(bettermann)&#39;</span>
+    
+<div class="viewcode-block" id="FileUploadAdmin.process_koks_file"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FileUploadAdmin.process_koks_file">[документация]</a>    <span class="k">def</span> <span class="nf">process_koks_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryset</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="s1">&#39;Пожалуйста, выберите один файл&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">KOKSDocumentReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">only_parse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">parse_file</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="s1">&#39;Файл </span><span class="si">{}</span><span class="s1"> не найден&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
+    <span class="n">process_koks_file</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Импортировать шаблон(KOKs)&#39;</span>
+    
+<div class="viewcode-block" id="FileUploadAdmin.process_general_file"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FileUploadAdmin.process_general_file">[документация]</a>    <span class="k">def</span> <span class="nf">process_general_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryset</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="s1">&#39;Пожалуйста, выберите один файл&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">GeneralDocumentReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">only_parse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">parse_file</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">,</span> <span class="s1">&#39;Файл </span><span class="si">{}</span><span class="s1"> загружен, </span><span class="si">{}</span><span class="s1"> позиций&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">document</span><span class="o">.</span><span class="n">c_lines</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="s1">&#39;Файл </span><span class="si">{}</span><span class="s1"> не найден&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
+    <span class="n">process_general_file</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Импортировать шаблон(Обработанный)&#39;</span>
+    
+<div class="viewcode-block" id="FileUploadAdmin.process_pkt_file"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FileUploadAdmin.process_pkt_file">[документация]</a>    <span class="k">def</span> <span class="nf">process_pkt_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryset</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="s1">&#39;Пожалуйста, выберите один файл&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">PKT</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">only_parse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">parse_file</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">,</span> <span class="s1">&#39;Файл </span><span class="si">{}</span><span class="s1"> загружен, </span><span class="si">{}</span><span class="s1"> позиций&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">document</span><span class="o">.</span><span class="n">c_lines</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="s1">&#39;Файл </span><span class="si">{}</span><span class="s1"> не найден&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">queryset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
+    <span class="n">process_pkt_file</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Импортировать шаблон(PKT)&#39;</span>
+    
+<div class="viewcode-block" id="FileUploadAdmin.process_file"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FileUploadAdmin.process_file">[документация]</a>    <span class="k">def</span> <span class="nf">process_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">qq</span> <span class="ow">in</span> <span class="n">queryset</span><span class="p">:</span>
+            <span class="n">created</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">ProcessingUploadData</span><span class="p">(</span>
+                <span class="n">XLSDocumentReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">qq</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(),</span> <span class="n">start_time</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">get_structured_data</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">,</span> <span class="s1">&#39;Данные успешно загружены из </span><span class="si">{}</span><span class="s1"> файла в БД&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qq</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span></div>
+    <span class="n">process_file</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;Импортировать данные(общий шаблон)&#39;</span>
+    
+<div class="viewcode-block" id="FileUploadAdmin.save_model"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FileUploadAdmin.save_model">[документация]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">change</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">created_by</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">updated_by</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div></div>
+    
+    <span class="c1">#autocomplete_fields = [&#39;category&#39;]</span>
+
+
+<div class="viewcode-block" id="MainLogAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.MainLogAdmin">[документация]</a><span class="k">class</span> <span class="nc">MainLogAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;action_time&#39;</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="s1">&#39;client_address&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="LogEntryAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.LogEntryAdmin">[документация]</a><span class="k">class</span> <span class="nc">LogEntryAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;content_type&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;action_time&#39;</span><span class="p">,</span> <span class="s1">&#39;object_id&#39;</span><span class="p">,</span> <span class="s1">&#39;object_repr&#39;</span><span class="p">,</span> <span class="s1">&#39;action_flag&#39;</span><span class="p">,</span> <span class="s1">&#39;change_message&#39;</span><span class="p">]</span>
+    <span class="n">readonly_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;content_type&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;action_time&#39;</span><span class="p">,</span> <span class="s1">&#39;object_id&#39;</span><span class="p">,</span> <span class="s1">&#39;object_repr&#39;</span><span class="p">,</span> <span class="s1">&#39;action_flag&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;change_message&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LogEntryAdmin.has_delete_permission"><a class="viewcode-back" href="../../catalog.html#catalog.admin.LogEntryAdmin.has_delete_permission">[документация]</a>    <span class="k">def</span> <span class="nf">has_delete_permission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="LogEntryAdmin.get_actions"><a class="viewcode-back" href="../../catalog.html#catalog.admin.LogEntryAdmin.get_actions">[документация]</a>    <span class="k">def</span> <span class="nf">get_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">actions</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">LogEntryAdmin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_actions</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="c1"># del actions[&#39;delete_selected&#39;]</span>
+        <span class="k">return</span> <span class="n">actions</span></div></div>
+
+<span class="c1"># TODO реализовать фильтры поиска по колонкам, рецепт тут: https://medium.com/@hakibenita/how-to-add-a-text-filter-to-django-admin-5d1db93772d8</span>
+<span class="c1"># TODO экспорт в формат xls https://xlsxwriter.readthedocs.io/index.html</span>
+
+
+<div class="viewcode-block" id="FixAttrValAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FixAttrValAdmin">[документация]</a><span class="k">class</span> <span class="nc">FixAttrValAdmin</span><span class="p">(</span><span class="n">BaseAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;value_title&#39;</span><span class="p">,</span> <span class="s1">&#39;attribute&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">]</span>
+    
+<div class="viewcode-block" id="FixAttrValAdmin.value_title"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FixAttrValAdmin.value_title">[документация]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">value_title</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">title</span></div>
+
+    <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;products&#39;</span><span class="p">,)</span></div>
+
+    
+<div class="viewcode-block" id="UnFixAttrValAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.UnFixAttrValAdmin">[документация]</a><span class="k">class</span> <span class="nc">UnFixAttrValAdmin</span><span class="p">(</span><span class="n">BaseAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;attribute&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">]</span>
+
+    <span class="c1"># autocomplete_fields = [&#39;attribute&#39;]</span>
+    <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;products&#39;</span><span class="p">,)</span></div>
+    
+
+<div class="viewcode-block" id="FixValAdmin"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FixValAdmin">[документация]</a><span class="k">class</span> <span class="nc">FixValAdmin</span><span class="p">(</span><span class="n">BaseAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;attribute&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;deleted&#39;</span><span class="p">]</span></div>
+
+<span class="c1"># admin.site.register(Category, CategoryAdmin)</span>
+
+
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">MainLog</span><span class="p">,</span> <span class="n">MainLogAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="n">CategoryAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">FixedAttributeValue</span><span class="p">,</span> <span class="n">FixAttrValAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">UnFixedAttributeValue</span><span class="p">,</span> <span class="n">UnFixAttrValAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">FixedValue</span><span class="p">,</span> <span class="n">FixValAdmin</span><span class="p">)</span>
+<span class="c1"># admin.site.register(FixedAttributeValue, AttrValAdmin)</span>
+<span class="c1"># admin.site.register(UnFixedAttributeValue, AttrValAdmin)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Product</span><span class="p">,</span> <span class="n">ProductAdmin</span><span class="p">)</span>
+<span class="c1"># admin.site.register(Manufacturer, BaseAdmin)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Manufacturer</span><span class="p">,</span> <span class="n">ManufacturerAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Attribute</span><span class="p">,</span> <span class="n">AttrAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Specification</span><span class="p">,</span> <span class="n">BaseAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">DataFile</span><span class="p">,</span> <span class="n">FileUploadAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">LogEntry</span><span class="p">,</span> <span class="n">LogEntryAdmin</span><span class="p">)</span>
+
+<span class="c1"># Register your models here.</span>
+</pre></div>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.2',
+            LANGUAGE:'ru',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+    <div class="footer" role="contentinfo">
+        <div class="container">
+            &#169; Copyright 2019, Vladislav Sazonov &amp; Alexander Tseluyko.
+        Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+        </div>
+    </div>  
+
+</body>
+</html>

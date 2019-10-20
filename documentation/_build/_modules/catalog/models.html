@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>catalog.models &mdash; Документация Система Analog 0.2</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.min.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a class="site-nav-toggle hidden-lg-up"><i class="icon-menu"></i></a>
+            <a class="site-title" href="../../index.html">
+                Система Analog
+            </a>
+        </div>
+    </header>
+
+
+<div class="breadcrumbs-outer hidden-xs-down">
+    <div class="container">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a></li>
+        
+          <li><a href="../index.html">Код модуля</a></li>
+        
+      <li>catalog.models</li>
+    
+    
+      <li class="breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+</div>
+    </div>
+</div>
+    <div class="main-outer">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-3 site-nav">
+                    
+<div role="search">
+    <form class="search" action="../../search.html" method="get">
+        <div class="icon-input">
+            <input type="text" name="q" placeholder="Search" />
+            <span class="icon-search"></span>
+        </div>
+        <input type="submit" value="Искать" class="d-hidden" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+                    <div class="site-nav-tree">
+                        
+
+                            
+                            
+                                <p class="caption"><span class="caption-text">Оглавление:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Система Analog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#id1">Краткое описание</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#id2">Разворачивание проекта разработчиком</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../techspec.html">Функциональные требования к Системе Analog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id1">1. Общее описание</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id2">1.1. описание процесса «как есть сейчас»</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id3">1.2. какой результат нужен</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id4">1.3. требования к ПО и разработчику</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id5">2. Описание отдельных процедур и частей алгоритма</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id6">2.1. первоначальная Загрузка и обновление БД</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id7">2.2. структура данных</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id8">2.3. какие значения могут быть у атрибута:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id9">2.4. загрзка спецификации</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id10">2.5. форма запроса</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id11">2.6. алгоритм поиска</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../techspec.html#id12">2.7. сохранение результатов</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dettechspec.html">Проектное решение по разработке Системы Analog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id1">1. Определения, сокращения и аббревиатуры</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id2">2. Общие сведения</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id3">3. Бизнес-процессы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id4">4. Декомпозиция архитектуры</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id5">4.1 АРМ Пользователя</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id6">4.2 АРМ Администратора</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id7">5. Сущности</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id8">5.1 прикладные сущности</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id9">5.2 Системные сущности</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id10">6. Представления</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id11">6.1 таблица/перечень</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id12">6.2 карточка экземпляра сущности</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id13">6.3 форма запроса параметров подбора спецификации-аналога</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id14">7. Группы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id15">8. Справочники и классификаторы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id16">9. Требования к отказоустойчивости</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dettechspec.html#id17">10. Требования к хостингу и инфраструктура хостинга</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Исходный код</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../catalog.html">catalog package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../core.html">core package</a></li>
+</ul>
+</li>
+</ul>
+
+                            
+                        
+<a href="genindex.html">Алфавитный указатель</a>
+<a href="py-modindex.html">Состав модулей</a>
+
+                    </div>
+                </div>
+                <div class="col-12 col-lg-9">
+                    <div class="document">
+                        
+                            
+  <h1>Исходный код catalog.models</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Описание основных моделей проекта</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="k">import</span> <span class="n">models</span>
+<span class="c1"># import uuid</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="k">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">catalog.choices</span> <span class="k">import</span> <span class="n">TYPES</span><span class="p">,</span> <span class="n">UNITS</span><span class="p">,</span> <span class="n">TYPES_FILE</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.postgres</span> <span class="k">import</span> <span class="n">fields</span> <span class="k">as</span> <span class="n">pgfields</span>
+
+<span class="kn">import</span> <span class="nn">mptt</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="k">import</span> <span class="n">timezone</span>
+
+
+<div class="viewcode-block" id="Base"><a class="viewcode-back" href="../../catalog.html#catalog.admin.Base">[документация]</a><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Абстрактная базовая модель</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># uid = models.UUIDField(verbose_name=&quot;Идентификатор&quot;, primary_key=True, default=uuid.uuid4, editable=False)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Когда создано&quot;</span><span class="p">)</span>
+    <span class="n">created_by</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Кем создано&quot;</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Когда обновлено&quot;</span><span class="p">)</span>
+    <span class="n">updated_by</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Кем обновлено&quot;</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">)</span>
+    <span class="n">is_public</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s2">&quot;Опубликовано?&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">deleted</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s2">&quot;В архиве?&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># rev = models.CharField(&quot;Ревизия&quot;, default=&#39;1-{0}&#39;.format(uuid.uuid4()), max_length=38, editable=False)</span>
+    <span class="c1"># json-delta пакет для работы с разностью в json; json_patch - функция пакета для применения изменений.</span>
+
+<div class="viewcode-block" id="Base.Meta"><a class="viewcode-back" href="../../catalog.html#catalog.admin.Base.Meta">[документация]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">abstract</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Базовая модель &quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Базовые модели&quot;</span></div></div>
+
+    <span class="c1"># def save(self, *args, **kwargs):</span>
+    <span class="c1">#     if not self.uid:</span>
+    <span class="c1">#         self.created_at = timezone.now()</span>
+    
+    <span class="c1">#     self.updated_at = timezone.now()</span>
+    <span class="c1">#     return super(Base, self).save(*args, **kwargs)</span>
+
+
+<div class="viewcode-block" id="Manufacturer"><a class="viewcode-back" href="../../catalog.html#catalog.admin.Manufacturer">[документация]</a><span class="k">class</span> <span class="nc">Manufacturer</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Модель производителя товаров</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Наименование&#39;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+    <span class="n">short_title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Краткое наименование&#39;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Производитель&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Производители&quot;</span></div>
+
+
+<div class="viewcode-block" id="Category"><a class="viewcode-back" href="../../catalog.html#catalog.admin.Category">[документация]</a><span class="k">class</span> <span class="nc">Category</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Модель класса товаров</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;self&#39;</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Родительский класс&quot;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;childs&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">childs</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Наименование&#39;</span><span class="p">)</span>
+    <span class="n">short_title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Краткое наименование&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">attributes</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s1">&#39;Attribute&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Атрибуты&quot;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="Category.getAttributes"><a class="viewcode-back" href="../../catalog.html#catalog.admin.Category.getAttributes">[документация]</a>    <span class="k">def</span> <span class="nf">getAttributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">childs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">subcat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">childs</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="n">_attrs</span> <span class="o">=</span> <span class="n">subcat</span><span class="o">.</span><span class="n">attributes</span> <span class="k">if</span> <span class="n">subcat</span><span class="o">.</span><span class="n">attributes</span> <span class="k">else</span> <span class="p">[]</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">_attrs</span><span class="p">)</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">attrs</span></div>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">short_title</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">short_title</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">title</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s1">&#39; -&gt; &#39;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+        <span class="k">return</span> <span class="n">text</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Класс&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Классы&quot;</span></div>
+
+<span class="n">mptt</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="p">)</span>
+<span class="c1"># class Subcategory(Base):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Модель Пподкласса товаров</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     title = models.CharField(max_length=255, verbose_name=&#39;Наименование&#39;)</span>
+<span class="c1">#     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name=&quot;Класс&quot;, related_name=&#39;subcategories&#39;)</span>
+<span class="c1">#     short_title = models.CharField(max_length=255, verbose_name=&#39;Краткое наименование&#39;, blank=True)</span>
+
+<span class="c1">#     def __str__(self):</span>
+<span class="c1">#         return self.category.title + &#39; -&gt; &#39; + self.title</span>
+
+<span class="c1">#     class Meta:</span>
+<span class="c1">#         verbose_name = &quot;Подкласс&quot;</span>
+<span class="c1">#         verbose_name_plural = &quot;Подклассы&quot;</span>
+
+
+<div class="viewcode-block" id="Attribute"><a class="viewcode-back" href="../../catalog.html#catalog.admin.Attribute">[документация]</a><span class="k">class</span> <span class="nc">Attribute</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Модель атрибута товара</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Наименование&#39;</span><span class="p">)</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">TYPES</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Тип&quot;</span><span class="p">)</span>
+    <span class="n">unit</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">UNITS</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Единицы измерения&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">priority</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PositiveSmallIntegerField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Приоритет&#39;</span><span class="p">)</span>
+    <span class="c1">#category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name=&quot;Класс&quot;, related_name=&#39;attributes&#39;, limit_choices_to={&#39;parent__isnull&#39;: False})</span>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">UNITS</span> <span class="o">=</span> <span class="n">UNITS</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">UNITS</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">==</span> <span class="n">unit</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">text</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">unit</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">text</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Атрибут&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Атрибуты&quot;</span></div>
+
+
+<div class="viewcode-block" id="FixedValue"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FixedValue">[документация]</a><span class="k">class</span> <span class="nc">FixedValue</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Модель фиксированного значения атрибута</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Значение&#39;</span><span class="p">)</span>
+    <span class="n">attribute</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Attribute</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Атрибут&quot;</span><span class="p">,</span>
+                                  <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;fixed_value&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">, title: </span><span class="si">{}</span><span class="s1">, attribute: </span><span class="si">{}</span><span class="s1">, type: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+                                                               <span class="bp">self</span><span class="o">.</span><span class="n">attribute</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Фиксированное значение&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Фиксированные значения&quot;</span></div>
+    
+    
+<div class="viewcode-block" id="FixedAttributeValue"><a class="viewcode-back" href="../../catalog.html#catalog.admin.FixedAttributeValue">[документация]</a><span class="k">class</span> <span class="nc">FixedAttributeValue</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Модель фиксированного значения атрибута</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">FixedValue</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Фиксированное значение атрибута&quot;</span><span class="p">)</span>
+    <span class="c1"># title = models.CharField(max_length=255, verbose_name=&#39;Значение&#39;)</span>
+    <span class="n">attribute</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Attribute</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Атрибут&quot;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;fixed_values&quot;</span><span class="p">)</span>
+    <span class="n">products</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s1">&#39;Product&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">is_tried</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Проверенный&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribute</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">title</span>
+    
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Значение атрибута(фикс)&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Значения атрибутов(фикс)&quot;</span></div>
+
+
+<div class="viewcode-block" id="UnFixedAttributeValue"><a class="viewcode-back" href="../../catalog.html#catalog.admin.UnFixedAttributeValue">[документация]</a><span class="k">class</span> <span class="nc">UnFixedAttributeValue</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Модель нефиксированного значения атрибута</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Нефикс значение атрибута&quot;</span><span class="p">)</span>
+    <span class="c1"># title = models.CharField(max_length=255, verbose_name=&#39;Значение&#39;)</span>
+    <span class="n">attribute</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Attribute</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Атрибут&quot;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;unfixed_values&quot;</span><span class="p">)</span>
+    <span class="n">products</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s1">&#39;Product&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">is_tried</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Проверенный&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribute</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Значение атрибута(нефикс)&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Значения атрибутов(нефикс)&quot;</span></div>
+
+
+<div class="viewcode-block" id="Product"><a class="viewcode-back" href="../../catalog.html#catalog.admin.Product">[документация]</a><span class="k">class</span> <span class="nc">Product</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Модель товара</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Наименование&#39;</span><span class="p">)</span>
+    <span class="n">formalized_title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Формализованное наименование&#39;</span><span class="p">)</span>
+    
+    <span class="n">article</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Артикул&#39;</span><span class="p">)</span>
+    <span class="n">additional_article</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Доп. артикул&#39;</span><span class="p">)</span>
+    <span class="n">series</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Серия&#39;</span><span class="p">)</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span>
+                                 <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Класс&quot;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;products&#39;</span><span class="p">,</span> <span class="n">limit_choices_to</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;parent__isnull&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+    
+    <span class="n">is_duplicate</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Дубликат&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">is_tried</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Проверенный&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="n">manufacturer</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Manufacturer</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Производитель&quot;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;products&#39;</span><span class="p">)</span>
+    
+    <span class="n">fixed_attrs_vals</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s1">&#39;FixedAttributeValue&#39;</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Фикс атрибуты&quot;</span><span class="p">)</span>
+    <span class="n">unfixed_attrs_vals</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s1">&#39;UnFixedAttributeValue&#39;</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Нефикс атрибуты&quot;</span><span class="p">)</span>
+
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">pgfields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Голые данные&quot;</span><span class="p">)</span>
+    
+    <span class="n">is_base</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Базовый&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Товар&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Товары&quot;</span></div>
+        <span class="c1"># ordering = (&#39;created_at&#39;, )</span>
+
+
+<span class="c1"># class ProductProperty(Base):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Модель, связующая товар и атрибут и его значение</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     product = models.ForeignKey(Product, on_delete=models.CASCADE)</span>
+<span class="c1">#     attribute_value = models.ForeignKey(AttributeValue, on_delete=models.CASCADE)</span>
+
+
+<div class="viewcode-block" id="Specification"><a class="viewcode-back" href="../../catalog.html#catalog.admin.Specification">[документация]</a><span class="k">class</span> <span class="nc">Specification</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Модель спецификации предложений товаров</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Наименование&#39;</span><span class="p">)</span>
+    <span class="n">products</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Product</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Товары&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Спецификация&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Спецификации&quot;</span></div>
+        
+        
+<div class="viewcode-block" id="DataFile"><a class="viewcode-back" href="../../catalog.html#catalog.admin.DataFile">[документация]</a><span class="k">class</span> <span class="nc">DataFile</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Модель загрузки файлов</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Файл&#39;</span><span class="p">)</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">TYPES_FILE</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Тип файла&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">TYPES_FILE</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;-updated_at&#39;</span><span class="p">,</span> <span class="p">)</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Файл&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Файлы&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span>
+    
+<div class="viewcode-block" id="DataFile.save"><a class="viewcode-back" href="../../catalog.html#catalog.admin.DataFile.save">[документация]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DataFile</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">)</span><span class="c1">#self.data.url)</span></div></div>
+</pre></div>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.2',
+            LANGUAGE:'ru',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+    <div class="footer" role="contentinfo">
+        <div class="container">
+            &#169; Copyright 2019, Vladislav Sazonov &amp; Alexander Tseluyko.
+        Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+        </div>
+    </div>  
+
+</body>
+</html>
