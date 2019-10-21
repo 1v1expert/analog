@@ -31,16 +31,16 @@
 	29.Services5
 	30.Services6
 	31.Services7
-	
+
 	=========================== */
-	
-	
-	
+
+
+
 	/* ============================
 	 1.General styles
 	 =========================== */
-	
-	
+
+
 	body {
 	background-color:#fff;
 }
@@ -147,7 +147,7 @@ h1, h2, h3, h4, h5, h6 {
 /* ============================
 	 3.Main nav
 	 =========================== */
-	
+
 	#main-nav {
 	width:100%;
 	left:0;
@@ -275,7 +275,7 @@ a.navbar-brand img {
 /* ============================
 	 4.Banner letter effect
 	 =========================== */
-	
+
 	.letter-container {
 	margin: 0px;
 	padding: 0px;
@@ -283,7 +283,7 @@ a.navbar-brand img {
 .head-space
 {
 	margin-top:10px;
-	
+
 }
 .letter-container h1 {
 	text-align: center;
@@ -596,8 +596,8 @@ a.navbar-brand img {
 /* ============================
 	 5.Banner area
 	 =========================== */
-	
-	
+
+
 	#lp-pom-block-10 {
 	width:100%;
 	height: 780px;
@@ -616,7 +616,7 @@ a.navbar-brand img {
 		position:absolute;
 		z-index:10;
 		background:url(../images/dot.png) repeat;
-		
+
 	}
 .baaner-container {
 	position: relative;
@@ -721,8 +721,8 @@ a.navbar-brand img {
 	text-align: center;
 	z-index:100;
 }
-	
-	
+
+
 	/* Pulse */
 	@-webkit-keyframes pulse {
  25% {
@@ -830,7 +830,7 @@ a.blue-button :hover {
 /* ============================
 	 6.Choose
 	 =========================== */
-	
+
 	.choose-container {
 	padding:65px 0px 45px 0px;
 }
@@ -1037,7 +1037,7 @@ a.blue-button :hover {
 /* ============================
 	 7.Features
 	 =========================== */
-	
+
 	.features-container {
 	padding:65px 0px;
 	background-color:#f5f5f5;
@@ -1109,7 +1109,7 @@ a.blue-button :hover {
 /* ============================
 	 8.Service
 	 =========================== */
-	
+
 	.service-container {
 	padding:65px 0px;
 	background-color:#fff;
@@ -1160,8 +1160,8 @@ a.blue-button :hover {
 /* ============================
 	 9.Offer
 	 =========================== */
-	 
-	
+
+
 	#lp-pom-block-11 {
 	padding:65px 0px 45px 0px;
 	height:auto;
@@ -1270,7 +1270,7 @@ a.blue-button :hover {
 .offer-boxhead img
 {
 	float:right;
-	
+
 }
 /* ============================
 	 10.Price
@@ -1391,7 +1391,7 @@ ol, ul {
 /* ============================
 	 11.Client
 	 =========================== */
-	
+
 	.client-container {
 	padding: 65px 0px;
 	background-color: #fafcfb;
@@ -1432,7 +1432,7 @@ ol, ul {
 /* ============================
 	12.Client review
 	=========================== */
-	
+
 	.clientreview-container {
 	padding: 65px 0px 45px 0px;
 	background-color: #fff;
@@ -1518,7 +1518,7 @@ ol, ul {
 /* ============================
 	13.Search domin
 	=========================== */
-	
+
 	#lp-pom-block-12 {
 	padding:65px 0px;
 	height:auto;
@@ -1610,9 +1610,9 @@ ol, ul {
 /* ============================
 	14.Get in touch
 	=========================== */
-	
-	
-	
+
+
+
 	  #contact .contact-form {
 	width:90%;
 	max-width: 830px;
@@ -1620,7 +1620,7 @@ ol, ul {
 }
 .form-control {
 	width: 100%;
-	
+
 	padding: 15px;
 	font-family: Arial, Helvetica, sans-serif;
 	border:1px solid #e0e0e0;
@@ -1659,7 +1659,7 @@ ol, ul {
 	border:none;
 }
 
-	
+
 	  ::-webkit-input-placeholder { /* WebKit browsers */
  color:    #666666;
 }
@@ -1675,8 +1675,8 @@ ol, ul {
 /* ============================
 	15.Footer
 	=========================== */
-	
-	
+
+
 	.footer-container {
 	padding: 65px 0px 45px 0px;
 	background-color: #323943;
@@ -1753,8 +1753,8 @@ ol, ul {
 /* ============================
 	16.Newsletter
 	=========================== */
-	
-	
+
+
 	.newsletter-container {
 	padding: 40px 0px;
 	background-color: #282e36;
@@ -1827,9 +1827,9 @@ ol, ul {
 /* ============================
 	17.Footer-bottom
 	=========================== */
-	
-	
-	
+
+
+
 	.footer-bottom {
 	padding: 35px 0px 35px 0px;
 	background-color: #191c21;
@@ -2134,7 +2134,7 @@ ol, ul {
 /* ============================
 	21.Blog single post
 	=========================== */
-	
+
 	.comments h1 {
 	color: #333333;
 	font-family: "Open Sans", Arial, Helvetica, sans-serif;
@@ -2227,8 +2227,8 @@ ol, ul {
 /* ============================
 	22.Footer1
 	=========================== */
-	
-	
+
+
 
 
 .sitemap {
@@ -2539,7 +2539,7 @@ a.back-btn i {
 /* ============================
 	25.Services1
 	=========================== */
-	
+
 	.service-main {
 	margin-bottom:25px;
 }
@@ -2584,8 +2584,8 @@ a.back-btn i {
 /* ============================
 	26.Services2
 	=========================== */
-	
-	
+
+
 	.service-round2 {
 	margin: 0 auto;
 	text-align: center;
@@ -2597,7 +2597,7 @@ a.back-btn i {
 /* ============================
 	27.Services3
 	=========================== */
-	
+
 	.service3 {
 }
 .service3 i {
@@ -2624,7 +2624,7 @@ a.back-btn i {
 /* ============================
 	28.Services4
 	=========================== */
-	
+
 	.service-round4 {
 	width: 80px;
 	height: 80px;
@@ -2664,7 +2664,7 @@ a.back-btn i {
 /* ============================
 	29.Services5
 	=========================== */
-	
+
 	.service-round5 {
 	width: 80px;
 	height: 80px;
@@ -2704,7 +2704,7 @@ a.back-btn i {
 /* ============================
 	30.Services6
 	=========================== */
-	
+
 	.service-round6 {
 	width: 50px;
 	height: 50px;
@@ -2744,7 +2744,7 @@ a.back-btn i {
 /* ============================
 	31.Services7
 	=========================== */
-	
+
 	.service-round7 {
 	width: 80px;
 	height: 80px;
@@ -2823,7 +2823,7 @@ a.back-btn i {
 }
 .carousel-caption h1 {
 	margin-top: 0px;
-	
+
 		}
  .carousel-caption h2 {
  font-size: 18px;
@@ -2955,7 +2955,7 @@ padding: 4px 0px 40px 0px;
  border-width: 4px;
  margin-left: -4px;
 }
- 
+
  .dropdown-menu li {
  border-bottom:solid 1px #666666;
 }
@@ -3214,7 +3214,7 @@ width: 84%;
 }
 }
 @media (max-width:640px) {
-	  
+
 	   #lp-pom-block-10
 {
 	  background-position: 50% 0px !important;
@@ -3230,5 +3230,5 @@ width: 84%;
 {
 	  background-position: 50% 0px !important;
 }
-	  
+
   }

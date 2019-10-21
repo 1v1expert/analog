@@ -567,30 +567,30 @@
     background-color: #f5f5f5;
 }
 </style>
-<div class="aboutproduct-container">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-3 col-md-3">
+{#<div class="aboutproduct-container">#}
+{#    <div class="container">#}
+{#        <div class="row">#}
+{#            <div class="col-sm-3 col-md-3">#}
 {#                <div class="newsletter"><span class="newsletterIcon"></span>#}
 {#                    <h2>Подписаться</h2>#}
 {#                    <p>на новости </p>#}
 {#                </div>#}
-            </div>
+{#            </div>#}
 {#            <form class="form-search" role="form" action="subscribe.php" id="subscribeForm" method="POST">#}
-            <form class="form-search" id="subscribeForm" method="POST">
-                <div class="col-sm-6 col-md-6">
-                    {% csrf_token %}
-                    {{ subscribe_form.email }}
+{#            <form class="form-search" id="subscribeForm" method="POST">#}
+{#                <div class="col-sm-6 col-md-6">#}
+{#                    {% csrf_token %}#}
+{#                    {{ subscribe_form.email }}#}
 {#                    <input type="email" name="email" id="address" required="required" class="newsletter-form"#}
 {#                           placeholder="Введите ваш email адрес" data-validate="validate(required, email)">#}
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    <button type="submit" class="newsletter-btn">Подписаться</button>
-                    <span id="result" class="alertMsg"></span></div>
-            </form>
-        </div>
-    </div>
-</div>
+{#                </div>#}
+{#                <div class="col-sm-3 col-md-3">#}
+{#                    <button type="submit" class="newsletter-btn">Подписаться</button>#}
+{#                    <span id="result" class="alertMsg"></span></div>#}
+{#            </form>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
 <!--=============================Separator block=============================-->
 <div class="seprator-block" style="height: 20px;"></div>
 <!--=============================Features=============================-->

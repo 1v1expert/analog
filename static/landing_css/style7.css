@@ -31,8 +31,8 @@
 	29.Services5
 	30.Services6
 	31.Services7
-	
-	
+
+
 =========================== */
 
 
@@ -55,7 +55,7 @@ h1, h2, h3, h4, h5, h6 {
 	position:relative;
 	height:auto;
 	background-color:#323943;
-	
+
 }
 /* ============================
    2.Top link
@@ -282,7 +282,7 @@ a.navbar-brand img{
 .head-space
 {
 	margin-top:10px;
-	
+
 }
 .letter-container h1 {
 	text-align: center;
@@ -605,7 +605,7 @@ a.navbar-brand img{
 	background-image:url(../images/banner-bg.jpg);
 	background-repeat: no-repeat;
 	background-color:#000;
-	
+
 	background-attachment: fixed;
 		background-position:top center;
 	background-size: cover;
@@ -618,7 +618,7 @@ a.navbar-brand img{
 		position:absolute;
 		z-index:10;
 		background:url(../images/dot.png) repeat;
-		
+
 	}
 
 .baaner-container {
@@ -643,7 +643,7 @@ a.navbar-brand img{
 	line-height:18px;
 	font-family: 'Open Sans Bold', Arial, Helvetica, sans-serif;
 	font-weight:bold;
-	
+
 }
 .carousel-caption h2 {
 	margin-top: 10px;
@@ -1163,8 +1163,8 @@ a.blue-button :hover {
 /* ============================
    9.Offer
    =========================== */
-   
-  
+
+
 #lp-pom-block-11 {
 	padding:65px 0px 45px 0px;
 	height:auto;
@@ -1273,7 +1273,7 @@ a.blue-button :hover {
 .offer-boxhead img
 {
 	float:right;
-	
+
 }
 /* ============================
    10.Price
@@ -1616,8 +1616,8 @@ ol, ul {
 
 
 
-	
-	
+
+
 
 	#contact .contact-form {
 	width:90%;
@@ -1626,7 +1626,7 @@ ol, ul {
 }
 .form-control {
 	width: 100%;
-	
+
 	padding: 15px;
 	font-family: Arial, Helvetica, sans-serif;
 	border:1px solid #e0e0e0;
@@ -2166,11 +2166,11 @@ width: 100%;
 	font-family: "Open Sans", Arial, Helvetica, sans-serif;
 	background-color: #fff;
 }
- 
+
 /* ============================
     21.Blog single post
     =========================== */
-    
+
     .comments h1 {
 color: #333333;
 font-family: "Open Sans", Arial, Helvetica, sans-serif;
@@ -2220,7 +2220,7 @@ top: 38px;
 width: 0;
 z-index: 0;
 }
- 
+
 .comment-box1 {
 margin: 20px 0 0 40px;
 }
@@ -2248,12 +2248,12 @@ margin: 20px 0 0 80px;
 	font-weight: normal;
 	margin: 20px 0px;
 }
- 
+
  /* ============================
 	22.Footer1
 	=========================== */
-	
-	
+
+
 
 
 .sitemap {
@@ -2564,7 +2564,7 @@ a.back-btn i {
 /* ============================
 	25.Services1
 	=========================== */
-	
+
 	.service-main {
 	margin-bottom:25px;
 }
@@ -2609,8 +2609,8 @@ a.back-btn i {
 /* ============================
 	26.Services2
 	=========================== */
-	
-	
+
+
 	.service-round2 {
 	margin: 0 auto;
 	text-align: center;
@@ -2622,7 +2622,7 @@ a.back-btn i {
 /* ============================
 	27.Services3
 	=========================== */
-	
+
 	.service3 {
 }
 .service3 i {
@@ -2649,7 +2649,7 @@ a.back-btn i {
 /* ============================
 	28.Services4
 	=========================== */
-	
+
 	.service-round4 {
 	width: 80px;
 	height: 80px;
@@ -2689,7 +2689,7 @@ a.back-btn i {
 /* ============================
 	29.Services5
 	=========================== */
-	
+
 	.service-round5 {
 	width: 80px;
 	height: 80px;
@@ -2729,7 +2729,7 @@ a.back-btn i {
 /* ============================
 	30.Services6
 	=========================== */
-	
+
 	.service-round6 {
 	width: 50px;
 	height: 50px;
@@ -2769,7 +2769,7 @@ a.back-btn i {
 /* ============================
 	31.Services7
 	=========================== */
-	
+
 	.service-round7 {
 	width: 80px;
 	height: 80px;
@@ -2827,7 +2827,7 @@ a.back-btn i {
 
 
 
- 
+
     /* RESPONSIVE CSS
     -------------------------------------------------- */
     @media (min-width:480px) {
@@ -2842,7 +2842,7 @@ font-size: 25px;
 }
 .carousel-caption h1 {
 	margin-top: 0px;
-	
+
 		}
  .carousel-caption h2 {
  font-size: 18px;
@@ -3239,7 +3239,7 @@ width: 84%;
 }
 
 @media (max-width:640px) {
-	  
+
 	   #lp-pom-block-10
 {
 	  background-position: 50% 0px !important;
@@ -3255,5 +3255,5 @@ width: 84%;
 {
 	  background-position: 50% 0px !important;
 }
-	  
+
   }
