@@ -421,7 +421,24 @@
     </div>
 </header>
 <!--=============================Banner=============================-->
+<style>
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+        border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #eef2f7;
 
+    {#border: 1px solid #ccc;#}
+    display: inline-block;
+    {#padding: 6px 12px;#}
+    cursor: pointer;
+}
+    .fa-inverse {
+        color: #666;
+    }
+</style>
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <div id="lp-pom-block-10" style="height: 400px;">
         <div class="banner-dot" style="height: 400px">
@@ -449,6 +466,9 @@
                                        data-slide="prev">
                                         <i class="fa fa-arrow-left hvr-icon"></i> Поиск по спецификации
                                     </a>
+{#                                    <a class="blue-button wobble-horizontal" role="button" href="#myCarousel"#}
+{#                                       data-slide="prev">Информация по артикулу#}
+{#                                    </a>#}
                                     <a class="blue-button hvr-icon-wobble-horizontal" role="button" href="#myCarousel"
                                        data-slide="next">Поиск по артикулу
                                         <i class="fa fa-arrow-right hvr-icon"></i>
@@ -520,12 +540,20 @@
                                                    value="{{ manufacturers.first.id }}">
                                             {#                                            <input type="hidden" name="manufacturer_from" id="manufacturer_from" value="{{ manufacturers.first.id }}">#}
                                             <div class="input-append">
-                                                <input class="search" type="file" name="file" accept=".xls, .xlsx,"
-                                                       placeholder="Введите номер артикула">
+
+
+                                                <label for="file-upload" class="custom-file-upload search" style="height: 56px;">
+                                                    <i class="fa fa-cloud-upload fa-inverse"></i> Загрузить файл
+                                                </label>
+                                                <input id="file-upload" type="file"/>
+
+
+{#                                                                                                <input class="search" type="file" name="file" accept=".xls, .xlsx,"#}
+{#                                                       placeholder="Введите номер артикула">#}
                                                 <div class="btn-group">
-                                                    <button class="btn dropdown-toggle" data-toggle="dropdown"
+                                                    <button class="btn dropdown-toggle btn-border" data-toggle="dropdown"
                                                             data-id_manufacturer=false id="btn_manufacturer"
-                                                            style="min-width: 150px;"> {{ manufacturers.first }}
+                                                            style="min-width: 100px;"> {{ manufacturers.first }}
                                                         <span class="caret"></span></button>
                                                     <ul class="dropdown-menu">
                                                         {% for manufacturer in  manufacturers %}
@@ -536,7 +564,7 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <input type="submit" class="search-area search-btn"
+                                            <input type="submit" class="search-area search-btn btn-border"
                                                    value="Искать"/>
                                             {#                                                <p class="search-area"><a href="#" class="search-btn">Искать </a></p>#}
                                         </form>
