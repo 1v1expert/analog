@@ -26,11 +26,17 @@ def login_view(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        print(user)
+        # print(user)
+        # response = HttpResponse()
+        # response.set_signed_cookie()
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('app:home')
+                # HttpResponseRedirect
+                redirect_cookie = redirect('app:home')
+                redirect_cookie.set_signed_cookie("user2", "demo")
+                return redirect_cookie
+                # return redirect('app:home')
         return render(request, 'login.html', {'auth_form': auth_form, 'error': 'Неверно введён логин или пароль'})
     
     return render(request, 'login.html', {'auth_form': auth_form})
