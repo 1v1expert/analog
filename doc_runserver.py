@@ -93,15 +93,15 @@ from tornado.util import (ObjectDict, raise_exc_info,
 
 # url = URLSpec
 
-if PY3:
-    import http.cookies as Cookie
-    import urllib.parse as urlparse
-    from urllib.parse import urlencode
-else:
-    import Cookie
-    import urlparse
-    from urllib import urlencode
-from tornado.web import HTTPError
+# if PY3:
+#     import http.cookies as Cookie
+#     import urllib.parse as urlparse
+#     from urllib.parse import urlencode
+# else:
+#     import Cookie
+#     import urlparse
+#     from urllib import urlencode
+# from tornado.web import HTTPError
 # @tornado.web.authenticated
 def authenticated(method):
     """Decorate methods with this to require that the user be logged in.
