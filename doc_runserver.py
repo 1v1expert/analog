@@ -376,5 +376,5 @@ server = ServerSpecific(
     # path=path
 )
 
-server.serve(port=8080, host='127.0.0.1',
+server.serve(port=8080, host='0.0.0.0',
              root='documentation/_build', open_url_delay=0)
