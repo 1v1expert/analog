@@ -172,19 +172,26 @@ def logout_view(request) -> HttpResponse:
 def login_view(request) -> HttpResponse:
     # auth_form = MyAuthenticationForm(request)
     if request.method == 'POST':
+
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(username=username, password=password)
+
+        try:
+            user = models.User.objects.get(username=username)
+            if not user.check_password(password):
+                return JsonResponse({'OK': False, 'error': 'Неверно введён логин или пароль'})
+        except (models.User.DoesNotExist, models.User.MultipleObjectsReturned) as e:
+            return HttpResponse('Unauthorized', status=401)
         
-        if not user.is_active:
+        # user = authenticate(request, username=username, password=password)
+        if user.is_active:
+            login(request, user)
+            # return redirect('app:landing_home')
+            return JsonResponse({'OK': True})
+        else:
             return JsonResponse({'OK': False, 'error': 'Учётная запись не подтверждена'})
+            
         
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                # return redirect('app:landing_home')
-                return JsonResponse({'OK': True})
-        return JsonResponse({'OK': False, 'error': 'Неверно введён логин или пароль'})
 
     return HttpResponseBadRequest()
 
