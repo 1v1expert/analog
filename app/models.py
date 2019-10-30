@@ -30,7 +30,7 @@ class FeedBack(models.Model):
     email = models.TextField(max_length=100, blank=True, null=True, verbose_name="Почта")
     phone = models.TextField(max_length=40, blank=True, null=True, verbose_name="Телефон")
     text = models.TextField(max_length=500, blank=True, null=True, verbose_name="Текст")
-    is_subscriber = models.BooleanField(default=False, null=True, verbose_name="Подписчик")
+    is_subscriber = models.BooleanField(default=False, null=True, verbose_name="Подписка")
     
     class Meta:
         verbose_name = "Обратная связь"
@@ -41,7 +41,7 @@ class FeedBack(models.Model):
 class MainLog(models.Model):
     action_time = models.DateTimeField(_('action time'), default=timezone.now, editable=False, )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, blank=True, null=True, verbose_name=_('user'),)
-    client_address = models.TextField(max_length=200, blank=True, null=True, verbose_name="Адрес клиента")
+    client_address = models.TextField(max_length=100, blank=True, null=True, verbose_name="Адрес клиента")
     message = models.TextField(_('message'), blank=True)
     raw = pgfields.JSONField(null=True, blank=True, verbose_name="Голые данные")
     has_errors = models.BooleanField(default=False, null=True)

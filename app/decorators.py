@@ -21,7 +21,14 @@ def a_decorator_passing_logs(func):
         if request.method == 'POST':
             message['post_data'] = request.POST
         
-        MainLog(user=user, message=message, client_address=client_address, ).save()
+        MainLog(user=user,
+                message=message,
+                client_address=client_address,
+                raw={'raw_message': message,
+                     'HTTP_USER_AGENT': request.META.get('HTTP_USER_AGENT'),
+                     'HTTP_CONNECTION': request.META.get('HTTP_CONNECTION')}
+                ).save()
+                # raw=vars(request.META)).save()
         
         return func(request)
     
