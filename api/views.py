@@ -118,8 +118,11 @@ def check_product_and_get_attributes(request) -> HttpResponse:
     
     return HttpResponseBadRequest()
 
+from app.decorators import check_recaptcha
+
 
 @a_decorator_passing_logs
+@check_recaptcha
 def feedback(request) -> HttpResponse:
     if request.method == 'POST':
         form = FeedBackForm(request.POST)
@@ -127,6 +130,10 @@ def feedback(request) -> HttpResponse:
         if str(request.user) == 'AnonymousUser':
             user = None
         if form.is_valid():
+            
+            if not request.recaptcha_is_valid:
+                return JsonResponse({'OK': False, 'error': 'Invalid reCAPTCHA. Please try again.'}, content_type='application/json')
+            
             try:
                 FeedBack.objects.create(user=user,
                                         text=form.cleaned_data.get('text', ''),
