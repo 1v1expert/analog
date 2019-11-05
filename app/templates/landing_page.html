@@ -814,49 +814,7 @@ input[type="file"] {
     </div>
 </div>
 <!--==============================Footer============================-->
-{#<div  class="footer-container">#}
-{#  <div class="container">#}
-{#    <div class="row">#}
-{#      <div class="col-sm-6 col-md-3" >#}
-{#        <h2>Support/help</h2>#}
-{#        <ul class="list">#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Terms Of Use </a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Privacy Policy</a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Return Policy</a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> My Account</a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Single and Portfolios</a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Recent Blogs or News</a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Ordering and Tracking</a></li>#}
-{#        </ul>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-3" >#}
-{#        <h2>Contact info</h2>#}
-{#        <p> Street str, 12345 Amsterdam, Duis venenatis neque, Lorem ipsum, venenatis ipsum, neque 56478 Australia<br>#}
-{#          <br>#}
-{#          Phone : +38 068 123-45-67  |  +38 068 987-65-43<br>#}
-{#          <br>#}
-{#          E-mail: info@carrots-desgmail.com </p>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-3" >#}
-{#        <h2>Our policies</h2>#}
-{#        <ul class="list">#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Terms Of Use </a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Privacy Policy</a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Return Policy</a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> My Account</a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Single and Portfolios</a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Recent Blogs or News</a></li>#}
-{#          <li><a href="#"><i class="fa fa-angle-right"></i> Ordering and Tracking</a></li>#}
-{#        </ul>#}
-{#      </div>#}
-{#      <div class="col-sm-6 col-md-3" >#}
-{#        <h2>Payment methods</h2>#}
-{#        <div class="payment-area"> <a href="#" target="_blank" title=""><img src="{% static 'images/maestro.png' %}" alt=""></a> <a href="#" target="_blank" title=""><img src="{% static 'images/visa.png' %}" alt=""></a> <a href="#" target="_blank" title=""><img src="{% static 'images/master-card.png' %}" alt=""></a> <a href="#" target="_blank" title=""><img src="{% static 'images/paypal.png' %}" alt=""></a> <a href="#" target="_blank" title=""><img src="{% static 'images/debit.png' %}" alt=""></a> <a href="#" target="_blank" title=""><img src="{% static 'images/express.png' %}" alt=""></a> </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
-
+<!-- TODO: set footer -->
 <!--===========================Goto top============================-->
 <a href="#" id="go-top"></a>
 
@@ -869,26 +827,9 @@ input[type="file"] {
         </div>
     </div>
 </div>
-<!--==============Theme box=================-->
-
-{#<div class="styles">#}
-{#  <p class="skins">Skins </p>#}
-{#  <ul>#}
-{#    <li class="bg1"> <a href="style=style" title="stylesheet" class="styleswitch"> </a></li>#}
-{#    <li class="bg2"> <a href="style=style1" title="stylesheet1" class="styleswitch"></a></li>#}
-{#    <li class="bg3"> <a href="style=style2" title="stylesheet2" class="styleswitch"></a></li>#}
-{#    <li class="bg4"> <a href="style=style3" title="stylesheet3" class="styleswitch"></a></li>#}
-{#    <li class="bg5"> <a href="style=style4" title="stylesheet4" class="styleswitch"></a></li>#}
-{#    <li class="bg6"> <a href="style=style5" title="stylesheet5" class="styleswitch"></a></li>#}
-{#    <li class="bg7"> <a href="style=style6" title="stylesheet6" class="styleswitch"></a></li>#}
-{#    <li class="bg8"> <a href="style=style7" title="stylesheet7" class="styleswitch"></a></li>#}
-{#  </ul>#}
-{#</div>#}
-{#<a class="styles-open"  href="#closeoptions"> </a>#}
-{#<div class="styles-closed " > <a href="#options"> </a> </div>#}
 
 <script type="text/javascript">
-    {#Working with cookie#}
+    //Working with cookie
 
     function createCookie(cookieName, cookieValue, daysToExpire) {
         var date = new Date();
@@ -909,43 +850,15 @@ input[type="file"] {
 </script>
 
 <script type="text/javascript">
-    /*===================
-       Letter effect
-        ===================*/
-
-    {#$(function() {#}
-    {#				$(".letter-container h1 a").lettering();#}
-    {##}
-    {#			});#}
-
 
     /*===================
      OWL Carousel
       ===================*/
 
     jQuery(document).ready(function () {
-        var owl = jQuery("#owl-sponsors");
-
-        owl.owlCarousel({
-            stopOnHover: true,
-            items: 2,
-            itemsCustom: false,
-            itemsDesktop: [1200, 5],
-            itemsDesktopSmall: [1240, 5],
-            itemsTablet: [767, 2],
-            itemsTabletSmall: false,
-            itemsMobile: [480, 1],
-            singleItem: false,
-            pagination: false,
-            itemsScaleUp: false,
-        });
-
-        jQuery(".next").click(function () {
-            owl.trigger('owl.next');
-        })
-
-        jQuery(".prev").click(function () {
-            owl.trigger('owl.prev');
+        var carousel = $('#myCarousel')
+        jQuery("#myCarousel").click(function () {
+            carousel.carousel('pause');
         })
     });
 
