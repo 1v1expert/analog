@@ -203,6 +203,8 @@ def landing_confirm_mail_page(request, verification_code, user_id) -> HttpRespon
         # 'error': error
     }
     if verification_code == check_code and user:
+        user.is_active = True
+        user.save()
         login(request, user)
         return render(request, 'landing_page.html', args)
     else:

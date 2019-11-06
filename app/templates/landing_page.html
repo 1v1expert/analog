@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="yandex-verification" content="e1c7be80f029b1a1" />
+    <meta name="yandex-verification" content="e1c7be80f029b1a1"/>
     <title>AnalogPro</title>
 
     <!--=========================== Bootstrap core CSS ===============================-->
@@ -82,10 +82,15 @@
 </head>
 {# color: #44abd1  #323232  #e4e4e4 #}
 <style>
+    .form-control {
+        margin-bottom: 10px;
+    }
+
     h4 {
         color: #666;
         font-weight: 900;
     }
+
     .dropdown-menu {
         font-size: 11px;
     }
@@ -123,12 +128,10 @@
     }
 
     .search {
-        {#border: 1px solid rgb(102, 102, 102);#}
-        border: 2px solid #e0e0e0;
+    {#border: 1px solid rgb(102, 102, 102);#} border: 2px solid #e0e0e0;
         border-radius: 6px;
         background-color: #eef2f7;
     }
-
 
     .service-container {
         background-color: #fafafa;
@@ -179,11 +182,11 @@
 
     .search-btn {
         background-color: #666;
-        {#border-radius: 6px;#}
+    {#border-radius: 6px;#}
     }
 
     .btn-border {
-        border-radius: 6px!important;
+        border-radius: 6px !important;
     }
 
     .input-append .btn-group:last-child > .dropdown-toggle {
@@ -231,81 +234,81 @@
                         {% if request.user.is_authenticated %}
                             <div class="oder-content">
                                 <div class="container10">
-{#                                    <a id="login-menu" href="#modal">#}
+                                    {#                                    <a id="login-menu" href="#modal">#}
                                     <a>{{ request.user.username }}</a>
                                     {#                            <div class="container10"><a id="login-menu" href="#modal">Войти или зарег.</a>#}
-{#                                    <div id="modal" class="login-popupContainer" style="display:none;">#}
-{#                                        <div class="popupHeader">#}
-{#                                            <div class="header_title">Авторизация</div>#}
-{#                                            <div class="modal_close"><i class="fa fa-times"></i></div>#}
-{#                                        </div>#}
-{#                                        <div class="popupBody">#}
-{#                                            <!-- Social Login -->#}
-{#                                            <div class="social_login">#}
-{#                                                <div class="login-main-icon"><img#}
-{#                                                        src="{% static 'images/login-icon.png' %}"#}
-{#                                                        alt=""/></div>#}
-{#                                                <h1>Ваш аккаунт</h1>#}
-{#                                                <div class="main_btns-container">#}
-{#                                                    <div class="first_half"><a href="#" id="login_form"#}
-{#                                                                               class="btn login-btn">Войти</a></div>#}
-{#                                                    <div class="first_half last"><a href="#" id="register_form"#}
-{#                                                                                    class="btn login-btn">Зарегистрироваться</a>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                            </div>#}
-{##}
-{#                                            <!-- Username & Password Login form -->#}
-{#                                            <div class="user_login">#}
-{#                                                <form>#}
-{#                                                    <input type="text" placeholder="Email / Username"/>#}
-{#                                                    <br/>#}
-{#                                                    <input type="password" placeholder="Password"/>#}
-{#                                                    <br/>#}
-{#                                                    <div class="checkbox">#}
-{#                                                        <input id="remember" type="checkbox"/>#}
-{#                                                        <label for="remember">Запомнить меня</label>#}
-{#                                                    </div>#}
-{#                                                    <div class="main_btns-container">#}
-{#                                                        <div class="first_half"><a href="#" class="btn back_btn"><i#}
-{#                                                                class="fa fa-angle-double-left"></i> Назад</a></div>#}
-{#                                                        <div class="first_half last"><a href="#"#}
-{#                                                                                        class="btn btn_blue">Войти</a>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                </form>#}
-{#                                                <a href="#" class="forgot_password">Забыл пароль ?</a></div>#}
-{##}
-{#                                            <!-- Register Form -->#}
-{#                                            <div class="user_register">#}
-{#                                                <form>#}
-{#                                                    <input type="text" placeholder="Full Name"/>#}
-{#                                                    <br/>#}
-{#                                                    <input type="email" placeholder="Email Address"/>#}
-{#                                                    <br/>#}
-{#                                                    <input type="password" placeholder="Password"/>#}
-{#                                                    <br/>#}
-{#                                                    <div class="checkbox">#}
-{#                                                        <input id="send_updates" type="checkbox"/>#}
-{#                                                        <label for="send_updates">Send me occasional email#}
-{#                                                            updates</label>#}
-{#                                                    </div>#}
-{#                                                    <div class="main_btns-container">#}
-{#                                                        <div class="first_half"><a href="#" class="btn back_btn"><i#}
-{#                                                                class="fa fa-angle-double-left"></i> Назад</a></div>#}
-{#                                                        <div class="first_half last"><a href="#"#}
-{#                                                                                        class="btn btn_blue">Войти</a>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                </form>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
+                                    {#                                    <div id="modal" class="login-popupContainer" style="display:none;">#}
+                                    {#                                        <div class="popupHeader">#}
+                                    {#                                            <div class="header_title">Авторизация</div>#}
+                                    {#                                            <div class="modal_close"><i class="fa fa-times"></i></div>#}
+                                    {#                                        </div>#}
+                                    {#                                        <div class="popupBody">#}
+                                    {#                                            <!-- Social Login -->#}
+                                    {#                                            <div class="social_login">#}
+                                    {#                                                <div class="login-main-icon"><img#}
+                                    {#                                                        src="{% static 'images/login-icon.png' %}"#}
+                                    {#                                                        alt=""/></div>#}
+                                    {#                                                <h1>Ваш аккаунт</h1>#}
+                                    {#                                                <div class="main_btns-container">#}
+                                    {#                                                    <div class="first_half"><a href="#" id="login_form"#}
+                                    {#                                                                               class="btn login-btn">Войти</a></div>#}
+                                    {#                                                    <div class="first_half last"><a href="#" id="register_form"#}
+                                    {#                                                                                    class="btn login-btn">Зарегистрироваться</a>#}
+                                    {#                                                    </div>#}
+                                    {#                                                </div>#}
+                                    {#                                            </div>#}
+                                    {##}
+                                    {#                                            <!-- Username & Password Login form -->#}
+                                    {#                                            <div class="user_login">#}
+                                    {#                                                <form>#}
+                                    {#                                                    <input type="text" placeholder="Email / Username"/>#}
+                                    {#                                                    <br/>#}
+                                    {#                                                    <input type="password" placeholder="Password"/>#}
+                                    {#                                                    <br/>#}
+                                    {#                                                    <div class="checkbox">#}
+                                    {#                                                        <input id="remember" type="checkbox"/>#}
+                                    {#                                                        <label for="remember">Запомнить меня</label>#}
+                                    {#                                                    </div>#}
+                                    {#                                                    <div class="main_btns-container">#}
+                                    {#                                                        <div class="first_half"><a href="#" class="btn back_btn"><i#}
+                                    {#                                                                class="fa fa-angle-double-left"></i> Назад</a></div>#}
+                                    {#                                                        <div class="first_half last"><a href="#"#}
+                                    {#                                                                                        class="btn btn_blue">Войти</a>#}
+                                    {#                                                        </div>#}
+                                    {#                                                    </div>#}
+                                    {#                                                </form>#}
+                                    {#                                                <a href="#" class="forgot_password">Забыл пароль ?</a></div>#}
+                                    {##}
+                                    {#                                            <!-- Register Form -->#}
+                                    {#                                            <div class="user_register">#}
+                                    {#                                                <form>#}
+                                    {#                                                    <input type="text" placeholder="Full Name"/>#}
+                                    {#                                                    <br/>#}
+                                    {#                                                    <input type="email" placeholder="Email Address"/>#}
+                                    {#                                                    <br/>#}
+                                    {#                                                    <input type="password" placeholder="Password"/>#}
+                                    {#                                                    <br/>#}
+                                    {#                                                    <div class="checkbox">#}
+                                    {#                                                        <input id="send_updates" type="checkbox"/>#}
+                                    {#                                                        <label for="send_updates">Send me occasional email#}
+                                    {#                                                            updates</label>#}
+                                    {#                                                    </div>#}
+                                    {#                                                    <div class="main_btns-container">#}
+                                    {#                                                        <div class="first_half"><a href="#" class="btn back_btn"><i#}
+                                    {#                                                                class="fa fa-angle-double-left"></i> Назад</a></div>#}
+                                    {#                                                        <div class="first_half last"><a href="#"#}
+                                    {#                                                                                        class="btn btn_blue">Войти</a>#}
+                                    {#                                                        </div>#}
+                                    {#                                                    </div>#}
+                                    {#                                                </form>#}
+                                    {#                                            </div>#}
+                                    {#                                        </div>#}
+                                    {#                                    </div>#}
                                 </div>
                             </div>
                             <div class="oder-content">l</div>
                             <div class="oder-content"><a href="{% url 'api:logout' %}">Выйти</a></div>
-{#                            <div class="oder-content"><a href="#">Помощь</a></div>#}
+                            {#                            <div class="oder-content"><a href="#">Помощь</a></div>#}
                         {% else %}
                             <div class="oder-content">
                                 <div class="container10">
@@ -332,15 +335,15 @@
                                             </div>
 
                                             <!-- Username & Password Login form -->
-                                            <div class="user_login" >
+                                            <div class="user_login">
                                                 <form action="{% url 'api:login' %}" method="post" id="user_login_form">
                                                     {% csrf_token %}
                                                     {{ auth_form.username }}
-{#                                                    <input type="text" placeholder="Email / Username"/>#}
-{#                                                    <br/>#}
+                                                    {#                                                    <input type="text" placeholder="Email / Username"/>#}
+                                                    {#                                                    <br/>#}
                                                     {{ auth_form.password }}
-{#                                                    <input type="password" placeholder="Password"/>#}
-{#                                                    <br/>#}
+                                                    {#                                                    <input type="password" placeholder="Password"/>#}
+                                                    {#                                                    <br/>#}
                                                     <div class="checkbox">
                                                         <input id="remember" type="checkbox"/>
                                                         <label for="remember">Запомнить меня</label>
@@ -348,42 +351,44 @@
                                                     <div class="main_btns-container">
                                                         <div class="first_half">
                                                             <a href="#" class="btn back_btn"><i
-                                                                class="fa fa-angle-double-left"></i> Назад</a></div>
+                                                                    class="fa fa-angle-double-left"></i> Назад</a></div>
                                                         <div class="first_half last">
-                                                            <button href="#" type="submit" class="btn btn_blue">Войти</button>
+                                                            <button href="#" type="submit" class="btn btn_blue">Войти
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </form>
                                                 <label id="error_user_login_form"></label>
-                                                <a href="#" onclick="swal('Печаль');$('#modal').hide()" class="forgot_password">Забыл пароль ?</a></div>
+                                                <a href="#" onclick="swal('Печаль');$('#modal').hide()"
+                                                   class="forgot_password">Забыл пароль ?</a></div>
 
                                             <!-- Register Form -->
                                             <div class="user_register">
                                                 <form id="user_register_form">
-                                                    {% csrf_token %}
-{#                                                    <input type="text" placeholder="Full Name"/>#}
-                                                    {{ reg_form.username }}
-{#                                                    <br/>#}
-{#                                                    <input type="email" placeholder="Email Address"/>#}
-                                                    {{ reg_form.email }}
-{#                                                    <br/>#}
-{#                                                    <input type="password" placeholder="Password"/>#}
-                                                    {{ reg_form.password }}
-{#                                                    <br/>#}
-                                                    {{ reg_form.double_password }}
-{#                                                    <br/>#}
-                                                    <div class="checkbox">
-{#                                                        <input id="send_updates" type="checkbox"/>#}
-{#                                                        <label for="send_updates">Send me occasional email#}
-{#                                                            updates</label>#}
+                                                    <div class="form-group">
+                                                        {% csrf_token %}
+                                                        {{ reg_form.username }}
+                                                        {{ reg_form.email }}
+                                                        <div class="form-group" id="password_check">
+                                                            {{ reg_form.password }}
+                                                            {{ reg_form.double_password }}
+                                                            <div class="col-sm-12">
+                                                                <small id="passwordHelp" class="text-danger"
+                                                                       style="display: none">
+                                                                    Must be 8-20 characters long.
+                                                                </small>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="main_btns-container">
                                                         <div class="first_half"><a href="#" class="btn back_btn"><i
                                                                 class="fa fa-angle-double-left"></i> Назад</a></div>
                                                         <div class="first_half last">
-{#                                                            <a href="#"#}
-{#                                                                                        class="btn btn_blue">Зарегистрироваться</a>#}
-                                                            <button href="#" type="submit" class="btn btn_blue">Зарегистрироваться</button>
+                                                            {#                                                            <a href="#"#}
+                                                            {#                                                                                        class="btn btn_blue">Зарегистрироваться</a>#}
+                                                            <button href="#" type="submit" class="btn btn_blue"
+                                                                    style="font-size: 12px;">Зарегистрироваться
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -392,9 +397,9 @@
                                     </div>
                                 </div>
                             </div>
-{#                            <div class="oder-content">l</div>#}
-{#                            <div class="oder-content"><a href="#">Выйти</a></div>#}
-{#                            <div class="oder-content"><a href="#">Помощь</a></div>#}
+                            {#                            <div class="oder-content">l</div>#}
+                            {#                            <div class="oder-content"><a href="#">Выйти</a></div>#}
+                            {#                            <div class="oder-content"><a href="#">Помощь</a></div>#}
                         {% endif %}
                     </div>
                 </div>
@@ -410,9 +415,9 @@
                         <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="#">
-                                      <h4>AnalogPro</h4>
-{#                        <img src="{% static 'images/logo_transparent_AnalogPRO.png' %}" alt=""#}
-{#                             style="height: 100px;position: absolute;bottom: -15px">#}
+                        <h4>AnalogPro</h4>
+                        {#                        <img src="{% static 'images/logo_transparent_AnalogPRO.png' %}" alt=""#}
+                        {#                             style="height: 100px;position: absolute;bottom: -15px">#}
                     </a>
                 </div>
                 <div class="navbar-collapse collapse">
@@ -429,19 +434,19 @@
 </header>
 <!--=============================Banner=============================-->
 <style>
-input[type="file"] {
-    display: none;
-}
-.custom-file-upload {
-        border: 2px solid #e0e0e0;
-    border-radius: 6px;
-    background-color: #eef2f7;
+    input[type="file"] {
+        display: none;
+    }
 
-    {#border: 1px solid #ccc;#}
-    display: inline-block;
-    {#padding: 6px 12px;#}
-    cursor: pointer;
-}
+    .custom-file-upload {
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        background-color: #eef2f7;
+
+    {#border: 1px solid #ccc;#} display: inline-block;
+    {#padding: 6px 12px;#} cursor: pointer;
+    }
+
     .fa-inverse {
         color: #666;
     }
@@ -473,9 +478,9 @@ input[type="file"] {
                                        data-slide="prev">
                                         <i class="fa fa-arrow-left hvr-icon"></i> Поиск по спецификации
                                     </a>
-{#                                    <a class="blue-button wobble-horizontal" role="button" href="#myCarousel"#}
-{#                                       data-slide="prev">Информация по артикулу#}
-{#                                    </a>#}
+                                    {#                                    <a class="blue-button wobble-horizontal" role="button" href="#myCarousel"#}
+                                    {#                                       data-slide="prev">Информация по артикулу#}
+                                    {#                                    </a>#}
                                     <a class="blue-button hvr-icon-wobble-horizontal" role="button" href="#myCarousel"
                                        data-slide="next">Поиск по артикулу
                                         <i class="fa fa-arrow-right hvr-icon"></i>
@@ -507,7 +512,8 @@ input[type="file"] {
                                                 <input class="search" type="text" name="article"
                                                        placeholder="Введите номер артикула">
                                                 <div class="btn-group">
-                                                    <button class="btn dropdown-toggle btn-border" data-toggle="dropdown"
+                                                    <button class="btn dropdown-toggle btn-border"
+                                                            data-toggle="dropdown"
                                                             data-id_manufacturer=false id="btn_manufacturer"
                                                             style="min-width: 100px;"> {{ manufacturers.first }}
                                                         <span class="caret"></span></button>
@@ -549,16 +555,18 @@ input[type="file"] {
                                             <div class="input-append">
 
 
-                                                <label for="file-upload" class="custom-file-upload search" style="height: 56px;">
+                                                <label for="file-upload" class="custom-file-upload search"
+                                                       style="height: 56px;">
                                                     <i class="fa fa-cloud-upload fa-inverse"></i> Загрузить файл
                                                 </label>
                                                 <input id="file-upload" type="file"/>
 
 
-{#                                                                                                <input class="search" type="file" name="file" accept=".xls, .xlsx,"#}
-{#                                                       placeholder="Введите номер артикула">#}
+                                                {#                                                                                                <input class="search" type="file" name="file" accept=".xls, .xlsx,"#}
+                                                {#                                                       placeholder="Введите номер артикула">#}
                                                 <div class="btn-group">
-                                                    <button class="btn dropdown-toggle btn-border" data-toggle="dropdown"
+                                                    <button class="btn dropdown-toggle btn-border"
+                                                            data-toggle="dropdown"
                                                             data-id_manufacturer=false id="btn_manufacturer"
                                                             style="min-width: 100px;"> {{ manufacturers.first }}
                                                         <span class="caret"></span></button>
@@ -598,9 +606,9 @@ input[type="file"] {
 <!--==============================AboutProduct Section=============================-->
 <style>
     .aboutproduct-container {
-    padding: 40px 0px;
-    background-color: #f5f5f5;
-}
+        padding: 40px 0px;
+        background-color: #f5f5f5;
+    }
 </style>
 {#<div class="aboutproduct-container">#}
 {#    <div class="container">#}
@@ -798,13 +806,13 @@ input[type="file"] {
                     <p>на новости </p>
                 </div>
             </div>
-{#            <form class="form-search" role="form" action="subscribe.php" id="subscribeForm" method="POST">#}
+            {#            <form class="form-search" role="form" action="subscribe.php" id="subscribeForm" method="POST">#}
             <form class="form-search" id="subscribeForm" method="POST">
                 <div class="col-sm-6 col-md-6">
                     {% csrf_token %}
                     {{ subscribe_form.email }}
-{#                    <input type="email" name="email" id="address" required="required" class="newsletter-form"#}
-{#                           placeholder="Введите ваш email адрес" data-validate="validate(required, email)">#}
+                    {#                    <input type="email" name="email" id="address" required="required" class="newsletter-form"#}
+                    {#                           placeholder="Введите ваш email адрес" data-validate="validate(required, email)">#}
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <button type="submit" class="newsletter-btn">Подписаться</button>
@@ -906,39 +914,39 @@ input[type="file"] {
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
-     /*===================
-   3.popup sign in & register
-    ===================*/
+    /*===================
+  3.popup sign in & register
+   ===================*/
 
 
-	$("#login-menu").leanModal({top : 130, overlay : 0.6, closeButton: ".modal_close" });
+    $("#login-menu").leanModal({top: 130, overlay: 0.6, closeButton: ".modal_close"});
 
-	$(function(){
-		// Calling Login Form
-		$("#login_form").click(function(){
-			$(".social_login").hide();
-			$(".user_login").show();
-			return false;
-		});
+    $(function () {
+        // Calling Login Form
+        $("#login_form").click(function () {
+            $(".social_login").hide();
+            $(".user_login").show();
+            return false;
+        });
 
-		// Calling Register Form
-		$("#register_form").click(function(){
-			$(".social_login").hide();
-			$(".user_register").show();
-			$(".header_title").text('Регистрация');
-			return false;
-		});
+        // Calling Register Form
+        $("#register_form").click(function () {
+            $(".social_login").hide();
+            $(".user_register").show();
+            $(".header_title").text('Регистрация');
+            return false;
+        });
 
-		// Going back to Social Forms
-		$(".back_btn").click(function(){
-			$(".user_login").hide();
-			$(".user_register").hide();
-			$(".social_login").show();
-			$(".header_title").text('Авторизация');
-			return false;
-		});
+        // Going back to Social Forms
+        $(".back_btn").click(function () {
+            $(".user_login").hide();
+            $(".user_register").hide();
+            $(".social_login").show();
+            $(".header_title").text('Авторизация');
+            return false;
+        });
 
-	})
+    })
 </script>
 
 <script type="text/javascript">
@@ -954,7 +962,7 @@ input[type="file"] {
                 url: "{% url 'api:subscriber' %}",
                 data: subscribe_form.serialize(),
                 success: function (response) {
-                    if (response.OK){
+                    if (response.OK) {
                         $('#result').html('Спасибо, вы успешно подписаны.');
                     }
                     else {
@@ -978,7 +986,7 @@ input[type="file"] {
                 url: "{% url 'api:login' %}",
                 data: login_form.serialize(),
                 success: function (response) {
-                    if (response.OK){
+                    if (response.OK) {
                         location.reload();
                     }
                     else {
@@ -996,24 +1004,46 @@ input[type="file"] {
          ====================*/
         var register_form = $('#user_register_form');
         register_form.submit(function (e) {
+            var is_success = false;
+            var username = $("#user_register_form #id_username");
+            var email = $("#user_register_form #id_email");
+            var id_password = $("#user_register_form #id_password");
+            var id_double_password = $("#user_register_form #id_double_password");
             e.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: "{% url 'api:registration' %}",
-                data: register_form.serialize(),
-                success: function (response) {
-                    console.log(response);
-                    if (response.OK){
-                        location.reload();
+            console.log(id_password.val(), id_double_password.val(), id_double_password.val().length > 7)
+            if ((id_password.val() === id_double_password.val()) &&
+                (id_password.val().length > 7) && (id_double_password.val().length > 7)) {
+                is_success = true;
+
+            }
+            else {
+                $("#passwordHelp").text('Пароли не совпадают или длина меньше 8 символов').css('display', 'block');
+                $("#password_check").addClass('has-error')
+            }
+            if (is_success === true) {
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'api:registration' %}",
+                    data: register_form.serialize(),
+                    success: function (response) {
+                        if (response.OK) {
+                            $('#modal').hide();
+                            swal('Благодарим за регистрацию, '
+                                + username.val()
+                                + '. Проследуйте на почту - ' + email.val()
+                                + ', чтобы подтвердить аккаунт');
+
+                            setTimeout(function(){location.reload()}, 3000);
+                        }
+                        else {
+                            $('#error_user_login_form').text(response.error)
+                        }
+                    },
+                    error: function (error) {
+                        $('#error_user_login_form').text("Произошла ошибка регистрации.")
                     }
-                    else {
-                        $('#error_user_login_form').text(response.error)
-                    }
-                },
-                error: function (error) {
-                    $('#error_user_login_form').text("Произошла ошибка.")
-                }
-            })
+                })
+            }
         })
 
     })
@@ -1032,12 +1062,11 @@ input[type="file"] {
 
             var attempt_count = +accessCookie('attempt_count');
             {% if not request.user.is_authenticated %}
-            if (attempt_count > 10)
-            {
-                swal("Ошибка!", "Пожалуйста, авторизуйтесь, чтобы продолжить пользоваться сервисом", "info");
-                {#$('#modal').modal("toggle");#}
-                return '';
-            }
+                if (attempt_count > 10) {
+                    swal("Ошибка!", "Пожалуйста, авторизуйтесь, чтобы продолжить пользоваться сервисом", "info");
+                    {#$('#modal').modal("toggle");#}
+                    return '';
+                }
             {% endif %}
 
             $.ajax({
@@ -1051,7 +1080,8 @@ input[type="file"] {
                         swal("Ошибка!", data.error, "info");
                     }
                     else {
-                        createCookie("attempt_count", attempt_count+1, 10);
+                        createCookie("attempt_count", attempt_count + 1, 10);
+
                         function buildTable(data) {
                             var table = document.createElement("table");
                             table.className = "table table-hover mb-0";
@@ -1102,7 +1132,7 @@ input[type="file"] {
                                 case "select":
                                     $('#table-info').show('slow');
                                     swal.stopLoading();
-                                    $('.swal-button--catch').css('display', 'none')
+                                    $('.swal-button--catch').css('display', 'none');
                                     break;
 
                                 default:
@@ -1139,20 +1169,22 @@ input[type="file"] {
 </script>
 
 <script type="text/javascript">
-        $(function () {
-            /*==================
-         Check registration
-         ==================*/
-            {% if confirm_email %}
-                swal('{{ request.user }}, ваш аккаунт подтверждён');
-                function redirect() {
-                    window.location.href = "{% url 'app:landing_home' %}";
-                }
+    function redirect(url) {
+        window.location.href = url;
+    }
 
-                setTimeout(redirect, 3000);
+    $(function () {
+        /*==================
+     Check registration
+     ==================*/
+        {% if confirm_email %}
+            swal('Спасибо за регистрацию, {{ request.user }}. Ваш аккаунт подтверждён');
+            setTimeout(function () {
+                window.location.href = "{% url 'app:landing_home' %}"
+            }, 3000);
 
-            {% endif %}
-        })
+        {% endif %}
+    })
 </script>
 </body>
 </html>
