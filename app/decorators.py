@@ -6,7 +6,7 @@ from django.contrib.auth.models import AnonymousUser
 
 
 def a_decorator_passing_logs(func):
-    def wrapper_logs(request):
+    def wrapper_logs(request, *args, **kwargs):
         message = {}
         
         try:
@@ -33,7 +33,7 @@ def a_decorator_passing_logs(func):
                 ).save()
                 # raw=vars(request.META)).save()
         
-        return func(request)
+        return func(request, *args, **kwargs)
     
     return wrapper_logs
 
@@ -53,7 +53,7 @@ def check_recaptcha(function):
                 request.recaptcha_is_valid = True
             else:
                 request.recaptcha_is_valid = False
-                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+                # messages.error(request, 'Invalid reCAPTCHA. Please try again.')
         return function(request, *args, **kwargs)
 
     wrap.__doc__ = function.__doc__
