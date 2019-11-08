@@ -163,7 +163,7 @@ class SearchProducts(object):
         
         if not self.product:
             self.error = True
-        print(self.error)
+        # print(self.error)
         return not self.error
     
     def global_search(self, default=True):
@@ -172,11 +172,10 @@ class SearchProducts(object):
         self.founded_products = Product.objects.filter(manufacturer=self.manufacturer_to,
                                                        category=self.product.category).prefetch_related(
             'fixed_attrs_vals', 'unfixed_attrs_vals')
-        print(self.founded_products.count())
+        # print(self.founded_products.count())
         if self.founded_products.exists():
-            # print('Count fnd prdcts-> ', self.founded_products.count())
             self.smart_attribute_search(default=default)
         self.lead_time = time.time() - self.start_time
-        print(self.founded_products.count())
+        # print(self.founded_products.count())
         return self
 
