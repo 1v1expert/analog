@@ -3,6 +3,7 @@ from django.shortcuts import render
 from catalog.models import Product, UnFixedAttributeValue
 import time
 from catalog.choices import TYPES
+from catalog.exceptions import NotFoundException
 
 
 class SearchProducts(object):
@@ -27,6 +28,7 @@ class SearchProducts(object):
         # 	attr.unfixed_attrs_vals.get(attribute__type=types, attribute__title=step_attr.attribute.title).value for attr
         # 	in all_attr]
         
+        # print(all_attr, step_attr)
         values_list = []
         for attr in all_attr:
             try:
@@ -54,21 +56,21 @@ class SearchProducts(object):
         # hrd attr
         hrd = 'hrd'
         hrd_fix_attributes = all_fix_attributes.filter(
-            attribute__type=hrd)  # self.product.fixed_attrs_vals.filter(attribute__type=hrd)
-        # print(hrd_fix_attributes)
+            attribute__type=hrd)
         hrd_unfix_attributes = all_unfix_attributes.filter(
             attribute__type=hrd)  # self.product.unfixed_attrs_vals.filter(attribute__type=hrd)
         for hrd_fix_attr in hrd_fix_attributes:
-            # print('HRD_FIX_ATTR', hrd_fix_attr.value.title)
+
             if default:
                 value = hrd_fix_attr.value.pk
             else:
                 value = self.form.cleaned_data['extra_field_fix{}'.format(hrd_fix_attr.pk)]
-            # print(value)
-            self.founded_products = self.founded_products.filter(fixed_attrs_vals__value__pk=value,
-                                                                 # attrs_vals__title=attribute.title,
-                                                                 fixed_attrs_vals__attribute=hrd_fix_attr.attribute)
-        # print('Count after HRD FIX search prdcts-> ', self.founded_products.count())
+
+            self.founded_products = self.founded_products.filter(
+                fixed_attrs_vals__value__pk=value,
+                fixed_attrs_vals__attribute=hrd_fix_attr.attribute
+            )
+
         if not self.founded_products.exists():
             return
         
@@ -76,15 +78,20 @@ class SearchProducts(object):
             if not default:
                 method = self.form.cleaned_data['extra_field_unfix{}'.format(hrd_unfix_attr.pk)]
             value = self.finding_the_closest_attribute_value(self.founded_products, hrd_unfix_attr, method, types=hrd)
-            # print(value, hrd_unfix_attr.value, type(value), type(hrd_unfix_attr.value))
-            self.founded_products = self.founded_products.filter(unfixed_attrs_vals__value=value,
-                                                                 # attrs_vals__title=attribute.title,
-                                                                 unfixed_attrs_vals__attribute=hrd_unfix_attr.attribute)
+
+            self.founded_products = self.founded_products.filter(
+                unfixed_attrs_vals__value=value,
+                unfixed_attrs_vals__attribute=hrd_unfix_attr.attribute
+            )
+            if not self.founded_products.exists():
+                raise NotFoundException(
+                    'Not found products after hrd cycle filtering'
+                )
         # attrs_vals__attribute=attribute.attribute)
         
         # print('Count after HRD search prdcts-> ', self.founded_products.count())
-        if not self.founded_products.exists():
-            return
+        # if not self.founded_products.exists():
+            # return
         # middle_results = self.founded_products
         # sft attr
         sft = 'sft'
@@ -156,7 +163,7 @@ class SearchProducts(object):
         
         if not self.product:
             self.error = True
-        
+        print(self.error)
         return not self.error
     
     def global_search(self, default=True):
@@ -165,10 +172,11 @@ class SearchProducts(object):
         self.founded_products = Product.objects.filter(manufacturer=self.manufacturer_to,
                                                        category=self.product.category).prefetch_related(
             'fixed_attrs_vals', 'unfixed_attrs_vals')
+        print(self.founded_products.count())
         if self.founded_products.exists():
             # print('Count fnd prdcts-> ', self.founded_products.count())
             self.smart_attribute_search(default=default)
         self.lead_time = time.time() - self.start_time
-    # print('Count after search prdcts-> ', self.founded_products.count())
-    # print("--- %s seconds ---" % (time.time() - start_time))
-    # print('FOUNDED PRODUCTS', self.founded_products.first().article, 'Count-> ', self.founded_products.count())
+        print(self.founded_products.count())
+        return self
+
