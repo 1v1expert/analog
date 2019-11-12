@@ -163,12 +163,17 @@ class SearchProducts(object):
         
         if not self.product:
             self.error = True
-        # print(self.error)
+
         return not self.error
     
     def global_search(self, default=True):
         if not self.check_product():
             return self
+        
+        if self.product.manufacturer == self.manufacturer_to:
+            self.founded_products = Product.objects.filter(pk=self.product.pk)
+            return self
+        
         self.founded_products = Product.objects.filter(manufacturer=self.manufacturer_to,
                                                        category=self.product.category).prefetch_related(
             'fixed_attrs_vals', 'unfixed_attrs_vals')
