@@ -164,7 +164,7 @@ class ProductAdmin(BaseAdmin):
 
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'created_at', 'created_by']
-    actions = ['export_data_to_xls', 'export_full_dump']
+    actions = ['export_data_to_xls', 'export_full_dump', 'export_duplicate_products']
     
     def export_full_dump(self, request, queryset):
         meta_data = generators.AdditionalGeneratorTemplate((User, Manufacturer, Category, Attribute, FixedValue))
@@ -177,7 +177,16 @@ class ManufacturerAdmin(BaseAdmin):
         data = generators.DefaultGeneratorTemplate(queryset)
         with writers.BookkeepingWriter('Dump data {}'.format(datetime.now().date()), request.user) as writer:
             writer.dump(data.generate())
+    
     export_data_to_xls.short_description = 'Выгрузить продукты производителя(-ей)'
+    
+    def export_duplicate_products(self, request, queryset):
+        meta_data = generators.AdditionalGeneratorTemplate(
+            (Product, ), **dict(**dict(is_duplicate=True))
+        )
+        with writers.BookkeepingWriter('Dump duplicate products {}'.format(datetime.now().date()), request.user) as writer:
+            writer.dump(meta_data.generate())
+    export_duplicate_products.short_description = 'Выгрузить дубликаты'
 
 
 class FileUploadAdmin(admin.ModelAdmin):
