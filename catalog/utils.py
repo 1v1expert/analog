@@ -24,11 +24,7 @@ class SearchProducts(object):
     
     @staticmethod
     def finding_the_closest_attribute_value(all_attr, step_attr, method, types='sft'):
-        # values_list = [
-        # 	attr.unfixed_attrs_vals.get(attribute__type=types, attribute__title=step_attr.attribute.title).value for attr
-        # 	in all_attr]
         
-        # print(all_attr, step_attr)
         values_list = []
         for attr in all_attr:
             try:

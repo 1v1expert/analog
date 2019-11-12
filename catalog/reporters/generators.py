@@ -89,9 +89,10 @@ class DefaultGeneratorTemplate(object):
 
 
 class AdditionalGeneratorTemplate(object):
-    def __init__(self, classes):
+    def __init__(self, classes, *args, **kwargs):
         self.classes = classes
         self.local_fields = None
+        self.kwargs = kwargs
         
     def _get_data(self, cls_obj):
         data = {
@@ -101,7 +102,7 @@ class AdditionalGeneratorTemplate(object):
                 'name': str(cls_obj._meta.verbose_name),
             },
             "table_header": OrderedDict([(field.name, field.verbose_name) for field in cls_obj._meta.local_fields]),
-            "table_data": self.values(cls_obj),
+            "table_data": self.values(cls_obj, **self.kwargs),
         }
         data["top_header"]["spread"] = len(data['table_header'])
         
@@ -112,5 +113,5 @@ class AdditionalGeneratorTemplate(object):
             yield self._get_data(cls_obj)
     
     @staticmethod
-    def values(cls_obj):
-        return cls_obj.objects.values_list()
+    def values(cls_obj, **kwargs):
+        return cls_obj.objects.filter(**kwargs).values_list()
