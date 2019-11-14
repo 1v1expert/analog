@@ -53,11 +53,13 @@ def search(request):
     return render(request, 'search.html', {'user': request.user, 'form': form})
 
 
-@a_decorator_passing_logs
 @login_required(login_url='login/')
+@a_decorator_passing_logs
 def search_from_file_view(request):
     if request.method == 'POST':
+        print('start test search')
         form = SearchFromFile(request.POST, request.FILES)
+        print(request.FILES, vars(request.FILES))
         if form.is_valid():
             instance = DataFile(file=request.FILES['file'],
                                 type=choices.TYPES_FILE[1][0],
@@ -68,6 +70,8 @@ def search_from_file_view(request):
             response = HttpResponse(file_response, content_type='text/plain')
             response['Content-Disposition'] = 'attachment; filename=' + file_response.name
             return response
+        else: return HttpResponse({'error': 'Not valid form'}, content_type='text/plain')
+        
     else:
         form = SearchFromFile()
         return render(request, 'search_from_file.html', {'form': form})

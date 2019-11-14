@@ -10,8 +10,10 @@ from catalog.internal.utils import get_attributes, ProductInfo
 from catalog.forms import SearchForm, AdvancedSearchForm
 from catalog.models import Product
 
+
 from app.models import MainLog, FeedBack
 from app.decorators import a_decorator_passing_logs
+from app.decorators import check_recaptcha
 from app.forms import FeedBackForm, SubscribeForm
 from catalog.internal.auth_actions import registration
 
@@ -118,8 +120,6 @@ def check_product_and_get_attributes(request) -> HttpResponse:
     
     return HttpResponseBadRequest()
 
-from app.decorators import check_recaptcha
-
 
 @a_decorator_passing_logs
 @check_recaptcha
@@ -198,8 +198,6 @@ def login_view(request) -> HttpResponse:
         else:
             return JsonResponse({'OK': False, 'error': 'Учётная запись не подтверждена'})
             
-        
-
     return HttpResponseBadRequest()
 
     
