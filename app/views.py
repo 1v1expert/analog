@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib.auth import authenticate, login, logout, models, forms
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.mail import get_connection, send_mail
 from django.conf import settings
 
@@ -53,9 +53,10 @@ def search(request):
     return render(request, 'search.html', {'user': request.user, 'form': form})
 
 
-@a_decorator_passing_logs
 @login_required(login_url='login/')
+@a_decorator_passing_logs
 def search_from_file_view(request):
+
     if request.method == 'POST':
         form = SearchFromFile(request.POST, request.FILES)
         if form.is_valid():
@@ -65,9 +66,14 @@ def search_from_file_view(request):
                                 updated_by=request.user)
             instance.save()
             file_response = ProcessingSearchFile(request.FILES['file'], instance.file, form, request).csv_processing()
-            response = HttpResponse(file_response, content_type='text/plain')
-            response['Content-Disposition'] = 'attachment; filename=' + file_response.name
-            return response
+            # response = HttpResponse(file_response, content_type='text/plain')
+            # response['Content-Disposition'] = 'attachment; filename=' + file_response.name
+            # return response
+            return JsonResponse({'OK': True, 'file': file_response.url})
+        else:
+            return JsonResponse({'OK': False, 'error': 'Not valid form'})
+            # return HttpResponse({'error': 'Not valid form'}, content_type='text/plain')
+        
     else:
         form = SearchFromFile()
         return render(request, 'search_from_file.html', {'form': form})

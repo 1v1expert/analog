@@ -45,6 +45,7 @@ class SearchFromFile(forms.Form):
                            widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
     manufacturer_from = forms.ModelChoiceField(label='Исходный производитель', empty_label=None,
                                                queryset=Manufacturer.objects.all(),
+                                               required=False,
                                                widget=forms.Select(attrs={'class': 'form-control'}))
     manufacturer_to = forms.ModelChoiceField(label='Необходимый производитель', empty_label=None,
                                              queryset=Manufacturer.objects.all(),

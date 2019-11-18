@@ -546,7 +546,7 @@
                                 {#                <div class="container">#}
                                 <div class="row" style="margin-top: 40px;">
                                     <div class="col-md-11 col-md-offset-1">
-                                        <form action="{% url 'api:search' %}" method="post" id="form">
+                                        <form action="{% url 'api:search' %}" enctype="multipart/form-data" method="post" id="specification_search_form">
                                             {% csrf_token %}
                                             {#                                            <input type="hidden" name="advanced_search" value="False">#}
                                             <input type="hidden" name="manufacturer_to" id="manufacturer_to"
@@ -559,7 +559,7 @@
                                                        style="height: 56px;">
                                                     <i class="fa fa-cloud-upload fa-inverse"></i> Загрузить файл
                                                 </label>
-                                                <input id="file-upload" type="file"/>
+                                                <input id="file-upload" name="file" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
 
 
                                                 {#                                                                                                <input class="search" type="file" name="file" accept=".xls, .xlsx,"#}
@@ -610,30 +610,6 @@
         background-color: #f5f5f5;
     }
 </style>
-{#<div class="aboutproduct-container">#}
-{#    <div class="container">#}
-{#        <div class="row">#}
-{#            <div class="col-sm-3 col-md-3">#}
-{#                <div class="newsletter"><span class="newsletterIcon"></span>#}
-{#                    <h2>Подписаться</h2>#}
-{#                    <p>на новости </p>#}
-{#                </div>#}
-{#            </div>#}
-{#            <form class="form-search" role="form" action="subscribe.php" id="subscribeForm" method="POST">#}
-{#            <form class="form-search" id="subscribeForm" method="POST">#}
-{#                <div class="col-sm-6 col-md-6">#}
-{#                    {% csrf_token %}#}
-{#                    {{ subscribe_form.email }}#}
-{#                    <input type="email" name="email" id="address" required="required" class="newsletter-form"#}
-{#                           placeholder="Введите ваш email адрес" data-validate="validate(required, email)">#}
-{#                </div>#}
-{#                <div class="col-sm-3 col-md-3">#}
-{#                    <button type="submit" class="newsletter-btn">Подписаться</button>#}
-{#                    <span id="result" class="alertMsg"></span></div>#}
-{#            </form>#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
 <!--=============================Separator block=============================-->
 <div class="seprator-block" style="height: 20px;"></div>
 <!--=============================Features=============================-->
@@ -1052,9 +1028,65 @@
 <script type="text/javascript">
     $(function () {
         /*==================
-         Analogue search
+         Analogue search from file
          ==================*/
 
+        $('#file-upload').change(function () {
+            if ($(this).val() !== '')  $(this).prev().text('Выбран файл: ' + $(this)[0].files[0].name);
+            else $(this).prev().text('Загрузить файл');
+        });
+
+        var specification_search_form = $('#specification_search_form');
+
+        specification_search_form.submit(function (e) {
+            e.preventDefault();
+
+            {% if not request.user.is_authenticated %}
+                swal("Ошибка!", "Пожалуйста, авторизуйтесь, чтобы продолжить пользоваться сервисом", "info");
+                return '';
+            {% endif %}
+
+            var data = new FormData();
+            data.append('file', $('#file-upload')[0].files[0]);
+            data.append('data', specification_search_form.serialize());
+            data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            data.append('manufacturer_to', $('#manufacturer_to').val());
+            {#console.log(data)#}
+            {#        for(let [name, value] of data) {#}
+            {#  console.log(`${name} = ${value}`);#}
+            {# } #}
+            $.ajax({
+                type: "POST",
+                url: "{% url 'app:search_from_file' %}",
+                data: data,
+                cache: false,
+                async: true,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: function (data) {
+                    if (data.OK) {
+                        var link = document.createElement("a");
+                        link.href = "/" + data.file;
+                        link.text = "скачать";
+                        swal('Файл с результатом поиска отправлен на почту {{ request.user.email }} ' + '\n или вы можете скачать его по ссылке ниже:', {
+                            content: link
+                        })
+                    }
+                    else {
+                        swal('Произошла ошибка')
+                    }
+                },
+                error: function (error) {
+                    swal('Произошла ошибка')
+                }
+            })
+
+
+        });
+        /*==================
+         Analogue search from article
+         ==================*/
 
         var form = $('#form');
         form.submit(function (e) {
