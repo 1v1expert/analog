@@ -13,9 +13,9 @@ class SearchProducts(object):
         self.form = form
         # self.manufacturer_to = form.cleaned_data['manufacturer_to']
         self.manufacturer_from = None
-        self.product = None
+        self.product = product
         self.manufacturer_to = form.cleaned_data['manufacturer_to']
-        if product is None:
+        if self.product is None:
             self.article = form.cleaned_data['article']
         else:
             self.article = product
@@ -166,8 +166,12 @@ class SearchProducts(object):
         return not self.error
     
     def global_search(self, default=True):
-        if not self.check_product():
-            return self
+        if self.product is None:
+            checked = self.check_product()
+            if not checked:
+                return self
+        # if not self.check_product():
+        #     return self
         
         if self.product.manufacturer == self.manufacturer_to:
             self.founded_products = Product.objects.filter(pk=self.product.pk)

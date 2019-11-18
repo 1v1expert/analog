@@ -25,7 +25,7 @@ def register_transaction(sender, instance, *args, **kwargs):
         )
     
     try:
-        send_email_with_connection('Msg from site, time: {}'.format(instance.action_time.strftime('%Y:%m:%d %H:%M')),
+        send_email_with_connection('Msg from AnalogPro, time: {}'.format(instance.action_time.strftime('%Y:%m:%d %H:%M')),
                                    message,
                                    ['mojaev-a@yandex.ru'])
     except SMTPDataError as e:

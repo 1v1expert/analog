@@ -10,11 +10,14 @@ from catalog.models import DataFile, Manufacturer
 from catalog import choices
 from catalog.handlers import ProcessingSearchFile
 from catalog.internal.auth_actions import registration
+from catalog.internal.messages import send_email_with_connection
 
 from app.forms import \
     MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile, EmailConfirmationForm, FeedBackForm, SubscribeForm
 from app.decorators import a_decorator_passing_logs
 from app.models import MainLog
+
+from smtplib import SMTPDataError
 
 import hashlib
 
@@ -65,7 +68,17 @@ def search_from_file_view(request):
                                 created_by=request.user,
                                 updated_by=request.user)
             instance.save()
-            file_response = ProcessingSearchFile(request.FILES['file'], instance.file, form, request).csv_processing()
+            file_response = ProcessingSearchFile(request.FILES['file'], instance.file, form, request).file_search()
+            
+            message = u'Скачать результат подбора вы можете по ссылке: \n %s' \
+                      % 'http://analogpro.ru/' + file_response.url
+            try:
+                send_email_with_connection(
+                    'Результат подбора',
+                    message,
+                    [request.user.email])
+            except SMTPDataError as e:
+                print('Error')
             # response = HttpResponse(file_response, content_type='text/plain')
             # response['Content-Disposition'] = 'attachment; filename=' + file_response.name
             # return response

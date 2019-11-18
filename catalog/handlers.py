@@ -22,29 +22,31 @@ class ProcessingSearchFile:
         self.request = request
         self.content = XLSDocumentReader(path=path).parse_file()
         self.manufacturer_from = form.cleaned_data['manufacturer_from']
-    
+        
     @staticmethod
     def check_product(article, manufacturer):
-        try:
-            product = Product.objects.get(article=article, manufacturer=manufacturer)
-            return product, ''
-        except Product.DoesNotExist:
-            return None, 'Not found product with article {} and manufacturer {}'.format(article, manufacturer)
-        except Product.MultipleObjectsReturned:
-            return None, 'Found any product with article {} and manufacturer {}'.format(article, manufacturer)
+        if manufacturer is None:
+            products = Product.objects.filter(article=article)
+        else:
+            products = Product.objects.filter(article=article, manufacturer=manufacturer)
+            
+        if products.exists():
+            return products.first(), ''
+        else:
+            return None, u'Not found product with article %s' % article
     
-    def csv_processing(self, data=None):
+    def file_search(self, data=None):
         if not data:
             data = self.content
         result_content = []
         for i, rec in enumerate(data):
-            body = []
+            body = list()
             
             body.append(rec.get(0))
             body.append(rec.get(1))
             product, err = self.check_product(rec.get(0), self.manufacturer_from)
             
-            if not product:
+            if product is None:
                 body.append(err)
                 result_content.append(err)
                 continue
