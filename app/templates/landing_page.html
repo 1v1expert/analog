@@ -1045,29 +1045,40 @@
                 swal("Ошибка!", "Пожалуйста, авторизуйтесь, чтобы продолжить пользоваться сервисом", "info");
                 return '';
             {% endif %}
-        console.log('start test search');
-        var data = new FormData();
-        data.append('file', $('#file-upload')[0].files[0]);
+
+            var data = new FormData();
+            data.append('file', $('#file-upload')[0].files[0]);
+            data.append('data', specification_search_form.serialize());
+            data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            data.append('manufacturer_to', $('#manufacturer_to').val());
+            {#console.log(data)#}
+            {#        for(let [name, value] of data) {#}
+            {#  console.log(`${name} = ${value}`);#}
+            {# } #}
             $.ajax({
                 type: "POST",
                 url: "{% url 'app:search_from_file' %}",
                 data: data,
                 cache: false,
-        {#contentType: false,#}
-                contentType: 'multipart/form-data',
-        processData: false,
-                        beforeSend: function (x) {
-            if (x && x.overrideMimeType) {
-                x.overrideMimeType("multipart/form-data");
-            }},
-                mimeType: 'multipart/form-data',
+                async: true,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
                 success: function (data) {
-                    console.log('success')
-                    console.log(data)
+                    if (data.OK) {
+                        var link = document.createElement("a");
+                        link.href = "/" + data.file;
+                        link.text = "скачать";
+                        swal('Файл с результатом поиска отправлен на почту {{ request.user.email }} ' + '\n или вы можете скачать его по ссылке ниже:', {
+                            content: link
+                        })
+                    }
+                    else {
+                        swal('Произошла ошибка')
+                    }
                 },
                 error: function (error) {
-                    console.log('err')
-                    console.log(error);
+                    swal('Произошла ошибка')
                 }
             })
 
