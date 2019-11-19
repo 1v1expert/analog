@@ -127,6 +127,12 @@
     {#.form-control:active  {#}
     {#        border: 5px solid #fddc3f;#}
     {# }#}
+    .how-card:hover {
+        border: 1px solid #fddc3f;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(208, 233, 0, 0.6);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(225, 233, 22, 0.6);
+    }
     .form-control:focus {
         border: 2px solid #fddc3f;
         /* border-color: #66afe9; */
@@ -1366,8 +1372,13 @@
         specification_search_form.submit(function (e) {
             e.preventDefault();
 
+            if ($('#file-upload')[0].files.length === 0) {
+                swal("Внимание", "Пожалуйста, выберите файл!", "info");
+                return '';
+            }
+
             {% if not request.user.is_authenticated %}
-                swal("Ошибка!", "Пожалуйста, авторизуйтесь, чтобы продолжить пользоваться сервисом", "info");
+                swal("Внимание", "Пожалуйста, авторизуйтесь, чтобы продолжить пользоваться сервисом", "info");
                 return '';
             {% endif %}
 
