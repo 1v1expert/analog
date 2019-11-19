@@ -10,7 +10,7 @@
     <!--=========================== Bootstrap core CSS ===============================-->
 
     <link href="{% static 'landing_css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
-{#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">#}
+    {#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">#}
 
 
     <!--===========================main css for  web host page===============================-->
@@ -88,31 +88,43 @@
     body {
         font-family: Helvetica Neue;
     }
+        .letter-container h1 a {
+        font-size: 35px;
+        color: #FFFFFF;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        font-family: Helvetica Neue;
+    }
+
     #go-top:hover {
         background-color: #FFDD40;
 
     }
+
     .btn-group, .btn-group-vertical {
-        {#vertical-align: top;#}
+    {#vertical-align: top;#}
     }
-    .input-append .btn-group:last-child>.dropdown-toggle {
+
+    .input-append .btn-group:last-child > .dropdown-toggle {
         margin-left: 4px;
     }
+
     .style-button {
         background: #FFDD40 !important;
         border-radius: 5px !important;
-        font-family: Helvetica Neue!important;
-        font-style: normal!important;
-        font-weight: normal!important;
-        font-size: 16px!important;
-        line-height: 19px!important;
-        letter-spacing: 0.02em!important;
-        color: #333333!important;
+        font-family: Helvetica Neue !important;
+        font-style: normal !important;
+        font-weight: normal !important;
+        font-size: 16px !important;
+        line-height: 19px !important;
+        letter-spacing: 0.02em !important;
+        color: #333333 !important;
     }
 
     .how-card figure {
         margin-top: 10px;
     }
+
     .how-card h3 {
         font-family: Helvetica Neue;
         font-style: normal;
@@ -146,6 +158,7 @@
         padding: 10px;
 
     }
+
     .how-row {
         margin-bottom: 25px;
     }
@@ -164,10 +177,7 @@
         margin-top: 0px;
         margin-bottom: 35px;
         text-align: center;
-        {#font-family: Arial, Helvetica, sans-serif;#}
-        {#font-size: 18px;#}
-        {#font-weight: normal;#}
-        {#color: #666666;#}
+    {#font-family: Arial, Helvetica, sans-serif;#}{#font-size: 18px;#}{#font-weight: normal;#}{#color: #666666;#}
     }
 
     .features-container {
@@ -225,6 +235,24 @@
     .features ol {
         list-style: circle;
     }
+    @media (min-width: 300px) {
+
+        .letter-container h1 a {
+            font-size: 16px;
+        }
+
+    }
+    @media (min-width: 992px) {
+        .blue-button {
+            width: 300px;
+            padding: 20px 30px 20px 30px;
+            background-image: none;
+        }
+
+        .letter-container h1 a {
+            font-size: 22px;
+        }
+    }
 
     @media (min-width: 1200px) {
 
@@ -234,13 +262,14 @@
 
     }
 
-    @media (min-width: 992px) {
-        .blue-button {
-            width: 300px;
-            padding: 20px 30px 20px 30px;
-            background-image: none;
-        }
-    }
+
+    {#@media (max-width: 700px) {#}
+    {#    .letter-container h1 a {#}
+    {#        font-size: 14px;#}
+    {#    }#}
+    {# } #}
+
+
 
     input[type=file] {
         display: initial;
@@ -268,13 +297,8 @@
         height: 520px;
     }
 
-    .letter-container h1 a {
-        font-size: 35px;
-        color: #FFFFFF;
-        font-weight: 500;
-        letter-spacing: 0.02em;
-        font-family: Helvetica Neue;
-    }
+
+
 
     .top-area {
         background-color: #323232;
@@ -334,11 +358,11 @@
     }
 
     .carousel-indicators li {
-        {#border: 1px solid #666;#}
+    {#border: 1px solid #666;#}
     }
 
     .carousel-indicators .active {
-        {#background-color: #666;#}
+    {#background-color: #666;#}
     }
 
     .carousel-indicators {
@@ -349,10 +373,12 @@
         font-weight: bolder;
         color: #666;
     }
+
     .aboutproduct-container {
         padding: 40px 0px;
         background-color: #f5f5f5;
     }
+
     input[type="file"] {
         display: none;
     }
@@ -406,7 +432,7 @@
                                 {#                                <div class="top-link">#}
                                 {#                                    <ul>#}
                                 {#                                        <li> #}
-                                <a href="#" class="phone-ico">
+                                <a href="tel:+79161760665" class="phone-ico">
                                     <svg width="17" style="margin-right: 10px" height="17" viewBox="0 0 19 19"
                                          fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g clip-path="url(#clip0)">
@@ -643,7 +669,7 @@
                     <div class="item active">
                         <div class="container">
                             <div class="carousel-caption"
-                                 style="object-fit: cover;border-radius: 5px;background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'landing_images/item1.jpg' %})">
+                                 style="object-fit: cover;border-radius: 5px;background-size: cover;background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'landing_images/item1.jpg' %})">
                                 {#      linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))                  #}
                                 {#                <p class="main-image"><img src="{% static 'images/icon1.png' %}" alt="" /></p>#}
                                 <div class="letter-container">
@@ -657,7 +683,7 @@
                                 <p class="carousel-btn-p">
                                     <a class="blue-button style-button" role="button" href="#myCarousel"
                                        data-slide="prev">
-{#                                        <i class="fa fa-arrow-left hvr-icon"></i> #}
+                                        {#                                        <i class="fa fa-arrow-left hvr-icon"></i> #}
                                         Поиск по спецификации
                                     </a>
                                     {#                                    <a class="blue-button wobble-horizontal" role="button" href="#myCarousel"#}
@@ -665,7 +691,7 @@
                                     {#                                    </a>#}
                                     <a class="blue-button style-button" role="button" href="#myCarousel"
                                        data-slide="next">Поиск по артикулу
-{#                                        <i class="fa fa-arrow-right hvr-icon"></i>#}
+                                        {#                                        <i class="fa fa-arrow-right hvr-icon"></i>#}
                                     </a>
                                     {#                    <a class="green-button wobble-horizontal" href="#" role="button">Подробнее </a>#}
                                     {#                    <a class="blue-button wobble-horizontal" href="#" role="button">Попробовать </a>#}
@@ -676,7 +702,7 @@
                     <div class="item">
                         <div class="container">
                             <div class="carousel-caption"
-                                 style="border-radius: 5px;background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'landing_images/item2.jpg' %})">
+                                 style="background-size: cover;border-radius: 5px;background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'landing_images/item2.jpg' %})">
                                 {#                <p class="main-image"><img src="{% static 'images/icon1.png' %}" alt="" /></p>#}
                                 <div class="letter-container">
                                     <h1><a href="#">Поиск аналога по артикулу</a></h1>
@@ -721,7 +747,7 @@
                     <div class="item">
                         <div class="container">
                             <div class="carousel-caption"
-                                 style="border-radius: 5px;background-image:linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'landing_images/item3.jpg' %})">
+                                 style="background-size: cover;border-radius: 5px;background-image:linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'landing_images/item3.jpg' %})">
                                 {#                <p class="main-image"><img src="{% static 'images/icon1.png' %}" alt="" /></p>#}
                                 <div class="letter-container">
                                     <h1><a href="#">Поиск аналога по спецификации</a></h1>
@@ -877,7 +903,8 @@
                             </div>
 
                             <p class="card-text mb-auto">Если вы электромонтажная организация, проектировщик или
-                                производитель, и вам необходимо быстро «перевести спецификацию с одного производителя на другого». </p>
+                                производитель, и вам необходимо быстро «перевести спецификацию с одного производителя на
+                                другого». </p>
                         </div>
                     </div>
                 </div>
@@ -980,10 +1007,13 @@
                             </div>
 
                             <p class="card-text mb-auto">Если вы не нашли требуемого производителя, напишите,
-                                пожалуйста, на наш адрес – <a href="mailto:user@analogpro.ru?subject=Не нашёл производителя">user@analogpro.ru</a> Мы ускорим работу по данному
+                                пожалуйста, на наш адрес – <a
+                                        href="mailto:user@analogpro.ru?subject=Не нашёл производителя">user@analogpro.ru</a>
+                                Мы ускорим работу по данному
                                 производителю и сообщим вам о готовности. Поиск постоянно совершенствуется,
                                 но если Вы заметили неточности в работе поиска, большая просьба сообщить нам об
-                                этом по адресу - <a href="mailto:user@analogpro.ru?subject=Не нашёл производителя">user@analogpro.ru</a> для устранения неточностей. </p>
+                                этом по адресу - <a href="mailto:user@analogpro.ru?subject=Не нашёл производителя">user@analogpro.ru</a>
+                                для устранения неточностей. </p>
                         </div>
                     </div>
                 </div>
@@ -1039,7 +1069,8 @@
                             </div>
 
                             <div class="relative fullwidth col-xs-12">
-                                <button type="submit" class="form-btn wobble-horizontal style-button">Отправить сообщение
+                                <button type="submit" class="form-btn wobble-horizontal style-button">Отправить
+                                    сообщение
                                 </button>
                                 <span class="loading"></span></div>
                             <div class="clear"></div>
