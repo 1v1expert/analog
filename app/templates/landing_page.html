@@ -89,6 +89,16 @@
         font-family: Helvetica Neue;
     }
 
+    .h2-newsletter {
+        font-family: Helvetica Neue;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 35px;
+        line-height: 42px;
+        letter-spacing: 0.02em;
+        color: #FFFFFF;
+    }
+
     .header-howcard-row {
         height: 70px;
         background: #2B4561;
@@ -191,6 +201,7 @@
 
         color: #333333;
     }
+
     .how-service {
         {#border: 1px solid #E6E6E6;#}
         box-sizing: border-box;
@@ -199,6 +210,9 @@
         background: #FFFFFF;
         box-shadow: 0px 4px 35px rgba(0, 0, 0, 0.07);
         border-radius: 5px;
+    }
+    .wide-section {
+        height: 215px;
     }
 
     .how-card {
@@ -1049,20 +1063,19 @@
                     <div class="col-md-6">
                         <div class="header-howcard-row">
                         </div>
-                        <div class="how-service">
+                        <div class="how-service wide-section">
                             <div class="row">
                                 <div class="col-md-12">
                                     <h3>Поиск сразу нескольких артикулов </h3>
                                 </div>
                             </div>
                             <p class="card-text mb-auto">Функция позволяет найти товары-аналоги сразу для списка исходных артикулов. Для этого необходимо выбрать исходный файл. Файл должен быть в формате EXCEL(xls или xlsx), в котором первый столбец должен содержать артикулы, по которым будет проводиться поиск. </p>
-                            {#                        </div>#}
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="header-howcard-row">
                         </div>
-                        <div class="how-service">
+                        <div class="how-service wide-section">
                             <div class="row">
                                 <div class="col-md-12">
                                     <h3>Результат </h3>
@@ -1136,27 +1149,31 @@
 </div>
 <!--==============================Newsletter=============================-->
 
-<div class="newsletter-container">
+<div class="newsletter-container" style="background-color: unset; padding: 10px">
     <div class="container">
         <div class="row">
-            <div class="col-sm-3 col-md-3">
-                <div class="newsletter"><span class="newsletterIcon"></span>
-                    <h2>Подписаться</h2>
-                    <p>на новости </p>
+            <div class="col-md-12">
+                <div class="newsletter-background" style="background-size: cover;
+    border-radius: 5px;height: 174px;
+    background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'landing_images/item3.jpg' %});">
+                    <div class="row">
+                    <div class="col-sm-3 col-md-12 h2-newsletter">
+{#                        <div class="newsletter"><span class="newsletterIcon"></span>#}
+                            <h2 style="text-align: center">Подписаться на новости </h2>
+{#                            <p>на новости </p>#}
+{#                        </div>#}
+                    </div></div>
+                    <form class="form-search" id="subscribeForm" method="POST">
+                        <div class="col-sm-8 col-md-4 col-md-offset-3">
+                            {% csrf_token %}
+                            {{ subscribe_form.email }}
+                        </div>
+                        <div class="col-sm-4 col-md-3">
+                            <button type="submit" class="newsletter-btn">Подписаться</button>
+                            <span id="result" class="alertMsg"></span></div>
+                    </form>
                 </div>
             </div>
-            {#            <form class="form-search" role="form" action="subscribe.php" id="subscribeForm" method="POST">#}
-            <form class="form-search" id="subscribeForm" method="POST">
-                <div class="col-sm-6 col-md-6">
-                    {% csrf_token %}
-                    {{ subscribe_form.email }}
-                    {#                    <input type="email" name="email" id="address" required="required" class="newsletter-form"#}
-                    {#                           placeholder="Введите ваш email адрес" data-validate="validate(required, email)">#}
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    <button type="submit" class="newsletter-btn">Подписаться</button>
-                    <span id="result" class="alertMsg"></span></div>
-            </form>
         </div>
     </div>
 </div>
