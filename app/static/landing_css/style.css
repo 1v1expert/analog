@@ -52,7 +52,7 @@
         url('../fonts/font/HelveticaNeueBoldCondensed.woff2') format('woff2'),
         url('../fonts/font/HelveticaNeueBoldCondensed.woff') format('woff'),
         url('../fonts/font/HelveticaNeueBoldCondensed.ttf') format('truetype');
-        font-weight: bold;
+        /*font-weight: ;*/
         font-style: normal;
     }
 
