@@ -88,6 +88,14 @@
     body {
         font-family: Helvetica Neue;
     }
+
+    .header-howcard-row {
+        height: 70px;
+        background: #2B4561;
+        border-radius: 5px 5px 0px 0px;
+        box-shadow: 0px 4px 35px rgba(0, 0, 0, 0.07);
+    }
+
     .service-container {
     padding: 50px 0px;
     background-color: #ffffff;
@@ -186,7 +194,7 @@
     .how-service {
         {#border: 1px solid #E6E6E6;#}
         box-sizing: border-box;
-        height: 365px;
+        height: 300px;
         padding: 10px;
         background: #FFFFFF;
         box-shadow: 0px 4px 35px rgba(0, 0, 0, 0.07);
@@ -510,81 +518,11 @@
                                     {% if request.user.is_authenticated %}
                                         <div class="oder-content">
                                             <div class="container10">
-                                                {#                                    <a id="login-menu" href="#modal">#}
                                                 <a>{{ request.user.username }}</a>
-                                                {#                            <div class="container10"><a id="login-menu" href="#modal">Войти или зарег.</a>#}
-                                                {#                                    <div id="modal" class="login-popupContainer" style="display:none;">#}
-                                                {#                                        <div class="popupHeader">#}
-                                                {#                                            <div class="header_title">Авторизация</div>#}
-                                                {#                                            <div class="modal_close"><i class="fa fa-times"></i></div>#}
-                                                {#                                        </div>#}
-                                                {#                                        <div class="popupBody">#}
-                                                {#                                            <!-- Social Login -->#}
-                                                {#                                            <div class="social_login">#}
-                                                {#                                                <div class="login-main-icon"><img#}
-                                                {#                                                        src="{% static 'images/login-icon.png' %}"#}
-                                                {#                                                        alt=""/></div>#}
-                                                {#                                                <h1>Ваш аккаунт</h1>#}
-                                                {#                                                <div class="main_btns-container">#}
-                                                {#                                                    <div class="first_half"><a href="#" id="login_form"#}
-                                                {#                                                                               class="btn login-btn">Войти</a></div>#}
-                                                {#                                                    <div class="first_half last"><a href="#" id="register_form"#}
-                                                {#                                                                                    class="btn login-btn">Зарегистрироваться</a>#}
-                                                {#                                                    </div>#}
-                                                {#                                                </div>#}
-                                                {#                                            </div>#}
-                                                {##}
-                                                {#                                            <!-- Username & Password Login form -->#}
-                                                {#                                            <div class="user_login">#}
-                                                {#                                                <form>#}
-                                                {#                                                    <input type="text" placeholder="Email / Username"/>#}
-                                                {#                                                    <br/>#}
-                                                {#                                                    <input type="password" placeholder="Password"/>#}
-                                                {#                                                    <br/>#}
-                                                {#                                                    <div class="checkbox">#}
-                                                {#                                                        <input id="remember" type="checkbox"/>#}
-                                                {#                                                        <label for="remember">Запомнить меня</label>#}
-                                                {#                                                    </div>#}
-                                                {#                                                    <div class="main_btns-container">#}
-                                                {#                                                        <div class="first_half"><a href="#" class="btn back_btn"><i#}
-                                                {#                                                                class="fa fa-angle-double-left"></i> Назад</a></div>#}
-                                                {#                                                        <div class="first_half last"><a href="#"#}
-                                                {#                                                                                        class="btn btn_blue">Войти</a>#}
-                                                {#                                                        </div>#}
-                                                {#                                                    </div>#}
-                                                {#                                                </form>#}
-                                                {#                                                <a href="#" class="forgot_password">Забыл пароль ?</a></div>#}
-                                                {##}
-                                                {#                                            <!-- Register Form -->#}
-                                                {#                                            <div class="user_register">#}
-                                                {#                                                <form>#}
-                                                {#                                                    <input type="text" placeholder="Full Name"/>#}
-                                                {#                                                    <br/>#}
-                                                {#                                                    <input type="email" placeholder="Email Address"/>#}
-                                                {#                                                    <br/>#}
-                                                {#                                                    <input type="password" placeholder="Password"/>#}
-                                                {#                                                    <br/>#}
-                                                {#                                                    <div class="checkbox">#}
-                                                {#                                                        <input id="send_updates" type="checkbox"/>#}
-                                                {#                                                        <label for="send_updates">Send me occasional email#}
-                                                {#                                                            updates</label>#}
-                                                {#                                                    </div>#}
-                                                {#                                                    <div class="main_btns-container">#}
-                                                {#                                                        <div class="first_half"><a href="#" class="btn back_btn"><i#}
-                                                {#                                                                class="fa fa-angle-double-left"></i> Назад</a></div>#}
-                                                {#                                                        <div class="first_half last"><a href="#"#}
-                                                {#                                                                                        class="btn btn_blue">Войти</a>#}
-                                                {#                                                        </div>#}
-                                                {#                                                    </div>#}
-                                                {#                                                </form>#}
-                                                {#                                            </div>#}
-                                                {#                                        </div>#}
-                                                {#                                    </div>#}
                                             </div>
                                         </div>
                                         <div class="oder-content">l</div>
                                         <div class="oder-content"><a href="{% url 'api:logout' %}">Выйти</a></div>
-                                        {#                            <div class="oder-content"><a href="#">Помощь</a></div>#}
                                     {% else %}
                                         <div class="oder-content">
                                             <div class="container10">
@@ -899,7 +837,6 @@
                             </div>
                             <p class="card-text mb-auto">По заданному артикулу система находит товар-аналог другого
                                 производителя. Поиск происходит с учетом технических характеристик товара.</p>
-                            {#                        </div>#}
                         </div>
                     </div>
                     <div class="col-md-5">
@@ -1050,7 +987,7 @@
 </div>
 <!--=============================Separator block=============================-->
 {#<div class="seprator-block" style="height: 20px;"></div>#}
-<!--=============================Рow does the service work=============================-->
+<!--=============================Search by article=============================-->
 <div id="service_work" class="service-container">
     <div class="container">
         <div class="row main-head">
@@ -1059,17 +996,22 @@
                 <h2>Поиск по артикулу</h2>
                 <div class="row how-row">
                     <div class="col-md-4">
+                        <div class="header-howcard-row">
+                        </div>
                         <div class="how-service">
                             <div class="row">
                                 <div class="col-md-12">
                                     <h3>Введите исходные данные </h3>
                                 </div>
                             </div>
-                            <p class="card-text mb-auto">Укажите артикул товара, для которого надо найти аналог. Выберите производителя По заданному артикулу система находит товар-аналог другого производителя. Поиск происходит с учетом технических характеристик товара. </p>
+                            <p class="card-text mb-auto">Укажите артикул товара, для которого надо найти аналог.
+                                Выберите производителя По заданному артикулу система находит товар-аналог другого производителя. Поиск происходит с учетом технических характеристик товара. </p>
                             {#                        </div>#}
                         </div>
                     </div>
                     <div class="col-md-4">
+                        <div class="header-howcard-row">
+                        </div>
                         <div class="how-service">
                             <div class="row">
                                 <div class="col-md-12">
@@ -1080,6 +1022,8 @@
                         </div>
                     </div>
                     <div class="col-md-4">
+                        <div class="header-howcard-row">
+                        </div>
                         <div class="how-service">
                             <div class="row">
                                 <div class="col-md-12">
@@ -1087,6 +1031,44 @@
                                 </div>
                             </div>
                             <p class="card-text mb-auto">Система позволяет изменить параметры поиска с учетом дополнительных требований пользователя. Для этого необходимо воспользоваться кнопкой «Открыть расширенную форму» и выбрать соответствующие параметры. В этом случае будет найден товар, максимально соответствующий заданным характеристикам. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--=============================Specification Search=============================-->
+<div id="service_work" class="service-container">
+    <div class="container">
+        <div class="row main-head">
+            <div class="col-md-12">
+                {#        <h1>What's features in our hosting</h1>#}
+                <h2>Поиск по спецификации</h2>
+                <div class="row how-row">
+                    <div class="col-md-6">
+                        <div class="header-howcard-row">
+                        </div>
+                        <div class="how-service">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Поиск сразу нескольких артикулов </h3>
+                                </div>
+                            </div>
+                            <p class="card-text mb-auto">Функция позволяет найти товары-аналоги сразу для списка исходных артикулов. Для этого необходимо выбрать исходный файл. Файл должен быть в формате EXCEL(xls или xlsx), в котором первый столбец должен содержать артикулы, по которым будет проводиться поиск. </p>
+                            {#                        </div>#}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="header-howcard-row">
+                        </div>
+                        <div class="how-service">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Результат </h3>
+                                </div>
+                            </div>
+                            <p class="card-text mb-auto">Результаты поиска будут сохранены в файле. Файл будет отправлен на электронный адрес, указанный при регистрации. Для пользования функцией регистрация обязательна. Регистрация бесплатная. </p>
                         </div>
                     </div>
                 </div>
