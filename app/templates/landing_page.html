@@ -103,9 +103,25 @@
     body {
         font-family: HelveticaNeueCyr;
     }
+    {#.user_register input[type="text"], .user_register input[type="email"], .user_register input[type="password"] {#}
+    {#    border: unset;#}
+    {# }#}
+    a.forgot_password {
+    {#display: block;#}
+    margin: unset;
+    }
+    .first_half.last {
+        {#width: 60%;#}
+    }
+    .back_btn {
+        padding: unset;
+        background: unset;
+    }
 
-
-
+    .popupHeader {
+        background: #ffffff;
+        text-align: center;
+    }
     .oder {
         padding: 5px 18px 10px 15px;
     }
@@ -656,7 +672,7 @@
                                         <div class="oder-content">
                                             <div class="container10">
                                                 <a id="login-menu" href="#modal">Войти</a>
-                                                <div id="modal" class="login-popupContainer" style="display:none;">
+                                                <div id="modal" class="login-popupContainer" style="border-radius: 5px;display:none;">
                                                     <div class="popupHeader">
                                                         <div class="header_title">Авторизация</div>
                                                         <div class="modal_close"><i class="fa fa-times"></i></div>
@@ -669,12 +685,15 @@
                                                                     alt=""/></div>
                                                             <h1>Ваш аккаунт</h1>
                                                             <div class="main_btns-container">
-                                                                <div class="first_half"><a href="#" id="login_form"
-                                                                                           class="btn login-btn">Войти</a>
+                                                                <div class="first_half">
+                                                                    <a href="#" id="login_form"
+                                                                       class="btn login-btn style-button"
+                                                                       style="font-size: 11px!important;">Войти</a>
                                                                 </div>
-                                                                <div class="first_half last"><a href="#"
-                                                                                                id="register_form"
-                                                                                                class="btn login-btn">Зарегистрироваться</a>
+                                                                <div class="first_half last">
+                                                                    <a href="#" id="register_form"
+                                                                       class="btn login-btn style-button"
+                                                                       style="font-size: 11px!important;">Зарегистрироваться</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -695,23 +714,32 @@
                                                                     <label for="remember">Запомнить меня</label>
                                                                 </div>
                                                                 <div class="main_btns-container">
-                                                                    <div class="first_half">
-                                                                        <a href="#" class="btn back_btn"><i
-                                                                                class="fa fa-angle-double-left"></i>
-                                                                            Назад</a>
-                                                                    </div>
-                                                                    <div class="first_half last">
+{#                                                                    <div class="first_half">#}
+{#                                                                        <a href="#" class="btn back_btn"><i#}
+{#                                                                                class="fa fa-angle-double-left"></i>#}
+{#                                                                            Назад</a>#}
+{#                                                                    </div>#}
+                                                                    <div class="first_half last" style="width: 60%;">
                                                                         <button href="#" type="submit"
-                                                                                class="btn btn_blue">
+                                                                                class="btn btn_blue style-button">
                                                                             Войти
                                                                         </button>
                                                                     </div>
                                                                 </div>
                                                             </form>
                                                             <label id="error_user_login_form"></label>
-                                                            <a href="#" onclick="swal('Печаль');$('#modal').hide()"
-                                                               class="forgot_password">Забыл пароль ?</a></div>
-
+{#                                                            <div class="first_half">#}
+                                                            <div class="row">
+                                                                <div class="col-md-6 col-xs-6 col-lg-6" style="text-align: left;">
+                                                                        <a href="#" class="btn back_btn"><i
+                                                                                class="fa fa-angle-double-left"></i>
+                                                                            Назад</a>
+                                                                </div>
+{#                                                                    </div>#}
+                                                                    <div class="col-md-6 col-xs-6 col-lg-6">
+                                                            <a href="#" onclick="swal('Попробуйте позже.');$('#modal').hide()"
+                                                               class="forgot_password">Забыл пароль ?</a></div></div>
+                                                        </div>
                                                         <!-- Register Form -->
                                                         <div class="user_register">
                                                             <form id="user_register_form">
@@ -739,8 +767,8 @@
                                                                         {#                                                            <a href="#"#}
                                                                         {#                                                                                        class="btn btn_blue">Зарегистрироваться</a>#}
                                                                         <button href="#" type="submit"
-                                                                                class="btn btn_blue"
-                                                                                style="font-size: 12px;">
+                                                                                class="btn btn_blue style-button"
+                                                                                style="font-size: 12px!important;">
                                                                             Зарегистрироваться
                                                                         </button>
                                                                     </div>
