@@ -46,6 +46,7 @@ class Manufacturer(Base):
     """
     title = models.CharField(verbose_name='Наименование', max_length=255)
     short_title = models.CharField(verbose_name='Краткое наименование', max_length=255, blank=True)
+    is_tried = models.BooleanField(verbose_name='Проверенный', default=False)
 
     def __str__(self):
         return self.title

@@ -44,6 +44,19 @@
 	body {
 	background-color:#fff;
 }
+
+@font-face {
+    font-family: 'HelveticaNeueCyr';
+    src: url('../fonts/font/HelveticaNeueCyr-Thin.eot');
+    src: local('HelveticaNeueCyr-Thin'),
+        url('../fonts/font/HelveticaNeueCyr-Thin.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/font/HelveticaNeueCyr-Thin.woff2') format('woff2'),
+        url('../fonts/font/HelveticaNeueCyr-Thin.woff') format('woff'),
+        url('../fonts/font/HelveticaNeueCyr-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
 a {
 	text-decoration:none;
 }
