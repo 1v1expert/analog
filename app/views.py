@@ -193,7 +193,7 @@ def landing_page_view(request) -> HttpResponse:
     auth_form = MyAuthenticationForm(request)
     reg_form = MyRegistrationForm()
     subscribe_form = SubscribeForm()
-    manufacturers = Manufacturer.objects.all()
+    manufacturers = Manufacturer.objects.filter(is_tried=True)
     return render(request, 'landing_page.html', {
         'manufacturers': manufacturers,
         'feedback': feedback_form,
