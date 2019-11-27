@@ -263,7 +263,7 @@ class KOKSDocumentReader(object):
     /code/article/title/price
     name sheet -> type
     """
-    def __init__(self, path=None, workbook=None, only_parse=True, user=None):
+    def __init__(self, path=None, workbook=None, only_parse=True, user=None, loadnetworkmodel=False):
         assert path or workbook, "You should provide either path to file or XLS-object"
         
         if workbook:
@@ -297,7 +297,7 @@ class KOKSDocumentReader(object):
         # self.unfix_attr_vals = {}
         self.attr_vals = {}
         
-        self.network = NeuralNetworkOption2(loadmodel=True)
+        self.network = NeuralNetworkOption2(loadmodel=loadnetworkmodel)
         
     # @staticmethod
     # def _get_data_from_line(row):
@@ -557,13 +557,16 @@ class GeneralDocumentReader(KOKSDocumentReader):
         article = line[1].strip()
         additional_article = line[2].strip() if line[2] is not 'None' else ''
         category_name = line[3].strip()
-        species = line[4] if line[4] != 'None' else ''
-        covering = line[5] if line[5] != 'None' else ''
-        price = line[6].strip() if line[6] != 'None' else ''
-        length = line[7].strip() if line[7] != 'None' else ''
-        depth = line[8].strip() if line[8] != 'None' else ''
-        board_height = line[9].strip() if line[9] != 'None' else ''
-        width = line[10].strip() if line[10] != 'None' else ''
+        species = line[4] if line[4] != 'None' else ''  # вид
+        covering = line[5] if line[5] != 'None' else ''  # покрытие
+        units = line[6].strip() if line[6] != 'None' else ''  # единицы измерения
+        length = line[7].strip() if line[7] != 'None' else ''  # длина
+        depth = line[8].strip() if line[8] != 'None' else ''  # толщина
+        board_height = line[9].strip() if line[9] != 'None' else ''   # высота борта
+        additional_width = line[10].strip() if line[10] != 'None' else ''  # доп. ширина
+        width = line[11].strip() if line[11] != 'None' else ''  # ширина
+        additional_board_height = line[12].strip() if line[12] != 'None' else ''   #  доп. высота борта
+        price = line[13].strip() if line[13] != 'None' else ''
 
         formalized_title = self.network.remove_stop_words(title)
         
@@ -586,6 +589,11 @@ class GeneralDocumentReader(KOKSDocumentReader):
         if is_digit(price) and price:  # create price attr
             attribute = Attribute.objects.get(title='цена')
             self._create_attribute(article, float(price), attribute, fixed=False)
+            
+        if units:
+            value = FixedValue.objects.get(title=units)
+            attribute = Attribute.objects.get(title='ед.изм')
+            self._create_attribute(article, value, attribute, fixed=True)
         
         if covering:
             value = FixedValue.objects.get(title=covering)
@@ -608,10 +616,18 @@ class GeneralDocumentReader(KOKSDocumentReader):
         if is_digit(board_height) and board_height:
             attribute = Attribute.objects.get(title='высота борта')
             self._create_attribute(article, float(board_height), attribute, fixed=False)
+            
+        if is_digit(additional_board_height) and additional_board_height:
+            attribute = Attribute.objects.get(title='высота борта доп.')
+            self._create_attribute(article, float(board_height), attribute, fixed=False)
         
         if is_digit(width) and width:
             attribute = Attribute.objects.get(title='ширина')
             self._create_attribute(article, float(width), attribute, fixed=False)
+            
+        if is_digit(additional_width) and additional_width:
+            attribute = Attribute.objects.get(title='ширина доп.')
+            self._create_attribute(article, float(additional_width), attribute, fixed=False)
 
     def parse_file(self):
         for name_list in self.sheets:
@@ -619,7 +635,7 @@ class GeneralDocumentReader(KOKSDocumentReader):
             logger.debug('Sheet {}'.format(name_list))
             self.sheet = self.workbook.get_sheet_by_name(name_list)
             for i, line in enumerate(self.read_sheet()):
-                if not i:
+                if not i:  # skip header table
                     continue
                 self.line_processing(line)
     
