@@ -771,7 +771,7 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
         article = line[0].strip()
         title = line[1].strip()
         # photo = line[2]  # only blank
-        category_name = line[3].strip() if line[3] != 'None' else ''
+        category_name = line[3].strip().lower() if line[3] != 'None' else ''
         shape = line[4].strip() if line[4] != 'None' else ''  # форма
         doubling = line[5].strip() if line[5] != 'None' else ''  # удвоение
         covering = line[6] if line[6] != 'None' else ''  # покрытие
@@ -800,7 +800,13 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
             return
         self.articles.add(article)
         
-        category = Category.objects.get(title=category_name)
+        try:
+            category = Category.objects.get(title=category_name)
+        except models.ObjectDoesNotExist:
+            raise Exception('Category does not exist, title: %s' % category_name)
+        except Category.MultipleObjectsReturned:
+            raise Exception('Multi objects returned, title: %s' % category_name)
+        
         self.create_products(article, title, formalized_title, category)
         
         if is_digit(price) and price:  # create price attr
@@ -820,22 +826,42 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
             self._create_attribute(article, float(carving), attribute, fixed=False)
         
         if units:
-            value = FixedValue.objects.get(title=units)
+            try:
+                value = FixedValue.objects.get(title=units)
+            except models.ObjectDoesNotExist:
+                raise Exception('FixedValue does not exist, unit: %s' % units)
+            except FixedValue.MultipleObjectsReturned:
+                raise Exception('FixedValue objects returned, unit: %s' % units)
             attribute = category.attributes.get(title='ед.изм')
             self._create_attribute(article, value, attribute, fixed=True)
         
         if doubling:
-            value = FixedValue.objects.get(title=doubling)
+            try:
+                value = FixedValue.objects.get(title=doubling)
+            except models.ObjectDoesNotExist:
+                raise Exception('FixedValue does not exist, doubling: %s' % doubling)
+            except FixedValue.MultipleObjectsReturned:
+                raise Exception('FixedValue objects returned, doubling: %s' % doubling)
             attribute = category.attributes.get(title='удвоение')
             self._create_attribute(article, value, attribute, fixed=True)
         
         if shape:
-            value = FixedValue.objects.get(title=shape)
+            try:
+                value = FixedValue.objects.get(title=shape)
+            except models.ObjectDoesNotExist:
+                raise Exception('FixedValue does not exist, shape: %s' % shape)
+            except FixedValue.MultipleObjectsReturned:
+                raise Exception('FixedValue objects returned, shape: %s' % shape)
             attribute = category.attributes.get(title='форма')
             self._create_attribute(article, value, attribute, fixed=True)
         
         if covering:
-            value = FixedValue.objects.get(title=covering)
+            try:
+                value = FixedValue.objects.get(title=covering)
+            except models.ObjectDoesNotExist:
+                raise Exception('FixedValue does not exist, covering: %s' % covering)
+            except FixedValue.MultipleObjectsReturned:
+                raise Exception('FixedValue objects returned, covering: %s' % covering)
             attribute = category.attributes.get(title='покрытие')
             self._create_attribute(article, value, attribute, fixed=True)
         
@@ -861,7 +887,7 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
         #     self._create_attribute(article, float(board_height), attribute, fixed=False)
         
         if is_digit(width) and width:
-            attribute = category.attributes.objects.get(title='ширина')
+            attribute = category.attributes.get(title='ширина')
             self._create_attribute(article, float(width), attribute, fixed=False)
         
         # if is_digit(additional_width) and additional_width:
