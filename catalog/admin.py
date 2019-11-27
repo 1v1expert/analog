@@ -238,10 +238,18 @@ class FileUploadAdmin(admin.ModelAdmin):
             messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
             return
         try:
-            document = GeneralDocumentReader(path=queryset[0].file.name, only_parse=False).parse_file()
-            messages.add_message(request, messages.SUCCESS, 'Файл {} загружен, {} позиций'.format(queryset[0].file.name, document.c_lines))
+            document = GeneralDocumentReader(path=queryset[0].file.name,
+                                             only_parse=False,
+                                             loadnetworkmodel=True).parse_file()
+            messages.add_message(request,
+                                 messages.SUCCESS,
+                                 'Файл {} загружен, {} позиций, дублей - {}'.format(
+                                     queryset[0].file.name, document.c_lines, len(document.doubles_article)
+                                 ))
         except FileNotFoundError:
             messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, 'Ошибка, детали: {}'.format(e))
     process_general_file.short_description = 'Импортировать шаблон(Обработанный)'
     
     def process_pkt_file(self, request, queryset):
