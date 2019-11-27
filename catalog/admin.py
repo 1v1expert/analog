@@ -259,7 +259,7 @@ class FileUploadAdmin(admin.ModelAdmin):
         try:
             document = GeneralDocumentReaderMountingElements(path=queryset[0].file.name,
                                                              only_parse=False,
-                                                             loadnetworkmodel=True).parse_file()
+                                                             loadnetworkmodel=False).parse_file()
             messages.add_message(request,
                                  messages.SUCCESS,
                                  'Файл {} загружен, {} позиций, дублей - {}'.format(
