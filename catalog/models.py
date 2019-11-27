@@ -117,7 +117,7 @@ class Attribute(Base):
     #category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='attributes', limit_choices_to={'parent__isnull': False})
     
     def __str__(self):
-        return '{}({})'.format(self.title, self.unit)
+        return '{}({})'.format(self.title, self.type)
         # self.UNITS = UNITS
         # text = self.title
         # if self.unit:
