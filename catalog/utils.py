@@ -7,9 +7,9 @@ from catalog.exceptions import NotFoundException
 
 
 class SearchProducts(object):
-    def __init__(self, request, form, product=None, manufacturer_to=None):
+    def __init__(self, form=None, product=None, manufacturer_to=None):
         
-        self.request = request
+        # self.request = request
         self.form = form
         self.product = product
         # self.manufacturer_to = form.cleaned_data['manufacturer_to']
