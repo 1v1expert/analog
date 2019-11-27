@@ -191,8 +191,8 @@ class ManufacturerAdmin(BaseAdmin):
 
 
 class FileUploadAdmin(admin.ModelAdmin):
-    actions = ['process_file', 'process_koks_file', 'process_iek_file', 'process_bettermann_file',
-               'process_general_file', 'process_pkt_file', 'process_general_file_mounting_elements']
+    actions = ['process_general_file_mounting_elements', 'process_file', 'process_koks_file', 'process_iek_file', 'process_bettermann_file']
+               'process_general_file', 'process_pkt_file',
     list_display = ['file', 'type', 'file_link', 'created_at', 'created_by']
     
     def file_link(self, obj):
