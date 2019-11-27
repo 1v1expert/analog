@@ -764,6 +764,125 @@ class PKT(GeneralDocumentReader):
             self._create_attribute(article, float(additional_width), attribute, fixed=False)
 
 
+class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
+    """  Управление монтажными элементами """
+    
+    def line_processing(self, line, name_sheet=None):
+        article = line[0].strip()
+        title = line[1].strip()
+        # photo = line[2]  # only blank
+        category_name = line[3].strip() if line[3] != 'None' else ''
+        shape = line[4].strip() if line[4] != 'None' else ''  # форма
+        doubling = line[5].strip() if line[5] != 'None' else ''  # удвоение
+        covering = line[6] if line[6] != 'None' else ''  # покрытие
+        depth = line[7].strip() if line[7] != 'None' else ''  # толщина
+        length = line[8].strip() if line[8] != 'None' else ''  # длина
+        footing = line[9].strip() if line[9] != 'None' else ''  # основание
+        width = line[10].strip() if line[10] != 'None' else ''  # ширина
+        board_height = line[11].strip() if line[11] != 'None' else ''  # высота борта
+        diameter = line[12].strip() if line[12] != 'None' else ''  # диаметр
+        carving = line[13].strip() if line[13] != 'None' else ''  # резьба
+        units = line[14].strip() if line[14] != 'None' else ''  # единицы измерения
+        price = line[16].strip() if line[16] != 'None' else ''  # цена
+        
+        formalized_title = self.network.remove_stop_words(title)
+        
+        if not article.strip() or title.strip().lower() == 'none' or not title:
+            return
+        if not category_name.strip() or category_name.strip().lower() == 'none' or not category_name:
+            return
+        
+        self.c_lines += 1  # counter lines
+        
+        # check_doubles
+        if article in self.articles:
+            self.doubles_article.append(article)
+            return
+        self.articles.add(article)
+        
+        category = Category.objects.get(title=category_name)
+        self.create_products(article, title, formalized_title, category)
+        
+        if is_digit(price) and price:  # create price attr
+            attribute = category.attributes.get(title='цена')
+            self._create_attribute(article, float(price), attribute, fixed=False)
+            
+        if is_digit(footing) and footing:  # create footing attr
+            attribute = category.attributes.get(title='основание')
+            self._create_attribute(article, float(footing), attribute, fixed=False)
+            
+        if is_digit(diameter) and diameter:  # create diameter attr
+            attribute = category.attributes.get(title='диаметр')
+            self._create_attribute(article, float(diameter), attribute, fixed=False)
+        
+        if is_digit(carving) and carving:  # create diameter attr
+            attribute = category.attributes.get(title='резьба')
+            self._create_attribute(article, float(carving), attribute, fixed=False)
+        
+        if units:
+            value = FixedValue.objects.get(title=units)
+            attribute = category.attributes.get(title='ед.изм')
+            self._create_attribute(article, value, attribute, fixed=True)
+        
+        if doubling:
+            value = FixedValue.objects.get(title=doubling)
+            attribute = category.attributes.get(title='удвоение')
+            self._create_attribute(article, value, attribute, fixed=True)
+        
+        if shape:
+            value = FixedValue.objects.get(title=shape)
+            attribute = category.attributes.get(title='форма')
+            self._create_attribute(article, value, attribute, fixed=True)
+        
+        if covering:
+            value = FixedValue.objects.get(title=covering)
+            attribute = category.attributes.get(title='покрытие')
+            self._create_attribute(article, value, attribute, fixed=True)
+        
+        # if species:
+        #     value = FixedValue.objects.get(title=species)
+        #     attribute = category.attributes.objects.get(title='вид')
+        #     self._create_attribute(article, value, attribute, fixed=True)
+        
+        if is_digit(length) and length:
+            attribute = category.attributes.get(title='длина')
+            self._create_attribute(article, float(length), attribute, fixed=False)
+        
+        if is_digit(depth) and depth:
+            attribute = category.attributes.get(title='толщина')
+            self._create_attribute(article, float(depth), attribute, fixed=False)
+        
+        if is_digit(board_height) and board_height:
+            attribute = category.attributes.get(title='высота борта')
+            self._create_attribute(article, float(board_height), attribute, fixed=False)
+        
+        # if is_digit(additional_board_height) and additional_board_height:
+        #     attribute = category.attributes.get(title='высота борта доп.')
+        #     self._create_attribute(article, float(board_height), attribute, fixed=False)
+        
+        if is_digit(width) and width:
+            attribute = category.attributes.objects.get(title='ширина')
+            self._create_attribute(article, float(width), attribute, fixed=False)
+        
+        # if is_digit(additional_width) and additional_width:
+        #     attribute = category.attributes.objects.get(title='ширина доп.')
+        #     self._create_attribute(article, float(additional_width), attribute, fixed=False)
+    
+    def parse_file(self):
+        for name_list in self.sheets:
+            self.manufacturer = Manufacturer.objects.get(title=name_list)
+            logger.debug('Sheet {}'.format(name_list))
+            self.sheet = self.workbook.get_sheet_by_name(name_list)
+            for i, line in enumerate(self.read_sheet()):
+                if not i:  # skip header table
+                    continue
+                self.line_processing(line)
+        
+        self._create_attributes_and_products()
+        
+        return self
+
+
 def is_digit(s):
     try:
         float(s)

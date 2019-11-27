@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, \
     UnFixedAttributeValue, Specification, DataFile
-from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader, GeneralDocumentReader, BettermannDocumentReader, PKT
+from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader, GeneralDocumentReader, BettermannDocumentReader, PKT, GeneralDocumentReaderMountingElements
 from catalog.reporters import writers, generators
 
 from catalog.forms import ProductChangeListForm
@@ -81,7 +81,8 @@ class CategoryAdmin(tree_editor.TreeEditor, BaseAdmin):
             print(obj, list(obj.parent.attributes.all()))
             obj.attributes.add(*list(obj.parent.attributes.all()))
             print(obj.attributes.all())
-            obj.save()
+            # obj.attributes.save()
+            # obj.save()  ## what is it??
         
     # @staticmethod
     def get_attributes(self, obj):
@@ -191,7 +192,7 @@ class ManufacturerAdmin(BaseAdmin):
 
 class FileUploadAdmin(admin.ModelAdmin):
     actions = ['process_file', 'process_koks_file', 'process_iek_file', 'process_bettermann_file',
-               'process_general_file', 'process_pkt_file']
+               'process_general_file', 'process_pkt_file', 'process_general_file_mounting_elements']
     list_display = ['file', 'type', 'file_link', 'created_at', 'created_by']
     
     def file_link(self, obj):
@@ -251,6 +252,25 @@ class FileUploadAdmin(admin.ModelAdmin):
         except Exception as e:
             messages.add_message(request, messages.ERROR, 'Ошибка, детали: {}'.format(e))
     process_general_file.short_description = 'Импортировать шаблон(Обработанный)'
+    
+    def process_general_file_mounting_elements(self, request, queryset):
+        if not len(queryset) == 1:
+            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
+            return
+        try:
+            document = GeneralDocumentReaderMountingElements(path=queryset[0].file.name,
+                                                             only_parse=False,
+                                                             loadnetworkmodel=True).parse_file()
+            messages.add_message(request,
+                                 messages.SUCCESS,
+                                 'Файл {} загружен, {} позиций, дублей - {}'.format(
+                                     queryset[0].file.name, document.c_lines, len(document.doubles_article)
+                                 ))
+        except FileNotFoundError:
+            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, 'Ошибка, детали: {}'.format(e))
+    process_general_file_mounting_elements.short_description = 'Импортировать шаблон(монтажные элементы)'
     
     def process_pkt_file(self, request, queryset):
         if not len(queryset) == 1:
