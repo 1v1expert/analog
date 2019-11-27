@@ -158,9 +158,10 @@ class SearchProducts(object):
                 return
     
     def check_product(self):
-        self.manufacturer_from = self.form.cleaned_data.get('manufacturer_from')
-        if self.manufacturer_from:
-            self.product = Product.objects.filter(article=self.article, manufacturer=self.manufacturer_from).first()
+        if self.form is not None:
+            self.manufacturer_from = self.form.cleaned_data.get('manufacturer_from')
+            if self.manufacturer_from:
+                self.product = Product.objects.filter(article=self.article, manufacturer=self.manufacturer_from).first()
         else:
             self.product = Product.objects.filter(article=self.article).first()
         
