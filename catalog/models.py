@@ -117,13 +117,14 @@ class Attribute(Base):
     #category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='attributes', limit_choices_to={'parent__isnull': False})
     
     def __str__(self):
-        self.UNITS = UNITS
-        text = self.title
-        if self.unit:
-            for unit in self.UNITS:
-                if self.unit == unit[0]:
-                    text += ', ' + unit[1]
-        return text
+        return '{}({})'.format(self.title, self.unit)
+        # self.UNITS = UNITS
+        # text = self.title
+        # if self.unit:
+        #     for unit in self.UNITS:
+        #         if self.unit == unit[0]:
+        #             text += ', ' + unit[1]
+        # return text
 
     class Meta:
         verbose_name = "Атрибут"
