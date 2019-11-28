@@ -52,4 +52,4 @@ class Command(BaseCommand):
                         }
                     finally:
                         del result
-                        product.save(update_fields=raw)
+                        product.save()
