@@ -32,7 +32,8 @@ class Command(BaseCommand):
                         result.global_search()
                         if result.founded_products is None and not result.founded_products.exists():
                             analog = {mm.title: 'Аналог не найден'}
-                        analog = {mm.title: result.founded_products.first().pk}
+                        else:
+                            analog = {mm.title: result.founded_products.first().pk}
                         analogs = raw.get('analogs', default=None)
                         
                         if analogs is not None:
