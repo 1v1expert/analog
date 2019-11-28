@@ -72,13 +72,17 @@ class SearchTable(object):
                 product.is_enabled = True
                 product.raw = raw
                 product.save()
-                
+    
+    def __enter__(self):
+        pass
+        
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.lead_time = time.time() - self.start_time
         message = 'The database data processing was launched, completed in %s seconds' % str(self.lead_time)
         MainLog(user=self.user,
                 message=message
                 ).save()
+        return True
 
 
 class Command(BaseCommand):
