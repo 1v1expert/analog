@@ -18,39 +18,46 @@ class Command(BaseCommand):
     help = 'Automatic search for analogues'
 
     def handle(self, *args, **options):
-        
-        for manufacturer in Manufacturer.objects.all():
+        manufacturers = Manufacturer.objects.all()
+        for manufacturer in manufacturers:
             
             products = Product.objects.filter(manufacturer=manufacturer)
-            need_manufactures = Manufacturer.objects.exclude(pk=manufacturer.pk)
+            # need_manufactures = Manufacturer.objects.exclude(pk=manufacturer.pk)
             
             for product in products[:10]:
                 raw = product.raw
-                for mm in need_manufactures:
+                analogs = raw.get('analogs', None)
+                
+                if analogs is not None:
+                    raw['analogs'].update({})
+                else:
+                    raw.update(
+                        {'analogs': {},
+                         'errors': False,
+                         'description': None
+                         })
+                
+                for mm in manufacturers:
                     result = SearchProducts(product=product, manufacturer_to=mm)
                     try:
                         result.global_search()
                         if result.founded_products is None or not result.founded_products.exists():
-                            analog = {mm.title: 'Аналог не найден'}
+                            analog = {mm.title: None}
                         else:
                             analog = {mm.title: result.founded_products.first().pk}
-                        analogs = raw.get('analogs', None)
                         
-                        if analogs is not None:
-                            raw['analogs'].update(analog)
-                        else:
-                            raw.update(
-                                {'analogs': analog,
-                                'errors': False
-                                 })
+                        raw['analogs'].update(analog)
                         # product.raw = {
                         #     'analogs': {}
                         # }
                     except Exception as e:
-                        product.raw = {
-                            'errors': True,
-                            'description': str(e)
-                        }
+                        raw.update({
+                            'errors_%s' % mm.title: True,
+                            'description': str(e),
+                            'errors': True
+                        })
                     finally:
                         del result
-                        product.save()
+                
+                product.raw = raw
+                product.save()
