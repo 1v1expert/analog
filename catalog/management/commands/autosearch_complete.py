@@ -24,7 +24,7 @@ class Command(BaseCommand):
             products = Product.objects.filter(manufacturer=manufacturer)
             # need_manufactures = Manufacturer.objects.exclude(pk=manufacturer.pk)
             
-            for product in products[:10]:
+            for product in products:
                 raw = product.raw
                 if raw is not None:
                     analogs = raw.get('analogs', None)
