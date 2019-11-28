@@ -26,11 +26,11 @@ class Command(BaseCommand):
             
             for product in products[:10]:
                 raw = product.raw
-                analogs = raw.get('analogs', None)
+                if raw is not None:
+                    analogs = raw.get('analogs', None)
+                else: raw, analogs = {}, {}
                 
-                if analogs is not None:
-                    raw['analogs'].update({})
-                else:
+                if analogs is None:
                     raw.update(
                         {'analogs': {},
                          'errors': False,
@@ -53,7 +53,7 @@ class Command(BaseCommand):
                     except Exception as e:
                         raw.update({
                             'errors_%s' % mm.title: True,
-                            'description': str(e),
+                            'description_%s % mm.title': str(e),
                             'errors': True
                         })
                     finally:
