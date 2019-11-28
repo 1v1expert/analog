@@ -208,6 +208,8 @@ class Product(Base):
     raw = pgfields.JSONField(null=True, blank=True, verbose_name="Голые данные")
     
     is_base = models.BooleanField(verbose_name='Базовый', default=False)
+
+    is_enabled = models.BooleanField(verbose_name='Поисковый', default=False)
     
     def __str__(self):
         return self.title
