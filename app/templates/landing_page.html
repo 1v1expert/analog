@@ -1681,7 +1681,7 @@
                 success: function (data) {
                     if (data.error) {
                         {#alert(data.error);#}
-                        swal("Ошибка!", data.error, "info");
+                        swal("Внимание!", data.error, "info");
                     }
                     else {
                         createCookie("attempt_count", attempt_count + 1, 10);
