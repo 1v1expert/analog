@@ -30,8 +30,8 @@ class Command(BaseCommand):
                     result = SearchProducts(product=product, manufacturer_to=mm)
                     try:
                         result.global_search()
-                        if not result.founded_products.exist():
-                            continue
+                        if result.founded_products is None and not result.founded_products.exists():
+                            analog = {mm.title: 'Аналог не найден'}
                         analog = {mm.title: result.founded_products.first().pk}
                         analogs = raw.get('analogs', default=None)
                         
