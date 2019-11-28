@@ -861,7 +861,7 @@
                                                 <div class="btn-group">
                                                     <button class="btn dropdown-toggle btn-border"
                                                             data-toggle="dropdown"
-                                                            data-id_manufacturer=false id="btn_manufacturer"
+                                                            data-id_manufacturer=false id="btn_manufacturer_article"
                                                             style="min-width: 100px;"> {{ manufacturers.first }}
                                                         <span class="caret"></span></button>
                                                     <ul class="dropdown-menu">
@@ -907,7 +907,7 @@
                                                 <div class="btn-group">
                                                     <button class="btn dropdown-toggle btn-border"
                                                             data-toggle="dropdown"
-                                                            data-id_manufacturer=false id="btn_manufacturer"
+                                                            data-id_manufacturer=false id="btn_manufacturer_file"
                                                             style="min-width: 100px;"> {{ manufacturers.first }}
                                                         <span class="caret"></span></button>
                                                     <ul class="dropdown-menu">
@@ -1760,12 +1760,16 @@
          Select manufacturer
          ==================*/
         var manufactures = $('.manufacturers');
-        $('#btn_manufacturer').attr('data-id_manufacturer', manufactures[0].id)
+        $('#btn_manufacturer_article').attr('data-id_manufacturer', manufactures[0].id)
+            .html(manufactures[0].text + '<span class="caret"></span>');
+        $('#btn_manufacturer_file').attr('data-id_manufacturer', manufactures[0].id)
             .html(manufactures[0].text + '<span class="caret"></span>');
 
         manufactures.click(function (self) {
             console.log(self.target.id, self);
-            $('#btn_manufacturer').html(self.target.text + '<span class="caret"></span>')
+            $('#btn_manufacturer_file').html(self.target.text + '<span class="caret"></span>')
+                .attr('data-id_manufacturer', self.target.id);
+            $('#btn_manufacturer_article').html(self.target.text + '<span class="caret"></span>')
                 .attr('data-id_manufacturer', self.target.id);
             $('#manufacturer_to').val(self.target.id);
         })
