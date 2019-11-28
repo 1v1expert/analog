@@ -82,7 +82,7 @@ class SearchTable(object):
         MainLog(user=self.user,
                 message=message
                 ).save()
-        return True
+        # return True
 
 
 class Command(BaseCommand):
