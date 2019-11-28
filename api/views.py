@@ -16,6 +16,7 @@ from app.decorators import a_decorator_passing_logs
 from app.decorators import check_recaptcha
 from app.forms import FeedBackForm, SubscribeForm
 from catalog.internal.auth_actions import registration
+from catalog.internal.utils import get_product_info
 
 
 @csrf_exempt
@@ -32,18 +33,44 @@ def search_from_form(request) -> HttpResponse:
             # resp = check_product(article, manufacturer_from)
             
             # if resp.get('correctly'):
-            
-            result = SearchProducts(request, form)
-            return result_api_processing(result, request, default=True)
+            article = form.cleaned_data['article']
+            manufacturer_to = form.cleaned_data['manufacturer_to']
+            product = Product.objects.filter(article=article).first()
+            if not product:
+                return JsonResponse(
+                    {'result': [],
+                     'error': 'Артикул %s не найден' % article
+                     }, content_type='application/json')
+            else:
+                if product.raw is not None:
+                    analogs = product.raw.get('analogs', None)
+                    if analogs:
+                        result_pk = analogs.get(manufacturer_to.title)
+                        if result_pk is not None:
+                            result = Product.objects.get(pk=result_pk)
+                            return JsonResponse({
+                                'result': [result.article],
+                                'info': get_product_info(result),
+                                'error': False
+                            }, content_type='application/json')
+                return JsonResponse(
+                    {'result': [],
+                     'error': 'Аналог не найден'
+                     }, content_type='application/json')
+                    
+            # result = SearchProducts(form=form)
+            # return result_api_processing(result, request, default=True)
+        
+        
         # else:
         # MainLog(user=request.user, message=resp['error_system']
         #         ).save()
         # return JsonResponse(resp, content_type='application/json')
         
-        return JsonResponse({'error': 'not valid form'}, content_type='application/json')
+        return JsonResponse({'error': 'Некорректно заполненные данные.'}, content_type='application/json')
     # return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
     
-    return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"},
+    return JsonResponse({'result': [], 'error': "Некорректный запрос поиска"},
                         content_type='application/json')
 
 
