@@ -74,7 +74,7 @@ class SearchTable(object):
                 product.save()
     
     def __enter__(self):
-        pass
+        return self
         
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.lead_time = time.time() - self.start_time
