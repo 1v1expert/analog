@@ -34,7 +34,7 @@ class Command(BaseCommand):
                             analog = {mm.title: 'Аналог не найден'}
                         else:
                             analog = {mm.title: result.founded_products.first().pk}
-                        analogs = raw.get('analogs', default=None)
+                        analogs = raw.get('analogs', None)
                         
                         if analogs is not None:
                             raw['analogs'].update(analog)
