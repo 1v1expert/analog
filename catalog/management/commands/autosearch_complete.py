@@ -22,7 +22,7 @@ class Command(BaseCommand):
         for manufacturer in Manufacturer.objects.all():
             
             products = Product.objects.filter(manufacturer=manufacturer)
-            need_manufactures = Manufacturer.objects.exclude(pk=manufacturer)
+            need_manufactures = Manufacturer.objects.exclude(pk=manufacturer.pk)
             
             for product in products[:10]:
                 raw = product.raw
