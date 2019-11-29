@@ -74,6 +74,21 @@ def search_from_form(request) -> HttpResponse:
                         content_type='application/json')
 
 
+def search_article(request) -> HttpResponse:
+    
+    article = request.GET.get('article', None)
+    
+    if len(article) > 1 and article is not None:
+        return JsonResponse(list(
+            Product.objects
+                .filter(article__istartswith=article)
+                .extra(select={'value': 'article'})
+                .values('value', 'title')[:10]
+        ), safe=False)
+    
+    return JsonResponse({'error': "Некорректный запрос"})
+
+
 def advanced_search(request) -> HttpResponse:
     if request.method == 'POST':
         form = SearchForm(request.POST)

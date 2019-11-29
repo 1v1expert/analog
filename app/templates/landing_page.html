@@ -406,7 +406,11 @@
     @media (min-width: 640px) {
         .input-append .btn-group:last-child > .dropdown-toggle {
             margin-top: 1px;
+            padding: 22px 32px;
         }
+        {#.input-append .btn-group:last-child > .dropdown-toggle {#}
+        {#    #}
+        {# }#}
     }
 
     @media (min-width: 992px) {
@@ -479,9 +483,14 @@
     }
 
     .search {
-    {#border: 1px solid rgb(102, 102, 102);#} border: 2px solid #e0e0e0;
+    {#border: 1px solid rgb(102, 102, 102);#}
+    {#    border: 0px solid #FFDF4F;#}
         border-radius: 5px;
         background-color: #ffffff;
+    }
+    .search:focus {
+        border: 2px solid #FFDF4F!important;
+        border-radius: 5px;
     }
 
     .service-container {
@@ -856,7 +865,7 @@
                                                    value="{{ manufacturers.first.id }}">
                                             {#                                            <input type="hidden" name="manufacturer_from" id="manufacturer_from" value="{{ manufacturers.first.id }}">#}
                                             <div class="input-append" style="    margin-top: 50px;">
-                                                <input class="search" type="text" name="article"
+                                                <input class="search" type="text" name="article" id="article"
                                                        placeholder="Введите номер артикула">
                                                 <div class="btn-group">
                                                     <button class="btn dropdown-toggle btn-border"
@@ -1775,33 +1784,72 @@
         })
     });
 </script>
+<!--=============================jquery ui.css==============================-->
+<link rel="stylesheet" href="{% static 'landing_css/jquery-ui.css' %}">
+<!--=============================jquery ui.js==============================-->
+<script src="{% static 'landing_js/jquery-ui.js' %}"></script>
 
-<script type="text/javascript">
-    function redirect(url) {
-        window.location.href = url;
+<style>
+    .ui-autocomplete-loading {
+        background: white url("{% static 'landing_images/ui-anim_basic_16x16.gif' %}") right center no-repeat;
     }
 
+    .ui-menu-item:active {
+        background: #FFDD40 !important;
+    }
+
+    .ui-menu-item:hover {
+        background: #FFDD40 !important;
+    }
+
+    .ui-menu-item:focus {
+        background: #FFDD40 !important;
+    }
+</style>
+<script type="text/javascript">
     $(function () {
         /*==================
-     Check registration
-     ==================*/
-        {% if confirm_email %}
-            swal('Спасибо за регистрацию, {{ request.user }}. Ваш аккаунт подтверждён');
-            setTimeout(function () {
-                window.location.href = "{% url 'app:landing_home' %}"
-            }, 3000);
+         Jquery autocomplete
+         ==================*/
+    $("#article").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                type: "GET",
+                url: "{% url 'api:search_article' %}",
+                data: {
+                    article: request.term
+                },
+                success: function (data) {
+                    console.log(data);
+                    response(data);
 
-        {% endif %}
-    })
+                }
+            });
+
+        },
+        minLength: 2,
+        select: function( event, ui ) {
+            console.log(event, ui);
+        {#console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );#}
+      }
+    });
+
+
+    /*==================
+    Check registration
+    ==================*/
+    {% if confirm_email %}
+        swal('Спасибо за регистрацию, {{ request.user }}. Ваш аккаунт подтверждён');
+        setTimeout(function () {
+            window.location.href = "{% url 'app:landing_home' %}"
+        }, 3000);
+
+    {% endif %}
+})
+
+function redirect(url) {
+    window.location.href = url;
+}
 </script>
-{#<script  type="text/javascript">#}
-{#    $(function () {#}
-{#        setTimeout(function () {#}
-{#            var rc_anchor_container = $('#rc-anchor-container') #}
-{#            rc_anchor_container.style.backgroundColor = "white";#}
-{#                            }, 3000);#}
-{##}
-{#    });#}
-{#</script>#}
 </body>
 </html>
