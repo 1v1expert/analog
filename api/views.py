@@ -74,6 +74,7 @@ def search_from_form(request) -> HttpResponse:
                         content_type='application/json')
 
 
+@a_decorator_passing_logs
 def search_article(request) -> HttpResponse:
     
     article = request.GET.get('article', None)
@@ -83,7 +84,7 @@ def search_article(request) -> HttpResponse:
             Product.objects
                 .filter(article__istartswith=article)
                 .extra(select={'value': 'article'})
-                .values('value', 'title')[:10]
+                .values('value', 'title', 'manufacturer__title')[:15]
         ), safe=False)
     
     return JsonResponse({'error': "Некорректный запрос"})

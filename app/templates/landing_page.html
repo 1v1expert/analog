@@ -1790,6 +1790,13 @@
 <script src="{% static 'landing_js/jquery-ui.js' %}"></script>
 
 <style>
+    .ui-autocomplete {
+        max-height: 150px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+
     .ui-autocomplete-loading {
         background: white url("{% static 'landing_images/ui-anim_basic_16x16.gif' %}") right center no-repeat;
     }
@@ -1830,24 +1837,28 @@
         minLength: 2,
         select: function( event, ui ) {
             console.log(event, ui);
-        {#console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );#}
-      }
+            {#console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );#}
+        }
+    })
+        .autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+            .append("<div>" + item.value + " (" + item.manufacturer__title + ") " + "<br>" + item.title + "</div>")
+            .appendTo(ul);
+    };
+
+        /*==================
+        Check registration
+        ==================*/
+        {% if confirm_email %}
+            swal('Спасибо за регистрацию, {{ request.user }}. Ваш аккаунт подтверждён');
+            setTimeout(function () {
+                window.location.href = "{% url 'app:landing_home' %}"
+            }, 3000);
+
+        {% endif %}
     });
 
-
-    /*==================
-    Check registration
-    ==================*/
-    {% if confirm_email %}
-        swal('Спасибо за регистрацию, {{ request.user }}. Ваш аккаунт подтверждён');
-        setTimeout(function () {
-            window.location.href = "{% url 'app:landing_home' %}"
-        }, 3000);
-
-    {% endif %}
-})
-
-function redirect(url) {
+    function redirect(url) {
     window.location.href = url;
 }
 </script>
