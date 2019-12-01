@@ -84,7 +84,7 @@ def search_article(request) -> HttpResponse:
             Product.objects
                 .filter(article__istartswith=article)
                 .extra(select={'value': 'article'})
-                .values('value', 'title', 'manufacturer__title')[:15]
+                .values('value', 'title', 'manufacturer__title')[:50]
         ), safe=False)
     
     return JsonResponse({'error': "Некорректный запрос"})
