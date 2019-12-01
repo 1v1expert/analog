@@ -14,6 +14,9 @@ files/*
 *.xls
 *.xlsx
 
+# Django static files
+static/
+
 # Distribution / packaging
 .Python
 _build/
