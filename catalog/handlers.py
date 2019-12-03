@@ -49,17 +49,21 @@ class NewProcessingSearchFile(object):
         content = self.read_file(object_file)
 
         for i, line in enumerate(content):
-            if i >
+            
+            if i > self.READ_LINES:
+                break
+            
             body = list()
     
             body.append(line.get(0))
             body.append(line.get(1))
             
-            product, err = self.get_product(line.get(0))
+            product = self.get_product(line.get(0))
+            
+            if product:
+                pass
         
         
-
-
 class ProcessingSearchFile:
     def __init__(self, file, path, form, request, type='csv'):
         self.path = path
