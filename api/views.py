@@ -20,7 +20,7 @@ from catalog.internal.auth_actions import registration
 from catalog.internal.utils import get_product_info
 
 
-def selection_of_analogues_from_file(request)  -> HttpResponse:
+def selection_of_analogues_from_file(request) -> HttpResponse:
     if request.method == 'POST':
         form = SearchFromFile(request.POST, request.FILES)
         if form.is_valid():

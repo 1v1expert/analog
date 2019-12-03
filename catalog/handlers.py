@@ -9,6 +9,7 @@ from app.models import MainLog
 from catalog.reporters.writers import dump_csv, BookkeepingWriter
 
 import csv
+from collections import OrderedDict
 
 from django.conf import settings
 from django.shortcuts import render
@@ -21,6 +22,8 @@ class NewProcessingSearchFile(object):
     def __init__(self, input_file, user=None):
         # self.file = None
         self.input_file = input_file
+        self.result = None
+        
         if user is not None:
             self.user = user
         else:
@@ -43,10 +46,27 @@ class NewProcessingSearchFile(object):
     def read_file(file):
         if file is not None:
             return XLSDocumentReader(path=file.file).parse_file()
-    
+
+    def _get_data(self, cls_obj):
+        return {
+            "top_header": {
+                'spread': None,
+                'row': [],
+                'name': 'Результат подбора аналогов',
+            },
+            "table_header": OrderedDict([
+                ('seq', '№ п/п'),
+                ('title', 'Исх. артикул'),
+                ('article', 'Количество'),
+                ('additional_article', 'Аналог'),
+                ('series', 'Количество')]),
+            "table_data": self.result,
+        }
+        # data["top_header"]["spread"] = len(data['table_header'])
+
     def process(self):
-        object_file = self.save()
-        content = self.read_file(object_file)
+        object_file = self.save()  ## maybe shoud use functor
+        content = self.read_file(object_file) ## maybe use functor
 
         for i, line in enumerate(content):
             
