@@ -16,27 +16,48 @@ from django.http import JsonResponse
 
 
 class NewProcessingSearchFile(object):
-    def __init__(self, input_file, user):
-        self.file = None
+    READ_LINES = 50
+    
+    def __init__(self, input_file, user=None):
+        # self.file = None
         self.input_file = input_file
-        self.user = user
+        if user is not None:
+            self.user = user
+        else:
+            self.user = None # this must be user
 
-    def save(self, file, user):
-        self.file = DataFile(file=file,
-                             type=choices.TYPES_FILE[1][0],
-                             created_by=user,
-                             updated_by=user)
-        self.file.save()
-        return self.file
-      
-    def read_file(self):
-        if self.file is not None:
-            return XLSDocumentReader(path=self.file.file).parse_file()
-        
-        raise
+    def save(self) -> DataFile:
+        file = DataFile(file=self.input_file,
+                        type=choices.TYPES_FILE[1][0],
+                        created_by=self.user,
+                        updated_by=self.user)
+        file.save()
+        return file
+        # return self.file
+    
+    @staticmethod
+    def get_product(article):
+        return Product.objects.filter(article=article).first()
+    
+    @staticmethod
+    def read_file(file):
+        if file is not None:
+            return XLSDocumentReader(path=file.file).parse_file()
     
     def process(self):
-        self.save()
+        object_file = self.save()
+        content = self.read_file(object_file)
+
+        for i, line in enumerate(content):
+            if i >
+            body = list()
+    
+            body.append(line.get(0))
+            body.append(line.get(1))
+            
+            product, err = self.get_product(line.get(0))
+        
+        
 
 
 class ProcessingSearchFile:
