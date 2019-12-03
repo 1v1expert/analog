@@ -22,10 +22,9 @@ from catalog.internal.utils import get_product_info
 @csrf_exempt
 @a_decorator_passing_logs
 def search_from_form(request) -> HttpResponse:
-    # print(vars(request), request.method, request.method.POST)
+
     if request.method == 'POST':
         form = SearchForm(request.POST)
-        # print( 'POST')
         if form.is_valid():
             # article = form.cleaned_data['article']
             # manufacturer_from = form.cleaned_data['manufacturer_from']
@@ -58,17 +57,7 @@ def search_from_form(request) -> HttpResponse:
                      'error': 'Аналог не найден'
                      }, content_type='application/json')
                     
-            # result = SearchProducts(form=form)
-            # return result_api_processing(result, request, default=True)
-        
-        
-        # else:
-        # MainLog(user=request.user, message=resp['error_system']
-        #         ).save()
-        # return JsonResponse(resp, content_type='application/json')
-        
         return JsonResponse({'error': 'Некорректно заполненные данные.'}, content_type='application/json')
-    # return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
     
     return JsonResponse({'result': [], 'error': "Некорректный запрос поиска"},
                         content_type='application/json')
