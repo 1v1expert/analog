@@ -15,6 +15,30 @@ from django.shortcuts import render
 from django.http import JsonResponse
 
 
+class NewProcessingSearchFile(object):
+    def __init__(self, input_file, user):
+        self.file = None
+        self.input_file = input_file
+        self.user = user
+
+    def save(self, file, user):
+        self.file = DataFile(file=file,
+                             type=choices.TYPES_FILE[1][0],
+                             created_by=user,
+                             updated_by=user)
+        self.file.save()
+        return self.file
+      
+    def read_file(self):
+        if self.file is not None:
+            return XLSDocumentReader(path=self.file.file).parse_file()
+        
+        raise
+    
+    def process(self):
+        self.save()
+
+
 class ProcessingSearchFile:
     def __init__(self, file, path, form, request, type='csv'):
         self.path = path

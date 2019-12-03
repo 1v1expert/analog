@@ -8,16 +8,49 @@ from catalog.utils import SearchProducts
 from catalog.handlers import result_api_processing
 from catalog.internal.utils import get_attributes, ProductInfo
 from catalog.forms import SearchForm, AdvancedSearchForm
-from catalog.models import Product
+from catalog.models import Product, DataFile
+from catalog import choices
 
 
 from app.models import MainLog, FeedBack
 from app.decorators import a_decorator_passing_logs
 from app.decorators import check_recaptcha
-from app.forms import FeedBackForm, SubscribeForm
+from app.forms import FeedBackForm, SubscribeForm, SearchFromFile
 from catalog.internal.auth_actions import registration
 from catalog.internal.utils import get_product_info
 
+
+def selection_of_analogues_from_file(request)  -> HttpResponse:
+    if request.method == 'POST':
+        form = SearchFromFile(request.POST, request.FILES)
+        if form.is_valid():
+            instance = DataFile(file=request.FILES['file'],
+                                type=choices.TYPES_FILE[1][0],
+                                created_by=request.user,
+                                updated_by=request.user)
+            instance.save()
+            file_response = ProcessingSearchFile(request.FILES['file'], instance.file, form, request).file_search()
+            
+            message = u'Скачать результат подбора вы можете по ссылке: \n %s' \
+                      % 'http://analogpro.ru/' + file_response.url
+            try:
+                send_email_with_connection(
+                    'Результат подбора',
+                    message,
+                    [request.user.email])
+            except SMTPDataError as e:
+                print('Error')
+            # response = HttpResponse(file_response, content_type='text/plain')
+            # response['Content-Disposition'] = 'attachment; filename=' + file_response.name
+            # return response
+            return JsonResponse({'OK': True, 'file': file_response.url})
+        else:
+            return JsonResponse({'OK': False, 'error': 'Not valid form'})
+            # return HttpResponse({'error': 'Not valid form'}, content_type='text/plain')
+    
+    else:
+        form = SearchFromFile()
+        return render(request, 'search_from_file.html', {'form': form})
 
 @csrf_exempt
 @a_decorator_passing_logs
@@ -26,12 +59,7 @@ def search_from_form(request) -> HttpResponse:
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
-            # article = form.cleaned_data['article']
-            # manufacturer_from = form.cleaned_data['manufacturer_from']
             
-            # resp = check_product(article, manufacturer_from)
-            
-            # if resp.get('correctly'):
             article = form.cleaned_data['article']
             manufacturer_to = form.cleaned_data['manufacturer_to']
             product = Product.objects.filter(article=article).first()
@@ -57,10 +85,9 @@ def search_from_form(request) -> HttpResponse:
                      'error': 'Аналог не найден'
                      }, content_type='application/json')
                     
-        return JsonResponse({'error': 'Некорректно заполненные данные.'}, content_type='application/json')
+        return JsonResponse({'error': 'Некорректно заполненные данные.'})
     
-    return JsonResponse({'result': [], 'error': "Некорректный запрос поиска"},
-                        content_type='application/json')
+    return JsonResponse({'result': [], 'error': "Некорректный запрос поиска"})
 
 
 @a_decorator_passing_logs
@@ -141,11 +168,11 @@ def check_product_and_get_attributes(request) -> HttpResponse:
         if form.is_valid():
             pi = ProductInfo(form=form)
             try:
-                return JsonResponse({'result': pi.get_attributes(), 'error': False}, content_type='application/json')
+                return JsonResponse({'result': pi.get_attributes(), 'error': False})
             except Product.DoesNotExist:
-                return JsonResponse({'error': 'Не найдено продукта, удовл. критериям'}, content_type='application/json')
+                return JsonResponse({'error': 'Не найдено продукта, удовл. критериям'})
             except Product.MultipleObjectsReturned:
-                return JsonResponse({'error': 'Найдено несколько продуктов, уточн. поиск'}, content_type='application/json')
+                return JsonResponse({'error': 'Найдено несколько продуктов, уточн. поиск'})
             except Exception as e:
                 MainLog.objects.create(user=request.user, raw={'error': e})
                 return JsonResponse({'error': 'Произошла ошибка, обратитесь в тех. поддержку'}, content_type='application/json')
