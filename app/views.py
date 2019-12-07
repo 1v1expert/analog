@@ -191,7 +191,6 @@ def landing_page_view(request) -> HttpResponse:
         'auth_form': auth_form,
         'reg_form': reg_form,
         'subscribe_form': subscribe_form,
-        # 'error': error
     })
 
 
@@ -210,7 +209,6 @@ def landing_confirm_mail_page(request, verification_code, user_id) -> HttpRespon
         'auth_form': auth_form,
         'reg_form': reg_form,
         'confirm_email': True
-        # 'error': error
     }
     if verification_code == check_code and user:
         user.is_active = True
