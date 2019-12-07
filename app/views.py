@@ -104,7 +104,6 @@ def check_in_view(request):
     return render(request, 'check_in.html', {'reg_form': reg_form})
 
 
-# @login_required(redirect_field_name='app:login')
 @login_required(login_url='login/')
 @a_decorator_passing_logs
 def home_view(request) -> HttpResponse:
