@@ -85,7 +85,7 @@ def search_from_file_view(request):
             return JsonResponse({'OK': True, 'file': file_response.url})
         else:
             return JsonResponse({'OK': False, 'error': 'Not valid form'})
-            # return HttpResponse({'error': 'Not valid form'}, content_type='text/plain')
+            
         
     else:
         form = SearchFromFile()
