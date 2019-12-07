@@ -162,7 +162,6 @@ def feedback(request) -> HttpResponse:
                 MainLog.objects.create(user=user, raw={'error': e}, has_errors=True)
                 return HttpResponseBadRequest()
     return HttpResponseBadRequest()
-    # return JsonResponse({'error': 'error'}, content_type='application/json')
 
 
 @a_decorator_passing_logs
