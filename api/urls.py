@@ -14,5 +14,4 @@ urlpatterns = [
     url(r'^register/$', registration_view, name='registration'),
     url(r'^search_article/$', search_article, name='search_article')
     # url(r'^old/email_confirmation/(?P<verification_code>[0-9\w-]+)-(?P<user_id>[0-9]+)/$',
-    #     email_confirmation, name='email_confirmation'),
 ]
