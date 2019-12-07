@@ -119,9 +119,7 @@ def advanced_search(request) -> HttpResponse:
                         content_type='application/json')
 
 
-# if request.method == 'POST':
-# 	advanced_form = AdvancedSearchForm(request.POST, extra=attributes_array)
-# 	if advanced_form.is_valid():
+
 # 		advanced_form.cleaned_data['manufacturer_from'] = product.manufacturer
 # 		advanced_form.cleaned_data['manufacturer_to'] = manufacturer_to
 
