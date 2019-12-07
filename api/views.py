@@ -206,7 +206,6 @@ def login_view(request) -> HttpResponse:
         
         if user.is_active:
             login(request, user)
-            # return redirect('app:landing_home')
             return JsonResponse({'OK': True})
         else:
             return JsonResponse({'OK': False, 'error': 'Учётная запись не подтверждена'})
