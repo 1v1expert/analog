@@ -94,7 +94,6 @@ def advanced_search(request):
 @a_decorator_passing_logs
 def check_in_view(request):
     reg_form = MyRegistrationForm()
-    # reg_form = forms.UserCreationForm()
     if request.method == 'POST':
         suc, resp = registration(request)
         if suc:
