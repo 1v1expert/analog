@@ -26,12 +26,9 @@ import hashlib
 def login_view(request):
     auth_form = MyAuthenticationForm(request)
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username, password = request.POST['username'], request.POST['password']
         user = authenticate(username=username, password=password)
-        # print(user)
-        # response = HttpResponse()
-        # response.set_signed_cookie()
+
         if user is not None:
             if user.is_active:
                 login(request, user)
