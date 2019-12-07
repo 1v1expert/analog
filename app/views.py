@@ -39,7 +39,7 @@ def login_view(request):
                 redirect_cookie = redirect('app:home')
                 redirect_cookie.set_signed_cookie("user2", "demo")
                 return redirect_cookie
-                # return redirect('app:home')
+            
         return render(request, 'login.html', {'auth_form': auth_form, 'error': 'Неверно введён логин или пароль'})
     
     return render(request, 'login.html', {'auth_form': auth_form})
