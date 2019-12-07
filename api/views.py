@@ -204,7 +204,6 @@ def login_view(request) -> HttpResponse:
         except (models.User.DoesNotExist, models.User.MultipleObjectsReturned) as e:
             return HttpResponse('Unauthorized', status=401)
         
-        # user = authenticate(request, username=username, password=password)
         if user.is_active:
             login(request, user)
             # return redirect('app:landing_home')
