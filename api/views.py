@@ -26,12 +26,7 @@ def search_from_form(request) -> HttpResponse:
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
-            # article = form.cleaned_data['article']
-            # manufacturer_from = form.cleaned_data['manufacturer_from']
             
-            # resp = check_product(article, manufacturer_from)
-            
-            # if resp.get('correctly'):
             article = form.cleaned_data['article']
             manufacturer_to = form.cleaned_data['manufacturer_to']
             product = Product.objects.filter(article=article).first()
