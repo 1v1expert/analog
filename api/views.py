@@ -119,15 +119,6 @@ def advanced_search(request) -> HttpResponse:
                         content_type='application/json')
 
 
-
-# 		advanced_form.cleaned_data['manufacturer_from'] = product.manufacturer
-# 		advanced_form.cleaned_data['manufacturer_to'] = manufacturer_to
-
-#
-# return render(request, 'admin/catalog/advanced_search.html',
-#               {'advanced_form': advanced_form, 'product': product, 'manufacturer_to': manufacturer_to})
-
-
 def check_product_and_get_attributes(request) -> HttpResponse:
     if request.method == 'POST':
         form = SearchForm(request.POST)
