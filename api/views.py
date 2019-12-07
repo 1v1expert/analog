@@ -192,7 +192,6 @@ def logout_view(request) -> HttpResponse:
 
 @a_decorator_passing_logs
 def login_view(request) -> HttpResponse:
-    # auth_form = MyAuthenticationForm(request)
     if request.method == 'POST':
 
         username = request.POST['username']
