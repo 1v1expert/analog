@@ -78,15 +78,11 @@ def search_from_file_view(request):
                     message,
                     [request.user.email])
             except SMTPDataError as e:
-                print('Error')
-            # response = HttpResponse(file_response, content_type='text/plain')
-            # response['Content-Disposition'] = 'attachment; filename=' + file_response.name
-            # return response
+                pass
             return JsonResponse({'OK': True, 'file': file_response.url})
         else:
             return JsonResponse({'OK': False, 'error': 'Not valid form'})
             
-        
     else:
         form = SearchFromFile()
         return render(request, 'search_from_file.html', {'form': form})
