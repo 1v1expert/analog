@@ -31,7 +31,6 @@ def a_decorator_passing_logs(func):
                      'HTTP_USER_AGENT': request.META.get('HTTP_USER_AGENT'),
                      'HTTP_CONNECTION': request.META.get('HTTP_CONNECTION')}
                 ).save()
-                # raw=vars(request.META)).save()
         
         return func(request, *args, **kwargs)
     
