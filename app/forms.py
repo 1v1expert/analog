@@ -53,7 +53,6 @@ class SearchFromFile(forms.Form):
 
 
 class AppSearchForm(forms.Form):
-    # forms.CharField()
     article = forms.CharField(label='Артикул', widget=forms.TextInput(attrs={'autofocus': True,
                                                                              'class': 'form-control',
                                                                              'placeholder': "Введите артикул товара"
