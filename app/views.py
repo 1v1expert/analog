@@ -32,7 +32,6 @@ def login_view(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                # HttpResponseRedirect
                 redirect_cookie = redirect('app:home')
                 redirect_cookie.set_signed_cookie("user2", "demo")
                 return redirect_cookie
