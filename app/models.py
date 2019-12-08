@@ -4,10 +4,7 @@ from django.contrib.postgres import fields as pgfields
 from django.utils import timezone
 from django.utils.translation import gettext, gettext_lazy as _
 from django.conf import settings
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 import uuid
-# from django.contrib.admin.models import LogEntry
 
 
 AUTHORIZATION = 1
