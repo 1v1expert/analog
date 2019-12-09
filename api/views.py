@@ -115,8 +115,7 @@ def advanced_search(request) -> HttpResponse:
                 message='Произошла ошибка при расширенном поиске, невалидная форма').save()
         return render(request, 'admin/catalog/search.html', {'error': 'Ошибка формы'})
     MainLog(message='Неверный тип запроса расширенного поиска').save()
-    return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"},
-                        content_type='application/json')
+    return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"})
 
 
 def check_product_and_get_attributes(request) -> HttpResponse:
