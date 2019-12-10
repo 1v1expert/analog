@@ -52,7 +52,7 @@ def search_from_form(request) -> HttpResponse:
                      'error': 'Аналог не найден'
                      }, content_type='application/json')
                     
-        return JsonResponse({'error': 'Некорректно заполненные данные.'}, content_type='application/json')
+        return JsonResponse({'error': 'Некорректно заполненные данные.'})
     
     return JsonResponse({'result': [], 'error': "Некорректный запрос поиска"})
 
