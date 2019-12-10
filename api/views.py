@@ -85,8 +85,9 @@ def advanced_search(request) -> HttpResponse:
                 product = Product.objects.get(article=article, manufacturer=manufacturer_from)
             except Product.DoesNotExist:
                 MainLog(user=request.user,
-                        message='По артикулу: {} и производителю: {} не найдено товара'.format(article,
-                                                                                               manufacturer_from)).save()
+                        message='По артикулу: {} и производителю: {} не найдено товара'.
+                        format(article, manufacturer_from)
+                        ).save()
                 return JsonResponse({'result': [], 'error': "Не найден продукт"}, content_type='application/json')
             except Product.MultipleObjectsReturned:
                 MainLog(user=request.user,
