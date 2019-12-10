@@ -176,7 +176,7 @@ def subscriber(request) -> HttpResponse:
                                         email=form.cleaned_data.get('email', ''),
                                         is_subscriber=True
                                         )
-                return JsonResponse({"OK": True}, content_type='application/json')
+                return JsonResponse({"OK": True})
             except Exception as e:
                 MainLog.objects.create(user=user, raw={'error': e}, has_errors=True)
                 return HttpResponseBadRequest()
