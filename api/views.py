@@ -92,8 +92,7 @@ def advanced_search(request) -> HttpResponse:
                 MainLog(user=request.user,
                         message='По артикулу: {} и производителю: {} найдено несколько товаров'.format(article,
                                                                                                        manufacturer_from)).save()
-                return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"},
-                                    content_type='application/json')
+                return JsonResponse({'result': [], 'error': "Найдено несколько продуктов, уточните поиск"})
             attributes_array = ProductInfo(product=product).get_attributes()
             advanced_form = AdvancedSearchForm(request.POST, extra=attributes_array.get('attributes'))
             if advanced_form.is_valid():
