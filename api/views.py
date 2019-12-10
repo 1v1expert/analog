@@ -47,11 +47,8 @@ def search_from_form(request) -> HttpResponse:
                                 'info': get_product_info(result),
                                 'error': False
                             }, content_type='application/json')
-                return JsonResponse(
-                    {'result': [],
-                     'error': 'Аналог не найден'
-                     }, content_type='application/json')
-                    
+                return JsonResponse({'result': [], 'error': 'Аналог не найден'})
+                
         return JsonResponse({'error': 'Некорректно заполненные данные.'})
     
     return JsonResponse({'result': [], 'error': "Некорректный запрос поиска"})
