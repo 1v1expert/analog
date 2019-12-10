@@ -147,7 +147,7 @@ def feedback(request) -> HttpResponse:
         if form.is_valid():
             
             if not request.recaptcha_is_valid:
-                return JsonResponse({'OK': False, 'error': 'Invalid reCAPTCHA. Please try again.'}, content_type='application/json')
+                return JsonResponse({'OK': False, 'error': 'Invalid reCAPTCHA. Please try again.'})
             
             try:
                 FeedBack.objects.create(user=user,
