@@ -126,7 +126,7 @@ def check_product_and_get_attributes(request) -> HttpResponse:
             try:
                 return JsonResponse({'result': pi.get_attributes(), 'error': False})
             except Product.DoesNotExist:
-                return JsonResponse({'error': 'Не найдено продукта, удовл. критериям'}, content_type='application/json')
+                return JsonResponse({'error': 'Не найдено продукта, удовл. критериям'})
             except Product.MultipleObjectsReturned:
                 return JsonResponse({'error': 'Найдено несколько продуктов, уточн. поиск'}, content_type='application/json')
             except Exception as e:
