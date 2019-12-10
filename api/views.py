@@ -54,8 +54,7 @@ def search_from_form(request) -> HttpResponse:
                     
         return JsonResponse({'error': 'Некорректно заполненные данные.'}, content_type='application/json')
     
-    return JsonResponse({'result': [], 'error': "Некорректный запрос поиска"},
-                        content_type='application/json')
+    return JsonResponse({'result': [], 'error': "Некорректный запрос поиска"})
 
 
 @a_decorator_passing_logs
