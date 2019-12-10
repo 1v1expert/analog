@@ -156,7 +156,7 @@ def feedback(request) -> HttpResponse:
                                         name=form.cleaned_data.get('name', ''),
                                         phone=form.cleaned_data.get('phone', ''),
                                         )
-                return JsonResponse({}, content_type='application/json')
+                return JsonResponse({})
             except Exception as e:
                 MainLog.objects.create(user=user, raw={'error': e}, has_errors=True)
                 return HttpResponseBadRequest()
