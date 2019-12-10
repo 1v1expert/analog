@@ -34,7 +34,7 @@ def search_from_form(request) -> HttpResponse:
                 return JsonResponse(
                     {'result': [],
                      'error': 'Артикул %s не найден' % article
-                     }, content_type='application/json')
+                     })
             else:
                 if product.raw is not None:
                     analogs = product.raw.get('analogs', None)
