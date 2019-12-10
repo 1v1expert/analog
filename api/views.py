@@ -124,7 +124,7 @@ def check_product_and_get_attributes(request) -> HttpResponse:
         if form.is_valid():
             pi = ProductInfo(form=form)
             try:
-                return JsonResponse({'result': pi.get_attributes(), 'error': False}, content_type='application/json')
+                return JsonResponse({'result': pi.get_attributes(), 'error': False})
             except Product.DoesNotExist:
                 return JsonResponse({'error': 'Не найдено продукта, удовл. критериям'}, content_type='application/json')
             except Product.MultipleObjectsReturned:
