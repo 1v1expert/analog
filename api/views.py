@@ -131,7 +131,7 @@ def check_product_and_get_attributes(request) -> HttpResponse:
                 return JsonResponse({'error': 'Найдено несколько продуктов, уточн. поиск'})
             except Exception as e:
                 MainLog.objects.create(user=request.user, raw={'error': e})
-                return JsonResponse({'error': 'Произошла ошибка, обратитесь в тех. поддержку'}, content_type='application/json')
+                return JsonResponse({'error': 'Произошла ошибка, обратитесь в тех. поддержку'})
     
     return HttpResponseBadRequest()
 
