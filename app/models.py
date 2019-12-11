@@ -64,14 +64,3 @@ class Profile(models.Model):
     
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
-    
-# todo: this code maybe need in the future, need rewrite
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Client.objects.create(user=instance)
-#
-#
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.profile.save()
