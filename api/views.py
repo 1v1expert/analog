@@ -1,28 +1,28 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
-from django.core import serializers
+
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login, logout, models
+from django.contrib.auth import login, logout, models
+from django.core.handlers.wsgi import WSGIRequest
 
 from catalog.utils import SearchProducts
 from catalog.handlers import result_api_processing
 from catalog.internal.utils import get_attributes, ProductInfo
 from catalog.forms import SearchForm, AdvancedSearchForm
 from catalog.models import Product
-
+from catalog.internal.auth_actions import registration
+from catalog.internal.utils import get_product_info
 
 from app.models import MainLog, FeedBack
 from app.decorators import a_decorator_passing_logs
 from app.decorators import check_recaptcha
 from app.forms import FeedBackForm, SubscribeForm
-from catalog.internal.auth_actions import registration
-from catalog.internal.utils import get_product_info
 
 
 @csrf_exempt
 @a_decorator_passing_logs
-def search_from_form(request) -> HttpResponse:
-
+def search_from_form(request: WSGIRequest) -> HttpResponse:
+    print(type(request))
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -55,7 +55,7 @@ def search_from_form(request) -> HttpResponse:
 
 
 @a_decorator_passing_logs
-def search_article(request) -> HttpResponse:
+def search_article(request: WSGIRequest) -> HttpResponse:
     
     article = request.GET.get('article', None)
     
@@ -70,7 +70,7 @@ def search_article(request) -> HttpResponse:
     return JsonResponse({'error': "Некорректный запрос"})
 
 
-def advanced_search(request) -> HttpResponse:
+def advanced_search(request: WSGIRequest) -> HttpResponse:
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -114,7 +114,7 @@ def advanced_search(request) -> HttpResponse:
     return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"})
 
 
-def check_product_and_get_attributes(request) -> HttpResponse:
+def check_product_and_get_attributes(request: WSGIRequest) -> HttpResponse:
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -134,7 +134,7 @@ def check_product_and_get_attributes(request) -> HttpResponse:
 
 @a_decorator_passing_logs
 @check_recaptcha
-def feedback(request) -> HttpResponse:
+def feedback(request: WSGIRequest) -> HttpResponse:
     if request.method == 'POST':
         form = FeedBackForm(request.POST)
         user = request.user
@@ -160,7 +160,7 @@ def feedback(request) -> HttpResponse:
 
 
 @a_decorator_passing_logs
-def subscriber(request) -> HttpResponse:
+def subscriber(request: WSGIRequest) -> HttpResponse:
     if request.method == 'POST':
         form = SubscribeForm(request.POST)
         user = request.user
@@ -180,13 +180,13 @@ def subscriber(request) -> HttpResponse:
 
 
 @a_decorator_passing_logs
-def logout_view(request) -> HttpResponse:
+def logout_view(request: WSGIRequest) -> HttpResponse:
     logout(request)
     return redirect('app:landing_home')
 
 
 @a_decorator_passing_logs
-def login_view(request) -> HttpResponse:
+def login_view(request: WSGIRequest) -> HttpResponse:
     if request.method == 'POST':
 
         username = request.POST['username']
@@ -209,7 +209,7 @@ def login_view(request) -> HttpResponse:
 
     
 @a_decorator_passing_logs
-def registration_view(request) -> HttpResponse:
+def registration_view(request: WSGIRequest) -> HttpResponse:
     if request.method == 'POST':
         suc, text = registration(request=request)
         if suc:
