@@ -1,17 +1,15 @@
-from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
-
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout, models
-from django.http import HttpRequest
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse, HttpRequest, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+
 
 from catalog.utils import SearchProducts
 from catalog.handlers import result_api_processing
-from catalog.internal.utils import get_attributes, ProductInfo
 from catalog.forms import SearchForm, AdvancedSearchForm
 from catalog.models import Product
 from catalog.internal.auth_actions import registration
-from catalog.internal.utils import get_product_info
+from catalog.internal.utils import get_product_info, ProductInfo
 
 from app.models import MainLog, FeedBack
 from app.decorators import a_decorator_passing_logs
