@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout, models
-from django.core.handlers.wsgi import WSGIRequest
+from django.http import HttpRequest
 
 from catalog.utils import SearchProducts
 from catalog.handlers import result_api_processing
@@ -21,7 +21,7 @@ from app.forms import FeedBackForm, SubscribeForm
 
 @csrf_exempt
 @a_decorator_passing_logs
-def search_from_form(request: WSGIRequest) -> HttpResponse:
+def search_from_form(request: HttpRequest) -> HttpResponse:
     print(type(request))
     if request.method == 'POST':
         form = SearchForm(request.POST)
@@ -55,7 +55,7 @@ def search_from_form(request: WSGIRequest) -> HttpResponse:
 
 
 @a_decorator_passing_logs
-def search_article(request: WSGIRequest) -> HttpResponse:
+def search_article(request: HttpRequest) -> HttpResponse:
     
     article = request.GET.get('article', None)
     
@@ -70,7 +70,7 @@ def search_article(request: WSGIRequest) -> HttpResponse:
     return JsonResponse({'error': "Некорректный запрос"})
 
 
-def advanced_search(request: WSGIRequest) -> HttpResponse:
+def advanced_search(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -114,7 +114,7 @@ def advanced_search(request: WSGIRequest) -> HttpResponse:
     return JsonResponse({'result': [], 'error': "Произошла ошибка при выполнении запроса"})
 
 
-def check_product_and_get_attributes(request: WSGIRequest) -> HttpResponse:
+def check_product_and_get_attributes(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -134,7 +134,7 @@ def check_product_and_get_attributes(request: WSGIRequest) -> HttpResponse:
 
 @a_decorator_passing_logs
 @check_recaptcha
-def feedback(request: WSGIRequest) -> HttpResponse:
+def feedback(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = FeedBackForm(request.POST)
         user = request.user
@@ -160,7 +160,7 @@ def feedback(request: WSGIRequest) -> HttpResponse:
 
 
 @a_decorator_passing_logs
-def subscriber(request: WSGIRequest) -> HttpResponse:
+def subscriber(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = SubscribeForm(request.POST)
         user = request.user
@@ -180,13 +180,13 @@ def subscriber(request: WSGIRequest) -> HttpResponse:
 
 
 @a_decorator_passing_logs
-def logout_view(request: WSGIRequest) -> HttpResponse:
+def logout_view(request: HttpRequest) -> HttpResponse:
     logout(request)
     return redirect('app:landing_home')
 
 
 @a_decorator_passing_logs
-def login_view(request: WSGIRequest) -> HttpResponse:
+def login_view(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
 
         username = request.POST['username']
@@ -209,7 +209,7 @@ def login_view(request: WSGIRequest) -> HttpResponse:
 
     
 @a_decorator_passing_logs
-def registration_view(request: WSGIRequest) -> HttpResponse:
+def registration_view(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         suc, text = registration(request=request)
         if suc:
