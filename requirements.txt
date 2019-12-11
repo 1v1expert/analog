@@ -83,3 +83,4 @@ wcwidth==0.1.7
 Werkzeug==0.15.6
 wrapt==1.11.2
 XlsxWriter==1.1.8
+lazy-import==0.2.2

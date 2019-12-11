@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from catalog.choices import *
 from catalog.models import *
-from catalog.internal.neural_network import NeuralNetworkOption2
+# from catalog.internal.neural_network import NeuralNetworkOption2
 
 from app.models import MainLog
 
@@ -14,7 +14,7 @@ from django.db import models
 from django.db.models.functions import Lower
 
 import time
-
+import lazy_import
 import re
 # import the logging library
 import logging
@@ -296,7 +296,7 @@ class KOKSDocumentReader(object):
         # self.fix_attr_vals = {}
         # self.unfix_attr_vals = {}
         self.attr_vals = {}
-        
+        NeuralNetworkOption2 = lazy_import.lazy_module("catalog.internal.neural_network.NeuralNetworkOption2")
         self.network = NeuralNetworkOption2(loadmodel=loadnetworkmodel)
         
     # @staticmethod

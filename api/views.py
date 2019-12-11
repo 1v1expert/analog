@@ -20,7 +20,6 @@ from app.forms import FeedBackForm, SubscribeForm
 @csrf_exempt
 @a_decorator_passing_logs
 def search_from_form(request: HttpRequest) -> HttpResponse:
-    print(type(request))
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
