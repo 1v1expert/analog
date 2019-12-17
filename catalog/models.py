@@ -211,6 +211,9 @@ class Product(Base):
 
     is_enabled = models.BooleanField(verbose_name='Поисковый', default=False)
     
+    def get_attributes(self):
+        return '{} {}'.format(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all())
+    
     def __str__(self):
         return self.title
 
