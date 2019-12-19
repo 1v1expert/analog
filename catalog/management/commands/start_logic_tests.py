@@ -6,5 +6,5 @@ class Command(BaseCommand):
     help = 'Automatic category checking'
 
     def handle(self, *args, **options):
-        tests = logic_tests.LogicTest()
+        tests = logic_tests.LogicTest(enable_msg=True)
         tests.start()
