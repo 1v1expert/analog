@@ -6,6 +6,7 @@ from collections import OrderedDict
 from django.contrib.auth import models
 from catalog.reporters import writers
 from datetime import datetime
+import random
 
 
 class AttributeReport(object):
@@ -136,18 +137,11 @@ class AttributeReport(object):
         result = []
         for fail in self.failed_attributes:
             result.append(generators.DefaultGeneratorTemplate()._get_data(
-                name_sheet='{}({})'.format(fail['category_name'][:15], fail['attribute_name'][:15]),
+                name_sheet='{}{}({})'.format(random.randint(1, 100),
+                                             fail['category_name'][:15],
+                                             fail['attribute_name'][:10]),
                 products=fail['query'])
             )
-            # products = Product.objects.filter(category__pk=fail['category_pk'],
-            #                                   unfixed_attrs_vals__attribute__pk=fail['attribute_pk'])
-            # if fail['fixed']:
-            #     products = Product.objects.filter(category__pk=fail['category_pk'],
-            #                                       fixed_attrs_vals__attribute__pk=fail['attribute_pk'])
-            
-            # result.append(generators.DefaultGeneratorTemplate()._get_data(
-            #     name_sheet='{}({})'.format(fail['category_name'][:15], fail['attribute_name'][:15]), products=products))
-        #
         return result
         
     def generate_doc(self):
