@@ -25,7 +25,7 @@ class LogicTest(object):
     
     @staticmethod
     def _get_categories() -> Category.objects:
-        return Category.objects.exclude(parent=None)[:5]
+        return Category.objects.exclude(parent=None)[:10]
     
     @staticmethod
     def _get_category_statistic(category: Category) -> dict:
@@ -33,12 +33,22 @@ class LogicTest(object):
              "count": count,
              "attributes": [
                 "attribute": title,
-                "count": count]
+                "count": count,
+                "per_count": per_count,
+                "type": attribute_type
+                ]
              } """
         # products = Product.objects.filter(category=category)
-        attributes = category.attributes.all()
+        attributes = category.attributes.filter(type='hrd')
         products = Product.objects.filter(category=category)
         products_count = products.count()
+        
+        if not products_count:
+            return {
+                "category": category.title,
+                "count": products_count
+            }
+        
         result = {
             "category": category.title,
             "count": products_count,
@@ -57,4 +67,6 @@ class LogicTest(object):
                                          "count": count,
                                          "per_count": round(count * 100 / products_count)})
         return result
-
+    
+    def export_data(self, data):
+        pass
