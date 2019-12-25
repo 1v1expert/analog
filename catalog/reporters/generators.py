@@ -23,6 +23,7 @@ class DefaultGeneratorTemplate(object):
                                             ('seq', '№ п/п'),
                                             ('title', 'Наименование'),
                                             ('article', 'Артикул'),
+                                            ('manufacturer', 'Производитель'),
                                             ('additional_article', 'Доп. артикул'),
                                             ('series', 'Серия'),
                                             ('category', 'Категория'),
@@ -53,8 +54,8 @@ class DefaultGeneratorTemplate(object):
                 yield OrderedDict([
                                       ('seq', seq),
                                       ('title', product.title),
-                                      ('manufacturer', product.manufacturer.title),
                                       ('article', product.article),
+                                      ('manufacturer', product.manufacturer.title),
                                       ('additional_article', product.additional_article),
                                       ('series', product.series),
                                       ('category', product.category.title),

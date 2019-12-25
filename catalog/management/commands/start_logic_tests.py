@@ -6,6 +6,7 @@ class Command(BaseCommand):
     help = 'Automatic category checking'
 
     def handle(self, *args, **options):
-        tests = logic_tests.LogicTest(enable_msg=True)
+        tests = logic_tests.AttributeReport(enable_msg=True)
+        tests.start()
         tests.generate_doc()
 

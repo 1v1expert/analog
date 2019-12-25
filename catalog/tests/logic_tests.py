@@ -8,33 +8,34 @@ from catalog.reporters import writers
 from datetime import datetime
 
 
-class LogicTest(object):
+class AttributeReport(object):
     """ Category checking """
     def __init__(self, enable_msg=False):
         self.categories = None
         self.start_time = time.time()
         self.enable_msg = enable_msg
         self.failed_attributes = []
+        self.report = []
     
     def start(self) -> list():
-        result = []
-        
+
         for category in self._get_categories():
-            result.append(self._get_category_statistic(category))
+            self.report.append(self._get_category_statistic(category))
         
         if self.enable_msg:
             end_time = time.time() - self.start_time
-            pprint(result)
+            pprint(self.report)
             print("Time left %s" % str(end_time))
         
-        return result
+        return self.report
     
     @staticmethod
     def _get_categories() -> Category.objects:
-        return Category.objects.exclude(parent=None)[:10]
-    
+        return Category.objects.exclude(parent=None)[:5]
+
     def _get_category_statistic(self, category: Category) -> dict:
-        """ {"category": title,
+        """ проверка сколько позиций содержат в себе жесткие атрибуты
+        {"category": title,
              "count": count,
              "attributes": [
                 "attribute": title,
@@ -48,14 +49,14 @@ class LogicTest(object):
         products = Product.objects.filter(category=category)
         products_count = products.count()
         
-        if not products_count:
+        if not products_count:  # if not have products in category
             return {
                 "category": category.title,
                 "count": products_count,
                 "attributes": []
             }
         
-        result = {
+        report = {
             "category": category.title,
             "count": products_count,
             "attributes": []
@@ -64,18 +65,20 @@ class LogicTest(object):
         for attribute in attributes:
             # fixed = True
             if attribute.title in ('вид', 'покрытие', 'ед.изм', 'форма', 'удвоение'):
-                # count = products.filter(fixed_attrs_vals__attribute=attribute).count()
-                query = products.filter(fixed_attrs_vals__attribute=attribute)
-                count = query.count()
-            else: # 'длина', 'толщина', 'высота борта', 'ширина доп.', 'ширина', 'высота борта доп.', 'цена', 'длина', 'основание', 'ширина', 'диаметр', 'резьба'
+                count = products.filter(fixed_attrs_vals__attribute=attribute).count()
+                # query = products.filter(fixed_attrs_vals__attribute=attribute)
+                # count = query.count()
+                query = products.exclude(fixed_attrs_vals__attribute=attribute)
+            else:  # 'длина', 'толщина', 'высота борта', 'ширина доп.', 'ширина', 'высота борта доп.', 'цена', 'длина', 'основание', 'ширина', 'диаметр', 'резьба'
                 # todo: should check on not null
-                #count = products.filter(unfixed_attrs_vals__attribute=attribute).count()
-                query = products.filter(unfixed_attrs_vals__attribute=attribute)
-                count = query.count()
+                count = products.filter(unfixed_attrs_vals__attribute=attribute).count()
+                # query = products.filter(unfixed_attrs_vals__attribute=attribute)
+                # count = query.count()
+                query = products.exclude(unfixed_attrs_vals__attribute=attribute)
                 # fixed = False
                 
             per_count = round(count * 100 / products_count)
-            result['attributes'].append({"name": attribute.title,
+            report['attributes'].append({"name": attribute.title,
                                          "type": attribute.get_type_display(),
                                          "count": count,
                                          "pk": attribute.pk,
@@ -91,7 +94,7 @@ class LogicTest(object):
                     "attribute_name": attribute.title
                 })
                 
-        return result
+        return report
     
     @staticmethod
     def to_xls(raw_data) -> list():
@@ -107,12 +110,12 @@ class LogicTest(object):
                 
                 for attribute in attributes:
                     
-                    count = '----'
+                    count, per_count = '----', '-'
                     for attr in category['attributes']:
                         if attr['pk'] == attribute[0]:
                             count = attr['count']
-                
-                    line.append((attribute[0], count))
+                            per_count = attr['per_count']
+                    line.append((attribute[0], '{}/{}%'.format(count, per_count)))
                 
                 yield OrderedDict(line)
                 # resp.append(OrderedDict(line))
@@ -157,6 +160,9 @@ class LogicTest(object):
     def generate_doc(self):
         user = models.User.objects.get(username='tech')
         
-        with writers.BookkeepingWriter('Статистика по подклассам {}'.format(datetime.now().date()), user) as writer:
-            to_dump = self.to_xls(self.start()) + self.generate_fail_products()
-            writer.dump(to_dump)
+        if self.report:
+            with writers.BookkeepingWriter(
+                    'Статистика по подклассам {}'.format(datetime.now().date()), user
+            ) as writer:
+                to_dump = self.to_xls(self.report) + self.generate_fail_products()
+                writer.dump(to_dump)
