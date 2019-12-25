@@ -74,13 +74,14 @@ class LogicTest(object):
                 count = query.count()
                 # fixed = False
                 
+            per_count = round(count * 100 / products_count)
             result['attributes'].append({"name": attribute.title,
                                          "type": attribute.get_type_display(),
                                          "count": count,
                                          "pk": attribute.pk,
-                                         "per_count": round(count * 100 / products_count)})
+                                         "per_count": per_count})
             
-            if count < 100:
+            if per_count < 100:
                 self.failed_attributes.append({
                     # "category_pk": category.pk,
                     # "attribute_pk": attribute.pk,
