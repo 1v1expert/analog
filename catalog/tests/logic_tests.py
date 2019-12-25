@@ -62,13 +62,17 @@ class LogicTest(object):
         }
 
         for attribute in attributes:
-            fixed = True
+            # fixed = True
             if attribute.title in ('вид', 'покрытие', 'ед.изм', 'форма', 'удвоение'):
-                count = products.filter(fixed_attrs_vals__attribute=attribute).count()
+                # count = products.filter(fixed_attrs_vals__attribute=attribute).count()
+                query = products.filter(fixed_attrs_vals__attribute=attribute)
+                count = query.count()
             else: # 'длина', 'толщина', 'высота борта', 'ширина доп.', 'ширина', 'высота борта доп.', 'цена', 'длина', 'основание', 'ширина', 'диаметр', 'резьба'
                 # todo: should check on not null
-                count = products.filter(unfixed_attrs_vals__attribute=attribute).count()
-                fixed = False
+                #count = products.filter(unfixed_attrs_vals__attribute=attribute).count()
+                query = products.filter(unfixed_attrs_vals__attribute=attribute)
+                count = query.count()
+                # fixed = False
                 
             result['attributes'].append({"name": attribute.title,
                                          "type": attribute.get_type_display(),
@@ -78,9 +82,12 @@ class LogicTest(object):
             
             if count < 100:
                 self.failed_attributes.append({
-                    "category_pk": category.pk,
-                    "attribute_pk": attribute.pk,
-                    "fixed": fixed
+                    # "category_pk": category.pk,
+                    # "attribute_pk": attribute.pk,
+                    # "fixed": fixed,
+                    "query": query,
+                    # "category_name": category.title,
+                    # "attribute_name": attribute.title
                 })
                 
         return result
@@ -137,7 +144,8 @@ class LogicTest(object):
                 products = Product.objects.filter(category__pk=fail['category_pk'],
                                                   fixed_attrs_vals__attribute__pk=fail['attribute_pk'])
                 
-            result.append(generators.DefaultGeneratorTemplate()._get_data(name_sheet='ss', products=products))
+            result.append(generators.DefaultGeneratorTemplate()._get_data(
+                name_sheet='{}({})'.format(fail['category_name'][:15], fail['attribute_name'][:15]), products=products))
             
         return result
         
