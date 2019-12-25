@@ -86,8 +86,8 @@ class LogicTest(object):
                     # "attribute_pk": attribute.pk,
                     # "fixed": fixed,
                     "query": query,
-                    # "category_name": category.title,
-                    # "attribute_name": attribute.title
+                    "category_name": category.title,
+                    "attribute_name": attribute.title
                 })
                 
         return result
@@ -138,15 +138,19 @@ class LogicTest(object):
     def generate_fail_products(self):
         result = []
         for fail in self.failed_attributes:
-            products = Product.objects.filter(category__pk=fail['category_pk'],
-                                              unfixed_attrs_vals__attribute__pk=fail['attribute_pk'])
-            if fail['fixed']:
-                products = Product.objects.filter(category__pk=fail['category_pk'],
-                                                  fixed_attrs_vals__attribute__pk=fail['attribute_pk'])
-                
             result.append(generators.DefaultGeneratorTemplate()._get_data(
-                name_sheet='{}({})'.format(fail['category_name'][:15], fail['attribute_name'][:15]), products=products))
+                name_sheet='{}({})'.format(fail['category_name'][:15], fail['attribute_name'][:15]),
+                products=fail['query'])
+            )
+            # products = Product.objects.filter(category__pk=fail['category_pk'],
+            #                                   unfixed_attrs_vals__attribute__pk=fail['attribute_pk'])
+            # if fail['fixed']:
+            #     products = Product.objects.filter(category__pk=fail['category_pk'],
+            #                                       fixed_attrs_vals__attribute__pk=fail['attribute_pk'])
             
+            # result.append(generators.DefaultGeneratorTemplate()._get_data(
+            #     name_sheet='{}({})'.format(fail['category_name'][:15], fail['attribute_name'][:15]), products=products))
+        #
         return result
         
     def generate_doc(self):
