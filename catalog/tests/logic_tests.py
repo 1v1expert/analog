@@ -63,19 +63,14 @@ class AttributeReport(object):
         }
 
         for attribute in attributes:
-            # fixed = True
             if attribute.title in ('вид', 'покрытие', 'ед.изм', 'форма', 'удвоение'):
                 count = products.filter(fixed_attrs_vals__attribute=attribute).count()
-                # query = products.filter(fixed_attrs_vals__attribute=attribute)
-                # count = query.count()
                 query = products.exclude(fixed_attrs_vals__attribute=attribute)
             else:  # 'длина', 'толщина', 'высота борта', 'ширина доп.', 'ширина', 'высота борта доп.', 'цена', 'длина', 'основание', 'ширина', 'диаметр', 'резьба'
                 # todo: should check on not null
                 count = products.filter(unfixed_attrs_vals__attribute=attribute).count()
-                # query = products.filter(unfixed_attrs_vals__attribute=attribute)
-                # count = query.count()
                 query = products.exclude(unfixed_attrs_vals__attribute=attribute)
-                # fixed = False
+
                 
             per_count = round(count * 100 / products_count)
             report['attributes'].append({"name": attribute.title,
@@ -118,7 +113,6 @@ class AttributeReport(object):
                     line.append((attribute[0], '{}/{}%'.format(count, per_count)))
                 
                 yield OrderedDict(line)
-                # resp.append(OrderedDict(line))
 
         list1 = {
             "top_header": {
