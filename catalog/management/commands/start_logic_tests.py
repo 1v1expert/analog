@@ -7,4 +7,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         tests = logic_tests.LogicTest(enable_msg=True)
-        tests.start()
+        tests.generate_doc()
+
