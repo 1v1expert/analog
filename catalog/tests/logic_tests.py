@@ -31,7 +31,7 @@ class AttributeReport(object):
     
     @staticmethod
     def _get_categories() -> Category.objects:
-        return Category.objects.exclude(parent=None)[:5]
+        return Category.objects.exclude(parent=None)
 
     def _get_category_statistic(self, category: Category) -> dict:
         """ проверка сколько позиций содержат в себе жесткие атрибуты
@@ -71,7 +71,6 @@ class AttributeReport(object):
                 count = products.filter(unfixed_attrs_vals__attribute=attribute).count()
                 query = products.exclude(unfixed_attrs_vals__attribute=attribute)
 
-                
             per_count = round(count * 100 / products_count)
             report['attributes'].append({"name": attribute.title,
                                          "type": attribute.get_type_display(),
