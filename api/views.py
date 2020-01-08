@@ -26,7 +26,8 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
             
             article = form.cleaned_data['article']
             manufacturer_to = form.cleaned_data['manufacturer_to']
-            product = Product.objects.filter(article=article).first()
+            product = Product.objects.filter(article=article,
+                                             is_enabled=True).first()
             if not product:
                 return JsonResponse(
                     {'result': [],
@@ -59,12 +60,12 @@ def search_article(request: HttpRequest) -> HttpResponse:
     if len(article) > 1 and article is not None:
         return JsonResponse(list(
             Product.objects
-                .filter(article__istartswith=article)
+                .filter(article__istartswith=article, is_enabled=True)
                 .extra(select={'value': 'article'})
                 .values('value', 'title', 'manufacturer__title')[:50]
         ), safe=False)
     
-    return JsonResponse({'error': "Некорректный запрос"})
+    return JsonResponse({'error': "Not found"})
 
 
 def advanced_search(request: HttpRequest) -> HttpResponse:
