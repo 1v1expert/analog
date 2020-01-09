@@ -1737,6 +1737,11 @@
                                     text: "Показать информацию",
                                     value: "select",
                                     closeModal: false
+                                },
+                                error: {
+                                    text: "Сообщить об ошибке",
+                                    value: "report_an_error",
+                                    className: "report_an_error_class",
                                 }
                                 {#defeat: true,#}
                             }
@@ -1747,6 +1752,18 @@
                                     $('#table-info').show('slow');
                                     swal.stopLoading();
                                     $('.swal-button--catch').css('display', 'none');
+                                    break;
+                                case "report_an_error":
+                                    swal.stopLoading();
+                                    swal("Спасибо", "Вы можете оставить свою почту и мы вам сообщим, " +
+                                        "как только исправим неточность", {
+                                        content: {
+                                            element: "input",
+                                            attributes: {
+                                                placeholder: "Введите ваш email",
+                                                type: "email"
+                                            }
+                                        }});
                                     break;
 
                                 default:
@@ -1812,6 +1829,17 @@
 
     .ui-menu-item:focus {
         background: #FFDD40 !important;
+    }
+</style>
+<style>
+    .swal-modal {
+        width: 580px;
+    }
+    .report_an_error_class {
+        background-color: #E03A3E;
+    }
+    .report_an_error_class:hover {
+        background-color: #880C00!important;
     }
 </style>
 <script type="text/javascript">
