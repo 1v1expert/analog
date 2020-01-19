@@ -1741,7 +1741,7 @@
                                 error: {
                                     text: "Сообщить об ошибке",
                                     value: "report_an_error",
-                                    className: "report_an_error_class",
+                                    className: "report_an_error_class"
                                 }
                                 {#defeat: true,#}
                             }
@@ -1752,6 +1752,7 @@
                                     $('#table-info').show('slow');
                                     swal.stopLoading();
                                     $('.swal-button--catch').css('display', 'none');
+                                    $('.report_an_error_class').css('display', 'block');
                                     break;
                                 case "report_an_error":
                                     swal.stopLoading();
@@ -1836,10 +1837,11 @@
         width: 580px;
     }
     .report_an_error_class {
-        background-color: #E03A3E;
+        background-color: #fddc3f;
+        display: none;
     }
     .report_an_error_class:hover {
-        background-color: #880C00!important;
+        background-color: #E0C239!important;
     }
 </style>
 <script type="text/javascript">
