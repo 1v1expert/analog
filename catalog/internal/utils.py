@@ -143,6 +143,7 @@ def get_product_info(analog, original=None):
         for original_attr in original_info:
             if original_attr.attribute.title == analog_name:
                 orig_attr = original_attr
+                break
         
         analog_info = {'name': analog_name}
         
@@ -165,5 +166,5 @@ def get_product_info(analog, original=None):
                  "original":
                      {"name": "производитель", "value": original.manufacturer.title}
                  })
-    print(info)
+    # print(info)
     return info

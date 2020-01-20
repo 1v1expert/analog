@@ -9,4 +9,4 @@ class Command(BaseCommand):
         tests = logic_tests.AttributeReport(enable_msg=True)
         tests.start()
         tests.generate_doc()
-
+        tests.turn_off_positions()

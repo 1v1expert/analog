@@ -20,8 +20,10 @@ class AttributeReport(object):
     
     def start(self) -> list():
 
-        for category in self._get_categories():
+        for i, category in enumerate(self._get_categories()):
             self.report.append(self._get_category_statistic(category))
+            if self.enable_msg:
+                print('{}. {}    ---> COMPLETED'.format(i, category.title))
         
         if self.enable_msg:
             end_time = time.time() - self.start_time
@@ -137,7 +139,7 @@ class AttributeReport(object):
         result = []
         for fail in self.failed_attributes:
             result.append(generators.DefaultGeneratorTemplate()._get_data(
-                name_sheet='{}{}({})'.format(random.randint(1, 100),
+                name_sheet='{}{}({})'.format(round(random.random() * 10000 % 100),
                                              fail['category_name'][:15],
                                              fail['attribute_name'][:10]),
                 products=fail['query'])
@@ -153,3 +155,8 @@ class AttributeReport(object):
             ) as writer:
                 to_dump = self.to_xls(self.report) + self.generate_fail_products()
                 writer.dump(to_dump)
+                
+    def turn_off_positions(self):
+        for fail in self.failed_attributes:
+            fail['query'].update(is_enabled=False)
+
