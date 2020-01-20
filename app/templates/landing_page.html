@@ -1755,10 +1755,36 @@
                                     $('#table-info').show('slow');
                                     swal.stopLoading();
                                     $('.swal-button--catch').css('display', 'none');
-                                    $('.report_an_error_class').css('display', 'block');
+                                    $('.report_an_error_class').css('display', 'block')
+                                        .click(function () {
+                                            {#swal.stopLoading();#}
+                                            {#console.log('click enabled!, swal!!')#}
+                                            swal("Спасибо", "Вы можете оставить свою почту и мы вам сообщим, " +
+                                                "как только исправим неточность", {
+                                                content: {
+                                                    element: "input",
+                                                    attributes: {
+                                                        placeholder: "Введите ваш email",
+                                                        type: "email",
+                                                        id: "email_for_report_an_error",
+                                                    }
+                                                }
+                                            }).then(function () {
+                                                $.ajax({
+                                                    type: "POST",
+                                                    url: "{% url 'api:report_an_error' %}",
+                                                    {#async: false,#}
+                                                    data: JSON.stringify(
+                                                        {'report': 'an_error',
+                                                        'result_pk': data['result_pk'],
+                                                        'original_pk': data['original_pk'],
+                                                        'email': $('#email_for_report_an_error').val()})
+                                                })
+                                            });
+                                        });
                                     break;
                                 case "report_an_error":
-                                    swal.stopLoading();
+                                {#swal.stopLoading();#}
                                     swal("Спасибо", "Вы можете оставить свою почту и мы вам сообщим, " +
                                         "как только исправим неточность", {
                                         content: {
@@ -1767,7 +1793,15 @@
                                                 placeholder: "Введите ваш email",
                                                 type: "email"
                                             }
-                                        }});
+                                        }
+                                    }).then(function () {
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "{% url 'api:report_an_error' %}",
+                                            {#async: false,#}
+                                            data: data
+                                        })
+                                    });
                                     break;
 
                                 default:
@@ -1786,6 +1820,7 @@
                 }
             })
         });
+
 
         /*==================
          Select manufacturer

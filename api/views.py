@@ -16,6 +16,8 @@ from app.decorators import a_decorator_passing_logs
 from app.decorators import check_recaptcha
 from app.forms import FeedBackForm, SubscribeForm
 
+import json
+
 
 @csrf_exempt
 @a_decorator_passing_logs
@@ -43,6 +45,8 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
                             return JsonResponse({
                                 'result': [result.article],
                                 'info': get_product_info(analog=result, original=product),
+                                'result_pk': result.pk,
+                                'original_pk': product.pk,
                                 'error': False
                             })
                 return JsonResponse({'result': [], 'error': 'Аналог не найден'})
@@ -215,4 +219,16 @@ def registration_view(request: HttpRequest) -> HttpResponse:
         
         return JsonResponse({'OK': False, 'error': text})
     
+    return HttpResponseBadRequest()
+
+
+@csrf_exempt
+def report_an_error(request: HttpRequest) -> HttpResponse:
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        MainLog.objects.create(raw=body,
+                               message='report_an_error')
+        # print(body)
+        return JsonResponse({'OK': True})
     return HttpResponseBadRequest()
