@@ -139,9 +139,11 @@ class AttributeReport(object):
         result = []
         for fail in self.failed_attributes:
             result.append(generators.DefaultGeneratorTemplate()._get_data(
-                name_sheet='{}{}({})'.format(round(random.random() * 10000 % 100),
-                                             fail['category_name'][:15],
-                                             fail['attribute_name'][:10]),
+                name_sheet='{}{}({}){}'.format(
+                    fail['category_name'][:14],
+                    round(random.random() * 10000 % 100),
+                    fail['attribute_name'][:9],
+                    round(random.random() * 10000 % 100)),
                 products=fail['query'])
             )
         return result
