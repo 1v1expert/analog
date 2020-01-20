@@ -229,6 +229,6 @@ def report_an_error(request: HttpRequest) -> HttpResponse:
         body = json.loads(body_unicode)
         MainLog.objects.create(raw=body,
                                message='report_an_error')
-        # print(body)
+
         return JsonResponse({'OK': True})
     return HttpResponseBadRequest()
