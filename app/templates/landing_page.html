@@ -1714,14 +1714,17 @@
                             table.appendChild(thead);
                             data.forEach(function (el) {
                                 var tr = document.createElement("tr");
-                                for (var o in el) {
-                                    var td = document.createElement("td");
-                                    td.appendChild(document.createTextNode(o));
-                                    tr.appendChild(td);
-                                    var td = document.createElement("td");
-                                    td.appendChild(document.createTextNode(el[o]));
-                                    tr.appendChild(td);
-                                }
+                                {#for (var o in el) {#}
+                                    var td1 = document.createElement("td");
+                                    td1.appendChild(document.createTextNode(el["original"]["name"]));
+                                    tr.appendChild(td1);
+                                    var td2 = document.createElement("td");
+                                    td2.appendChild(document.createTextNode(el["original"]["value"]));
+                                    tr.appendChild(td2);
+                                    var td3 = document.createElement("td");
+                                    td3.appendChild(document.createTextNode(el["analog"]["value"]));
+                                    tr.appendChild(td3);
+                                {# }#}
                                 tbody.appendChild(tr);
                             });
                             table.appendChild(tbody);

@@ -108,26 +108,62 @@ def get_attributes(product, api=True):
     pass
 
 
-def get_product_info(product):
-    info = []
-    info.append({"наименование": product.title})
+def get_product_info(analog, original=None):
+    # info = []
+    info = [{"analog":
+                 {"name": "наименование", "value": analog.title},
+             "original":
+                 {"name": "наименование", "value": original.title}
+             }]
     
-    fix_attributes = product.fixed_attrs_vals \
-        .all() \
-        .exclude(attribute__title='ед.изм') \
-        .select_related('value', 'attribute')  # category.attributes.all()
-    unfix_attributes = product.unfixed_attrs_vals \
-        .all() \
-        .exclude(attribute__title='цена') \
-        .select_related('attribute')  # category.attributes.all()
+    # fix_attributes = product.fixed_attrs_vals \
+    #     .all() \
+    #     .exclude(attribute__title='') \
+    #     .select_related('value', 'attribute')  # category.attributes.all()
+    # unfix_attributes = product.unfixed_attrs_vals \
+    #     .all() \
+    #     .exclude(attribute__title='') \
+    #     .select_related('attribute')  # category.attributes.all()
     
     # additional_info = [{attr.attribute.title: attr.value} for attr in ]
-    for attr in unfix_attributes:
-        info.append({attr.attribute.title: attr.value})
+    # for attr in unfix_attributes:
+    #     info.append({attr.attribute.title: attr.value})
+    # print(unfix_attributes.values('value', 'attribute__title'))
+    # for attr in fix_attributes:
+    #     info.append({attr.attribute.title: attr.value.title})
+    original_info = original.get_info()
     
-    for attr in fix_attributes:
-        info.append({attr.attribute.title: attr.value.title})
-    
-    info.append({"производитель": product.manufacturer.title})
-    
+    for attr in analog.get_info():
+        analog_name = attr.attribute.title
+        orig_attr = None
+        
+        if analog_name in ('ед.изм', 'цена'):
+            continue
+        
+        for original_attr in original_info:
+            if original_attr.attribute.title == analog_name:
+                orig_attr = original_attr
+        
+        analog_info = {'name': analog_name}
+        
+        if attr.__class__.__name__ == 'FixedAttributeValue':
+            analog_value = attr.value.title
+            original_value = orig_attr.value.title if orig_attr else ""
+        else:
+            analog_value = attr.value
+            original_value = orig_attr.value if orig_attr else ""
+
+        analog_info['value'] = analog_value
+        
+        info.append({"analog": analog_info,
+                     "original":
+                         {"name": analog_info["name"], "value": original_value}
+                     })
+
+    info.append({"analog":
+                     {"name": "производитель", "value": analog.manufacturer.title},
+                 "original":
+                     {"name": "производитель", "value": original.manufacturer.title}
+                 })
+    print(info)
     return info

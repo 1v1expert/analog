@@ -42,7 +42,7 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
                             result = Product.objects.get(pk=result_pk)
                             return JsonResponse({
                                 'result': [result.article],
-                                'info': get_product_info(result),
+                                'info': get_product_info(analog=result, original=product),
                                 'error': False
                             })
                 return JsonResponse({'result': [], 'error': 'Аналог не найден'})

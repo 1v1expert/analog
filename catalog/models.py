@@ -3,12 +3,14 @@
 """
 
 from django.db import models
+from django.db.models import Q
 # import uuid
 from django.contrib.auth.models import User
 from catalog.choices import TYPES, UNITS, TYPES_FILE
 
 from django.contrib.postgres import fields as pgfields
 
+from itertools import chain
 import mptt
 from django.utils import timezone
 
@@ -213,6 +215,10 @@ class Product(Base):
     
     def get_attributes(self):
         return '{} {}'.format(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all())
+    
+    def get_info(self):
+        # return Q(self.fixed_attrs_vals.all()) | Q(self.unfixed_attrs_vals.all())
+        return chain(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all())
     
     def __str__(self):
         return self.title
