@@ -54,8 +54,8 @@ TYPES_SEARCH = (
     ('closest_max', 'Ближайшее максимальное'))
 
 TYPES_FILE = (
-	('import', 'Импорт базы'),
-	('search', 'Поиск'),
+    ('import', 'Импорт базы'),
+    ('search', 'Поиск'),
     ('result_search', 'Результат поиска'),
     ('export', 'Экспорт данных')
 )
