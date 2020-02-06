@@ -61,10 +61,7 @@ class NeuralNetworkOption2(object):
         pass
     else:
         ssl._create_default_https_context = _create_unverified_https_context
-    """
-    https://habr.com/ru/post/350900/
-    """
-    
+
     def __init__(self, percent=100, loadmodel=False):
         if percent > 100 or percent < 0:
             raise Exception('Error percent')
@@ -166,8 +163,7 @@ class NeuralNetworkOption2(object):
 
 class NeuralNetworkOption1(object):
     """
-    http://zabaykin.ru/?p=558
-    Simple neural network
+    Neural Network
     precision ~ 62% without removing stop words
     """
     
@@ -208,4 +204,3 @@ class NeuralNetworkOption1(object):
         not_correct = 100 - correct
         
         print('Result: correct is {}, not correct {}'.format(correct, not_correct))
-# print(truth, untruth)
