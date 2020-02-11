@@ -38,3 +38,4 @@ class MailGun(object):
                                    'html': html.read()
                                    }
                              )
+# https://email.uplers.com/blog/step-step-guide-create-html-email/
