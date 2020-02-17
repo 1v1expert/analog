@@ -171,6 +171,7 @@ class NeuralNetworkOption1(object):
         
         # clf = SGDClassifier or RandomForestClassifier
         clf = SGDClassifier
+        # https://moluch.ru/conf/tech/archive/166/10840/
         
         self.text_clf = Pipeline([
             ('tfidf', TfidfVectorizer()),

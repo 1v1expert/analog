@@ -29,10 +29,10 @@ class MailGun(object):
                              )
     
     def send_html_invite(self, to=('info@analogpro.ru', ), html=''):
-        html = open(os.path.join(self.PROJECT_ROOT, 'templates/invitation.html'))
+        html = open(os.path.join(self.PROJECT_ROOT, 'templates/index.html'))
         return requests.post(self._url,
                              auth=self._auth,
-                             data={"from": "Продавец слёз <sazonov@analogpro.ru>",
+                             data={"from": "Vladislav Sazonov <sazonov@analogpro.ru>",
                                    "to": to,
                                    'subject': 'Подбор кабельных лотков - АналогPRO',
                                    'html': html.read()
