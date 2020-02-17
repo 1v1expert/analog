@@ -17,6 +17,7 @@ files/*
 
 # Django static files
 static/
+!app/static/
 
 # Distribution / packaging
 .Python
