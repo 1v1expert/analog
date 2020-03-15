@@ -28,9 +28,12 @@ class SearchTable(object):
             self.products = Product.objects.filter(is_enabled=False)
     
     def build(self):
-        for manufacturer in self.manufacturers:
-        
+        print('{} products'.format(self.products.count()))
+        for i, manufacturer in enumerate(self.manufacturers):
+            print('{}/{} from {}'.format(i, self.manufacturers.count(), manufacturer.title))
+            
             products = self.products.filter(manufacturer=manufacturer)
+            print('{} products from {}'.format(products.count(), manufacturer.title))
             # need_manufactures = Manufacturer.objects.exclude(pk=manufacturer.pk)
         
             for product in products:
@@ -89,5 +92,5 @@ class Command(BaseCommand):
     help = 'Automatic search for analogues'
 
     def handle(self, *args, **options):
-        with SearchTable() as st:
+        with SearchTable(full=True) as st:
             st.build()
