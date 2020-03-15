@@ -6,7 +6,9 @@ from django.db import models
 from django.db.models import Q
 # import uuid
 from django.contrib.auth.models import User
+
 from catalog.choices import TYPES, UNITS, TYPES_FILE
+from catalog.managers import CoreModelManager
 
 from django.contrib.postgres import fields as pgfields
 
@@ -29,6 +31,15 @@ class Base(models.Model):
     # rev = models.CharField("Ревизия", default='1-{0}'.format(uuid.uuid4()), max_length=38, editable=False)
     # json-delta пакет для работы с разностью в json; json_patch - функция пакета для применения изменений.
 
+    objects = CoreModelManager()
+
+    def delete(self, *args, **kwargs):
+        # Achtung! not deleting - hiding!
+        models.signals.pre_delete.send(sender=self.__class__, instance=self)
+        self.deleted = True
+        self.save(update_fields=('deleted',))
+        models.signals.post_delete.send(sender=self.__class__, instance=self)
+        
     class Meta:
         abstract = True
         verbose_name = "Базовая модель "
