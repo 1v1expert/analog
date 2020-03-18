@@ -223,6 +223,8 @@ class Product(Base):
     is_base = models.BooleanField(verbose_name='Базовый', default=False)
 
     is_enabled = models.BooleanField(verbose_name='Поисковый', default=False)
+
+    priority = models.PositiveSmallIntegerField(verbose_name='Приоритет', default=0)
     
     def get_attributes(self):
         return '{} {}'.format(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all())
