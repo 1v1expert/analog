@@ -161,9 +161,12 @@ class SearchProducts(object):
         if self.form is not None:
             self.manufacturer_from = self.form.cleaned_data.get('manufacturer_from')
             if self.manufacturer_from:
-                self.product = Product.objects.filter(article=self.article, manufacturer=self.manufacturer_from).first()
+                self.product = Product.objects\
+                    .filter(article=self.article, manufacturer=self.manufacturer_from)\
+                    .select_related('manufacturer', 'category').first()
         else:
-            self.product = Product.objects.filter(article=self.article).first()
+            self.product = Product.objects.filter(article=self.article) \
+                .select_related('manufacturer', 'category').first()
         
         if not self.product:
             self.error = True
