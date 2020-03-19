@@ -103,7 +103,11 @@ class AdditionalGeneratorTemplate(object):
                 'row': [],
                 'name': str(cls_obj._meta.verbose_name),
             },
-            "table_header": OrderedDict([(field.name, field.verbose_name) for field in cls_obj._meta.local_fields]),
+            "table_header": OrderedDict(
+                [
+                    (field.name, field.verbose_name) for field in cls_obj._meta.local_fields
+                ]
+            ),
             "table_data": self.values(cls_obj, **self.kwargs),
         }
         data["top_header"]["spread"] = len(data['table_header'])

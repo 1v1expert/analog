@@ -74,6 +74,7 @@ class SearchTable(object):
                 
                 product.is_enabled = True
                 product.raw = raw
+                product.is_updated = True
                 product.save()
     
     def __enter__(self):

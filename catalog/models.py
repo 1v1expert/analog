@@ -212,6 +212,7 @@ class Product(Base):
     
     is_duplicate = models.BooleanField(verbose_name='Дубликат', default=False)
     is_tried = models.BooleanField(verbose_name='Проверенный', default=False)
+    is_updated = models.BooleanField(verbose_name='Обновлённый', default=False)
     
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name="Производитель", related_name='products')
     
@@ -282,4 +283,3 @@ class DataFile(Base):
     
     def save(self, *args, **kwargs):
         super(DataFile, self).save(*args, **kwargs)
-        print(vars(self.file), self.file)#self.data.url)
