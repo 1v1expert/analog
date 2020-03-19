@@ -186,8 +186,9 @@ class SearchProducts(object):
             return self
         
         self.founded_products = Product.objects.filter(manufacturer=self.manufacturer_to,
-                                                       category=self.product.category).prefetch_related(
-            'fixed_attrs_vals', 'unfixed_attrs_vals')
+                                                       category=self.product.category)
+        #prefetch_related(
+         #   'fixed_attrs_vals', 'unfixed_attrs_vals')
         # print(self.founded_products.count())
         if self.founded_products.exists():
             self.smart_attribute_search(default=default)
