@@ -187,10 +187,8 @@ class SearchProducts(object):
         
         self.founded_products = Product.objects.filter(manufacturer=self.manufacturer_to,
                                                        category=self.product.category)
-        #prefetch_related(
-         #   'fixed_attrs_vals', 'unfixed_attrs_vals')
-        # print(self.founded_products.count())
-        if self.founded_products.exists():
+
+        if self.founded_products.count():
             self.smart_attribute_search(default=default)
         self.lead_time = time.time() - self.start_time
         # print(self.founded_products.count())
