@@ -25,7 +25,7 @@ class SearchTable(object):
         if full:
             self.products = Product.objects.all()
         else:
-            self.products = Product.objects.filter(is_enabled=False)
+            self.products = Product.objects.filter(is_updated=False)
     
     def build(self):
         print('{} products'.format(self.products.count()))
@@ -93,5 +93,5 @@ class Command(BaseCommand):
     help = 'Automatic search for analogues'
 
     def handle(self, *args, **options):
-        with SearchTable(full=True) as st:
+        with SearchTable() as st:
             st.build()
