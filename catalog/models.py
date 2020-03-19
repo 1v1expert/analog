@@ -78,7 +78,9 @@ class Category(Base):
     title = models.CharField(max_length=255, verbose_name='Наименование')
     short_title = models.CharField(max_length=255, verbose_name='Краткое наименование', blank=True)
     attributes = models.ManyToManyField('Attribute', blank=True, verbose_name="Атрибуты")
-    
+
+    image = models.ImageField(upload_to='images', null=True, max_length=100)
+
     def getAttributes(self):
         if not self.childs:
             return []
