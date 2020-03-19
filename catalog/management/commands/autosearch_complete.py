@@ -16,12 +16,16 @@ from app.models import MainLog
 
 class SearchTable(object):
     """ Automatic search for analogues """
-    def __init__(self, full=False):
+    def __init__(self, full=False, manufacturers=None):
         self.start_time = time.time()
         self.lead_time = 0
         self.user = auth_md.User.objects.get(is_staff=True, username='admin')
         
-        self.manufacturers = Manufacturer.objects.all()
+        if manufacturers is None:
+            self.manufacturers = Manufacturer.objects.all()
+        else:
+            self.manufacturers = manufacturers
+            
         if full:
             self.products = Product.objects.all()
         else:
