@@ -1,8 +1,10 @@
 from app.models import MainLog
+
 import requests
+
 from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth.models import AnonymousUser
+
+import json
 
 
 def a_decorator_passing_logs(func):
@@ -23,16 +25,24 @@ def a_decorator_passing_logs(func):
         
         if request.method == 'POST':
             message['post_data'] = request.POST
+
+        response_func = func(request, *args, **kwargs)
+        response_content_type = response_func._headers['content-type'][1]
+        response = b'<html>'
+        if 'json' in response_content_type:
+            response = response_func._container[0]
+            
+        MainLog.objects.create(user=user,
+                               message=message,
+                               client_address=client_address,
+                               raw={'raw_request': message,
+                                    'HTTP_USER_AGENT': request.META.get('HTTP_USER_AGENT'),
+                                    'HTTP_CONNECTION': request.META.get('HTTP_CONNECTION'),
+                                    'response_headers': response_func._headers,
+                                    'response': response.decode('utf-8')}
+                               )
         
-        MainLog(user=user,
-                message=message,
-                client_address=client_address,
-                raw={'raw_message': message,
-                     'HTTP_USER_AGENT': request.META.get('HTTP_USER_AGENT'),
-                     'HTTP_CONNECTION': request.META.get('HTTP_CONNECTION')}
-                ).save()
-        
-        return func(request, *args, **kwargs)
+        return response_func
     
     return wrapper_logs
 
