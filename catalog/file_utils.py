@@ -782,8 +782,8 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
         board_height = line[11].strip() if line[11] != 'None' else ''  # высота борта
         diameter = line[12].strip() if line[12] != 'None' else ''  # диаметр
         carving = line[13].strip() if line[13] != 'None' else ''  # резьба
-        units = line[14].strip() if line[14] != 'None' else ''  # единицы измерения
-        price = line[16].strip() if line[16] != 'None' else ''  # цена
+        # units = line[14].strip() if line[14] != 'None' else ''  # единицы измерения
+        # price = line[16].strip() if line[16] != 'None' else ''  # цена
         
         formalized_title = self.network.remove_stop_words(title)
         
@@ -809,10 +809,10 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
         
         self.create_products(article, title, formalized_title, category)
         
-        if is_digit(price) and price:  # create price attr
-            attribute = category.attributes.get(title='цена')
-            self._create_attribute(article, float(price), attribute, fixed=False)
-            
+        # if is_digit(price) and price:  # create price attr
+        #     attribute = category.attributes.get(title='цена')
+        #     self._create_attribute(article, float(price), attribute, fixed=False)
+        
         if is_digit(footing) and footing:  # create footing attr
             attribute = category.attributes.get(title='основание')
             self._create_attribute(article, float(footing), attribute, fixed=False)
@@ -825,15 +825,15 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
             attribute = category.attributes.get(title='резьба')
             self._create_attribute(article, float(carving), attribute, fixed=False)
         
-        if units:
-            try:
-                value = FixedValue.objects.get(title=units)
-            except models.ObjectDoesNotExist:
-                raise Exception('FixedValue does not exist, unit: %s' % units)
-            except FixedValue.MultipleObjectsReturned:
-                raise Exception('FixedValue objects returned, unit: %s' % units)
-            attribute = category.attributes.get(title='ед.изм')
-            self._create_attribute(article, value, attribute, fixed=True)
+        # if units:
+        #     try:
+        #         value = FixedValue.objects.get(title=units)
+        #     except models.ObjectDoesNotExist:
+        #         raise Exception('FixedValue does not exist, unit: %s' % units)
+        #     except FixedValue.MultipleObjectsReturned:
+        #         raise Exception('FixedValue objects returned, unit: %s' % units)
+        #     attribute = category.attributes.get(title='ед.изм')
+        #     self._create_attribute(article, value, attribute, fixed=True)
         
         if doubling:
             try:
