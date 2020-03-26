@@ -259,7 +259,7 @@ class FileUploadAdmin(admin.ModelAdmin):
         try:
             document = GeneralDocumentReaderMountingElements(path=queryset[0].file.name,
                                                              only_parse=False,
-                                                             loadnetworkmodel=True).parse_file()
+                                                             loadnetworkmodel=False).parse_file()
             messages.add_message(request,
                                  messages.SUCCESS,
                                  'Файл {} загружен, {} позиций, дублей - {}'.format(
@@ -268,7 +268,7 @@ class FileUploadAdmin(admin.ModelAdmin):
         except FileNotFoundError:
             messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
         except Exception as e:
-            messages.add_message(request, messages.ERROR, 'Ошибка, детали: {}'.format(e))
+            messages.add_message(request, messages.ERROR, 'Ошибка, детали: {}, {}'.format(e, e.args))
     process_general_file_mounting_elements.short_description = 'Импортировать шаблон(монтажные элементы)'
     
     def process_pkt_file(self, request, queryset):

@@ -296,15 +296,17 @@ class KOKSDocumentReader(object):
         # self.fix_attr_vals = {}
         # self.unfix_attr_vals = {}
         self.attr_vals = {}
-        NeuralNetworkOption2 = lazy_import.lazy_module("catalog.internal.neural_network.NeuralNetworkOption2")
-        self.network = NeuralNetworkOption2(loadmodel=loadnetworkmodel)
+        if loadnetworkmodel:
+            NeuralNetworkOption2 = lazy_import.lazy_module("catalog.internal.neural_network.NeuralNetworkOption2")
+            self.network = NeuralNetworkOption2(loadmodel=loadnetworkmodel)
         
     # @staticmethod
     # def _get_data_from_line(row):
     #     for cell in row:
     #         yield str(cell.value)
     #
-    def create_products(self, article, title, formalized_title, category, additional_article="", raw=None):
+    def create_products(self, article=None, title=None, category=None, formalized_title=None, additional_article="",
+                        raw=None):
         product = Product(article=article,
                           additional_article=additional_article,
                           manufacturer=self.manufacturer,
@@ -315,6 +317,7 @@ class KOKSDocumentReader(object):
                           updated_by=self.user)
         if raw is not None:
             product.raw = raw
+            
         logger.debug(product)
         self.products.append(product)
         self.attr_vals[article] = {
@@ -768,46 +771,74 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
     """  Управление монтажными элементами """
     
     def line_processing(self, line, name_sheet=None):
-        article = line[0].strip()
-        title = line[1].strip()
+        logger.debug(line)
+        ordering = (
+            ('article', 'артикул'),
+            ('title', 'наименование'),
+            ('category_name', 'подкласс'),
+            ('shape', 'форма'),
+            ('doubling', 'удвоение'),
+            ('covering', 'покрытие'),
+            ('depth', 'толщина'),
+            ('length', 'длина'),
+            ('footing', 'основание'),
+            ('width', 'ширина'),
+            ('board_height', 'высота борта'),
+            ('diameter', 'диаметр'),
+            ('carving', 'резьба'),
+            ('units', 'единицы измерения'),
+            ('price', 'цена')
+        )
+        dict_line = {
+            ordering[number_line][0]: line[number_line].strip() if line[number_line] != 'None' else ''
+            for number_line in range(len(line))
+        }
+        print(dict_line)
+        # for number_line in range(len(line)):
+        #     dict_line[]
+        # article = line[0].strip()
+        # title = line[1].strip()
         # photo = line[2]  # only blank
-        category_name = line[3].strip().lower() if line[3] != 'None' else ''
-        shape = line[4].strip() if line[4] != 'None' else ''  # форма
-        doubling = line[5].strip() if line[5] != 'None' else ''  # удвоение
-        covering = line[6] if line[6] != 'None' else ''  # покрытие
-        depth = line[7].strip() if line[7] != 'None' else ''  # толщина
-        length = line[8].strip() if line[8] != 'None' else ''  # длина
-        footing = line[9].strip() if line[9] != 'None' else ''  # основание
-        width = line[10].strip() if line[10] != 'None' else ''  # ширина
-        board_height = line[11].strip() if line[11] != 'None' else ''  # высота борта
-        diameter = line[12].strip() if line[12] != 'None' else ''  # диаметр
-        carving = line[13].strip() if line[13] != 'None' else ''  # резьба
+        # category_name = line[3].strip().lower() if line[3] != 'None' else ''
+        # shape = line[4].strip() if line[4] != 'None' else ''  # форма
+        # doubling = line[5].strip() if line[5] != 'None' else ''  # удвоение
+        # covering = line[6] if line[6] != 'None' else ''  # покрытие
+        # depth = line[7].strip() if line[7] != 'None' else ''  # толщина
+        # length = line[8].strip() if line[8] != 'None' else ''  # длина
+        # footing = line[9].strip() if line[9] != 'None' else ''  # основание
+        # width = line[10].strip() if line[10] != 'None' else ''  # ширина
+        # board_height = line[11].strip() if line[11] != 'None' else ''  # высота борта
+        # diameter = line[12].strip() if line[12] != 'None' else ''  # диаметр
+        # carving = line[13].strip() if line[13] != 'None' else ''  # резьба
         # units = line[14].strip() if line[14] != 'None' else ''  # единицы измерения
         # price = line[16].strip() if line[16] != 'None' else ''  # цена
         
-        formalized_title = self.network.remove_stop_words(title)
-        
-        if not article.strip() or title.strip().lower() == 'none' or not title:
-            return
-        if not category_name.strip() or category_name.strip().lower() == 'none' or not category_name:
-            return
+        # formalized_title = self.network.remove_stop_words(title)
+        assert dict_line.get('article', False) and dict_line.get('category_name', False), \
+            (f'Line should included article and category, line: {dict_line}')
+        # if not article.strip() or title.strip().lower() == 'none' or not title:
+        #     return
+        # if not category_name.strip() or category_name.strip().lower() == 'none' or not category_name:
+        #     return
         
         self.c_lines += 1  # counter lines
         
         # check_doubles
-        if article in self.articles:
-            self.doubles_article.append(article)
+        if dict_line['article'] in self.articles:
+            self.doubles_article.append(dict_line['article'])
             return
-        self.articles.add(article)
+        
+        self.articles.add(dict_line['article'])
         
         try:
-            category = Category.objects.get(title=category_name)
+            category = Category.objects.get(title=dict_line['category_name'])
+            dict_line['category'] = category
         except models.ObjectDoesNotExist:
-            raise Exception('Category does not exist, title: %s' % category_name)
+            raise Exception('Category does not exist, title: %s' % dict_line['category_name'])
         except Category.MultipleObjectsReturned:
-            raise Exception('Multi objects returned, title: %s' % category_name)
+            raise Exception('Multi objects returned, title: %s' % dict_line['category_name'])
         
-        self.create_products(article, title, formalized_title, category)
+        self.create_products(**dict_line)
         
         # if is_digit(price) and price:  # create price attr
         #     attribute = category.attributes.get(title='цена')
