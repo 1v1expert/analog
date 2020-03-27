@@ -79,7 +79,7 @@ class Category(Base):
     short_title = models.CharField(max_length=255, verbose_name='Краткое наименование', blank=True)
     attributes = models.ManyToManyField('Attribute', blank=True, verbose_name="Атрибуты")
 
-    image = models.ImageField(upload_to='images', null=True, max_length=100)
+    image = models.ImageField(upload_to='images', null=True, max_length=100, verbose_name='Изображение')
 
     def getAttributes(self):
         if not self.childs:
