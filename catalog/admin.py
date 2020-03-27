@@ -268,7 +268,7 @@ class FileUploadAdmin(admin.ModelAdmin):
         except FileNotFoundError:
             messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
         except Exception as e:
-            messages.add_message(request, messages.ERROR, 'Ошибка, детали: {}, {}'.format(e, e.args))
+            messages.add_message(request, messages.ERROR, 'Ошибка! детали: {}'.format(e))
     process_general_file_mounting_elements.short_description = 'Импортировать шаблон(монтажные элементы)'
     
     def process_pkt_file(self, request, queryset):

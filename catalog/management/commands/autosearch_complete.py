@@ -13,10 +13,15 @@ from catalog.utils import SearchProducts
 
 from app.models import MainLog
 
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger('analog')
+
 
 class SearchTable(object):
     """ Automatic search for analogues """
-    def __init__(self, full=False, manufacturers=None):
+    def __init__(self, full=False, products=None, manufacturers=None):
         self.start_time = time.time()
         self.lead_time = 0
         self.user = auth_md.User.objects.get(is_staff=True, username='admin')
@@ -25,6 +30,10 @@ class SearchTable(object):
             self.manufacturers = Manufacturer.objects.all()
         else:
             self.manufacturers = manufacturers
+        
+        if products:
+            self.products = products
+            return
             
         if full:
             self.products = Product.objects.all()
@@ -32,12 +41,12 @@ class SearchTable(object):
             self.products = Product.objects.filter(is_updated=False)
     
     def build(self):
-        print('{} products'.format(self.products.count()))
+        logger.debug('{} products'.format(self.products.count()))
         for i, manufacturer in enumerate(self.manufacturers):
-            print('{}/{} from {}'.format(i, self.manufacturers.count(), manufacturer.title))
+            logger.debug('{}/{} from {}'.format(i, self.manufacturers.count(), manufacturer.title))
             
             products = self.products.filter(manufacturer=manufacturer)
-            print('{} products from {}'.format(products.count(), manufacturer.title))
+            logger.debug('{} products from {}'.format(products.count(), manufacturer.title))
             # need_manufactures = Manufacturer.objects.exclude(pk=manufacturer.pk)
         
             for product in products:
