@@ -1,0 +1,166 @@
+<header id="home">
+    <!--==============================Navarea=============================-->
+    <div class="nav-area">
+        <nav id="main-nav" class="navbar navbar-default">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-8">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                    data-target=".navbar-collapse">
+                                <span class="icon-bar"></span> <span class="icon-bar"></span> <span
+                                    class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#">
+                                {#                                <h4>AnalogPro</h4>#}
+                                <img height="25px;" src="{% static 'landing_images/ezgif.com-gif-maker.png' %}"
+                                     alt="AnalogPro">
+                                {#                             style="height: 100px;position: absolute;bottom: -15px">#}
+                            </a>
+                        </div>
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown active"><a href="#home">Главная </a></li>
+                                <li><a href="#features">Помощь</a></li>
+                                <li><a href="#contact">Контакты</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="row">
+                            <div class="col-xs-7 col-sm-6 col-md-6 oder">
+                                {#                                <div class="top-link">#}
+                                {#                                    <ul>#}
+                                {#                                        <li> #}
+                                <a href="tel:+74957403618" class="phone-ico">
+                                    <img src="{% static 'svg/tel.svg' %}" alt="tel ico">
+                                    +7(495) 740 36 18 </a>
+                            </div>
+                            <div class="col-xs-5 col-sm-6 col-md-6">
+                                <div class="oder">
+                                    {% if request.user.is_authenticated %}
+                                        <div class="oder-content">
+                                            <div class="container10">
+                                                <a>{{ request.user.username }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="oder-content">l</div>
+                                        <div class="oder-content"><a href="{% url 'api:logout' %}">Выйти</a></div>
+                                    {% else %}
+                                        <div class="oder-content">
+                                            <div class="container10">
+                                                <a id="login-menu" href="#modal">Войти</a>
+                                                <div id="modal" class="login-popupContainer"
+                                                     style="border-radius: 5px;display:none;">
+                                                    <div class="popupHeader">
+                                                        <div class="header_title">Авторизация</div>
+                                                        <div class="modal_close"><i class="fa fa-times"></i></div>
+                                                    </div>
+                                                    <div class="popupBody">
+                                                        <!-- Social Login -->
+                                                        <div class="social_login">
+                                                            <div class="login-main-icon"><img
+                                                                    src="{% static 'images/login-icon.png' %}"
+                                                                    alt=""/></div>
+                                                            <h1>Ваш аккаунт</h1>
+                                                            <div class="main_btns-container">
+                                                                <div class="first_half">
+                                                                    <a href="#" id="login_form"
+                                                                       class="btn login-btn style-button"
+                                                                       style="font-size: 11px!important;">Войти</a>
+                                                                </div>
+                                                                <div class="first_half last">
+                                                                    <a href="#" id="register_form"
+                                                                       class="btn login-btn style-button"
+                                                                       style="font-size: 11px!important;">Зарегистрироваться</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Username & Password Login form -->
+                                                        <div class="user_login">
+                                                            <form action="{% url 'api:login' %}" method="post"
+                                                                  id="user_login_form">
+                                                                {% csrf_token %}
+                                                                {{ auth_form.username }}
+                                                                {{ auth_form.password }}
+                                                                <div class="checkbox">
+                                                                    <input id="remember" type="checkbox"/>
+                                                                    <label for="remember">Запомнить меня</label>
+                                                                </div>
+                                                                <div class="main_btns-container">
+                                                                    <div class="first_half last" style="width: 60%;">
+                                                                        <button href="#" type="submit"
+                                                                                class="btn btn_blue style-button">
+                                                                            Войти
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                            <label id="error_user_login_form"></label>
+                                                            <div class="row">
+                                                                <div class="col-md-6 col-xs-6 col-lg-6"
+                                                                     style="text-align: left;">
+                                                                    <a href="#" class="btn back_btn"><i
+                                                                            class="fa fa-angle-double-left"></i>
+                                                                        Назад</a>
+                                                                </div>
+                                                                <div class="col-md-6 col-xs-6 col-lg-6">
+                                                                    <a href="#"
+                                                                       onclick="swal('Попробуйте позже.');$('#modal').hide()"
+                                                                       class="forgot_password">Забыл пароль ?</a></div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Register Form -->
+                                                        <div class="user_register">
+                                                            <form id="user_register_form">
+                                                                <div class="form-group">
+                                                                    {% csrf_token %}
+                                                                    {{ reg_form.username }}
+                                                                    {{ reg_form.email }}
+                                                                    <div class="form-group" id="password_check">
+                                                                        {{ reg_form.password }}
+                                                                        {{ reg_form.double_password }}
+                                                                        <div class="col-sm-12">
+                                                                            <small id="passwordHelp" class="text-danger"
+                                                                                   style="display: none">
+                                                                                Must be 8-20 characters long.
+                                                                            </small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="main_btns-container">
+                                                                    <div class="first_half"><a href="#"
+                                                                                               class="btn back_btn"><i
+                                                                            class="fa fa-angle-double-left"></i>
+                                                                        Назад</a></div>
+                                                                    <div class="first_half last">
+                                                                        {#                                                            <a href="#"#}
+                                                                        {#                                                                                        class="btn btn_blue">Зарегистрироваться</a>#}
+                                                                        <button href="#" type="submit"
+                                                                                class="btn btn_blue style-button"
+                                                                                style="font-size: 12px!important;">
+                                                                            Зарегистрироваться
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {#                            <div class="oder-content">l</div>#}
+                                        {#                            <div class="oder-content"><a href="#">Выйти</a></div>#}
+                                        {#                            <div class="oder-content"><a href="#">Помощь</a></div>#}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </nav>
+    </div>
+</header>
