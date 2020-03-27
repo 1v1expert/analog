@@ -1,0 +1,58 @@
+{% load staticfiles %}
+
+<div id="contact" class="service-container">
+    <div class="container">
+        <div class="row main-head">
+            <div class="col-md-12">
+                <h2>Связаться с нами</h2>
+                {#                    <h2>Мы рады видеть вас </h2>#}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="contact-form" id="contact-us">
+                    <form id="feedback_form" role="form" action="{% url 'api:feedback' %}">
+                        {% csrf_token %}
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-group">
+                                    {{ feedback.name }}
+                                    {#                                    <input type="text" class="form-control" name="name" id="name" placeholder="Имя">#}
+                                </div>
+                                <div class="form-group">
+                                    {{ feedback.email }}
+                                    {#                                    <input type="email" class="form-control" name="email" id="email"#}
+                                    {#                                           placeholder="Email">#}
+                                </div>
+                                <div class="form-group">
+                                    {{ feedback.phone }}
+                                    {#                                    <input type="text" class="form-control" name="mobile" id="mobile"#}
+                                    {#                                           placeholder="Номер телефона">#}
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-group">
+                                    {{ feedback.text }}
+                                    {#                                        <textarea class="form-control textarea" rows="5" name="message" id="msg"#}
+                                    {#                                                  placeholder="Ваше сообщение"></textarea>#}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-sm-offset-4">
+                                <div class="form-group g-recaptcha"
+                                     data-sitekey="6LcYCcEUAAAAAJVAuKy2QHfMelDXBlMkjVZgLMMI"></div>
+                            </div>
+
+                            <div class="relative fullwidth col-xs-12">
+                                <button type="submit" class="form-btn wobble-horizontal style-button">Отправить
+                                    сообщение
+                                </button>
+                                <span class="loading"></span></div>
+                            <div class="clear"></div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
