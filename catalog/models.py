@@ -153,14 +153,15 @@ class FixedValue(Base):
     title = models.CharField(max_length=255, verbose_name='Значение')
     attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут",
                                   related_name="fixed_value")
+    image = models.ImageField(upload_to='images', null=True, max_length=100, verbose_name='Изображение')
 
     def __str__(self):
         return '{}, title: {}, attribute: {}, type: {}'.format(self._meta.model, self.title, self.attribute.title,
                                                                self.attribute.type)
 
     class Meta:
-        verbose_name = "Фиксированное значение"
-        verbose_name_plural = "Фиксированные значения"
+        verbose_name = "Фикс значение"
+        verbose_name_plural = "Фикс значения"
     
     
 class FixedAttributeValue(Base):
