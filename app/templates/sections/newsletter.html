@@ -1,0 +1,30 @@
+{% load staticfiles %}
+
+<div class="newsletter-container" style="background-color: unset; padding: 10px">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="newsletter-background" style="background-size: cover;
+    border-radius: 5px;height: 174px;
+    background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'landing_images/item3.jpg' %});">
+                    <div class="row">
+                    <div class="col-sm-12 col-md-12 h2-newsletter">
+{#                        <div class="newsletter"><span class="newsletterIcon"></span>#}
+                            <h2 style="text-align: center">Подписаться на новости </h2>
+{#                            <p>на новости </p>#}
+{#                        </div>#}
+                    </div></div>
+                    <form class="form-search" id="subscribeForm" method="POST">
+                        <div class="col-sm-8 col-md-4 col-md-offset-3">
+                            {% csrf_token %}
+                            {{ subscribe_form.email }}
+                        </div>
+                        <div class="col-sm-4 col-md-3">
+                            <button type="submit" class="newsletter-btn">Подписаться</button>
+                            <span id="result" class="alertMsg"></span></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
