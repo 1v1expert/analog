@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from api.views import check_product_and_get_attributes, search_from_form, advanced_search, \
+from app.api.views import check_product_and_get_attributes, search_from_form, advanced_search, \
     feedback, logout_view, login_view, registration_view, subscriber, search_article, report_an_error
 
 app_name = 'api'
