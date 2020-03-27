@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib.auth import authenticate, login, logout, models, forms
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, Http404, JsonResponse
 from django.core.mail import get_connection, send_mail
 from django.conf import settings
 
@@ -51,7 +51,8 @@ def search_from_file_view(request):
             
     else:
         form = SearchFromFile()
-        return render(request, 'search_from_file.html', {'form': form})
+        return Http404()
+        # return render(request, 'search_from_file.html', {'form': form})
 
 
 @a_decorator_passing_logs
@@ -59,11 +60,6 @@ def search_from_file_view(request):
 def advanced_search(request):
     return redirect('catalog:search')
 
-
-@login_required(login_url='login/')
-@a_decorator_passing_logs
-def contacts_view(request) -> HttpResponse:
-    return render(request, 'contacts.html')
 
 
 #  ========================
