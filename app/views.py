@@ -76,7 +76,7 @@ def landing_page_view(request) -> HttpResponse:
     reg_form = MyRegistrationForm()
     subscribe_form = SubscribeForm()
     manufacturers = Manufacturer.objects.filter(is_tried=True)
-    return render(request, 'landing_page.html', {
+    return render(request, 'index.html', {
         'manufacturers': manufacturers,
         'feedback': feedback_form,
         'auth_form': auth_form,
@@ -105,7 +105,7 @@ def landing_confirm_mail_page(request, verification_code, user_id) -> HttpRespon
         user.is_active = True
         user.save()
         login(request, user)
-        return render(request, 'landing_page.html', args)
+        return render(request, 'index.html', args)
     else:
         args['confirm_email'] = False
-        return render(request, 'landing_page.html', args)
+        return render(request, 'index.html', args)
