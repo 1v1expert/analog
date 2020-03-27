@@ -797,7 +797,7 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
         # formalized_title = self.network.remove_stop_words(title)
         article = dict_line.get('article', False)
         category_name = dict_line.get('category_name', False)
-        assert article and category_name, f'Line should included article and category, line: {dict_line}'
+        assert article and category_name, 'Line should included article and category, line: {}'.format(dict_line)
         # if not article.strip() or title.strip().lower() == 'none' or not title:
         #     return
         # if not category_name.strip() or category_name.strip().lower() == 'none' or not category_name:
@@ -856,11 +856,11 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
                 if not i:  # skip header table
                     continue
                 if i % 50 == 0:
-                    logger.debug(f'{i} rows checked successfully')
+                    logger.debug('{} rows checked successfully'.format(i))
                 self.line_processing(line)
         
         self._create_attributes_and_products()
-        logger.debug(f'Дубли артикулов: {self.doubles_article}')
+        logger.debug('Дубли артикулов: {}'.format(self.doubles_article))
         
         return self
 
