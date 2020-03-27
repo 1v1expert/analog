@@ -2,6 +2,8 @@ from django.db import models
 
 
 class CoreQuerySet(models.query.QuerySet):
+    """QuerySet whose delete() does not delete items, but instead marks the
+    rows as not active, and updates the timestamps"""
 
     def delete(self):
         self.update(deleted=True)
