@@ -1,0 +1,479 @@
+/*	Main stylesheet for app
+	==========================
+*/
+
+body {
+    font-family: HelveticaNeueCyr;
+}
+
+a.forgot_password {
+    margin: unset;
+}
+
+.first_half.last {
+}
+
+.back_btn {
+    padding: unset;
+    background: unset;
+}
+
+.popupHeader {
+    background: #ffffff;
+    text-align: center;
+}
+
+.oder {
+    padding: 5px 18px 10px 15px;
+}
+
+.footer-link ul {
+    list-style: none;
+    list-style-position: outside;
+    margin: 0px 0px;
+}
+
+.footer-link ul li a {
+    width: 150px;
+    padding-left: 0px;
+}
+
+.footer-link ul li a span {
+    top: 5px;
+    left: unset;
+}
+
+.top-link ul li a span {
+    width: 105px;
+}
+
+.footer-bottom {
+    padding: 20px 0px 5px 0px;
+    background-color: #fff;
+    font-family: HelveticaNeueCyr, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    color: #333333;
+    text-align: center;
+    font-size: 13px;
+}
+
+.h2-newsletter {
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 35px;
+    line-height: 42px;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+}
+
+.header-howcard-row {
+    height: 70px;
+    background: #2B4561;
+    border-radius: 5px 5px 0px 0px;
+    box-shadow: 0px 4px 35px rgba(0, 0, 0, 0.07);
+}
+
+.service-container {
+    padding: 50px 0px;
+    background-color: #ffffff;
+}
+
+.letter-container h1 a {
+    font-size: 35px;
+    color: #FFFFFF;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    font-family: HelveticaNeueCyr;
+}
+
+#go-top:hover {
+    background-color: #FFDD40;
+
+}
+
+.btn-group, .btn-group-vertical {
+}
+
+.input-append .btn-group:last-child > .dropdown-toggle {
+    margin-left: 4px;
+}
+
+.style-button {
+    margin-bottom: 10px;
+    border-width: 0px;
+    background: #FFDD40 !important;
+    border-radius: 5px !important;
+    font-family: HelveticaNeueCyr !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 16px !important;
+    line-height: 19px !important;
+    letter-spacing: 0.02em !important;
+    color: #333333 !important;
+}
+
+.style-button:hover {
+    font-weight: bolder !important;
+}
+
+.how-card:hover {
+    border: 1px solid #fddc3f;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(208, 233, 0, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(225, 233, 22, 0.6);
+}
+
+.form-control:focus {
+    border: 2px solid #fddc3f;
+    /* border-color: #66afe9; */
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(208, 233, 0, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(225, 233, 22, 0.6);
+}
+
+.how-card figure {
+    margin-top: 10px;
+}
+
+.how-card h3 {
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 31px;
+    letter-spacing: 0.02em;
+    color: #333333;
+    margin-top: 5px;
+}
+
+.service-container p {
+    text-align: left;
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: #333333;
+}
+
+.features-container p {
+    text-align: left;
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    /* or 143% */
+
+    letter-spacing: 0.02em;
+
+    color: #333333;
+}
+
+.how-service {
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    height: 300px;
+    padding: 10px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 35px rgba(0, 0, 0, 0.07);
+    border-radius: 5px;
+}
+
+.wide-section {
+    height: 215px;
+}
+
+.how-card {
+    margin-bottom: 10px;
+    border: 1px solid #E6E6E6;
+    box-sizing: border-box;
+    border-radius: 5px;
+    height: 295px;
+    padding: 10px;
+
+}
+
+.how-row {
+    margin-bottom: 25px;
+}
+
+.main-head h2 {
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 35px;
+    line-height: 42px;
+    /* identical to box height, or 120% */
+
+    letter-spacing: 0.02em;
+
+    color: #333333;
+    margin-top: 0px;
+    margin-bottom: 35px;
+    text-align: center;
+}
+
+.features-container {
+    padding: 50px 0px;
+    background-color: #ffffff;
+}
+
+.carousel-btn-p {
+    position: absolute;
+    bottom: 50px;
+    z-index: 15;
+    width: 100%;
+    list-style: none;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    ul.navbar-nav {
+        float: left;
+        margin: 0px 15px;
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar-nav > li {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+.oder a {
+    color: #333333;
+    font-size: 17px;
+}
+
+.top-link ul li a {
+    color: #333333;
+
+}
+
+.form-control {
+    margin-bottom: 10px;
+}
+
+h4 {
+    color: #666;
+    font-weight: 900;
+}
+
+.dropdown-menu {
+    font-size: 11px;
+}
+
+.features ol {
+    list-style: circle;
+}
+
+@media (min-width: 300px) {
+    h2 {
+        font-size: 20px;
+    }
+
+    .g-recaptcha {
+        transform: scale(0.77);
+        transform-origin: 0 0;
+    }
+
+    .oder a {
+        font-size: 14px;
+    }
+
+    .how-card {
+        height: 350px;
+    }
+
+    .how-card h3 {
+        font-size: 20px;
+    }
+
+    .how-card figure {
+        display: flex;
+    }
+
+    .letter-container h1 a {
+        font-size: 16px;
+    }
+
+    .baaner-container {
+        width: 100%;
+        margin: 0;
+    }
+
+}
+
+@media (min-width: 640px) {
+    .input-append .btn-group:last-child > .dropdown-toggle {
+        margin-top: 1px;
+        padding: 22px 32px;
+    }
+}
+
+@media (min-width: 992px) {
+    h2 {
+        font-size: 30px;
+    }
+
+    .g-recaptcha {
+        transform: scale(1);
+        transform-origin: 0 0;
+    }
+
+    .oder a {
+        font-size: 17px;
+    }
+
+    .blue-button {
+        width: 300px;
+        padding: 20px 30px 20px 30px;
+        background-image: none;
+    }
+
+    .how-card {
+        height: 295px;
+    }
+
+    .how-card h3 {
+        font-size: 25px;
+    }
+
+    .baaner-container {
+        width: 78%;
+        margin: 0 11%;
+    }
+
+    .letter-container h1 a {
+        font-size: 22px;
+    }
+
+    .oder {
+        text-align: right;
+        padding: 10px 0 10px 0;
+    }
+}
+
+@media (min-width: 1200px) {
+
+    .letter-container h1 a {
+        font-size: 30px;
+    }
+
+}
+
+input[type=file] {
+    display: initial;
+}
+
+.dropdown-menu {
+    min-width: 125px;
+}
+
+.input-append .btn-group:last-child > .dropdown-toggle {
+    font-size: 15px;
+}
+
+.search {
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+.search:focus {
+    border: 2px solid #FFDF4F !important;
+    border-radius: 5px;
+}
+
+.service-container {
+    background-color: #ffffff;
+}
+
+.carousel .item {
+    height: 520px;
+}
+
+.top-area {
+    background-color: #323232;
+}
+
+#main-nav {
+    border-top: none;
+    border-bottom: none;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 35px rgba(0, 0, 0, 0.07);
+}
+
+#menu-icon:after {
+    border-bottom-color: #323232;
+}
+
+#lp-pom-block-10 {
+    background-color: #ffffff;
+    background-image: none;
+}
+
+.banner-text {
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 25px;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+}
+
+.banner-dot {
+    background: none;
+}
+
+.search-btn {
+    background-color: #666;
+}
+
+.btn-border {
+    border-radius: 6px !important;
+    margin-bottom: 10px;
+}
+
+.input-append .btn-group:last-child > .dropdown-toggle {
+    background: #ffffff;
+    color: #333333;
+}
+
+.carousel-indicators li {
+}
+
+.carousel-indicators .active {
+}
+
+.carousel-indicators {
+    bottom: 20px;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    font-weight: bolder;
+    color: #666;
+}
+
+.aboutproduct-container {
+    padding: 40px 0px;
+    background-color: #f5f5f5;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #ffffff;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.fa-inverse {
+    color: #666;
+}

@@ -18,7 +18,7 @@ admin.site.index_title = "Система Analog"
 urlpatterns = [
     url(r'^jet/', include('jet.urls', 'jet')),
     url(r'^admin/search/', include('catalog.urls')),
-    url(r'^api/', include('api.urls')),
+    url(r'^api/', include('app.api.urls')),
     url(r'^', include('app.urls')),
     # url(r'^old/', include('app.urls')),
     url(r'^admin/', admin.site.urls),
