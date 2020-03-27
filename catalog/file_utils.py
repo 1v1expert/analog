@@ -771,7 +771,6 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
     """  Управление монтажными элементами """
     
     def line_processing(self, line, name_sheet=None):
-        # logger.debug(line)
         ordering = (
             # name attr, type, fixed
             ('article', 'артикул', None),
@@ -794,30 +793,11 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
             ordering[number_line][0]: line[number_line].strip() if line[number_line] != 'None' else ''
             for number_line in range(len(line))
         }
-        # print(dict_line)
-        # for number_line in range(len(line)):
-        #     dict_line[]
-        # article = line[0].strip()
-        # title = line[1].strip()
-        # photo = line[2]  # only blank
-        # category_name = line[3].strip().lower() if line[3] != 'None' else ''
-        # shape = line[4].strip() if line[4] != 'None' else ''  # форма
-        # doubling = line[5].strip() if line[5] != 'None' else ''  # удвоение
-        # covering = line[6] if line[6] != 'None' else ''  # покрытие
-        # depth = line[7].strip() if line[7] != 'None' else ''  # толщина
-        # length = line[8].strip() if line[8] != 'None' else ''  # длина
-        # footing = line[9].strip() if line[9] != 'None' else ''  # основание
-        # width = line[10].strip() if line[10] != 'None' else ''  # ширина
-        # board_height = line[11].strip() if line[11] != 'None' else ''  # высота борта
-        # diameter = line[12].strip() if line[12] != 'None' else ''  # диаметр
-        # carving = line[13].strip() if line[13] != 'None' else ''  # резьба
-        # units = line[14].strip() if line[14] != 'None' else ''  # единицы измерения
-        # price = line[16].strip() if line[16] != 'None' else ''  # цена
         
         # formalized_title = self.network.remove_stop_words(title)
         article = dict_line.get('article', False)
         category_name = dict_line.get('category_name', False)
-        assert article and category_name, (f'Line should included article and category, line: {dict_line}')
+        assert article and category_name, f'Line should included article and category, line: {dict_line}'
         # if not article.strip() or title.strip().lower() == 'none' or not title:
         #     return
         # if not category_name.strip() or category_name.strip().lower() == 'none' or not category_name:
@@ -826,7 +806,6 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
         self.c_lines += 1  # counter lines
         
         # check_doubles
-        # article =
         if article in self.articles:
             self.doubles_article.append(article)
             return
@@ -846,12 +825,13 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
         for key in ordering:
             if key[2] is None:
                 continue
+                
             if key[2] is False:
                 value = dict_line.get(key[0])
-                # print(value, key, is_digit(value))
                 if is_digit(value) and value:
                     attribute = category.attributes.get(title=key[1])
                     self._create_attribute(article, float(value), attribute, fixed=key[2])
+                    
             if key[2] is True:
                 value = dict_line.get(key[0])
                 
@@ -866,92 +846,6 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
                     raise Exception('FixedValue objects returned: %s, attribute %s' % (value, key[1]))
                 attribute = category.attributes.get(title=key[1])
                 self._create_attribute(article, obj_value, attribute, fixed=key[2])
-            
-        
-        # if is_digit(price) and price:  # create price attr
-        #     attribute = category.attributes.get(title='цена')
-        #     self._create_attribute(article, float(price), attribute, fixed=False)
-        
-        # if is_digit(footing) and footing:  # create footing attr
-        #     attribute = category.attributes.get(title='основание')
-        #     self._create_attribute(article, float(footing), attribute, fixed=False)
-        #
-        # if is_digit(diameter) and diameter:  # create diameter attr
-        #     attribute = category.attributes.get(title='диаметр')
-        #     self._create_attribute(article, float(diameter), attribute, fixed=False)
-        #
-        # if is_digit(carving) and carving:  # create diameter attr
-        #     attribute = category.attributes.get(title='резьба')
-        #     self._create_attribute(article, float(carving), attribute, fixed=False)
-        
-        # if units:
-        #     try:
-        #         value = FixedValue.objects.get(title=units)
-        #     except models.ObjectDoesNotExist:
-        #         raise Exception('FixedValue does not exist, unit: %s' % units)
-        #     except FixedValue.MultipleObjectsReturned:
-        #         raise Exception('FixedValue objects returned, unit: %s' % units)
-        #     attribute = category.attributes.get(title='ед.изм')
-        #     self._create_attribute(article, value, attribute, fixed=True)
-        
-        # if doubling:
-        #     try:
-        #         value = FixedValue.objects.get(title=doubling)
-        #     except models.ObjectDoesNotExist:
-        #         raise Exception('FixedValue does not exist, doubling: %s' % doubling)
-        #     except FixedValue.MultipleObjectsReturned:
-        #         raise Exception('FixedValue objects returned, doubling: %s' % doubling)
-        #     attribute = category.attributes.get(title='удвоение')
-        #     self._create_attribute(article, value, attribute, fixed=True)
-        
-        # if shape:
-        #     try:
-        #         value = FixedValue.objects.get(title=shape)
-        #     except models.ObjectDoesNotExist:
-        #         raise Exception('FixedValue does not exist, shape: %s' % shape)
-        #     except FixedValue.MultipleObjectsReturned:
-        #         raise Exception('FixedValue objects returned, shape: %s' % shape)
-        #     attribute = category.attributes.get(title='форма')
-        #     self._create_attribute(article, value, attribute, fixed=True)
-        #
-        # if covering:
-        #     try:
-        #         value = FixedValue.objects.get(title=covering)
-        #     except models.ObjectDoesNotExist:
-        #         raise Exception('FixedValue does not exist, covering: %s' % covering)
-        #     except FixedValue.MultipleObjectsReturned:
-        #         raise Exception('FixedValue objects returned, covering: %s' % covering)
-        #     attribute = category.attributes.get(title='покрытие')
-        #     self._create_attribute(article, value, attribute, fixed=True)
-        
-        # if species:
-        #     value = FixedValue.objects.get(title=species)
-        #     attribute = category.attributes.objects.get(title='вид')
-        #     self._create_attribute(article, value, attribute, fixed=True)
-        
-        # if is_digit(length) and length:
-        #     attribute = category.attributes.get(title='длина')
-        #     self._create_attribute(article, float(length), attribute, fixed=False)
-        #
-        # if is_digit(depth) and depth:
-        #     attribute = category.attributes.get(title='толщина')
-        #     self._create_attribute(article, float(depth), attribute, fixed=False)
-        #
-        # if is_digit(board_height) and board_height:
-        #     attribute = category.attributes.get(title='высота борта')
-        #     self._create_attribute(article, float(board_height), attribute, fixed=False)
-        
-        # if is_digit(additional_board_height) and additional_board_height:
-        #     attribute = category.attributes.get(title='высота борта доп.')
-        #     self._create_attribute(article, float(board_height), attribute, fixed=False)
-        
-        # if is_digit(width) and width:
-        #     attribute = category.attributes.get(title='ширина')
-        #     self._create_attribute(article, float(width), attribute, fixed=False)
-        #
-        # if is_digit(additional_width) and additional_width:
-        #     attribute = category.attributes.objects.get(title='ширина доп.')
-        #     self._create_attribute(article, float(additional_width), attribute, fixed=False)
     
     def parse_file(self):
         for name_list in self.sheets:
