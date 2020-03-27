@@ -22,36 +22,6 @@ from smtplib import SMTPDataError
 import hashlib
 
 
-# @a_decorator_passing_logs
-# def login_view(request):
-#     auth_form = MyAuthenticationForm(request)
-#     if request.method == 'POST':
-#         username, password = request.POST['username'], request.POST['password']
-#         user = authenticate(username=username, password=password)
-#
-#         if user is not None:
-#             if user.is_active:
-#                 login(request, user)
-#                 redirect_cookie = redirect('app:home')
-#                 redirect_cookie.set_signed_cookie("user2", "demo")
-#                 return redirect_cookie
-#
-#         return render(request, 'login.html', {'auth_form': auth_form, 'error': 'Неверно введён логин или пароль'})
-#
-#     return render(request, 'login.html', {'auth_form': auth_form})
-
-
-# @a_decorator_passing_logs
-# @login_required(login_url='login/')
-# def search(request):
-#     form = AppSearchForm()
-#
-#     if request.method == 'POST':
-#         form = AppSearchForm(request.POST)
-#
-#     return render(request, 'search.html', {'user': request.user, 'form': form})
-
-
 @login_required(login_url='login/')
 @a_decorator_passing_logs
 def search_from_file_view(request):
@@ -90,74 +60,11 @@ def advanced_search(request):
     return redirect('catalog:search')
 
 
-# @a_decorator_passing_logs
-# def check_in_view(request):
-#     reg_form = MyRegistrationForm()
-#     if request.method == 'POST':
-#         suc, resp = registration(request)
-#         if suc:
-#             return redirect('app:email_confirmation', resp.pk, resp.pk)
-#
-#         return render(request, 'check_in.html', {'reg_form': reg_form, 'error': resp})
-#
-#     return render(request, 'check_in.html', {'reg_form': reg_form})
-
-
-# @login_required(login_url='login/')
-# @a_decorator_passing_logs
-# def home_view(request) -> HttpResponse:
-#     return render(request, 'home.html')
-
-
-# @login_required(login_url='login/')
-# @a_decorator_passing_logs
-# def profile_view(request) -> HttpResponse:
-#     return render(request, 'profile.html',
-#                   {
-#                       'actions_count': MainLog.objects.filter(user=request.user).count(),
-#                       'search_count': MainLog.objects.filter(user=request.user, message__icontains='search').filter(
-#                           message__icontains='post').count(),
-#                       'files_count': DataFile.objects.filter(created_by=request.user).count(),
-#                       'files': DataFile.objects.filter(created_by=request.user)})
-
-
-
 @login_required(login_url='login/')
 @a_decorator_passing_logs
 def contacts_view(request) -> HttpResponse:
     return render(request, 'contacts.html')
 
-
-# @a_decorator_passing_logs
-# def logout_view(request) -> HttpResponse:
-#     logout(request)
-#     return redirect('app:login')
-
-
-# def email_confirmation(request, verification_code, user_id):
-#     user = get_object_or_404(models.User, pk=user_id)
-#     check_code = hashlib.md5('{}'.format(user.pk).encode()).hexdigest()
-#     msg = 'Подтвердите email'
-#     if verification_code == check_code:
-#         user.is_active = True
-#         user.save()
-#         msg = 'E-mail подтверждён'
-#         return render(request, 'email_confirmation.html', {'confirmation': True, 'msg': msg})
-#
-#     elif verification_code == user_id:
-#         confirmation_form = EmailConfirmationForm()
-#         if request.method == 'POST':
-#             confirmation_form = EmailConfirmationForm(request)
-#             if check_code == request.POST['code']:
-#                 user.is_active = True
-#                 user.save()
-#                 msg = 'E-mail подтверждён'
-#                 return render(request, 'email_confirmation.html',
-#                               {'confirmation': True, 'msg': msg})
-#             else:
-#                 msg = 'Код неверен'
-#         return render(request, 'email_confirmation.html', {'conf_form': confirmation_form, 'msg': msg})
-#     return render(request, 'email_confirmation.html', {'msg': "Ошибка подтверждения email'a"})
 
 #  ========================
 #  Landing page, new design
