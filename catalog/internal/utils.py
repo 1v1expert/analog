@@ -154,9 +154,7 @@ def get_product_info(analog, original=None):
                  "original":
                      {"name": "производитель", "value": original.manufacturer.title}
                  })
-    # print(fixed_attributes)
     # find group with image
-    # 3086459
     if not len(fixed_attributes):
         return {"result": info}
     
@@ -165,8 +163,7 @@ def get_product_info(analog, original=None):
         group = GroupSubclass.objects.get(category=analog.category,
                                           fixed_attribute__in=fixed_attributes)
         return {"result": info, "image": group.image.url}
-        # print(info)
-        # print('IMAGE', group.image)
+    
     except GroupSubclass.DoesNotExist:
         pass
     except GroupSubclass.MultipleObjectsReturned:
