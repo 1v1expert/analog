@@ -384,9 +384,11 @@
                                 if (image) {
                                     var tr = document.createElement("tr");
                                     var td = document.createElement("td");
-                                    var DOM_img = document.createElement("img");
-                                    DOM_img.src = image;
-                                    td.appendChild(DOM_img);
+                                    td.setAttribute("colspan", 3);
+                                    var img = document.createElement("img");
+                                    img.src = image;
+                                    img.alt = "image";
+                                    td.appendChild(img);
                                     tr.appendChild(td);
                                     tbody.appendChild(tr);
                                 }
