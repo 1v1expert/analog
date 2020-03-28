@@ -347,6 +347,10 @@ class FixValAdmin(BaseAdmin):
 # admin.site.register(Category, CategoryAdmin)
 
 
+class GroupSubclassAdmin(BaseAdmin):
+    list_display = ['category', 'fixed_attribute', 'image']
+
+
 admin.site.register(MainLog, MainLogAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(FixedAttributeValue, FixAttrValAdmin)
@@ -361,6 +365,6 @@ admin.site.register(Attribute, AttrAdmin)
 admin.site.register(Specification, BaseAdmin)
 admin.site.register(DataFile, FileUploadAdmin)
 admin.site.register(LogEntry, LogEntryAdmin)
-admin.site.register(GroupSubclass)
+admin.site.register(GroupSubclass, GroupSubclassAdmin)
 
 # Register your models here.
