@@ -137,6 +137,7 @@ def get_product_info(analog, original=None):
         if attr.__class__.__name__ == 'FixedAttributeValue':
             analog_value = attr.value.title
             original_value = orig_attr.value.title if orig_attr else ""
+            fixed_attributes.append(attr.value)  # for search group with image
         else:
             analog_value = attr.value
             original_value = orig_attr.value if orig_attr else ""
@@ -153,16 +154,22 @@ def get_product_info(analog, original=None):
                  "original":
                      {"name": "производитель", "value": original.manufacturer.title}
                  })
+    # print(fixed_attributes)
     # find group with image
+    # 3086459
     if not len(fixed_attributes):
-        return info
+        return {"result": info}
     
     from catalog.models import GroupSubclass
     try:
         group = GroupSubclass.objects.get(category=analog.category,
                                           fixed_attribute__in=fixed_attributes)
-        print('IMAGE', group.image)
+        return {"result": info, "image": group.image.url}
+        # print(info)
+        # print('IMAGE', group.image)
     except GroupSubclass.DoesNotExist:
         pass
+    except GroupSubclass.MultipleObjectsReturned:
+        pass
     
-    return info
+    return {"result": info}

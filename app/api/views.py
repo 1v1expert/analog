@@ -42,9 +42,11 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
                         result_pk = analogs.get(manufacturer_to.title)
                         if result_pk is not None:
                             result = Product.objects.get(pk=result_pk)
+                            info = get_product_info(analog=result, original=product)
                             return JsonResponse({
                                 'result': [result.article],
-                                'info': get_product_info(analog=result, original=product),
+                                'info': info.get("result"),
+                                "image": info.get("image"),
                                 'result_pk': result.pk,
                                 'original_pk': product.pk,
                                 'error': False
