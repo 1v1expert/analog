@@ -79,8 +79,6 @@ class Category(Base):
     short_title = models.CharField(max_length=255, verbose_name='Краткое наименование', blank=True)
     attributes = models.ManyToManyField('Attribute', blank=True, verbose_name="Атрибуты")
 
-    image = models.ImageField(upload_to='images', null=True, max_length=100, verbose_name='Изображение')
-
     def getAttributes(self):
         if not self.childs:
             return []
@@ -104,20 +102,6 @@ class Category(Base):
         verbose_name_plural = "Классы"
 
 mptt.register(Category, )
-# class Subcategory(Base):
-#     """
-#     Модель Пподкласса товаров
-#     """
-#     title = models.CharField(max_length=255, verbose_name='Наименование')
-#     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='subcategories')
-#     short_title = models.CharField(max_length=255, verbose_name='Краткое наименование', blank=True)
-
-#     def __str__(self):
-#         return self.category.title + ' -> ' + self.title
-
-#     class Meta:
-#         verbose_name = "Подкласс"
-#         verbose_name_plural = "Подклассы"
 
 
 class Attribute(Base):
@@ -153,7 +137,7 @@ class FixedValue(Base):
     title = models.CharField(max_length=255, verbose_name='Значение')
     attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут",
                                   related_name="fixed_value")
-    image = models.ImageField(upload_to='images', null=True, max_length=100, verbose_name='Изображение')
+    # image = models.ImageField(upload_to='images', null=True, max_length=100, verbose_name='Изображение')
 
     def __str__(self):
         return '{}, title: {}, attribute: {}, type: {}'.format(self._meta.model, self.title, self.attribute.title,
@@ -267,8 +251,22 @@ class Specification(Base):
     class Meta:
         verbose_name = "Спецификация"
         verbose_name_plural = "Спецификации"
+
         
-        
+class GroupSubclass(Base):
+    """  Модель группы товаров, объединенные подклассов и фиксированным атрибутом """
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Класс товара')
+    fixed_attribute = models.ForeignKey(FixedValue, on_delete=models.PROTECT, verbose_name='Значение аттрибута')
+    image = models.ImageField(upload_to='images', null=True, max_length=100, verbose_name='Изображение')
+    
+    def __str__(self):
+        return 'Группа в подклассе <{}> и фикс. атрибутом <{}>'.format(self.category, self.fixed_attribute)
+    
+    class Meta:
+        verbose_name = "Группа"
+        verbose_name_plural = "Группы"
+
+
 class DataFile(Base):
     """
     Модель загрузки файлов

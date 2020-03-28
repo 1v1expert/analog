@@ -7,7 +7,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.auth.models import User
 
 from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, \
-    UnFixedAttributeValue, Specification, DataFile
+    UnFixedAttributeValue, Specification, DataFile, GroupSubclass
 from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader, GeneralDocumentReader, BettermannDocumentReader, PKT, GeneralDocumentReaderMountingElements
 from catalog.reporters import writers, generators
 
@@ -361,5 +361,6 @@ admin.site.register(Attribute, AttrAdmin)
 admin.site.register(Specification, BaseAdmin)
 admin.site.register(DataFile, FileUploadAdmin)
 admin.site.register(LogEntry, LogEntryAdmin)
+admin.site.register(GroupSubclass)
 
 # Register your models here.
