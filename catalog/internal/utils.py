@@ -109,29 +109,16 @@ def get_attributes(product, api=True):
 
 
 def get_product_info(analog, original=None):
-    # info = []
+    
     info = [{"analog":
                  {"name": "наименование", "value": analog.title},
              "original":
                  {"name": "наименование", "value": original.title}
              }]
-    
-    # fix_attributes = product.fixed_attrs_vals \
-    #     .all() \
-    #     .exclude(attribute__title='') \
-    #     .select_related('value', 'attribute')  # category.attributes.all()
-    # unfix_attributes = product.unfixed_attrs_vals \
-    #     .all() \
-    #     .exclude(attribute__title='') \
-    #     .select_related('attribute')  # category.attributes.all()
-    
-    # additional_info = [{attr.attribute.title: attr.value} for attr in ]
-    # for attr in unfix_attributes:
-    #     info.append({attr.attribute.title: attr.value})
-    # print(unfix_attributes.values('value', 'attribute__title'))
-    # for attr in fix_attributes:
-    #     info.append({attr.attribute.title: attr.value.title})
+
     original_info = original.get_info()
+    
+    fixed_attributes = []  # for find images in groups
     
     for attr in analog.get_info():
         analog_name = attr.attribute.title
@@ -150,6 +137,7 @@ def get_product_info(analog, original=None):
         if attr.__class__.__name__ == 'FixedAttributeValue':
             analog_value = attr.value.title
             original_value = orig_attr.value.title if orig_attr else ""
+            fixed_attributes.append(attr.value)  # for search group with image
         else:
             analog_value = attr.value
             original_value = orig_attr.value if orig_attr else ""
@@ -166,5 +154,19 @@ def get_product_info(analog, original=None):
                  "original":
                      {"name": "производитель", "value": original.manufacturer.title}
                  })
-    # print(info)
-    return info
+    # find group with image
+    if not len(fixed_attributes):
+        return {"result": info}
+    
+    from catalog.models import GroupSubclass
+    try:
+        group = GroupSubclass.objects.get(category=analog.category,
+                                          fixed_attribute__in=fixed_attributes)
+        return {"result": info, "image": group.image.url}
+    
+    except GroupSubclass.DoesNotExist:
+        pass
+    except GroupSubclass.MultipleObjectsReturned:
+        pass
+    
+    return {"result": info}

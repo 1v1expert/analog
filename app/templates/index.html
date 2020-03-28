@@ -350,7 +350,7 @@
                         else {
                             createCookie("attempt_count", attempt_count + 1, 10);
 
-                            function buildTable(data) {
+                            function buildTable(data, image) {
                                 var table = document.createElement("table");
                                 table.className = "table table-hover mb-0";
                                 table.id = 'table-info';
@@ -381,12 +381,24 @@
                                     {# }#}
                                     tbody.appendChild(tr);
                                 });
+
+                                if (image) {
+                                    var tr = document.createElement("tr");
+                                    var td = document.createElement("td");
+                                    td.setAttribute("colspan", 3);
+                                    var img = document.createElement("img");
+                                    img.src = image;
+                                    img.alt = "image";
+                                    td.appendChild(img);
+                                    tr.appendChild(td);
+                                    tbody.appendChild(tr);
+                                }
                                 table.appendChild(tbody);
                                 return table;
                             }
 
                             swal("Артикул: " + data.result.join(' ;'), {
-                                content: buildTable(data.info),
+                                content: buildTable(data.info, data.image),
                                 buttons: {
                                     cancel: "Закрыть",
                                     catch: {
