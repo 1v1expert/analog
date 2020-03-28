@@ -257,7 +257,7 @@ class GroupSubclass(Base):
     """  Модель группы товаров, объединенные подклассов и фиксированным атрибутом """
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Класс товара')
     fixed_attribute = models.ForeignKey(FixedValue, on_delete=models.PROTECT, verbose_name='Значение аттрибута')
-    image = models.ImageField(upload_to='images', null=True, max_length=100, verbose_name='Изображение')
+    image = models.ImageField(upload_to='images', null=True, max_length=100, blank=True, verbose_name='Изображение')
     
     def __str__(self):
         return 'Группа в подклассе <{}> и фикс. атрибутом <{}>'.format(self.category, self.fixed_attribute)
