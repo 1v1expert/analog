@@ -1,4 +1,41 @@
 <script type="text/javascript">
+    //Working with cookie
+
+    function createCookie(cookieName, cookieValue, daysToExpire) {
+        var date = new Date();
+        date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+        document.cookie = cookieName + "=" + cookieValue + "; expires=" + date.toGMTString();
+    }
+
+    function accessCookie(cookieName) {
+        var name = cookieName + "=";
+        var allCookieArray = document.cookie.split(';');
+        for (var i = 0; i < allCookieArray.length; i++) {
+            var temp = allCookieArray[i].trim();
+            if (temp.indexOf(name) == 0)
+                return temp.substring(name.length, temp.length);
+        }
+        return "";
+    }
+</script>
+
+<script type="text/javascript">
+
+    /*===================
+     OWL Carousel
+      ===================*/
+
+    jQuery(document).ready(function () {
+        var carousel = $('#myCarousel')
+        jQuery("#myCarousel").click(function () {
+            carousel.carousel('pause');
+        })
+    });
+
+
+</script>
+
+<script type="text/javascript">
     /*===================
   3.popup sign in & register
    ===================*/
@@ -380,51 +417,51 @@
 </script>
 
 <script type="text/javascript">
-        $(function () {
-            /*==================
-             Jquery autocomplete
-             ==================*/
-            $("#article").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        type: "GET",
-                        url: "{% url 'api:search_article' %}",
-                        data: {
-                            article: request.term
-                        },
-                        success: function (data) {
-                            console.log(data);
-                            response(data);
+    $(function () {
+        /*==================
+         Jquery autocomplete
+         ==================*/
+        $("#article").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'api:search_article' %}",
+                    data: {
+                        article: request.term
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        response(data);
 
-                        }
-                    });
+                    }
+                });
 
-                },
-                minLength: 2,
-                select: function (event, ui) {
-                    console.log(event, ui);
-                    {#console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );#}
-                }
-            })
-                .autocomplete("instance")._renderItem = function (ul, item) {
-                return $("<li>")
-                    .append("<div>" + item.value + " (" + item.manufacturer__title + ") " + "<br>" + item.title + "</div>")
-                    .appendTo(ul);
-            };
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                console.log(event, ui);
+                {#console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );#}
+            }
+        })
+            .autocomplete("instance")._renderItem = function (ul, item) {
+            return $("<li>")
+                .append("<div>" + item.value + " (" + item.manufacturer__title + ") " + "<br>" + item.title + "</div>")
+                .appendTo(ul);
+        };
 
-            /*==================
-            Check registration
-            ==================*/
-            {% if confirm_email %}
-                swal('Спасибо за регистрацию, {{ request.user }}. Ваш аккаунт подтверждён');
-                setTimeout(function () {
-                    window.location.href = "{% url 'app:landing_home' %}"
-                }, 3000);
+        /*==================
+        Check registration
+        ==================*/
+        {% if confirm_email %}
+            swal('Спасибо за регистрацию, {{ request.user }}. Ваш аккаунт подтверждён');
+            setTimeout(function () {
+                window.location.href = "{% url 'app:landing_home' %}"
+            }, 3000);
 
-            {% endif %}
-        });
+        {% endif %}
+    });
 
-        function redirect(url) {
-            window.location.href = url;
-        }
-    </script>
+    function redirect(url) {
+        window.location.href = url;
+    }
+</script>
