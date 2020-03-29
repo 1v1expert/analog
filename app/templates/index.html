@@ -354,16 +354,10 @@
                                 var table = document.createElement("table");
                                 table.className = "table table-hover mb-0";
                                 table.id = 'table-info';
-                                {#table.visible = false;#}
                                 table.style.display = "none";
                                 var thead = document.createElement("thead");
                                 var tbody = document.createElement("tbody");
                                 var headRow = document.createElement("tr");
-                                {#Object.keys(data[0]).forEach(function (el) {#}
-                                {#    var th = document.createElement("th");#}
-                                {#    th.appendChild(document.createTextNode(el));#}
-                                {#    headRow.appendChild(th);#}
-                                {# });#}
                                 thead.appendChild(headRow);
                                 table.appendChild(thead);
                                 data.forEach(function (el) {
