@@ -202,7 +202,7 @@ def login_view(request: HttpRequest) -> HttpResponse:
                 return JsonResponse({'OK': False, 'error': 'Неверно введён логин или пароль'})
         except (models.User.DoesNotExist, models.User.MultipleObjectsReturned) as e:
             return HttpResponse('Unauthorized', status=401)
-        
+        # ss
         if user.is_active:
             login(request, user)
             return JsonResponse({'OK': True})
