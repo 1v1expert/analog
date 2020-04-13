@@ -66,6 +66,10 @@ def advanced_search(request):
 #  Landing page, new design
 #  ========================
 
+text = {"search_by_specification":
+{"en": "",
+ "ru": ""}
+ }
 
 @a_decorator_passing_logs
 def landing_page_view(request, lang='ru') -> HttpResponse:
