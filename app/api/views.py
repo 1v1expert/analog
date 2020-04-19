@@ -141,9 +141,9 @@ def check_product_and_get_attributes(request: HttpRequest) -> HttpResponse:
 def feedback(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = FeedBackForm(request.POST)
-        user = request.user
-        if str(request.user) == 'AnonymousUser':
-            user = None
+        user = request.user if str(request.user) != 'AnonymousUser' else None
+        # if str(request.user) == 'AnonymousUser':
+            # user = None
         if form.is_valid():
             
             if not request.recaptcha_is_valid:

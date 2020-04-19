@@ -261,7 +261,7 @@ class KOKSDocumentReader(object):
     /code/article/title/price
     name sheet -> type
     """
-    def __init__(self, path=None, workbook=None, only_parse=True, user=None, loadnetworkmodel=False):
+    def __init__(self, path=None, workbook=None, only_parse=True, user=None, loadnetworkmodel=False, name_sheet=None):
         assert path or workbook, "You should provide either path to file or XLS-object"
         
         if workbook:
@@ -868,7 +868,7 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
 class NorthAurora(GeneralDocumentReaderMountingElements):
     """  Управление монтажными элементами """
     
-    def line_processing(self, line, name_sheet=None):
+    def line_processing(self, line, name_sheet=None, category=None):
         ordering = (
             # name attr, type, fixed
             
@@ -877,21 +877,31 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
             ('article', 'артикул', None),
             # ('additional_article', 'Доп. артикул', None),
             ('species', 'вид', True),
+            ('species_2', 'вид', True),
             ('covering', 'покрытие', True),
             ('width', 'ширина', False),
             # ('additional_width', 'ширина доп.', False),
             ('depth', 'толщина', False),
             ('board_height', 'высота борта', False),
-            # ('additional_board_height', 'высота борта доп.', False),
             ('length', 'длина', False),
-            # ('units', 'ед.изм', True),
-            
-            ('category_name', 'подкласс', None),
+            # false values
+            ('species_2', 'вид', True)
         )
         dict_line = {
             ordering[number_line][0]: line[number_line].strip() if line[number_line] != 'None' else ''
             for number_line in range(len(line))
         }
+        
+        if dict_line['covering'] == 'ОЦ':
+            dict_line['covering'] = ''
+        elif dict_line['covering'] == 'ХК':
+            dict_line['covering'] = ''
+        elif dict_line['covering'] == 'ХК':
+            dict_line['covering'] = ''
+        elif dict_line['covering'] == 'ОЦ':
+            dict_line['covering'] = ''
+            
+        dict_line['species'] = 'лестничный'
         
         # formalized_title = self.network.remove_stop_words(title)
         article = dict_line.get('article', False)
@@ -911,13 +921,13 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
         
         self.articles.add(article)
         
-        try:
-            category = Category.objects.get(title='Прямая секция')
-            dict_line['category'] = category
-        except models.ObjectDoesNotExist:
-            raise Exception('Category does not exist, title: %s' % category_name)
-        except Category.MultipleObjectsReturned:
-            raise Exception('Multi objects returned, title: %s' % category_name)
+        # try:
+            # category = category
+        dict_line['category'] = category
+        # except models.ObjectDoesNotExist:
+        #     raise Exception('Category does not exist, title: %s' % category_name)
+        # except Category.MultipleObjectsReturned:
+        #     raise Exception('Multi objects returned, title: %s' % category_name)
         
         self.create_products(**dict_line)
         
@@ -949,6 +959,7 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
     def parse_file(self):
         for name_list in self.sheets:
             self.manufacturer = Manufacturer.objects.get(title=name_list)
+            category = Category.objects.get(title='Прямая секция')
             logger.debug('Sheet {}'.format(name_list))
             self.sheet = self.workbook.get_sheet_by_name(name_list)
             for i, line in enumerate(self.read_sheet()):
@@ -956,10 +967,12 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
                     continue
                 if i % 50 == 0:
                     logger.debug('{} rows checked successfully'.format(i))
-                self.line_processing(line)
+                    print('{} rows checked successfully'.format(i))
+                self.line_processing(line, category=category)
         
         self._create_attributes_and_products()
         logger.debug('Дубли артикулов: {}'.format(self.doubles_article))
+        print('Дубли артикулов: {}'.format(self.doubles_article))
         
         return self
     

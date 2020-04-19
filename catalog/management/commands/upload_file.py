@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 import time
 
-from catalog.file_utils import ProcessingUploadData, PKT, XLSDocumentReader
+from catalog.file_utils import ProcessingUploadData, PKT, NorthAurora
 
 
 class Command(BaseCommand):
@@ -21,7 +21,7 @@ class Command(BaseCommand):
         if not filename:
             filename = 'files/new_db.xlsx'
         
-        reader = XLSDocumentReader(path=filename, sheet_name='Companys')
+        reader = NorthAurora(path=filename, sheet_name='Companys')
         data = reader.parse_file()
         self.companys_update(data)
 
