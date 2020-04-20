@@ -8,7 +8,6 @@ import time
 from catalog.file_utils import ProcessingUploadData, PKT, XLSDocumentReader
 
 
-
 class Command(BaseCommand):
     """ Update DataBase"""
     

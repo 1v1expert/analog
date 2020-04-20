@@ -16,6 +16,7 @@ from app.forms import \
     MyAuthenticationForm, MyRegistrationForm, AppSearchForm, SearchFromFile, EmailConfirmationForm, FeedBackForm, SubscribeForm
 from app.decorators import a_decorator_passing_logs
 from app.models import MainLog
+from app.trans import trans_text
 
 from smtplib import SMTPDataError
 
@@ -61,20 +62,18 @@ def advanced_search(request):
     return redirect('catalog:search')
 
 
-
 #  ========================
 #  Landing page, new design
 #  ========================
 
-text = {"search_by_specification":
-{"en": "",
- "ru": ""}
- }
 
 @a_decorator_passing_logs
-def landing_page_view(request, lang='ru') -> HttpResponse:
+def landing_page_view(request, lang="ru") -> HttpResponse:
     """  The function renders the main project page """
     # https://ianlunn.github.io/Hover/
+    if lang not in ("en", "ru"):
+        lang = "ru"
+        
     feedback_form = FeedBackForm()
     auth_form = MyAuthenticationForm(request)
     reg_form = MyRegistrationForm()
@@ -86,6 +85,7 @@ def landing_page_view(request, lang='ru') -> HttpResponse:
         'auth_form': auth_form,
         'reg_form': reg_form,
         'subscribe_form': subscribe_form,
+        'text': trans_text[lang]
     })
 
 
