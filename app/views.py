@@ -68,7 +68,7 @@ def advanced_search(request):
 
 
 @a_decorator_passing_logs
-def landing_page_view(request) -> HttpResponse:
+def landing_page_view(request, lang='ru') -> HttpResponse:
     """  The function renders the main project page """
     # https://ianlunn.github.io/Hover/
     feedback_form = FeedBackForm()
