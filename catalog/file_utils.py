@@ -865,6 +865,105 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
         return self
 
 
+class NorthAurora(GeneralDocumentReaderMountingElements):
+    """  Управление монтажными элементами """
+    
+    def line_processing(self, line, name_sheet=None):
+        ordering = (
+            # name attr, type, fixed
+            
+            ('title', 'наименование', None),
+            ('series', 'серия', None),
+            ('article', 'артикул', None),
+            # ('additional_article', 'Доп. артикул', None),
+            ('species', 'вид', True),
+            ('covering', 'покрытие', True),
+            ('width', 'ширина', False),
+            # ('additional_width', 'ширина доп.', False),
+            ('depth', 'толщина', False),
+            ('board_height', 'высота борта', False),
+            # ('additional_board_height', 'высота борта доп.', False),
+            ('length', 'длина', False),
+            # ('units', 'ед.изм', True),
+            
+            ('category_name', 'подкласс', None),
+        )
+        dict_line = {
+            ordering[number_line][0]: line[number_line].strip() if line[number_line] != 'None' else ''
+            for number_line in range(len(line))
+        }
+        
+        # formalized_title = self.network.remove_stop_words(title)
+        article = dict_line.get('article', False)
+        category_name = dict_line.get('category_name', False)
+        assert article and category_name, 'Line should included article and category, line: {}'.format(dict_line)
+        # if not article.strip() or title.strip().lower() == 'none' or not title:
+        #     return
+        # if not category_name.strip() or category_name.strip().lower() == 'none' or not category_name:
+        #     return
+        
+        self.c_lines += 1  # counter lines
+        
+        # check_doubles
+        if article in self.articles:
+            self.doubles_article.append(article)
+            return
+        
+        self.articles.add(article)
+        
+        try:
+            category = Category.objects.get(title='Прямая секция')
+            dict_line['category'] = category
+        except models.ObjectDoesNotExist:
+            raise Exception('Category does not exist, title: %s' % category_name)
+        except Category.MultipleObjectsReturned:
+            raise Exception('Multi objects returned, title: %s' % category_name)
+        
+        self.create_products(**dict_line)
+        
+        for key in ordering:
+            if key[2] is None:
+                continue
+            
+            if key[2] is False:
+                value = dict_line.get(key[0])
+                if is_digit(value) and value:
+                    attribute = category.attributes.get(title=key[1])
+                    self._create_attribute(article, float(value), attribute, fixed=key[2])
+            
+            if key[2] is True:
+                value = dict_line.get(key[0])
+                
+                if not value:
+                    continue
+                
+                try:
+                    obj_value = FixedValue.objects.get(title__iexact=value)
+                except models.ObjectDoesNotExist:
+                    raise Exception('Фикс. значение: "%s" не найдено в аттрибуте: "%s"' % (value, key[1]))
+                except FixedValue.MultipleObjectsReturned:
+                    raise Exception('FixedValue objects returned: %s, attribute %s' % (value, key[1]))
+                attribute = category.attributes.get(title=key[1])
+                self._create_attribute(article, obj_value, attribute, fixed=key[2])
+    
+    def parse_file(self):
+        for name_list in self.sheets:
+            self.manufacturer = Manufacturer.objects.get(title=name_list)
+            logger.debug('Sheet {}'.format(name_list))
+            self.sheet = self.workbook.get_sheet_by_name(name_list)
+            for i, line in enumerate(self.read_sheet()):
+                if not i:  # skip header table
+                    continue
+                if i % 50 == 0:
+                    logger.debug('{} rows checked successfully'.format(i))
+                self.line_processing(line)
+        
+        self._create_attributes_and_products()
+        logger.debug('Дубли артикулов: {}'.format(self.doubles_article))
+        
+        return self
+    
+
 def is_digit(s):
     try:
         float(s)
