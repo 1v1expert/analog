@@ -259,7 +259,45 @@
                 success: function (data) {
                     if (data.error) {
                         {#alert(data.error);#}
-                        swal("Внимание!", data.error, "info");
+                        swal("Внимание!", data.error, {
+                            {#content: ,#}
+                            buttons: {
+                                cancel: "Ok",
+                                error: {
+                                    text: "Сообщить об ошибке",
+                                    value: "report_an_error",
+                                    className: "report_an_error_class_visible"
+                                }
+                            }}).then(function (value) {
+                            switch (value) {
+
+                                case "report_an_error":
+                                    swal("Спасибо", "Вы можете оставить свою почту и мы вам сообщим, " +
+                                        "как только исправим неточность", {
+                                        content: {
+                                            element: "input",
+                                            attributes: {
+                                                placeholder: "Введите ваш email",
+                                                type: "email"
+                                            }
+                                        }
+                                    }).then(function () {
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "{% url 'api:report_an_error' %}",
+                                            {#async: false,#}
+                                            data: data
+                                        })
+                                    });
+                                    break;
+
+                                default:
+                                    swal.close();
+                                    break;
+                            }
+
+
+                        });
                     }
                     else {
                         createCookie("attempt_count", attempt_count + 1, 10);
