@@ -884,29 +884,28 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
             ('depth', 'толщина', False),
             ('board_height', 'высота борта', False),
             ('length', 'длина', False),
-            # false values
-            ('species_2', 'вид', True)
         )
+        
         dict_line = {
             ordering[number_line][0]: line[number_line].strip() if line[number_line] != 'None' else ''
             for number_line in range(len(line))
         }
         
         if dict_line['covering'] == 'ОЦ':
-            dict_line['covering'] = ''
+            dict_line['covering'] = 'холодный цинк'
         elif dict_line['covering'] == 'ХК':
-            dict_line['covering'] = ''
-        elif dict_line['covering'] == 'ХК':
-            dict_line['covering'] = ''
-        elif dict_line['covering'] == 'ОЦ':
-            dict_line['covering'] = ''
+            dict_line['covering'] = 'сталь без покрытия'
+        elif dict_line['covering'] == 'RAL':
+            dict_line['covering'] = 'крашеный'
+        elif dict_line['covering'] == 'ГЦ':
+            dict_line['covering'] = 'горячий цинк'
             
         dict_line['species'] = 'лестничный'
         
         # formalized_title = self.network.remove_stop_words(title)
         article = dict_line.get('article', False)
-        category_name = dict_line.get('category_name', False)
-        assert article and category_name, 'Line should included article and category, line: {}'.format(dict_line)
+        # category_name = dict_line.get('category_name', False)
+        # assert article and category_name, 'Line should included article and category, line: {}'.format(dict_line)
         # if not article.strip() or title.strip().lower() == 'none' or not title:
         #     return
         # if not category_name.strip() or category_name.strip().lower() == 'none' or not category_name:
@@ -957,22 +956,20 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
                 self._create_attribute(article, obj_value, attribute, fixed=key[2])
     
     def parse_file(self):
-        for name_list in self.sheets:
-            self.manufacturer = Manufacturer.objects.get(title=name_list)
-            category = Category.objects.get(title='Прямая секция')
-            logger.debug('Sheet {}'.format(name_list))
-            self.sheet = self.workbook.get_sheet_by_name(name_list)
-            for i, line in enumerate(self.read_sheet()):
-                if not i:  # skip header table
-                    continue
-                if i % 50 == 0:
-                    logger.debug('{} rows checked successfully'.format(i))
-                    print('{} rows checked successfully'.format(i))
-                self.line_processing(line, category=category)
+        # for name_list in self.sheets:
+        self.manufacturer = Manufacturer.objects.get(title='Северная Аврора')
+        category = Category.objects.get(title='Прямая секция')
+        logger.debug('Sheet {}'.format('НПЛ'))
+        self.sheet = self.workbook.get_sheet_by_name('НПЛ')
+        for i, line in enumerate(self.read_sheet()):
+            if not i:  # skip header table
+                continue
+            if i % 50 == 0:
+                logger.debug('{} rows checked successfully'.format(i))
+            self.line_processing(line, category=category)
         
         self._create_attributes_and_products()
         logger.debug('Дубли артикулов: {}'.format(self.doubles_article))
-        print('Дубли артикулов: {}'.format(self.doubles_article))
         
         return self
     
