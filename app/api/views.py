@@ -229,6 +229,7 @@ def report_an_error(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
+        body['user'] = str(request.user)
         MainLog.objects.create(raw=body,
                                message='report_an_error')
 

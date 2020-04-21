@@ -278,15 +278,19 @@
                                             element: "input",
                                             attributes: {
                                                 placeholder: "Введите ваш email",
-                                                type: "email"
+                                                type: "email",
+                                                id: "email_for_report_an_error",
                                             }
                                         }
                                     }).then(function () {
                                         $.ajax({
                                             type: "POST",
                                             url: "{% url 'api:report_an_error' %}",
-                                            {#async: false,#}
-                                            data: data
+                                            data: JSON.stringify({
+                                                'report': 'an_error',
+                                                'original_article': $('#article').val(),
+                                                'email': $('#email_for_report_an_error').val()
+                                            })
                                         })
                                     });
                                     break;
