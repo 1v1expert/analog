@@ -281,6 +281,8 @@ class KOKSDocumentReader(object):
         self.only_parse = only_parse
         self.c_lines = 0
         
+        self.start_time = time.time()
+        
         self.user = user if user is not None else auth_md.User.objects.get(is_staff=True, username='admin')
         
         self.manufacturer = Manufacturer.objects.get(title='КОКС')
@@ -500,7 +502,10 @@ class KOKSDocumentReader(object):
             logger.debug('Start creating process: {}, {} products'.format(not self.only_parse, len(self.products)))
             Product.objects.bulk_create(self.products)
             
-            for key in self.attr_vals.keys():
+            for i, key in enumerate(self.attr_vals.keys()):
+                if i % 50 == 0:
+                    logger.debug('{} from {} attr added'.format(i, len(self.attr_vals.keys())))
+                    
                 product = Product.objects.get(article=key, manufacturer=self.manufacturer)
                 for fix in self.attr_vals[key]['fix']:
                     fix.save()
@@ -955,17 +960,30 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
                 attribute = category.attributes.get(title=key[1])
                 self._create_attribute(article, obj_value, attribute, fixed=key[2])
     
-    def parse_file(self):
+    def parse_file(self, sheet_name=None):
         # for name_list in self.sheets:
         self.manufacturer = Manufacturer.objects.get(title='Северная Аврора')
         category = Category.objects.get(title='Прямая секция')
-        logger.debug('Sheet {}'.format('НПЛ'))
-        self.sheet = self.workbook.get_sheet_by_name('НПЛ')
+        
+        logger.debug('Sheet {}'.format(sheet_name))
+        
+        self.sheet = self.workbook.get_sheet_by_name(sheet_name)
+        
+        # len_sheet =
+        times_list = []
+        timestamp = time.time()
         for i, line in enumerate(self.read_sheet()):
+            
             if not i:  # skip header table
                 continue
+                
             if i % 50 == 0:
-                logger.debug('{} rows checked successfully'.format(i))
+                times_list.append(time.time() - timestamp)
+                timestamp = time.time()
+                logger.debug('{} rows checked successfully, the approximate time {}'.format(i,
+                                                                                            sum(times_list)/len(times_list)
+                                                                                            ))
+                
             self.line_processing(line, category=category)
         
         self._create_attributes_and_products()
