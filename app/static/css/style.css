@@ -2942,7 +2942,7 @@ padding: 4px 0px 40px 0px;
  height:50px;
 }
  .dropdown-menu li.active a, .dropdown-menu a:hover, .dropdown-menu a:focus, .dropdown-menu li.active a:hover, .dropdown-menu li.active a:focus {
- background:#2fbbff !important;
+ background:#FFDD40 !important;
  color: #fff;
 }
  #menu-icon {
