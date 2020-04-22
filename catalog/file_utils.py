@@ -906,15 +906,9 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
             dict_line['covering'] = 'горячий цинк'
             
         dict_line['species'] = 'лестничный'
+        dict_line['species_2'] = 'неперфорированный'
         
-        # formalized_title = self.network.remove_stop_words(title)
         article = dict_line.get('article', False)
-        # category_name = dict_line.get('category_name', False)
-        # assert article and category_name, 'Line should included article and category, line: {}'.format(dict_line)
-        # if not article.strip() or title.strip().lower() == 'none' or not title:
-        #     return
-        # if not category_name.strip() or category_name.strip().lower() == 'none' or not category_name:
-        #     return
         
         self.c_lines += 1  # counter lines
         
@@ -925,13 +919,7 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
         
         self.articles.add(article)
         
-        # try:
-            # category = category
         dict_line['category'] = category
-        # except models.ObjectDoesNotExist:
-        #     raise Exception('Category does not exist, title: %s' % category_name)
-        # except Category.MultipleObjectsReturned:
-        #     raise Exception('Multi objects returned, title: %s' % category_name)
         
         self.create_products(**dict_line)
         
@@ -969,7 +957,6 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
         
         self.sheet = self.workbook.get_sheet_by_name(sheet_name)
         
-        # len_sheet =
         times_list = []
         timestamp = time.time()
         for i, line in enumerate(self.read_sheet()):
