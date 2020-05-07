@@ -873,22 +873,24 @@ class GeneralDocumentReaderMountingElements(KOKSDocumentReader):
 class NorthAurora(GeneralDocumentReaderMountingElements):
     """  Управление монтажными элементами """
     
-    def line_processing(self, line, name_sheet=None, category=None):
+    def line_processing(self, line, name_sheet=None):
         ordering = (
             # name attr, type, fixed
             
             ('title', 'наименование', None),
             ('series', 'серия', None),
             ('article', 'артикул', None),
-            # ('additional_article', 'Доп. артикул', None),
+            ('category_name', 'подкласс', None),
             ('species', 'вид', True),
-            ('species_2', 'вид', True),
+            # ('perforation', 'перфорация', True),
             ('covering', 'покрытие', True),
             ('width', 'ширина', False),
             # ('additional_width', 'ширина доп.', False),
             ('depth', 'толщина', False),
             ('board_height', 'высота борта', False),
             ('length', 'длина', False),
+            # ('cap_type', 'тип крышки', True),
+            ('interface_type', 'тип стыка', True)
         )
         
         dict_line = {
@@ -896,19 +898,32 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
             for number_line in range(len(line))
         }
         
-        if dict_line['covering'] == 'ОЦ':
-            dict_line['covering'] = 'холодный цинк'
-        elif dict_line['covering'] == 'ХК':
-            dict_line['covering'] = 'сталь без покрытия'
-        elif dict_line['covering'] == 'RAL':
-            dict_line['covering'] = 'крашеный'
-        elif dict_line['covering'] == 'ГЦ':
-            dict_line['covering'] = 'горячий цинк'
-            
-        dict_line['species'] = 'лестничный'
-        dict_line['species_2'] = 'неперфорированный'
-        
         article = dict_line.get('article', False)
+        category_name = dict_line.get('category_name', False)
+        # assert article and category_name, 'Line should included article and category, line: {}'.format(dict_line)
+        if not article or not category_name:
+            logger.debug('Line should included article and category, line: {}'.format(dict_line))
+            return
+        
+        try:
+            category = Category.objects.get(title__iexact=category_name)
+            dict_line['category'] = category
+        except models.ObjectDoesNotExist:
+            raise Exception('Category does not exist, title: %s' % category_name)
+        except Category.MultipleObjectsReturned:
+            raise Exception('Multi objects returned, title: %s' % category_name)
+        
+        # if dict_line['covering'] == 'ОЦ':
+        #     dict_line['covering'] = 'холодный цинк'
+        # elif dict_line['covering'] == 'ХК':
+        #     dict_line['covering'] = 'сталь без покрытия'
+        # elif dict_line['covering'] == 'RAL':
+        #     dict_line['covering'] = 'крашеный'
+        # elif dict_line['covering'] == 'ГЦ':
+        #     dict_line['covering'] = 'горячий цинк'
+        #
+        # dict_line['species'] = 'лестничный'
+        # dict_line['species_2'] = 'неперфорированный'
         
         self.c_lines += 1  # counter lines
         
@@ -918,8 +933,6 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
             return
         
         self.articles.add(article)
-        
-        dict_line['category'] = category
         
         self.create_products(**dict_line)
         
@@ -940,18 +953,19 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
                     continue
                 
                 try:
-                    obj_value = FixedValue.objects.get(title__iexact=value)
+                    attribute = Attribute.objects.get(title=key[1])
+                    obj_value = FixedValue.objects.get(title__iexact=value, attribute=attribute)
                 except models.ObjectDoesNotExist:
                     raise Exception('Фикс. значение: "%s" не найдено в аттрибуте: "%s"' % (value, key[1]))
-                except FixedValue.MultipleObjectsReturned:
+                except (FixedValue.MultipleObjectsReturned, Category.MultipleObjectsReturned):
                     raise Exception('FixedValue objects returned: %s, attribute %s' % (value, key[1]))
-                attribute = category.attributes.get(title=key[1])
+                
                 self._create_attribute(article, obj_value, attribute, fixed=key[2])
     
     def parse_file(self, sheet_name=None):
         # for name_list in self.sheets:
         self.manufacturer = Manufacturer.objects.get(title='Северная Аврора')
-        category = Category.objects.get(title='Прямая секция')
+        # category = Category.objects.get(title='Прямая секция')
         
         logger.debug('Sheet {}'.format(sheet_name))
         
@@ -971,7 +985,7 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
                                                                                             sum(times_list)/len(times_list)
                                                                                             ))
                 
-            self.line_processing(line, category=category)
+            self.line_processing(line)
         
         self._create_attributes_and_products()
         logger.debug('Дубли артикулов: {}'.format(self.doubles_article))

@@ -5,22 +5,34 @@ from catalog.models import Manufacturer, Product, FixedAttributeValue, UnFixedAt
 from catalog.internal.neural_network import NeuralNetworkOption2
 from catalog import file_utils
 
+from time import gmtime, time, strftime
+
 import re
 
 
-class ObjectHandling(object):
+class ObjectManager(object):
     
-    @staticmethod
-    def deleting_all_manufacturer_information(manufacturer):
+    def __init__(self):
+        self.start_time = time()
+    
+    def deleting_all_manufacturer_information(self, manufacturer):
         manufacturer_obj = manufacturer
         if isinstance(manufacturer, str):
             manufacturer_obj = Manufacturer.objects.get(title=manufacturer)
         
         products = Product.objects.filter(manufacturer=manufacturer_obj)
+        product_count = products.count()
+        
         for product in products:
             FixedAttributeValue.objects.filter(product=product).delete()
             UnFixedAttributeValue.objects.filter(product=product).delete()
         products.delete()
+
+        print('Remove {} products by manufacturer: {}, time left: {}'.format(
+            product_count,
+            manufacturer,
+            strftime("%H:%M:%S", gmtime(time() - self.start_time))
+        ))
     
     @staticmethod
     def removal_of_all_unprocessed_products():
