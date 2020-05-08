@@ -305,10 +305,11 @@ class KOKSDocumentReader(object):
     #     for cell in row:
     #         yield str(cell.value)
     #
-    def create_products(self, article=None, title=None, category=None, formalized_title=None, additional_article="",
+    def create_products(self, article=None, title=None, series=None, category=None, formalized_title=None, additional_article="",
                         raw=None, **kwargs):
         product = Product(article=article,
                           is_duplicate=True,
+                          series=series,
                           additional_article=additional_article,
                           manufacturer=self.manufacturer,
                           title=title,
