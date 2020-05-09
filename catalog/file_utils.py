@@ -883,7 +883,7 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
             ('article', 'артикул', None),
             ('category_name', 'подкласс', None),
             ('species', 'вид', True),
-            ('perforation', 'перфорация', True),
+            # ('perforation', 'перфорация', True),
             ('covering', 'покрытие', True),
             ('width', 'ширина', False),
             # ('additional_width', 'ширина доп.', False),

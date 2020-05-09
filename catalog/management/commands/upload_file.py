@@ -23,7 +23,7 @@ class Command(BaseCommand):
         if not filename:
             filename = 'files/north_aurora_sheet_strays_straight_sections.xlsx'
 
-        document = NorthAurora(path=filename, only_parse=False, loadnetworkmodel=False).parse_file(sheet_name='ЛПМ')
+        document = NorthAurora(path=filename, only_parse=False, loadnetworkmodel=False).parse_file(sheet_name='ЛМ')
         logger.debug('Файл {} загружен, {} позиций, дублей - {}'.format(
             filename, document.c_lines, len(document.doubles_article)
         ))
