@@ -5,14 +5,13 @@
     <div class="container">
         <div class="row main-head">
             <div class="col-md-12">
-                {#        <h1>What's features in our hosting</h1>#}
-                <h2>Как работает сервис</h2>
+                <h2>{{ text.features.h2 }}</h2>
                 <div class="row how-row">
                     <div class="col-md-5 col-md-offset-1">
                         <div class="how-card">
                             <div class="row">
                                 <div class="col-md-9 col-xs-9">
-                                    <h3 class="mb-0">Поиск товара-аналога по артикулу</h3>
+                                    <h3 class="mb-0">{{ text.features.section1.h3 }}</h3>
                                 </div>
                                 <div class="col-md-3">
                                     <figure>
@@ -47,15 +46,14 @@
                                     </figure>
                                 </div>
                             </div>
-                            <p class="card-text mb-auto">По заданному артикулу система находит товар-аналог другого
-                                производителя. Поиск происходит с учетом технических характеристик товара.</p>
+                            <p class="card-text mb-auto">{{ text.features.section1.p }}</p>
                         </div>
                     </div>
                     <div class="col-md-5">
                         <div class="how-card">
                             <div class="row">
                                 <div class="col-md-9 col-xs-9">
-                                    <h3 class="mb-0">На кого рассчитан наш сервис</h3>
+                                    <h3 class="mb-0">{{ text.features.section2.h3 }}</h3>
                                 </div>
                                 <div class="col-md-3">
                                     <figure>
@@ -78,9 +76,7 @@
                                 </div>
                             </div>
 
-                            <p class="card-text mb-auto">Если вы электромонтажная организация, проектировщик или
-                                производитель, и вам необходимо быстро «перевести спецификацию с одного производителя на
-                                другого». </p>
+                            <p class="card-text mb-auto">{{ text.features.section2.p }}</p>
                         </div>
                     </div>
                 </div>
@@ -90,7 +86,7 @@
                             <div class="row">
                                 <div class="col-md-9 col-xs-9">
 
-                                    <h3 class="mb-0">В каких товарных категориях работает сервис </h3>
+                                    <h3 class="mb-0">{{ text.features.section3.h3 }}</h3>
                                 </div>
                                 <div class="col-md-3">
                                     <figure>
@@ -150,16 +146,14 @@
                                     </figure>
                                 </div>
                             </div>
-                            <p class="card-text mb-auto">Пока поиск осуществляется в категории «кабеленесущие системы»
-                                (кабельные лотки). Количество представленных производителей и товарных категорий, среди
-                                которых выполняется поиск, постоянно расширяется. </p>
+                            <p class="card-text mb-auto">{{ text.features.section3.p }}</p>
                         </div>
                     </div>
                     <div class="col-md-5">
                         <div class="how-card">
                             <div class="row">
                                 <div class="col-md-9 col-xs-9">
-                                    <h3 class="mb-0">Если Вы хотите помочь нам улучшить работу сервиса </h3>
+                                    <h3 class="mb-0">{{ text.features.section4.h3 | safe}}</h3>
                                 </div>
                                 <div class="col-md-3">
                                     <figure>
@@ -182,14 +176,7 @@
                                 </div>
                             </div>
 
-                            <p class="card-text mb-auto">Если вы не нашли требуемого производителя, напишите,
-                                пожалуйста, на наш адрес – <a
-                                        href="mailto:user@analogpro.ru?subject=Не нашёл производителя">user@analogpro.ru</a>
-                                Мы ускорим работу по данному
-                                производителю и сообщим вам о готовности. Поиск постоянно совершенствуется,
-                                но если Вы заметили неточности в работе поиска, большая просьба сообщить нам об
-                                этом по адресу - <a href="mailto:user@analogpro.ru?subject=Не нашёл производителя">user@analogpro.ru</a>
-                                для устранения неточностей. </p>
+                            <p class="card-text mb-auto">{{ text.features.section4.p | safe}}</p>
                         </div>
                     </div>
                 </div>

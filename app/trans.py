@@ -44,8 +44,35 @@ trans_text = {
                                  "select the appropriate parameters. In this case, the product will be found that "
                                  "best matches the specified characteristics. "
                         }
-            
+    
+                },
+            "features": {
+                "h2": "How our service works",
+                "section1": {
+                    "h3": "Search of an analog product by article",
+                    "p": "Based on a given article number, the system finds an analogue product of another "
+                         "manufacturer. The search takes into account the technical characteristics of the goods."
+                },
+                "section2": {
+                    "h3": "Who is our service for",
+                    "p": "If you are a wiring organization, designer or manufacturer, and you need to «transfer the "
+                         "specification from one manufacturer to another» as soon as possible."
+                },
+                "section3": {
+                    "h3": "For which product categories does the service work.",
+                    "p": "The search is carried out in the category «cable support systems» (cable trays). The number "
+                         "of manufacturers and product categories is constantly expanding."
+                },
+                "section4": {
+                    "h3": "If you want to help us improve the service.",
+                    "p": 'If you did not find the required manufacturer, please write to our email adress - '
+                         '<a href="mailto:user@analogpro.ru?subject=Not found manufacturer">user@analogpro.ru</a> '
+                         'We will focus on this manufacturer and inform you about the readiness. '
+                         'The search is constantly being improved, but if you notice inaccuracies in the search, '
+                         'please, inform us of this at '
+                         '<a href="mailto:user@analogpro.ru?subject=Not found manufacturer">user@analogpro.ru</a>.'
                 }
+            }
         },
     "ru":
         {
