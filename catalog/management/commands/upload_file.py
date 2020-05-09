@@ -21,9 +21,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         filename = options["filename"]
         if not filename:
-            filename = 'files/north_aurora_straight_stairs.xlsx'
+            filename = 'files/north_aurora_sheet_strays_straight_sections.xlsx'
 
-        document = NorthAurora(path=filename, only_parse=False, loadnetworkmodel=False).parse_file(sheet_name='НЛ')
+        document = NorthAurora(path=filename, only_parse=False, loadnetworkmodel=False).parse_file(sheet_name='ЛПМ')
         logger.debug('Файл {} загружен, {} позиций, дублей - {}'.format(
             filename, document.c_lines, len(document.doubles_article)
         ))
