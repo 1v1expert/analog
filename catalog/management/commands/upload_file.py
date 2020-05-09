@@ -27,10 +27,7 @@ class Command(BaseCommand):
         logger.debug('Файл {} загружен, {} позиций, дублей - {}'.format(
             filename, document.c_lines, len(document.doubles_article)
         ))
-        # all_time = time.time() - document.start_time
-        # h = all_time // 3600
-        # m = (all_time // 60) % 60
-        # s = all_time % 60
+
         logger.debug('Время потраченное на загрузку: {}'.format(
             strftime("%H:%M:%S", gmtime(time() - document.start_time))))
 
