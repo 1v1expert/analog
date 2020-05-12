@@ -1,22 +1,81 @@
 import time
 
 from catalog.exceptions import NotFoundException
-from catalog.models import Manufacturer, Product, UnFixedAttributeValue
+from catalog.models import Manufacturer, Product, UnFixedAttributeValue, FixedValue, FixedAttributeValue
+from catalog.choices import HARD, SOFT, RELATION, RECALCULATION, PRICE
 
 
 class AnalogSearch(object):
     def __init__(self, product_from: Product = None, manufacturer_to: Manufacturer = None):
-        self.product_from = product_from
+        self.initial_product = product_from
+        self.initial_product_info = {}
         self.manufacturer_to = manufacturer_to
+        self.products_found = []
         
     def find_products_with_category(self):
-        return Product.objects.filter(category=self.product_from.category)
+        return Product.objects.filter(category=self.initial_product.category)
     
-    def find(self):
+    @staticmethod
+    def _get_hrd_fix_attributes(products):
+        return FixedAttributeValue.objects.filter(product__in=products, attribute__type=HARD)
+    
+    @staticmethod
+    def _get_hrd_unfix_attributes(products):
+        return UnFixedAttributeValue.objects.filter(product__in=products, attribute__type=HARD)
+
+    def get_full_info_from_initial_product(self):
+        info = {HARD: [], SOFT: [], RELATION: [], RECALCULATION: [], PRICE: []}
+        for attr in self.initial_product.fixed_attrs_vals.values_list('value__title',
+                                                                      'attribute__type',
+                                                                      'attribute__title'):
+            info[attr[1]].append({'value': attr[0],
+                                  'attribute': attr[2],
+                                  'type': 'fix'
+                                  })
+    
+        for attr in self.initial_product.unfixed_attrs_vals.values_list('value', 'attribute__type', 'attribute__title'):
+            info[attr[1]].append({'value': attr[0],
+                                  'attribute': attr[2],
+                                  'type': 'unfix'
+                                  })
+        return info
+        
+    def find_in_hrd_attributes(self, fix):
+        middleware_pk_products = [] #
+        for hrd in self.initial_product_info[HARD]:
+            pass
+        
+    
+    def build(self):
+        self.initial_product_info = self.get_full_info_from_initial_product()
+        
+        # first step
+        products_with_category = self.find_products_with_category()
+        
+        fix_attrs_values_list = self._get_hrd_fix_attributes(products_with_category)\
+            .values_list('product__pk', 'value__title', 'attribute__type', 'attribute__title')
+        unfix_attrs_values_list = self._get_hrd_unfix_attributes(products_with_category)\
+            .values_list('product__pk', 'value', 'attribute__type', 'attribute__title')
+        
+        
+    def smart_search(self, products):
         pass
     
-    def smart_search(self):
-        pass
+    
+if __name__ == '__main__':
+    north_aurora_product = Product.objects.filter(
+        category__title__iexact='Прямая секция', manufacturer=Manufacturer.objects.get(title='Северная Аврора')).first()
+    fixed_attrs = north_aurora_product.fixed_attrs_vals.values_list('value__title', 'attribute__type', 'attribute__title')
+    unfixed_attrs = north_aurora_product.unfixed_attrs_vals.values_list('value', 'attribute__type', 'attribute__title')
+    make_search = AnalogSearch(product_from=north_aurora_product, manufacturer_to=Manufacturer.objects.first())
+    
+    print(fixed_attrs, unfixed_attrs)
+    find_products = make_search.find_products_with_category()
+    f_fixed_attrs = FixedAttributeValue.objects.filter(product__in=find_products)
+    print(f_fixed_attrs.count())
+    f_fixed_attrs_values = f_fixed_attrs.values_list('product__pk', 'value__title', 'attribute__type', 'attribute__title')
+    print(f_fixed_attrs_values)
+    # f_unfixed_attrs = north_aurora_product.unfixed_attrs_vals.values_list('value', 'attribute__type', 'attribute__title')
     
     
 class SearchProducts(object):
