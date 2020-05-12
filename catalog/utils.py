@@ -39,13 +39,23 @@ class AnalogSearch(object):
                                   'type': 'unfix'
                                   })
         return info
-        
-    def find_in_hrd_attributes(self, fix):
+    
+    def find_unfix_value(self, values_list, value, method='nearest'):
+        if method == 'min':
+            value = min(values_list, key=lambda x: x)
+        elif method == 'max':
+            value = max(values_list, key=lambda x: x)
+        else:  # method = 'nearest
+            # print(values_list, step_attr.value)
+            value = min(values_list, key=lambda x: abs(x - value))
+        return value
+    
+    def find_in_hrd_attributes(self, fix, unfix):
         middleware_pk_products = [] #
         for hrd in self.initial_product_info[HARD]:
-            pass
+            if hrd['type'] == 'unfix':
+                pass
         
-    
     def build(self):
         self.initial_product_info = self.get_full_info_from_initial_product()
         
@@ -62,19 +72,19 @@ class AnalogSearch(object):
         pass
     
     
-if __name__ == '__main__':
-    north_aurora_product = Product.objects.filter(
-        category__title__iexact='Прямая секция', manufacturer=Manufacturer.objects.get(title='Северная Аврора')).first()
-    fixed_attrs = north_aurora_product.fixed_attrs_vals.values_list('value__title', 'attribute__type', 'attribute__title')
-    unfixed_attrs = north_aurora_product.unfixed_attrs_vals.values_list('value', 'attribute__type', 'attribute__title')
-    make_search = AnalogSearch(product_from=north_aurora_product, manufacturer_to=Manufacturer.objects.first())
-    
-    print(fixed_attrs, unfixed_attrs)
-    find_products = make_search.find_products_with_category()
-    f_fixed_attrs = FixedAttributeValue.objects.filter(product__in=find_products)
-    print(f_fixed_attrs.count())
-    f_fixed_attrs_values = f_fixed_attrs.values_list('product__pk', 'value__title', 'attribute__type', 'attribute__title')
-    print(f_fixed_attrs_values)
+# if __name__ == '__main__':
+#     north_aurora_product = Product.objects.filter(
+#         category__title__iexact='Прямая секция', manufacturer=Manufacturer.objects.get(title='Северная Аврора')).first()
+#     fixed_attrs = north_aurora_product.fixed_attrs_vals.values_list('value__title', 'attribute__type', 'attribute__title')
+#     unfixed_attrs = north_aurora_product.unfixed_attrs_vals.values_list('value', 'attribute__type', 'attribute__title')
+#     make_search = AnalogSearch(product_from=north_aurora_product, manufacturer_to=Manufacturer.objects.first())
+#
+#     print(fixed_attrs, unfixed_attrs)
+#     find_products = make_search.find_products_with_category()
+#     f_fixed_attrs = FixedAttributeValue.objects.filter(product__in=find_products)
+#     print(f_fixed_attrs.count())
+#     f_fixed_attrs_values = f_fixed_attrs.values_list('product__pk', 'value__title', 'attribute__type', 'attribute__title')
+#     print(f_fixed_attrs_values)
     # f_unfixed_attrs = north_aurora_product.unfixed_attrs_vals.values_list('value', 'attribute__type', 'attribute__title')
     
     

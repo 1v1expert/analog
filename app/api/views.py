@@ -52,8 +52,61 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
                                 'error': False
                             })
                         else:
-                            pass  # todo: make analog search in runtime
-                return JsonResponse({'result': [], 'error': 'Аналог не найден'})
+                            result = SearchProducts(product=product, manufacturer_to=manufacturer_to)
+                            try:
+                                result_product = None
+                                result.global_search()
+                                if result.founded_products is None or not result.founded_products.exists():
+                                    analog = {manufacturer_to.title: None}
+                                else:
+                                    result_product = result.founded_products.first()
+                                    analog = {manufacturer_to.title: result_product.pk}
+                                product.raw['analogs'].update(analog)
+                                product.save()
+                                if result_product is not None:
+                                    info = get_product_info(analog=result_product, original=product)
+                                    return JsonResponse({
+                                        'result': [result_product.article],
+                                        'info': info.get("result"),
+                                        "image": info.get("image"),
+                                        'result_pk': result_product.pk,
+                                        'original_pk': product.pk,
+                                        'error': False
+                                    })
+                                else:
+                                    return JsonResponse({'result': [], 'error': 'Аналог не найден'})
+                            except Exception as e:
+                                return JsonResponse({'result': [], 'error': 'Аналог не найден'})
+                                
+                                
+                            # pass  # todo: make analog search in runtime
+                else:
+                    result = SearchProducts(product=product, manufacturer_to=manufacturer_to)
+                    try:
+                        result_product = None
+                        result.global_search()
+                        if result.founded_products is None or not result.founded_products.exists():
+                            analog = {manufacturer_to.title: None}
+                        else:
+                            result_product = result.founded_products.first()
+                            analog = {manufacturer_to.title: result_product.pk}
+                        product.raw = {'analogs': analog}
+                        product.save()
+                        if result_product is not None:
+                            info = get_product_info(analog=result_product, original=product)
+                            return JsonResponse({
+                                'result': [result_product.article],
+                                'info': info.get("result"),
+                                "image": info.get("image"),
+                                'result_pk': result_product.pk,
+                                'original_pk': product.pk,
+                                'error': False
+                            })
+                        else:
+                            return JsonResponse({'result': [], 'error': 'Аналог не найден'})
+                    except Exception as e:
+                        return JsonResponse({'result': [], 'error': 'Аналог не найден, {}'.format(e)})
+                # return JsonResponse({'result': [], 'error': 'Аналог не найден'})
                 
         return JsonResponse({'error': 'Некорректно заполненные данные.'})
     
