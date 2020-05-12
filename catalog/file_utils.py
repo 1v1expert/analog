@@ -889,8 +889,10 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
             # ('additional_width', 'ширина доп.', False),
             ('depth', 'толщина', False),
             ('board_height', 'высота борта', False),
-            ('length', 'длина', False),
-            # ('cap_type', 'тип крышки', True),
+            # ('length', 'длина', False),
+            ('cap_type', 'тип крышки', True),
+            ('angle', 'угол', None),
+            ('radius', 'радиус', None),
             ('interface_type', 'тип стыка', True)
         )
         
@@ -934,6 +936,8 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
             return
         
         self.articles.add(article)
+        
+        dict_line['raw'] = {'angle': dict_line.get('angle'), 'radius': dict_line.get('radius')}
         
         self.create_products(**dict_line)
         

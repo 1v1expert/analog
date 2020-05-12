@@ -51,6 +51,8 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
                                 'original_pk': product.pk,
                                 'error': False
                             })
+                        else:
+                            pass  # todo: make analog search in runtime
                 return JsonResponse({'result': [], 'error': 'Аналог не найден'})
                 
         return JsonResponse({'error': 'Некорректно заполненные данные.'})

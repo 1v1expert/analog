@@ -1,11 +1,24 @@
-from django.shortcuts import render
-
-from catalog.models import Product, UnFixedAttributeValue
 import time
-from catalog.choices import TYPES
+
 from catalog.exceptions import NotFoundException
+from catalog.models import Manufacturer, Product, UnFixedAttributeValue
 
 
+class AnalogSearch(object):
+    def __init__(self, product_from: Product = None, manufacturer_to: Manufacturer = None):
+        self.product_from = product_from
+        self.manufacturer_to = manufacturer_to
+        
+    def find_products_with_category(self):
+        return Product.objects.filter(category=self.product_from.category)
+    
+    def find(self):
+        pass
+    
+    def smart_search(self):
+        pass
+    
+    
 class SearchProducts(object):
     def __init__(self, form=None, product=None, manufacturer_to=None):
         
