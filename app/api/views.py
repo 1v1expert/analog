@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponse, HttpRequest, HttpResponseBad
 from django.views.decorators.csrf import csrf_exempt
 
 
-from catalog.utils import SearchProducts
+from catalog.utils import SearchProducts, AnalogSearch
 from catalog.handlers import result_api_processing
 from catalog.forms import SearchForm, AdvancedSearchForm
 from catalog.models import Product
@@ -52,24 +52,23 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
                                 'error': False
                             })
                         else:
-                            result = SearchProducts(product=product, manufacturer_to=manufacturer_to)
+                            result = AnalogSearch(product_from=product, manufacturer_to=manufacturer_to)
                             try:
-                                result_product = None
-                                result.global_search()
-                                if result.founded_products is None or not result.founded_products.exists():
+                                # result_product = None
+                                result.build()
+                                if result.result.product is None:
                                     analog = {manufacturer_to.title: None}
                                 else:
-                                    result_product = result.founded_products.first()
-                                    analog = {manufacturer_to.title: result_product.pk}
+                                    analog = {manufacturer_to.title: result.product.pk}
                                 product.raw['analogs'].update(analog)
                                 product.save()
-                                if result_product is not None:
-                                    info = get_product_info(analog=result_product, original=product)
+                                if result.product is not None:
+                                    info = get_product_info(analog=result.product, original=product)
                                     return JsonResponse({
-                                        'result': [result_product.article],
+                                        'result': [result.product.article],
                                         'info': info.get("result"),
                                         "image": info.get("image"),
-                                        'result_pk': result_product.pk,
+                                        'result_pk': result.product.pk,
                                         'original_pk': product.pk,
                                         'error': False
                                     })
@@ -81,24 +80,23 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
                                 
                             # pass  # todo: make analog search in runtime
                 else:
-                    result = SearchProducts(product=product, manufacturer_to=manufacturer_to)
+                    result = AnalogSearch(product_from=product, manufacturer_to=manufacturer_to)
                     try:
-                        result_product = None
-                        result.global_search()
-                        if result.founded_products is None or not result.founded_products.exists():
+                        # result_product = None
+                        result.build()
+                        if result.product is None:
                             analog = {manufacturer_to.title: None}
                         else:
-                            result_product = result.founded_products.first()
-                            analog = {manufacturer_to.title: result_product.pk}
+                            analog = {manufacturer_to.title: result.product.pk}
                         product.raw = {'analogs': analog}
                         product.save()
-                        if result_product is not None:
-                            info = get_product_info(analog=result_product, original=product)
+                        if result.product is not None:
+                            info = get_product_info(analog=result.product, original=product)
                             return JsonResponse({
-                                'result': [result_product.article],
+                                'result': [result.product.article],
                                 'info': info.get("result"),
                                 "image": info.get("image"),
-                                'result_pk': result_product.pk,
+                                'result_pk': result.product.pk,
                                 'original_pk': product.pk,
                                 'error': False
                             })
