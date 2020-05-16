@@ -5,14 +5,19 @@ from catalog.models import Manufacturer, Product, UnFixedAttributeValue, FixedVa
 from catalog.choices import HARD, SOFT, RELATION, RECALCULATION, PRICE
 
 from typing import Optional
+
+
 class AnalogSearch(object):
     def __init__(self, product_from: Optional[Product] = None, manufacturer_to: Optional[Manufacturer] = None):
+        
         self.start_time = time.time()
         self.left_time = None
         self.initial_product = product_from
         self.initial_product_info = {}
         self.manufacturer_to = manufacturer_to
         self.product = None
+        
+        # raise product_from is None or manufacturer_to is None
         
     def find_products_with_category(self):
         return Product.objects.filter(category=self.initial_product.category, manufacturer=self.manufacturer_to)
@@ -160,7 +165,6 @@ class AnalogSearch(object):
 #     print(f_fixed_attrs_values)
     # f_unfixed_attrs = north_aurora_product.unfixed_attrs_vals.values_list('value', 'attribute__type', 'attribute__title')
     
-
     
 class SearchProducts(object):
     def __init__(self, form=None, product=None, manufacturer_to=None):

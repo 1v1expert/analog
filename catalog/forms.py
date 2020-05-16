@@ -18,8 +18,10 @@ class SearchFromFile(forms.Form):
 class SearchForm(forms.Form):
     article = forms.CharField(label='Артикул')
     #cc = forms.ComboField(fields=[forms.CharField(max_length=20), forms.EmailField()])
-    manufacturer_from = forms.ModelChoiceField(label='Исходный производитель', empty_label=None, required=False, queryset=Manufacturer.objects.all())
-    manufacturer_to = forms.ModelChoiceField(label='Необходимый производитель', empty_label=None, queryset=Manufacturer.objects.all())
+    manufacturer_from = forms.ModelChoiceField(label='Исходный производитель', empty_label=None, required=False,
+                                               queryset=Manufacturer.objects.all())
+    manufacturer_to = forms.ModelChoiceField(label='Необходимый производитель', empty_label=None,
+                                             queryset=Manufacturer.objects.all())
     advanced_search = forms.BooleanField(label='Расширенный поиск', widget=forms.CheckboxInput, required=False)
     
 

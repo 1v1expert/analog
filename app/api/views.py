@@ -1,23 +1,57 @@
+import json
+import traceback
+
 from django.contrib.auth import login, logout, models
-from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse, HttpRequest, HttpResponseBadRequest
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
-
-from catalog.utils import SearchProducts, AnalogSearch
-from catalog.handlers import result_api_processing
-from catalog.forms import SearchForm, AdvancedSearchForm
-from catalog.models import Product
-from catalog.internal.auth_actions import registration
-from catalog.internal.utils import get_product_info, ProductInfo
-
-from app.models import MainLog, FeedBack
 from app.decorators import a_decorator_passing_logs
 from app.decorators import check_recaptcha
 from app.forms import FeedBackForm, SubscribeForm
+from app.models import FeedBack, MainLog
+from catalog.exceptions import AnalogNotFound, ArticleNotFound, InternalError
+from catalog.forms import AdvancedSearchForm, SearchForm
+from catalog.handlers import result_api_processing
+from catalog.internal.auth_actions import registration
+from catalog.internal.utils import ProductInfo, get_product_info
+from catalog.models import Manufacturer, Product
+from catalog.utils import SearchProducts
 
-import json
 
+def get_analog(article: str = None, manufacturer_to: Manufacturer = None) -> json:
+    product = Product.objects.filter(article=article,
+                                     is_enabled=True).first()
+    if not product:
+        raise ArticleNotFound("Артикул {} не найден".format(article),
+                              "Article: {}, manufacturer to: {}".format(article, manufacturer_to))
+    
+    try:
+        analog_pk = product.raw['analogs'][manufacturer_to.title]
+        analog = Product.objects.get(pk=analog_pk)
+        info = get_product_info(analog=analog, original=product)
+        return {"analog": analog, "info": info, "product": product}
+    
+    except (KeyError, TypeError):
+        search = SearchProducts(product=product, manufacturer_to=manufacturer_to)
+        search.global_search()
+        analog = search.founded_products.first()
+        if not analog:
+            raise AnalogNotFound('Аналог по артикулу: {} не найден'.format(article),
+                                 "Not find analog for article: {}, manufacturer to: {}".format(article, manufacturer_to))
+        info = get_product_info(analog=analog, original=product)
+        
+        if product.raw is None:
+            product.raw = {"analogs": {manufacturer_to.title: analog.pk}}
+        else:
+            product.raw['analogs'].update({manufacturer_to.title: analog.pk})
+        product.save()
+        
+        return {"analog": analog, "info": info, "product": product}
+    
+    except Exception as e:
+        raise InternalError('Аналог не найден', "Internal error: \n{}".format(traceback.format_exc()))
+        
 
 @csrf_exempt
 @a_decorator_passing_logs
@@ -28,83 +62,19 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
             
             article = form.cleaned_data['article']
             manufacturer_to = form.cleaned_data['manufacturer_to']
-            product = Product.objects.filter(article=article,
-                                             is_enabled=True).first()
-            if not product:
-                return JsonResponse(
-                    {'result': [],
-                     'error': 'Артикул %s не найден' % article
-                     })
-            else:
-                if product.raw is not None:
-                    analogs = product.raw.get('analogs', None)
-                    if analogs:
-                        result_pk = analogs.get(manufacturer_to.title)
-                        if result_pk is not None:
-                            result = Product.objects.get(pk=result_pk)
-                            info = get_product_info(analog=result, original=product)
-                            return JsonResponse({
-                                'result': [result.article],
-                                'info': info.get("result"),
-                                "image": info.get("image"),
-                                'result_pk': result.pk,
-                                'original_pk': product.pk,
-                                'error': False
-                            })
-                        else:
-                            result = AnalogSearch(product_from=product, manufacturer_to=manufacturer_to)
-                            try:
-                                # result_product = None
-                                result.build()
-                                if result.result.product is None:
-                                    analog = {manufacturer_to.title: None}
-                                else:
-                                    analog = {manufacturer_to.title: result.product.pk}
-                                product.raw['analogs'].update(analog)
-                                product.save()
-                                if result.product is not None:
-                                    info = get_product_info(analog=result.product, original=product)
-                                    return JsonResponse({
-                                        'result': [result.product.article],
-                                        'info': info.get("result"),
-                                        "image": info.get("image"),
-                                        'result_pk': result.product.pk,
-                                        'original_pk': product.pk,
-                                        'error': False
-                                    })
-                                else:
-                                    return JsonResponse({'result': [], 'error': 'Аналог не найден'})
-                            except Exception as e:
-                                return JsonResponse({'result': [], 'error': 'Аналог не найден'})
-                                
-                                
-                            # pass  # todo: make analog search in runtime
-                else:
-                    result = AnalogSearch(product_from=product, manufacturer_to=manufacturer_to)
-                    try:
-                        # result_product = None
-                        result.build()
-                        if result.product is None:
-                            analog = {manufacturer_to.title: None}
-                        else:
-                            analog = {manufacturer_to.title: result.product.pk}
-                        product.raw = {'analogs': analog}
-                        product.save()
-                        if result.product is not None:
-                            info = get_product_info(analog=result.product, original=product)
-                            return JsonResponse({
-                                'result': [result.product.article],
-                                'info': info.get("result"),
-                                "image": info.get("image"),
-                                'result_pk': result.product.pk,
-                                'original_pk': product.pk,
-                                'error': False
-                            })
-                        else:
-                            return JsonResponse({'result': [], 'error': 'Аналог не найден'})
-                    except Exception as e:
-                        return JsonResponse({'result': [], 'error': 'Аналог не найден, {}'.format(e)})
-                # return JsonResponse({'result': [], 'error': 'Аналог не найден'})
+            
+            try:
+                result = get_analog(article=article, manufacturer_to=manufacturer_to)
+                return JsonResponse({
+                    'result': [result["analog"].article],
+                    'info': result["info"].get("result"),
+                    "image": result["info"].get("image"),
+                    'result_pk': result["analog"].pk,
+                    'original_pk': result["product"].pk,
+                    'error': False
+                })
+            except Exception as e:
+                return JsonResponse({'result': [], 'error': str(e.args)})
                 
         return JsonResponse({'error': 'Некорректно заполненные данные.'})
     
@@ -114,8 +84,8 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
 @a_decorator_passing_logs
 def search_article(request: HttpRequest) -> HttpResponse:
     
-    article = request.GET.get('article', None)
-    
+    article = request.GET.get("article", None)
+
     if len(article) > 1 and article is not None:
         return JsonResponse(list(
             Product.objects

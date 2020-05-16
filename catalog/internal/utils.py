@@ -117,10 +117,11 @@ def get_product_info(analog, original=None):
              }]
 
     original_info = original.get_info()
+    analog_get_info = analog.get_info()
     
     fixed_attributes = []  # for find images in groups
     
-    for attr in analog.get_info():
+    for attr in analog_get_info:
         analog_name = attr.attribute.title
         orig_attr = None
         
@@ -128,6 +129,7 @@ def get_product_info(analog, original=None):
             continue
         
         for original_attr in original_info:
+            print(original_attr.attribute.title, analog_name)
             if original_attr.attribute.title == analog_name:
                 orig_attr = original_attr
                 break
@@ -157,7 +159,7 @@ def get_product_info(analog, original=None):
     # find group with image
     if not len(fixed_attributes):
         return {"result": info}
-    
+
     from catalog.models import GroupSubclass
     try:
         group = GroupSubclass.objects.get(category=analog.category,

@@ -217,9 +217,9 @@ class Product(Base):
     def get_attributes(self):
         return '{} {}'.format(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all())
     
-    def get_info(self):
+    def get_info(self) -> list:
         # return Q(self.fixed_attrs_vals.all()) | Q(self.unfixed_attrs_vals.all())
-        return chain(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all())
+        return list(chain(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all()))
     
     def __str__(self):
         return self.title
