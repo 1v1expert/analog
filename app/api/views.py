@@ -74,7 +74,7 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
                     'error': False
                 })
             except Exception as e:
-                return JsonResponse({'result': [], 'error': str(e.args)})
+                return JsonResponse({'result': [], 'error': e.args[0]})
                 
         return JsonResponse({'error': 'Некорректно заполненные данные.'})
     
