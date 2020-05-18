@@ -1,10 +1,9 @@
 import time
-
-from catalog.exceptions import NotFoundException
-from catalog.models import Manufacturer, Product, UnFixedAttributeValue, FixedValue, FixedAttributeValue
-from catalog.choices import HARD, SOFT, RELATION, RECALCULATION, PRICE
-
 from typing import Optional
+
+from catalog.choices import HARD, PRICE, RECALCULATION, RELATION, SOFT
+from catalog.exceptions import AnalogNotFound
+from catalog.models import FixedAttributeValue, Manufacturer, Product, UnFixedAttributeValue
 
 
 class AnalogSearch(object):
@@ -247,14 +246,13 @@ class SearchProducts(object):
                 unfixed_attrs_vals__attribute=hrd_unfix_attr.attribute
             )
             if not self.founded_products.exists():
-                raise NotFoundException(
-                    'Not found products after hrd cycle filtering'
-                )
+                raise AnalogNotFound('Аналог не найден'
+                                     )
         # attrs_vals__attribute=attribute.attribute)
-        
+
         # print('Count after HRD search prdcts-> ', self.founded_products.count())
         # if not self.founded_products.exists():
-            # return
+        # return
         # middle_results = self.founded_products
         # sft attr
         sft = 'sft'
