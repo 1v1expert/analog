@@ -892,7 +892,7 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
             # ('length', 'длина', False),
             ('cap_type', 'тип крышки', True),
             ('angle', 'угол', None),
-            ('radius', 'радиус', None),
+            # ('radius', 'радиус', None),
             ('interface_type', 'тип стыка', True)
         )
         
