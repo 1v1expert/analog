@@ -903,7 +903,6 @@ class NorthAurora(GeneralDocumentReaderMountingElements):
         
         article = dict_line.get('article', False)
         category_name = dict_line.get('category_name', False)
-        # assert article and category_name, 'Line should included article and category, line: {}'.format(dict_line)
         if not article or not category_name:
             logger.debug('Line should included article and category, line: {}'.format(dict_line))
             return
