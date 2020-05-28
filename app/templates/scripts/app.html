@@ -467,7 +467,7 @@
             source: function (request, response) {
                 $.ajax({
                     type: "GET",
-                    url: "{% url 'api:search_article' %}",
+                    url: "{% url 'api:search' %}",
                     data: {
                         article: request.term
                     },

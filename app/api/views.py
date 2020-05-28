@@ -78,7 +78,7 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
                 
         return JsonResponse({'error': 'Некорректно заполненные данные.'})
     else:
-        article = request.GET.get("article", None)
+        article = request.GET.get("article", default=None)
 
         if article is not None and len(article) > 1:
             return JsonResponse(list(
@@ -89,23 +89,6 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
             ), safe=False)
     
         return JsonResponse({'error': "Not found"})
-    
-    # return JsonResponse({'result': [], 'error': "Некорректный запрос поиска"})
-
-
-@a_decorator_passing_logs
-def search_article(request: HttpRequest) -> HttpResponse:
-    
-    article = request.GET.get("article", None)
-    if article is not None and len(article) > 1:
-        return JsonResponse(list(
-            Product.objects
-                .filter(article__istartswith=article, is_enabled=True)
-                .extra(select={'value': 'article'})
-                .values('value', 'title', 'manufacturer__title')[:50]
-        ), safe=False)
-    
-    return JsonResponse({'error': "Not found"})
 
 
 def advanced_search(request: HttpRequest) -> HttpResponse:
