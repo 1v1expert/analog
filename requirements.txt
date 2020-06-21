@@ -61,7 +61,7 @@ pytz==2018.7
 PyYAML==5.1.2
 requests==2.21.0
 scikit-learn==0.21.3
-scipy==1.3.1
+scipy
 six==1.12.0
 sklearn==0.0
 snowballstemmer==1.2.1
@@ -72,8 +72,6 @@ sphinxcontrib-websupport==1.1.0
 sqlparse==0.3.1
 tb-nightly==1.14.0a20190603
 tensorboard==1.14.0
-tensorflow==1.14.0
-tensorflow-estimator==1.14.0
 termcolor==1.1.0
 texttable==1.6.2
 tf-estimator-nightly==1.14.0.dev2019060501
