@@ -35,7 +35,6 @@ marshmallow==3.0.0rc5
 nltk==3.4.5
 openpyxl==2.6.2
 packaging==18.0
-pandas==0.25.1
 parso==0.3.4
 pathtools==0.1.2
 pexpect==4.6.0
@@ -44,7 +43,7 @@ Pillow
 port-for==0.3.1
 prompt-toolkit==2.0.9
 protobuf==3.9.1
-psycopg2-binary==2.7.6.1
+psycopg2-binary
 ptyprocess==0.6.0
 pyexcel==0.5.15
 pyexcel-io==0.5.20
