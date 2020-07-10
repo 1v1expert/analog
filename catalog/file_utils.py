@@ -162,7 +162,8 @@ class ProcessingUploadData(object):
             is_valid_data = self.check_exists_types(structured_product)
 
             if isinstance(is_valid_data, str):
-                logger.debug('{}\n reason: {}'.format(structured_product, is_valid_data))
+                MainLog(user=self.user,
+                        message=f'{is_valid_data}\n reason: {structured_product}, time: {time.time() - self.start_time}').save()
                 return False, is_valid_data
             else:
                 self.products.append(is_valid_data)
