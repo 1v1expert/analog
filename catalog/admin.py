@@ -65,7 +65,7 @@ class AttributeshipInline(admin.TabularInline):
     model = Category.attributes.through
 
 
-class CategoryAdmin(tree_editor.TreeEditor, BaseAdmin):
+class CategoryAdmin(BaseAdmin):
     list_display = ('title', 'get_attributes')
     
     #inlines = [AttributeshipInline]

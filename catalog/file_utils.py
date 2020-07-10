@@ -1012,3 +1012,67 @@ sheet_names = {
     'Лестничные': 'лестничный',
     'Оцинковка': 'хол. цинк'
 }
+
+
+class SubclassesReader(object):
+    def __init__(self, path=None, workbook=None, only_parse=True, user=None, loadnetworkmodel=False, name_sheet=None):
+        assert path or workbook, "You should provide either path to file or XLS-object"
+        
+        if workbook:
+            self.workbook = workbook
+        else:
+            try:
+                self.workbook = openpyxl.load_workbook(path,
+                                                       read_only=True,
+                                                       data_only=True)
+            except InvalidFileException:
+                # make read file another reader
+                raise Exception('Invalid file')
+        self.xlsx = path
+        # self.ws = self.workbook.active
+        self.sheet = self.workbook.active
+        self.sheets = self.workbook.get_sheet_names()
+        self.body = {}
+        self.header = {}
+        self.create_subclass = True
+
+    def parse_file(self):
+        rows = self.sheet.rows
+        for cnt, row in enumerate(rows):
+            if cnt == 0:
+                self.generate_header(row)
+            else:
+                self.generate_body(row, cnt)
+                
+        self.workbook._archive.close()
+        
+        # return self.doc
+    
+    def generate_body(self, row, number):
+        # line = {}
+        for cnt_c, cell in enumerate(row):
+            self.body[number] = {
+                cnt_c: {
+                    "value": str(cell.value),
+                    "object": None
+                }
+            }
+            
+            if cnt_c == 0:
+                self.body[number][cnt_c]["object"] = Category.objects.get_or_create(title=cell.value)
+            # if cell.value:
+                # line.update({cnt_c: str(cell.value)})
+        # self.doc.append(line)
+        
+    def generate_header(self, row):
+        for cnt_c, cell in enumerate(row):
+            if cell.value:
+                self.header.update({
+                    cnt_c: {
+                        "value": str(cell.value),
+                        "object": None
+                    }
+                })
+                
+            if cnt_c != 0:
+                self.header[cnt_c]["object"] = Attribute.objects.get(title__iexact=cell.value)
