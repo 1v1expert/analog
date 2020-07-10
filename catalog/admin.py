@@ -128,7 +128,7 @@ class ProductChangeList(ChangeList):
 
 
 class ProductAdmin(BaseAdmin):
-    list_display = ['title', 'article', 'manufacturer', 'get_fix_attrs_vals', 'get_unfix_attrs_vals', 'category', 'is_public', 'deleted']
+    list_display = ['title', 'article', 'manufacturer', 'category', 'is_public', 'deleted']
     # inlines = [PropertiesInline]
     #filter_horizontal = ['attrs_vals']
     autocomplete_fields = ['category', 'manufacturer',]
