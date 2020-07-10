@@ -262,7 +262,7 @@ class ProcessingUploadData(object):
                 attr.update({"attr_obj": attribute})
                 # find fixed attribute
                 if attribute.is_fixed:
-                    fix_value = FixedValue.objects.get(title__iexact=attr['value'], attribute=attribute)
+                    fix_value = FixedValue.objects.get(title__iexact=str(attr['value']), attribute=attribute)
                     attr['value'] = fix_value
             except Attribute.DoesNotExist:
                 return f'Ошибка! Не найден атрибут с наименованием {attr["name"]} в категории {category}'
