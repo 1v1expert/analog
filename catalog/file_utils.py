@@ -156,7 +156,7 @@ class ProcessingUploadData(object):
                         })
 
             structured_product.update({
-                self.STRUCTURE_PRODUCT[6][1]: attributes
+                self.STRUCTURE_PRODUCT[7][1]: attributes
             })
             
             print(structured_product)
