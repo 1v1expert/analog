@@ -113,6 +113,7 @@ class Attribute(Base):
     type = models.CharField(max_length=13, choices=TYPES, verbose_name="Тип")
     unit = models.CharField(max_length=5, choices=UNITS, verbose_name="Единицы измерения", blank=True)
     priority = models.PositiveSmallIntegerField(verbose_name='Приоритет')
+    is_fixed = models.BooleanField(verbose_name='Fixed attribute?', default=False)
     #category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Класс", related_name='attributes', limit_choices_to={'parent__isnull': False})
     
     def __str__(self):
@@ -149,7 +150,7 @@ class FixedValue(Base):
 
     
 class AttributeValue(Base):
-    is_fixed = models.BooleanField(verbose_name='Fixed value?', default=False)
+    # is_fixed = models.BooleanField(verbose_name='Fixed value?', default=False)
     value = models.ForeignKey(FixedValue, on_delete=models.PROTECT, verbose_name="Фиксированное значение атрибута", null=True)
     un_value = models.FloatField(verbose_name="Нефиксированное значение атрибута", null=True)
     attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут")
@@ -157,14 +158,15 @@ class AttributeValue(Base):
     
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        if self.value is not None and self.un_value is not None:
-            raise Exception('Values ist can be used')
         
-        if self.value is None and self.un_value is not None:
-            self.is_fixed = True
+        if self.is_fixed and self.un_value is not None:
+            raise Exception('Values ist can be used')
             
         super(AttributeValue, self).save(force_insert=force_insert, force_update=force_update, using=using,
                                          update_fields=update_fields)
+    @property
+    def is_fixed(self):
+        return self.attribute.is_fixed
     
     class Meta:
         verbose_name = "Значение атрибута"
