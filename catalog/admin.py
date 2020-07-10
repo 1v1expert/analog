@@ -206,7 +206,7 @@ class FileUploadAdmin(admin.ModelAdmin):
         for qq in queryset:
             created, error = ProcessingUploadData(
                 XLSDocumentReader(path=qq.file.name).parse_file(), start_time=time.time(), request=request
-            ).get_structured_data(only_check=True)
+            ).get_structured_data(only_check=False)
             
             if created:
                 messages.add_message(request, messages.SUCCESS, 'Данные успешно загружены из {} файла в БД'.format(qq.file.name))

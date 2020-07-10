@@ -46,9 +46,9 @@ class XLSDocumentReader(object):
     def parse_file(self):
         rows = self.sheet.rows
         for cnt, row in enumerate(rows):
-            if cnt > 15:
-                break
-                
+            # if cnt > 15:
+            #     break
+            
             line = {}
             for cnt_c, cell in enumerate(row):
     
