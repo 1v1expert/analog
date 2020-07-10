@@ -88,9 +88,10 @@ class ProcessingUploadData(object):
         (1, "class"),
         (2, "article"),
         (3, "additional_article"),
-        (4, "subclass"),
-        (5, "manufacturer"),
-        (6, "attributes")
+        (4, "series"),
+        (5, "subclass"),
+        (6, "manufacturer"),
+        (7, "attributes")
     )
 
     STRUCTURE_PRODUCT_REV_DICT = _rev_dict(STRUCTURE_PRODUCT)
@@ -144,7 +145,7 @@ class ProcessingUploadData(object):
                 return False, 'Error in line: {}'.format(line)
             
             for key in line.keys():
-                if key < 6:
+                if key < 7:
                     structured_product.update({
                             self.STRUCTURE_PRODUCT[key][1]: line[key]  # article: 1234
                     })
@@ -220,6 +221,7 @@ class ProcessingUploadData(object):
             new_product = Product(article=product['article'],
                                   additional_article=product.get('additional_article', ""),
                                   manufacturer=product['manufacturer_obj'],
+                                  series=product['series'],
                                   title=product['title'],
                                   category=product['category_obj'],
                                   created_by=self.user,
