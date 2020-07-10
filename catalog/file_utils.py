@@ -151,7 +151,7 @@ class ProcessingUploadData(object):
                 else:
                     attributes.append({
                         "name": self.options[key],
-                        "value": float(line[key].replace(',', '.')) if is_digit(line[key].replace(',', '.')) else line[key]
+                        "value": line[key]
                         })
 
             structured_product.update({
@@ -262,8 +262,10 @@ class ProcessingUploadData(object):
                 attr.update({"attr_obj": attribute})
                 # find fixed attribute
                 if attribute.is_fixed:
-                    fix_value = FixedValue.objects.get(title__iexact=str(attr['value']), attribute=attribute)
+                    fix_value = FixedValue.objects.get(title__iexact=attr['value'], attribute=attribute)
                     attr['value'] = fix_value
+                else:
+                    attr['value'] = float(attr['value'].replace(',', '.')) if is_digit(attr['value'].replace(',', '.')) else attr['value']
             except Attribute.DoesNotExist:
                 return f'Ошибка! Не найден атрибут с наименованием {attr["name"]} в категории {category}'
             except Attribute.MultipleObjectsReturned:
