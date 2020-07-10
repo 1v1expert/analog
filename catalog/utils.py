@@ -3,7 +3,7 @@ from typing import Optional
 
 from catalog.choices import HARD, PRICE, RECALCULATION, RELATION, SOFT
 from catalog.exceptions import AnalogNotFound
-from catalog.models import FixedAttributeValue, Manufacturer, Product, UnFixedAttributeValue
+from catalog.models import Manufacturer, Product
 
 
 class AnalogSearch(object):

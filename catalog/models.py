@@ -101,7 +101,7 @@ class Category(Base):
         verbose_name = "Класс"
         verbose_name_plural = "Классы"
 
-mptt.register(Category, )
+# mptt.register(Category, )
 
 
 class Attribute(Base):
@@ -146,42 +146,63 @@ class FixedValue(Base):
     class Meta:
         verbose_name = "Фикс значение"
         verbose_name_plural = "Фикс значения"
+
     
+class AttributeValue(Base):
+    is_fixed = models.BooleanField(verbose_name='Fixed value?', default=False)
+    value = models.ForeignKey(FixedValue, on_delete=models.PROTECT, verbose_name="Фиксированное значение атрибута", null=True)
+    un_value = models.FloatField(verbose_name="Нефиксированное значение атрибута", null=True)
+    attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут")
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
     
-class FixedAttributeValue(Base):
-    """
-    Модель фиксированного значения атрибута
-    """
-    value = models.ForeignKey(FixedValue, on_delete=models.PROTECT, verbose_name="Фиксированное значение атрибута")
-    # title = models.CharField(max_length=255, verbose_name='Значение')
-    attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="fixed_values")
-    products = models.ManyToManyField('Product', blank=True)
-    is_tried = models.BooleanField(verbose_name='Проверенный', default=False)
-    
-    def __str__(self):
-        return str(self.attribute) + ": " + self.value.title
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.value is not None and self.un_value is not None:
+            raise Exception('Values ist can be used')
+        
+        if self.value is None and self.un_value is not None:
+            self.is_fixed = True
+            
+        super(AttributeValue, self).save(force_insert=force_insert, force_update=force_update, using=using,
+                                         update_fields=update_fields)
     
     class Meta:
-        verbose_name = "Значение атрибута(фикс)"
-        verbose_name_plural = "Значения атрибутов(фикс)"
-
-
-class UnFixedAttributeValue(Base):
-    """
-    Модель нефиксированного значения атрибута
-    """
-    value = models.FloatField(verbose_name="Нефикс значение атрибута")
-    # title = models.CharField(max_length=255, verbose_name='Значение')
-    attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="unfixed_values")
-    products = models.ManyToManyField('Product', blank=True)
-    is_tried = models.BooleanField(verbose_name='Проверенный', default=False)
-    
-    def __str__(self):
-        return '{}: {}'.format(self.attribute, self.value)
-    
-    class Meta:
-        verbose_name = "Значение атрибута(нефикс)"
-        verbose_name_plural = "Значения атрибутов(нефикс)"
+        verbose_name = "Значение атрибута"
+        verbose_name_plural = "Значения атрибутов"
+# class FixedAttributeValue(Base):
+#     """
+#     Модель фиксированного значения атрибута
+#     """
+#     value = models.ForeignKey(FixedValue, on_delete=models.PROTECT, verbose_name="Фиксированное значение атрибута")
+#     # title = models.CharField(max_length=255, verbose_name='Значение')
+#     attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="fixed_values")
+#     products = models.ManyToManyField('Product', blank=True)
+#     is_tried = models.BooleanField(verbose_name='Проверенный', default=False)
+#
+#     def __str__(self):
+#         return str(self.attribute) + ": " + self.value.title
+#
+#     class Meta:
+#         verbose_name = "Значение атрибута(фикс)"
+#         verbose_name_plural = "Значения атрибутов(фикс)"
+#
+#
+# class UnFixedAttributeValue(Base):
+#     """
+#     Модель нефиксированного значения атрибута
+#     """
+#     value = models.FloatField(verbose_name="Нефикс значение атрибута")
+#     # title = models.CharField(max_length=255, verbose_name='Значение')
+#     attribute = models.ForeignKey(Attribute, on_delete=models.PROTECT, verbose_name="Атрибут", related_name="unfixed_values")
+#     products = models.ManyToManyField('Product', blank=True)
+#     is_tried = models.BooleanField(verbose_name='Проверенный', default=False)
+#
+#     def __str__(self):
+#         return '{}: {}'.format(self.attribute, self.value)
+#
+#     class Meta:
+#         verbose_name = "Значение атрибута(нефикс)"
+#         verbose_name_plural = "Значения атрибутов(нефикс)"
 
 
 class Product(Base):
@@ -203,8 +224,8 @@ class Product(Base):
     
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name="Производитель", related_name='products')
     
-    fixed_attrs_vals = models.ManyToManyField('FixedAttributeValue', verbose_name="Фикс атрибуты")
-    unfixed_attrs_vals = models.ManyToManyField('UnFixedAttributeValue', verbose_name="Нефикс атрибуты")
+    # fixed_attrs_vals = models.ManyToManyField('FixedAttributeValue', verbose_name="Фикс атрибуты")
+    # unfixed_attrs_vals = models.ManyToManyField('UnFixedAttributeValue', verbose_name="Нефикс атрибуты")
 
     raw = pgfields.JSONField(null=True, blank=True, verbose_name="Голые данные")
     
@@ -214,12 +235,12 @@ class Product(Base):
 
     priority = models.PositiveSmallIntegerField(verbose_name='Приоритет', default=0)
     
-    def get_attributes(self):
-        return '{} {}'.format(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all())
+    # def get_attributes(self):
+    #     return '{} {}'.format(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all())
     
-    def get_info(self) -> list:
-        # return Q(self.fixed_attrs_vals.all()) | Q(self.unfixed_attrs_vals.all())
-        return list(chain(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all()))
+    # def get_info(self) -> list:
+    #     # return Q(self.fixed_attrs_vals.all()) | Q(self.unfixed_attrs_vals.all())
+    #     return list(chain(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all()))
     
     def __str__(self):
         return self.title

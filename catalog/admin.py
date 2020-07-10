@@ -6,12 +6,11 @@ from django.utils.safestring import mark_safe
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth.models import User
 
-from catalog.models import Category, Product, Manufacturer, Attribute, FixedAttributeValue, FixedValue, \
-    UnFixedAttributeValue, Specification, DataFile, GroupSubclass
+from catalog.models import Category, Product, Manufacturer, Attribute, FixedValue, Specification, DataFile, GroupSubclass
 from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader, GeneralDocumentReader, BettermannDocumentReader, PKT, GeneralDocumentReaderMountingElements
 from catalog.reporters import writers, generators
 
-from catalog.forms import ProductChangeListForm
+# from catalog.forms import ProductChangeListForm
 
 from app.models import MainLog
 
@@ -353,8 +352,8 @@ class GroupSubclassAdmin(BaseAdmin):
 
 admin.site.register(MainLog, MainLogAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(FixedAttributeValue, FixAttrValAdmin)
-admin.site.register(UnFixedAttributeValue, UnFixAttrValAdmin)
+# admin.site.register(FixedAttributeValue, FixAttrValAdmin)
+# admin.site.register(UnFixedAttributeValue, UnFixAttrValAdmin)
 admin.site.register(FixedValue, FixValAdmin)
 # admin.site.register(FixedAttributeValue, AttrValAdmin)
 # admin.site.register(UnFixedAttributeValue, AttrValAdmin)

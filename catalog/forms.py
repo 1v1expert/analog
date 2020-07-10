@@ -1,13 +1,13 @@
 from django import forms
 from catalog.choices import TYPES_SEARCH
-from catalog.models import FixedAttributeValue, UnFixedAttributeValue, Manufacturer
+from catalog.models import Manufacturer
 
 
-class ProductChangeListForm(forms.ModelForm):
-    # here we only need to define the field we want to be editable
-    attrs_vals = forms.ModelMultipleChoiceField(
-        queryset=FixedAttributeValue.objects.only('title').all(), required=False)
-   
+# class ProductChangeListForm(forms.ModelForm):
+#     # here we only need to define the field we want to be editable
+#     attrs_vals = forms.ModelMultipleChoiceField(
+#         queryset=FixedAttributeValue.objects.only('title').all(), required=False)
+
 
 class SearchFromFile(forms.Form):
     file = forms.FileField(label='Файл', required=False)
