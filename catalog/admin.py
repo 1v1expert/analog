@@ -7,7 +7,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.auth.models import User
 
 from catalog.models import Category, Product, Manufacturer, Attribute, FixedValue, Specification, DataFile, GroupSubclass
-from catalog.file_utils import XLSDocumentReader, ProcessingUploadData, KOKSDocumentReader, IEKDocumentReader, GeneralDocumentReader, BettermannDocumentReader, PKT, GeneralDocumentReaderMountingElements
+from catalog.file_utils import XLSDocumentReader, ProcessingUploadData
 from catalog.reporters import writers, generators
 
 # from catalog.forms import ProductChangeListForm
@@ -190,7 +190,7 @@ class ManufacturerAdmin(BaseAdmin):
 
 
 class FileUploadAdmin(admin.ModelAdmin):
-    actions = ['process_general_file_mounting_elements', 'process_file', 'process_koks_file', 'process_iek_file', 'process_bettermann_file', 'process_general_file', 'process_pkt_file']
+    actions = ['process_file']
     list_display = ['file', 'type', 'file_link', 'created_at', 'created_by']
     
     def file_link(self, obj):
@@ -202,90 +202,11 @@ class FileUploadAdmin(admin.ModelAdmin):
     file_link.allow_tags = True
     file_link.short_description = 'Ссылка на скачивание'
     
-    def process_iek_file(self, request, queryset):
-        if not len(queryset) == 1:
-            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
-            return
-        try:
-            IEKDocumentReader(path=queryset[0].file.name, only_parse=False).parse_file()
-        except FileNotFoundError:
-            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
-    process_iek_file.short_description = 'Импортировать шаблон(IEK)'
-    
-    def process_bettermann_file(self, request, queryset):
-        if not len(queryset) == 1:
-            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
-            return
-        try:
-            BettermannDocumentReader(path=queryset[0].file.name, only_parse=False).parse_file()
-        except FileNotFoundError:
-            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
-    process_bettermann_file.short_description = 'Импортировать шаблон(bettermann)'
-    
-    def process_koks_file(self, request, queryset):
-        if not len(queryset) == 1:
-            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
-            return
-        try:
-            KOKSDocumentReader(path=queryset[0].file.name, only_parse=False).parse_file()
-        except FileNotFoundError:
-            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
-    process_koks_file.short_description = 'Импортировать шаблон(KOKs)'
-    
-    def process_general_file(self, request, queryset):
-        if not len(queryset) == 1:
-            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
-            return
-        try:
-            document = GeneralDocumentReader(path=queryset[0].file.name,
-                                             only_parse=False,
-                                             loadnetworkmodel=True).parse_file()
-            messages.add_message(request,
-                                 messages.SUCCESS,
-                                 'Файл {} загружен, {} позиций, дублей - {}'.format(
-                                     queryset[0].file.name, document.c_lines, len(document.doubles_article)
-                                 ))
-        except FileNotFoundError:
-            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
-        except Exception as e:
-            messages.add_message(request, messages.ERROR, 'Ошибка, детали: {}'.format(e))
-    process_general_file.short_description = 'Импортировать шаблон(Обработанный)'
-    
-    def process_general_file_mounting_elements(self, request, queryset):
-        if not len(queryset) == 1:
-            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
-            return
-        try:
-            document = GeneralDocumentReaderMountingElements(path=queryset[0].file.name,
-                                                             only_parse=False,
-                                                             loadnetworkmodel=False).parse_file()
-            messages.add_message(request,
-                                 messages.SUCCESS,
-                                 'Файл {} загружен, {} позиций, дублей - {}'.format(
-                                     queryset[0].file.name, document.c_lines, len(document.doubles_article)
-                                 ))
-        except FileNotFoundError:
-            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
-        except Exception as e:
-            messages.add_message(request, messages.ERROR, 'Ошибка! детали: {}'.format(e))
-    process_general_file_mounting_elements.short_description = 'Импортировать шаблон(монтажные элементы)'
-    
-    def process_pkt_file(self, request, queryset):
-        if not len(queryset) == 1:
-            messages.add_message(request, messages.ERROR, 'Пожалуйста, выберите один файл')
-            return
-        try:
-            document = PKT(path=queryset[0].file.name, only_parse=False).parse_file()
-            messages.add_message(request, messages.SUCCESS, 'Файл {} загружен, {} позиций'.format(queryset[0].file.name, document.c_lines))
-        except FileNotFoundError:
-            messages.add_message(request, messages.ERROR, 'Файл {} не найден'.format(queryset[0].file.name))
-    process_pkt_file.short_description = 'Импортировать шаблон(PKT)'
-    
     def process_file(self, request, queryset):
         for qq in queryset:
             created, error = ProcessingUploadData(
-                XLSDocumentReader(path=qq.file.name).parse_file(), start_time=time.time()
-            ).get_structured_data(request)
+                XLSDocumentReader(path=qq.file.name).parse_file(), start_time=time.time(), request=request
+            ).get_structured_data(only_check=True)
             
             if created:
                 messages.add_message(request, messages.SUCCESS, 'Данные успешно загружены из {} файла в БД'.format(qq.file.name))
