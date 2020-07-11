@@ -164,7 +164,13 @@ class ProductAdmin(BaseAdmin):
 
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'created_at', 'created_by']
-    actions = ['export_data_to_xls', 'export_full_dump', 'export_duplicate_products']
+    actions = ['export_data_to_xls', 'export_full_dump', 'export_duplicate_products', 'delete_all_products']
+    
+    def delete_all_products(self, request, queryset):
+        for manufacturer in queryset:
+            Product.objects.filter(manufacturer=manufacturer).delete()
+
+    delete_all_products.short_description = 'Удалить позиции по производителю'
     
     def export_full_dump(self, request, queryset):
         meta_data = generators.AdditionalGeneratorTemplate((User, Manufacturer, Category, Attribute, FixedValue))

@@ -248,7 +248,7 @@ class ProcessingUploadData(object):
             return 'Ошибка! Найдено более одного подкласса {} с классом {}'.format(product['subclass'], product['class'])
         # check product
         try:
-            Product.objects.get(article=product['article'], manufacturer=manufacturer)
+            Product.objects.get(article=product['article'], manufacturer=manufacturer, additional_article=product.get("additional_article"))
             return 'Ошибка! Наден продукт с наименованием - {} и производителем товара - {} в БД'.format(
                 product['article'], manufacturer.title)
         except Product.DoesNotExist:
