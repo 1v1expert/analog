@@ -139,8 +139,8 @@ class ProcessingUploadData(object):
             structured_product, attributes = {}, []
             try:
                 self.unique_class.add(line[1])
-                self.unique_subclass.add(line[2])
-                self.unique_manufacturer.add(line[4])
+                self.unique_subclass.add(line[5])
+                self.unique_manufacturer.add(line[6])
             except KeyError:
                 return False, 'Error in line: {}'.format(line)
             
