@@ -221,7 +221,7 @@ class ProcessingUploadData(object):
             new_product = Product(article=product['article'],
                                   additional_article=product.get('additional_article', ""),
                                   manufacturer=product['manufacturer_obj'],
-                                  series=product['series'],
+                                  series=product.get('series', ""),
                                   title=product['title'],
                                   category=product['category_obj'],
                                   created_by=self.user,
