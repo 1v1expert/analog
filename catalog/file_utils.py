@@ -1,21 +1,14 @@
-import openpyxl
-from openpyxl.utils.exceptions import InvalidFileException
-
-from catalog.choices import _rev_dict, _dict, TYPES_DICT
-from catalog.models import *
-
-from app.models import MainLog
-
-from django.contrib import messages
-from django.contrib.auth import models as auth_md
-from django.db import models
-from django.db.models.functions import Lower
-
-import time
-import lazy_import
-import re
 # import the logging library
 import logging
+import time
+
+import openpyxl
+from django.contrib.auth import models as auth_md
+from openpyxl.utils.exceptions import InvalidFileException
+
+from app.models import MainLog
+from catalog.choices import _dict, _rev_dict
+from catalog.models import *
 
 # Get an instance of a logger
 logger = logging.getLogger('analog')
@@ -282,21 +275,7 @@ class ProcessingUploadData(object):
         })
         
         return product
-        
-        
-        # try:
-        #     class_list = list(self.unique_class)
-        #     subclass_list = list(self.unique_subclass)
-        #     if (len(class_list) > 1) or (len(subclass_list) > 1):
-        #         return "Too many class or subclass: {}, {}".format(class_list, subclass_list)
-        #     else:
-        #         category = Category.objects.get(title__icontains=class_list[0],
-        #                                         parent__title__icontains=subclass_list[0])
-        # except:
-        #     return "Not found class or subclass"
-        #
-        # print(self.unique_type_attributes, self.unique_value_attributes, self.unique_manufacturer, self.unique_class, self.unique_subclass)
-        #
+
     def get_attribute(self):
         pass
     
