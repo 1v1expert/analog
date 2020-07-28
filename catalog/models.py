@@ -247,10 +247,10 @@ class Product(Base):
     
     def comparison(self, analog: "Product" = None):
         fields = ('value', 'un_value', 'attribute__title', 'attribute__pk')
-        attributes = chain(
+        attributes = sorted(chain(
             self.attributevalue_set.all().order_by('attribute__pk').values(*fields),
             analog.attributevalue_set.all().order_by('attribute__pk').values(*fields)
-        )
+        ), key=lambda attribute: attribute['attribute__pk'])
         
         return groupby(attributes, lambda x: x['attribute__pk'])
         
