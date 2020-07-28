@@ -7,74 +7,84 @@ from catalog.exceptions import AnalogNotFound, ArticleNotFound, InternalError
 import traceback
 
 
-def get_product_info(analog, original=None):
-    info = [{"analog":
-                 {"name": "наименование", "value": analog.title},
-             "original":
-                 {"name": "наименование", "value": original.title}
-             }]
+def get_product_info(analog: Product, original: Product):
+    info = list()
+    info.append(
+        {
+            "analog":
+                {
+                    "name": "наименование", "value": analog.title
+                },
+            "original":
+                {
+                    "name": "наименование", "value": original.title
+                }
+        }
+    )
+
+    matching = {
+        analog.pk: "analog",
+        original.pk: "original"
+    }
     
-    original_info = original.get_info()
-    analog_get_info = analog.get_info()
-    
-    fixed_attributes = []  # for find images in groups
-    
-    for attr in analog_get_info:
-        analog_name = attr.attribute.title
-        orig_attr = None
+    for attribute__pk, group in original.comparison(analog):
+        elements = list(group)
         
-        if analog_name in ('ед.изм', 'цена'):
-            continue
-        
-        for original_attr in original_info:
-            print(original_attr.attribute.title, analog_name)
-            if original_attr.attribute.title == analog_name:
-                orig_attr = original_attr
-                break
-        
-        analog_info = {'name': analog_name}
-        
-        if attr.attribute.is_fixed:
-            analog_value = attr.value.title
-            original_value = orig_attr.value.title if orig_attr else ""
-            fixed_attributes.append(attr.value)  # for search group with image
-        else:
-            analog_value = attr.un_value
-            original_value = orig_attr.value if orig_attr else ""
-        
-        analog_info['value'] = analog_value
-        
-        info.append({"analog": analog_info,
-                     "original":
-                         {"name": analog_info["name"], "value": original_value}
-                     })
-    
-    info.append({"analog":
-                     {"name": "производитель", "value": analog.manufacturer.title},
-                 "original":
-                     {"name": "производитель", "value": original.manufacturer.title}
-                 })
-    # find group with image
-    if not len(fixed_attributes):
-        return {"result": info}
-    
-    from catalog.models import GroupSubclass
-    try:
-        group = GroupSubclass.objects.get(category=analog.category,
-                                          fixed_attribute__in=fixed_attributes)
-        return {"result": info, "image": group.image.url}
-    
-    except GroupSubclass.DoesNotExist:
-        pass
-    except GroupSubclass.MultipleObjectsReturned:
-        pass
-    
+        element1 = elements[0]
+        if len(elements) == 2:
+            element2 = elements[1]
+            info.append({
+                matching[element1["product__pk"]]: {
+                    "name": element1["attribute__title"].lower(),
+                    "value": element1["value__title"] if element1["value__title"] is not None else element1["un_value"]
+                },
+                matching[element2["product__pk"]]: {
+                    "name": element2["attribute__title"].lower(),
+                    "value": element2["value__title"] if element2["value__title"] is not None else element2["un_value"]
+                },
+            })
+            
+        elif len(elements) == 1:
+            product__pk = [key for key in matching.keys() if key != element1["product__pk"]][0]
+            info.append({
+                matching[element1["product__pk"]]: {
+                    "name": element1["attribute__title"].lower(),
+                    "value": element1["value__title"] if element1["value__title"] is not None else element1["un_value"]
+                },
+                
+                matching[product__pk]: {
+                    "name": element1["attribute__title"].lower(),
+                    "value": "------"
+                },
+            })
+
+    info.append(
+        {
+            "analog":
+                {
+                    "name": "производитель", "value": analog.manufacturer.title
+                },
+            "original":
+                {
+                    "name": "производитель", "value": original.manufacturer.title
+                }
+        }
+    )
+
     return {"result": info}
 
+class SearchProducts():
+    def __init__(self, product=None, manufacturer_to=None):
+        self.product = product
+        self.manufacturer_to = manufacturer_to
+        self.founded_products = Product.objects.filter(pk=2346)
+    def global_search(self):
+        pass
+    
 
 def get_analog(article: str = None, manufacturer_to: Manufacturer = None) -> dict:
-    product = Product.objects.filter(article=article,
-                                     is_enabled=True).first()
+    product = Product.objects.filter(article=article).first()
+                                     #is_enabled=True).first()
     if not product:
         raise ArticleNotFound("Артикул {} не найден".format(article),
                               "Article: {}, manufacturer to: {}".format(article, manufacturer_to))

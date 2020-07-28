@@ -244,13 +244,16 @@ class Product(Base):
         return list(self.attributevalue_set.all())
     #     # return Q(self.fixed_attrs_vals.all()) | Q(self.unfixed_attrs_vals.all())
     #     return list(chain(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all()))
-    
-    def comparison(self, analog: "Product" = None):
-        fields = ('value', 'un_value', 'attribute__title', 'attribute__pk')
-        attributes = sorted(chain(
-            self.attributevalue_set.all().order_by('attribute__pk').values(*fields),
-            analog.attributevalue_set.all().order_by('attribute__pk').values(*fields)
-        ), key=lambda attribute: attribute['attribute__pk'])
+
+    def comparison(self, analog):
+        fields = ('value__title', 'un_value', 'attribute__title', 'attribute__pk', 'product__pk')
+        attributes = sorted(
+            chain(
+                self.attributevalue_set.all().order_by('attribute__pk').values(*fields),
+                analog.attributevalue_set.all().order_by('attribute__pk').values(*fields)
+            ),
+            key=lambda attribute: attribute['attribute__pk']
+        )
         
         return groupby(attributes, lambda x: x['attribute__pk'])
         
