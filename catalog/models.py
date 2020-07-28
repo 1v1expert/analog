@@ -11,7 +11,7 @@ from catalog.choices import TYPES, UNITS, TYPES_FILE
 from catalog.managers import CoreModelManager
 
 from django.contrib.postgres import fields as pgfields
-
+from itertools import chain, groupby
 from itertools import chain
 import mptt
 from django.utils import timezone
@@ -245,6 +245,15 @@ class Product(Base):
     #     # return Q(self.fixed_attrs_vals.all()) | Q(self.unfixed_attrs_vals.all())
     #     return list(chain(self.fixed_attrs_vals.all(), self.unfixed_attrs_vals.all()))
     
+    def comparison(self, analog: "Product" = None):
+        fields = ('value', 'un_value', 'attribute__title', 'attribute__pk')
+        attributes = chain(
+            self.attributevalue_set.all().order_by('attribute__pk').values(*fields),
+            analog.attributevalue_set.all().order_by('attribute__pk').values(*fields)
+        )
+        
+        return groupby(attributes, lambda x: x['attribute__pk'])
+        
     def __str__(self):
         return self.title
 
