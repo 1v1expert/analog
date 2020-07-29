@@ -3,7 +3,7 @@ from typing import Optional
 
 from catalog.choices import HARD, PRICE, RECALCULATION, RELATION, SOFT
 from catalog.exceptions import AnalogNotFound
-from catalog.models import Manufacturer, Product
+from catalog.models import Manufacturer, Product, AttributeValue
 
 
 class AnalogSearch(object):
@@ -21,37 +21,47 @@ class AnalogSearch(object):
     def find_products_with_category(self):
         return Product.objects.filter(category=self.initial_product.category, manufacturer=self.manufacturer_to)
     
-    @staticmethod
-    def _get_hrd_fix_attributes(products):
-        return FixedAttributeValue.objects.filter(product__in=products, attribute__type=HARD)
-    
-    @staticmethod
-    def _get_hrd_unfix_attributes(products):
-        return UnFixedAttributeValue.objects.filter(product__in=products, attribute__type=HARD)
-
-    @staticmethod
-    def _get_soft_fix_attributes(products):
-        return FixedAttributeValue.objects.filter(product__in=products, attribute__type=SOFT)
-
-    @staticmethod
-    def _get_soft_unfix_attributes(products):
-        return UnFixedAttributeValue.objects.filter(product__in=products, attribute__type=SOFT)
+    # @staticmethod
+    # def _get_hrd_fix_attributes(products):
+    #     return FixedAttributeValue.objects.filter(product__in=products, attribute__type=HARD)
+    #
+    # @staticmethod
+    # def _get_hrd_unfix_attributes(products):
+    #     return UnFixedAttributeValue.objects.filter(product__in=products, attribute__type=HARD)
+    #
+    # @staticmethod
+    # def _get_soft_fix_attributes(products):
+    #     return FixedAttributeValue.objects.filter(product__in=products, attribute__type=SOFT)
+    #
+    # @staticmethod
+    # def _get_soft_unfix_attributes(products):
+    #     return UnFixedAttributeValue.objects.filter(product__in=products, attribute__type=SOFT)
 
     def get_full_info_from_initial_product(self):
+        attributes = self.initial_product.attributevalue_set.values(
+            'value__title',
+            'un_value',
+            'attribute__type',
+            'attribute__title',
+            'attribute__is_fixed'
+        )
+        # return {attribute['attribute__title']: attribute for attribute in attributes}
         info = {HARD: [], SOFT: [], RELATION: [], RECALCULATION: [], PRICE: []}
-        for attr in self.initial_product.fixed_attrs_vals.values_list('value__title',
-                                                                      'attribute__type',
-                                                                      'attribute__title'):
-            info[attr[1]].append({'value': attr[0],
-                                  'attribute': attr[2],
-                                  'type': 'fix'
-                                  })
-    
-        for attr in self.initial_product.unfixed_attrs_vals.values_list('value', 'attribute__type', 'attribute__title'):
-            info[attr[1]].append({'value': attr[0],
-                                  'attribute': attr[2],
-                                  'type': 'unfix'
-                                  })
+        for attribute in attributes:
+            info[attribute["attribute__type"]].append(attribute)
+        # for attr in self.initial_product.fixed_attrs_vals.values_list('value__title',
+        #                                                               'attribute__type',
+        #                                                               'attribute__title'):
+        #     info[attr[1]].append({'value': attr[0],
+        #                           'attribute': attr[2],
+        #                           'type': 'fix'
+        #                           })
+        #
+        # for attr in self.initial_product.unfixed_attrs_vals.values_list('value', 'attribute__type', 'attribute__title'):
+        #     info[attr[1]].append({'value': attr[0],
+        #                           'attribute': attr[2],
+        #                           'type': 'unfix'
+        #                           })
         return info
     
     def find_unfix_value(self, values_list, value, method='nearest'):
@@ -77,31 +87,64 @@ class AnalogSearch(object):
         if None in pks: pks.remove(None)
         return pks
     
-    def find_by_attributes(self, fix, unfix):
-        middleware_pk_products = set() #
-        valid_fix, valid_unfix = fix, unfix
-        product_info = self.initial_product_info[HARD]
-        product_info.sort(key=lambda x: x['type'], reverse=False)
-        for attr in product_info:
-            # pks = set()
-            if attr['type'] == 'unfix':
-                pks = self.find_unfix_value(valid_unfix, attr['value'])
-                if len(pks):
-                    middleware_pk_products = pks
-                    valid_unfix = []
-                    for uf in valid_unfix:
-                        if uf[0] in middleware_pk_products:
-                            valid_unfix.append(uf)
+    # def find_by_attributes(self, fix, unfix):
+    #     middleware_pk_products = set() #
+    #     valid_fix, valid_unfix = fix, unfix
+    #     product_info = self.initial_product_info[HARD]
+    #     product_info.sort(key=lambda x: x['type'], reverse=False)
+    #     for attr in product_info:
+    #         # pks = set()
+    #         if attr['type'] == 'unfix':
+    #             pks = self.find_unfix_value(valid_unfix, attr['value'])
+    #             if len(pks):
+    #                 middleware_pk_products = pks
+    #                 valid_unfix = []
+    #                 for uf in valid_unfix:
+    #                     if uf[0] in middleware_pk_products:
+    #                         valid_unfix.append(uf)
+    #
+    #         if attr['type'] == 'fix':
+    #             pks = self.find_fix_value(valid_fix, attr['value'])
+    #             if len(pks):
+    #                 middleware_pk_products = pks
+    #                 valid_fix = []
+    #                 for f in valid_fix:
+    #                     if f[0] in middleware_pk_products:
+    #                         valid_fix.append(f)
+    #
+    #     return middleware_pk_products
+    
+    def find_by_hard_attributes(self, query):
+        middleware_pk_products = []
+        for i, attribute in enumerate(self.initial_product_info[HARD]):
+            if i == 0:
+                middleware_pk_products = list(AttributeValue.objects.filter(
+                    product__in=query,
+                    attribute__type=HARD,
+                    attribute__is_fixed=attribute["attribute__is_fixed"],
+                    value__title=attribute["value__title"],
+                    un_value=attribute["un_value"]
+                ).distinct('product__pk').values_list('product__pk', flat=True))
             
-            if attr['type'] == 'fix':
-                pks = self.find_fix_value(valid_fix, attr['value'])
-                if len(pks):
-                    middleware_pk_products = pks
-                    valid_fix = []
-                    for f in valid_fix:
-                        if f[0] in middleware_pk_products:
-                            valid_fix.append(f)
-                
+            else:
+                middleware_pk_products = list(AttributeValue.objects.filter(
+                    product__pk__in=middleware_pk_products,
+                    attribute__type=HARD,
+                    attribute__is_fixed=attribute["attribute__is_fixed"],
+                    value__title=attribute["value__title"],
+                    un_value=attribute["un_value"]
+                ).distinct('product__pk').values_list('product__pk', flat=True))
+        
+        # for i, attribute in enumerate(AttributeValue.objects.filter(
+        #     product__in=query,
+        #     attribute__type='hrd',
+        #     attribute__is_fixed=True
+        # ).values('value__title', 'attribute__title', 'product__pk')):
+        #     attr = self.initial_product_info.get(attribute["attribute__title"])
+        #     if attr and attr["value__title"] == attribute["value__title"]:
+        #         middleware_pk_products.add(attribute["product_pk"])
+        
+        
         return middleware_pk_products
         
     def build(self):
@@ -110,28 +153,30 @@ class AnalogSearch(object):
         # first step
         founded_first = self.find_products_with_category()
         
-        fix_hrd_attrs_values_list = self._get_hrd_fix_attributes(founded_first)\
-            .values_list('product__pk', 'value__title', 'attribute__type', 'attribute__title')
-        unfix_hrd_attrs_values_list = self._get_hrd_unfix_attributes(founded_first)\
-            .values_list('product__pk', 'value', 'attribute__type', 'attribute__title')
+        # fix_hrd_attrs_values_list = self._get_hrd_fix_attributes(founded_first)\
+        #     .values_list('product__pk', 'value__title', 'attribute__type', 'attribute__title')
+        # unfix_hrd_attrs_values_list = self._get_hrd_unfix_attributes(founded_first)\
+        #     .values_list('product__pk', 'value', 'attribute__type', 'attribute__title')
         
         # second step
-        second_founded = self.find_by_attributes(fix_hrd_attrs_values_list, unfix_hrd_attrs_values_list)
+        second_founded = self.find_by_hard_attributes(founded_first)
+        
+        
         if not len(second_founded):
             raise Exception('Not founded')
         # third step
         products = Product.objects.filter(pk__in=second_founded)
-        fix_soft_attrs_values_list = self._get_soft_fix_attributes(products)\
-            .values_list('product__pk', 'value__title', 'attribute__type', 'attribute__title')
-        unfix_soft_attrs_values_list = self._get_soft_unfix_attributes(products)\
-            .values_list('product__pk', 'value', 'attribute__type', 'attribute__title')
-
-        third_founded = self.find_by_attributes(fix_soft_attrs_values_list, unfix_soft_attrs_values_list)
-        if not len(third_founded):
-            raise Exception('Not founded')
-        
-        # fourth second
-        products = Product.objects.filter(pk__in=third_founded)
+        # fix_soft_attrs_values_list = self._get_soft_fix_attributes(products)\
+        #     .values_list('product__pk', 'value__title', 'attribute__type', 'attribute__title')
+        # unfix_soft_attrs_values_list = self._get_soft_unfix_attributes(products)\
+        #     .values_list('product__pk', 'value', 'attribute__type', 'attribute__title')
+        #
+        # third_founded = self.find_by_attributes(fix_soft_attrs_values_list, unfix_soft_attrs_values_list)
+        # if not len(third_founded):
+        #     raise Exception('Not founded')
+        #
+        # # fourth second
+        # products = Product.objects.filter(pk__in=third_founded)
         self.product = products.first()
         self.left_time = time.time() - self.start_time
         return self

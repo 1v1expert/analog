@@ -3,6 +3,7 @@ from django.views import View
 
 from catalog.models import Product, Manufacturer
 from catalog.forms import AdvancedSearchForm, SearchForm
+from catalog.utils import AnalogSearch
 from catalog.exceptions import AnalogNotFound, ArticleNotFound, InternalError
 import traceback
 
@@ -96,9 +97,9 @@ def get_analog(article: str = None, manufacturer_to: Manufacturer = None) -> dic
         return {"analog": analog, "info": info, "product": product}
     
     except (KeyError, TypeError):
-        search = SearchProducts(product=product, manufacturer_to=manufacturer_to)
-        search.global_search()
-        analog = search.founded_products.first()
+        search = AnalogSearch(product_from=product, manufacturer_to=manufacturer_to)
+        search.build()
+        analog = search.product
         if not analog:
             raise AnalogNotFound('Аналог по артикулу: {} не найден'.format(article),
                                  "Not find analog for article: {}, manufacturer to: {}".format(article,
