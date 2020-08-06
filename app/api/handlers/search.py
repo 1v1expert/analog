@@ -74,7 +74,8 @@ def get_product_info(analog: Product, original: Product):
 
     return {"result": info}
 
-class SearchProducts():
+
+class SearchProducts(object):
     def __init__(self, product=None, manufacturer_to=None):
         self.product = product
         self.manufacturer_to = manufacturer_to

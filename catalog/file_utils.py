@@ -5,7 +5,7 @@ import time
 import openpyxl
 from django.contrib.auth import models as auth_md
 from openpyxl.utils.exceptions import InvalidFileException
-
+from functools import lru_cache
 from app.models import MainLog
 from catalog.choices import _dict, _rev_dict
 from catalog.models import *
@@ -37,10 +37,14 @@ class XLSDocumentReader(object):
         self.doc = []
         
     def parse_file(self):
+        logger.debug(f'Start parse file: {self.xlsx}')
+        start_time = time.time()
+        
         rows = self.sheet.rows
         for cnt, row in enumerate(rows):
-            # if cnt > 15:
-            #     break
+            
+            if cnt > 500:
+                break
             
             line = {}
             for cnt_c, cell in enumerate(row):
@@ -51,11 +55,37 @@ class XLSDocumentReader(object):
                 
                 if cell.value:
                     line.update({cnt_c: value})
+
             self.doc.append(line)
             
         self.workbook._archive.close()
-        return self.doc
         
+        logger.debug(f'Finish parse file, time left: {time.time() - start_time}s')
+        return self.doc
+
+
+@lru_cache()
+def get_manufacturer(manufacturer: str):
+    return Manufacturer.objects.get(title__icontains=manufacturer)
+
+
+@lru_cache()
+def get_category(product_class, product_subclass):
+    return Category.objects.get(
+        title__iexact=product_subclass,
+        parent__title__iexact=product_class
+    )
+
+
+@lru_cache()
+def get_attribute(category, name):
+    return Attribute.objects.get(category=category, title__iexact=name)
+
+
+@lru_cache()
+def get_fixed_value(value, attribute):
+    return FixedValue.objects.get(title__iexact=value, attribute=attribute)
+
 
 class ProcessingUploadData(object):
     """Класс преобразования считанных данных из загружаемого файла
@@ -90,18 +120,15 @@ class ProcessingUploadData(object):
     STRUCTURE_PRODUCT_REV_DICT = _rev_dict(STRUCTURE_PRODUCT)
     STRUCTURE_PRODUCT_DICT = _dict(STRUCTURE_PRODUCT)
     
-    def __init__(self, data, start_time=None, request=None):
+    def __init__(self, data, request=None):
         
         if request is None:
             self.user = auth_md.User.objects.get(is_staff=True, username='admin')
         else:
             self.user = request.user
             
-        if start_time is None:
-            self.start_time = time.time()
-        else:
-            self.start_time = start_time
-            
+        self.start_time = time.time()
+        
         self.ATTRIBUTE_LINE = 0
         self.OPTION_LINE = 0
         
@@ -152,7 +179,6 @@ class ProcessingUploadData(object):
                 self.STRUCTURE_PRODUCT[7][1]: attributes
             })
             
-            print(structured_product)
             is_valid_data = self.check_exists_types(structured_product)
 
             if isinstance(is_valid_data, str):
@@ -189,36 +215,26 @@ class ProcessingUploadData(object):
                 attr_val = AttributeValue(un_value=attr['value'], attribute=attr['attr_obj'], created_by=self.user,
                                           updated_by=self.user,
                                           product=new_product)
-                
-            # if attr.get('is_digit'):
-            #     attr_val = AttributeValue(value=attr['value'], attribute=attr[''],
-            #                                      created_by=self.user, updated_by=self.user)
-            # else:
-            #     attr_val = FixedAttributeValue(value=attr['value'], attribute=attr['attr_obj'],
-            #                                    created_by=self.user, updated_by=self.user)
             
             attr_val.save()
-            # attr_val.products.add(new_product)
-            # attr_val.save()
-            # if attr.get('is_digit'):
-            #     new_product.unfixed_attrs_vals.add(attr_val)
-            # else:
-            #     new_product.fixed_attrs_vals.add(attr_val)
             
         for count, product in enumerate(self.products):
             # if count % 100 == 0:
             #     print('Line #{}'.format(count))
             #     messages.add_message(request, messages.INFO,
             #                          'Success added {} products'.format(count))
-            
-            new_product = Product(article=product['article'],
-                                  additional_article=product.get('additional_article', ""),
-                                  manufacturer=product['manufacturer_obj'],
-                                  series=product.get('series', ""),
-                                  title=product['title'],
-                                  category=product['category_obj'],
-                                  created_by=self.user,
-                                  updated_by=self.user)
+    
+            new_product = Product(
+                article=product['article'],
+                additional_article=product.get('additional_article', ""),
+                manufacturer=product['manufacturer_obj'],
+                series=product.get('series', ""),
+                title=product['title'],
+                category=product['category_obj'],
+                created_by=self.user,
+                updated_by=self.user,
+                is_tried=True
+            )
             new_product.save()
             for attr in product['attributes']:
                 create_attr()
@@ -228,13 +244,12 @@ class ProcessingUploadData(object):
     def check_exists_types(self, product):
         # check manufacturer
         try:
-            manufacturer = Manufacturer.objects.get(title__icontains=product.get('manufacturer'))
+            manufacturer = get_manufacturer(product.get('manufacturer'))
         except Manufacturer.DoesNotExist:
             return 'Ошибка! Не найден производитель товаров: {}'.format(product.get('manufacturer'))
         # check category
         try:
-            category = Category.objects.get(title__iexact=product['subclass'],
-                                            parent__title__iexact=product['class'])
+            category = get_category(product['class'], product['subclass'],)
         except Category.DoesNotExist:
             return 'Ошибка! Не найден класс {} с подклассом {}'.format(product['class'], product['subclass'])
         except Category.MultipleObjectsReturned:
@@ -253,11 +268,11 @@ class ProcessingUploadData(object):
         for attr in product['attributes']:
             # find instance attribute
             try:
-                attribute = Attribute.objects.get(category=category, title__iexact=attr['name'])
+                attribute = get_attribute(category, attr['name'])
                 attr.update({"attr_obj": attribute})
                 # find fixed attribute
                 if attribute.is_fixed:
-                    fix_value = FixedValue.objects.get(title__iexact=attr['value'], attribute=attribute)
+                    fix_value = get_fixed_value(attr['value'], attribute)
                     attr['value'] = fix_value
                 else:
                     attr['value'] = float(attr['value'].replace(',', '.')) if is_digit(attr['value'].replace(',', '.')) else attr['value']
@@ -331,8 +346,6 @@ class SubclassesReader(object):
         self.workbook._archive.close()
         
         return {"header": self.header, "body": self.body}
-        # return self
-        # return self.doc
     
     def generate_body(self, row, number):
         # line = {}

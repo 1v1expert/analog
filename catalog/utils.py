@@ -15,27 +15,12 @@ class AnalogSearch(object):
         self.initial_product_info = {}
         self.manufacturer_to = manufacturer_to
         self.product = None
+        self.first_step_products = None
         
         # raise product_from is None or manufacturer_to is None
         
     def find_products_with_category(self):
         return Product.objects.filter(category=self.initial_product.category, manufacturer=self.manufacturer_to)
-    
-    # @staticmethod
-    # def _get_hrd_fix_attributes(products):
-    #     return FixedAttributeValue.objects.filter(product__in=products, attribute__type=HARD)
-    #
-    # @staticmethod
-    # def _get_hrd_unfix_attributes(products):
-    #     return UnFixedAttributeValue.objects.filter(product__in=products, attribute__type=HARD)
-    #
-    # @staticmethod
-    # def _get_soft_fix_attributes(products):
-    #     return FixedAttributeValue.objects.filter(product__in=products, attribute__type=SOFT)
-    #
-    # @staticmethod
-    # def _get_soft_unfix_attributes(products):
-    #     return UnFixedAttributeValue.objects.filter(product__in=products, attribute__type=SOFT)
 
     def get_full_info_from_initial_product(self):
         attributes = self.initial_product.attributevalue_set.values(
@@ -87,33 +72,6 @@ class AnalogSearch(object):
         if None in pks: pks.remove(None)
         return pks
     
-    # def find_by_attributes(self, fix, unfix):
-    #     middleware_pk_products = set() #
-    #     valid_fix, valid_unfix = fix, unfix
-    #     product_info = self.initial_product_info[HARD]
-    #     product_info.sort(key=lambda x: x['type'], reverse=False)
-    #     for attr in product_info:
-    #         # pks = set()
-    #         if attr['type'] == 'unfix':
-    #             pks = self.find_unfix_value(valid_unfix, attr['value'])
-    #             if len(pks):
-    #                 middleware_pk_products = pks
-    #                 valid_unfix = []
-    #                 for uf in valid_unfix:
-    #                     if uf[0] in middleware_pk_products:
-    #                         valid_unfix.append(uf)
-    #
-    #         if attr['type'] == 'fix':
-    #             pks = self.find_fix_value(valid_fix, attr['value'])
-    #             if len(pks):
-    #                 middleware_pk_products = pks
-    #                 valid_fix = []
-    #                 for f in valid_fix:
-    #                     if f[0] in middleware_pk_products:
-    #                         valid_fix.append(f)
-    #
-    #     return middleware_pk_products
-    
     def find_by_hard_attributes(self, query):
         middleware_pk_products = []
         for i, attribute in enumerate(self.initial_product_info[HARD]):
@@ -135,17 +93,10 @@ class AnalogSearch(object):
                     un_value=attribute["un_value"]
                 ).distinct('product__pk').values_list('product__pk', flat=True))
         
-        # for i, attribute in enumerate(AttributeValue.objects.filter(
-        #     product__in=query,
-        #     attribute__type='hrd',
-        #     attribute__is_fixed=True
-        # ).values('value__title', 'attribute__title', 'product__pk')):
-        #     attr = self.initial_product_info.get(attribute["attribute__title"])
-        #     if attr and attr["value__title"] == attribute["value__title"]:
-        #         middleware_pk_products.add(attribute["product_pk"])
-        
-        
         return middleware_pk_products
+    
+    def find_by_soft_attributes(self, query_pk):
+        pass
         
     def build(self):
         self.initial_product_info = self.get_full_info_from_initial_product()
@@ -178,6 +129,7 @@ class AnalogSearch(object):
         # # fourth second
         # products = Product.objects.filter(pk__in=third_founded)
         self.product = products.first()
+        self.first_step_products = products
         self.left_time = time.time() - self.start_time
         return self
         
