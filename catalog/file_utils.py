@@ -43,8 +43,8 @@ class XLSDocumentReader(object):
         rows = self.sheet.rows
         for cnt, row in enumerate(rows):
             
-            if cnt > 500:
-                break
+            # if cnt > 500:
+            #     break
             
             line = {}
             for cnt_c, cell in enumerate(row):
