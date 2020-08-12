@@ -211,7 +211,7 @@ class FileUploadAdmin(admin.ModelAdmin):
     def process_file(self, request, queryset):
         for qq in queryset:
             created, error = ProcessingUploadData(
-                XLSDocumentReader(path=qq.file.name).parse_file(), start_time=time.time(), request=request
+                XLSDocumentReader(path=qq.file.name).parse_file(), request=request
             ).get_structured_data(only_check=False)
             
             if created:
