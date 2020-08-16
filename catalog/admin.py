@@ -77,9 +77,7 @@ class CategoryAdmin(BaseAdmin):
         obj.updated_by = request.user
         obj.save()
         if obj.parent and not obj.attributes.all().count():
-            print(obj, list(obj.parent.attributes.all()))
             obj.attributes.add(*list(obj.parent.attributes.all()))
-            print(obj.attributes.all())
             # obj.attributes.save()
             # obj.save()  ## what is it??
         
