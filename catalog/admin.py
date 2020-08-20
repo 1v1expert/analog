@@ -1,23 +1,17 @@
+from datetime import datetime
+
 from django.contrib import admin
 from django.contrib import messages
-from django.contrib.admin.views.main import ChangeList
-
-from django.utils.safestring import mark_safe
 from django.contrib.admin.models import LogEntry
+from django.contrib.admin.views.main import ChangeList
 from django.contrib.auth.models import User
-
-from catalog.models import Category, Product, Manufacturer, Attribute, FixedValue, Specification, DataFile, GroupSubclass
-from catalog.file_utils import XLSDocumentReader, ProcessingUploadData
-from catalog.reporters import writers, generators
-
-# from catalog.forms import ProductChangeListForm
+from django.utils.safestring import mark_safe
 
 from app.models import MainLog
-
-from feincms.admin import tree_editor
-
-from datetime import datetime
-import time
+from catalog.file_utils import ProcessingUploadData, XLSDocumentReader
+from catalog.models import Attribute, Category, DataFile, FixedValue, GroupSubclass, Manufacturer, Product, \
+    Specification
+from catalog.reporters import generators, writers
 
 
 def mark_as_published(modeladmin, request, queryset):
@@ -36,7 +30,7 @@ mark_as_unpublished.short_description = u"Снять с публикации"
 
 class BaseAdmin(admin.ModelAdmin):
 
-    list_display = ['title', 'id','is_public', 'deleted', 'created_at', 'created_by', 'updated_at','updated_by']
+    list_display = ['title', 'id', 'is_public', 'deleted', 'created_at', 'created_by', 'updated_at', 'updated_by']
     save_on_top = True
     actions = [mark_as_published, mark_as_unpublished]
     list_filter = ['is_public', 'deleted', 'created_at', 'updated_at']
@@ -81,34 +75,16 @@ class CategoryAdmin(BaseAdmin):
             # obj.attributes.save()
             # obj.save()  ## what is it??
         
-    # @staticmethod
     def get_attributes(self, obj):
         """Атрибуты"""
         return "; ".join(['{}: {}'.format(p.type, p.title) for p in obj.attributes.all()])
     get_attributes.short_description = 'Атрибуты'
-    
-
-# class CategoryAdmin(BaseAdmin):
-#     autocomplete_fields = ['parent']
-#     inlines=[SubCatValInline]
 
 
 class AttrAdmin(BaseAdmin):
     list_display = ['title', 'unit', 'id', 'type', 'priority', 'is_public', 'deleted']
     #'category'
     #autocomplete_fields = ['category']
-
-
-class AttrValAdmin(BaseAdmin):
-    list_display = ['title', 'attribute', 'id', 'is_public', 'deleted']
-    
-    #autocomplete_fields = ['attribute']
-    exclude = ('products',)
-    
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     if db_field.name == "attribute":
-    #         print(json.dumps(kwargs, indent=2))
-    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class ProductChangeList(ChangeList):
@@ -141,23 +117,6 @@ class ProductAdmin(BaseAdmin):
         return "; ".join(['{}: {}'.format(p.attribute.title, p.value) for p in obj.unfixed_attrs_vals.all()])
 
     get_unfix_attrs_vals.short_description = 'Нефиксированные атрибуты'
-    # def get_changelist(self, request, **kwargs):
-    #     return ProductChangeList
-    #
-    # def get_changelist_form(self, request, **kwargs):
-    #     return ProductChangeListForm
-    # exclude = ('attrs_vals', )
-
-# class ListingAdmin(BaseAdmin):
-#     actions = None
-#     search_fields = ['=user__username', ]
-#     fieldsets = [
-#         (None, {'fields':()}),
-#         ]
-
-#     def __init__(self, *args, **kwargs):
-#         super(LogEntryAdmin, self).__init__(*args, **kwargs)
-#         self.list_display_links = (None, )
 
 
 class ManufacturerAdmin(BaseAdmin):
@@ -190,7 +149,11 @@ class ManufacturerAdmin(BaseAdmin):
         )
         with writers.BookkeepingWriter('Dump duplicate products {}'.format(datetime.now().date()), request.user) as writer:
             writer.dump(meta_data.generate())
+
     export_duplicate_products.short_description = 'Выгрузить дубликаты'
+    
+    def download_check_result(self, request, queryset):
+        pass
 
 
 class FileUploadAdmin(admin.ModelAdmin):
@@ -243,32 +206,10 @@ class LogEntryAdmin(admin.ModelAdmin):
         actions = super(LogEntryAdmin, self).get_actions(request)
         # del actions['delete_selected']
         return actions
-
-# TODO реализовать фильтры поиска по колонкам, рецепт тут: https://medium.com/@hakibenita/how-to-add-a-text-filter-to-django-admin-5d1db93772d8
-# TODO экспорт в формат xls https://xlsxwriter.readthedocs.io/index.html
-
-
-class FixAttrValAdmin(BaseAdmin):
-    list_display = ['value_title', 'attribute', 'id']
-    
-    @staticmethod
-    def value_title(obj):
-        return obj.value.title
-
-    exclude = ('products',)
-
-    
-class UnFixAttrValAdmin(BaseAdmin):
-    list_display = ['value', 'attribute', 'id']
-
-    # autocomplete_fields = ['attribute']
-    exclude = ('products',)
     
 
 class FixValAdmin(BaseAdmin):
     list_display = ['title', 'attribute', 'id', 'deleted']
-
-# admin.site.register(Category, CategoryAdmin)
 
 
 class GroupSubclassAdmin(BaseAdmin):
@@ -277,13 +218,8 @@ class GroupSubclassAdmin(BaseAdmin):
 
 admin.site.register(MainLog, MainLogAdmin)
 admin.site.register(Category, CategoryAdmin)
-# admin.site.register(FixedAttributeValue, FixAttrValAdmin)
-# admin.site.register(UnFixedAttributeValue, UnFixAttrValAdmin)
 admin.site.register(FixedValue, FixValAdmin)
-# admin.site.register(FixedAttributeValue, AttrValAdmin)
-# admin.site.register(UnFixedAttributeValue, AttrValAdmin)
 admin.site.register(Product, ProductAdmin)
-# admin.site.register(Manufacturer, BaseAdmin)
 admin.site.register(Manufacturer, ManufacturerAdmin)
 admin.site.register(Attribute, AttrAdmin)
 admin.site.register(Specification, BaseAdmin)

@@ -184,6 +184,23 @@ class Product(Base):
     
     def get_info(self) -> list:
         return list(self.attributevalue_set.all())
+    
+    def get_full_info(self):
+        return self.attributevalue_set.select_related(
+            'attribute',
+            'value'
+        ).values(
+            'attribute__pk',
+            'value',
+            'un_value',
+            'attribute__is_fixed'
+        )
+    
+    def get_attributes(self):
+        return {
+            attribute["attribute__pk"]: {
+                key: attribute[key] for key in attribute.keys()
+            } for attribute in self.get_full_info()}
 
     def comparison(self, analog):
         fields = ('value__title', 'un_value', 'attribute__title', 'attribute__pk', 'product__pk')

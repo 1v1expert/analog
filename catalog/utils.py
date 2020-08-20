@@ -18,6 +18,7 @@ class AnalogSearch(object):
         self.manufacturer_to = manufacturer_to
         self.product = None
         self.first_step_products = None
+        self.second_dataset = None
         
         # raise product_from is None or manufacturer_to is None
         
@@ -158,7 +159,8 @@ class AnalogSearch(object):
 
         if second_dataset.count() == 0:
             raise Exception('Not founded')  # after hard check
-
+        
+        self.second_dataset = second_dataset
         # third step
         third_dataset: QuerySet = self.filter_by_soft_attributes(second_dataset)
         
