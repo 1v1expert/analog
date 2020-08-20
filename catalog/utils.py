@@ -163,17 +163,7 @@ class AnalogSearch(object):
         third_dataset: QuerySet = self.filter_by_soft_attributes(second_dataset)
         
         products = Product.objects.filter(pk__in=third_dataset)
-        # fix_soft_attrs_values_list = self._get_soft_fix_attributes(products)\
-        #     .values_list('product__pk', 'value__title', 'attribute__type', 'attribute__title')
-        # unfix_soft_attrs_values_list = self._get_soft_unfix_attributes(products)\
-        #     .values_list('product__pk', 'value', 'attribute__type', 'attribute__title')
-        #
-        # third_founded = self.find_by_attributes(fix_soft_attrs_values_list, unfix_soft_attrs_values_list)
-        # if not len(third_founded):
-        #     raise Exception('Not founded')
-        #
-        # # fourth second
-        # products = Product.objects.filter(pk__in=third_founded)
+
         self.product = products.first()
         self.first_step_products = products
         self.left_time = time.time() - self.start_time
