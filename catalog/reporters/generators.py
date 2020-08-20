@@ -140,12 +140,28 @@ class SearchCheckGenerator(object):
         self.manufactures = manufactures or Manufacturer.objects.all()
         # self.products = Product.objects.filter(manufacturer__in=self.manufactures)
         self.start_at = time()
-    
+
     def get_table(self, manufacturer) -> dict:
         data = {
-            'table_header': Attribute.objects.values('pk', 'title', 'type').order_by('pk', 'type'),
+            "top_header": {
+                'spread': None,
+                'row': [],
+                'name': str(Manufacturer)[:31],
+            },
+            'table_header': {
+                attribute["pk"]: {
+                    key: attribute[key] for key in attribute.keys()
+                } for attribute in Attribute.objects.values('pk', 'title', 'type').order_by('pk', 'type')},
             'table_data': self.get_data(manufacturer)
         }
+        
+        for idx, key in enumerate(data["table_header"].keys(), 4):
+            data["table_header"][key]["cell"] = idx
+
+        data["table_header"]["category"] = {"title": "подкласс", "cell": 3}
+        data["table_header"]["title"] = {"title": "наименование", "cell": 2}
+        data["table_header"]["article"] = {"title": "артикул", "cell": 1}
+        
         return data
 
     @staticmethod
@@ -201,6 +217,8 @@ class SearchCheckGenerator(object):
             for manufacturer_to in manufactures_to:
                 
                 analog, queryset = self._get_or_put_analogs(initial_product, manufacturer_to, need_update=True)
+                if analog is None:
+                    continue
 
                 yield {
                     'initial_product': initial_product,

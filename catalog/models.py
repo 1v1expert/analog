@@ -191,7 +191,7 @@ class Product(Base):
             'value'
         ).values(
             'attribute__pk',
-            'value',
+            'value__title',
             'un_value',
             'attribute__is_fixed'
         )

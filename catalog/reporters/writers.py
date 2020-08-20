@@ -26,10 +26,10 @@ class BookkeepingWriter(object):
         self._col = 0
         self._default_ws = self._wb.add_worksheet(name)
     
-    def dump(self, book):
+    def dump(self, books):
         # self.write_top_header(**data['top_header'])
         # for data in book:
-        for data in book:
+        for data in books:
             self.create_page(data['top_header']['name'])
             self.write_table_header(data['table_header'].values())
             # FIXME: make use of `for k in data['table_header']`
@@ -116,6 +116,62 @@ class BookkeepingWriter(object):
         # self.instance.file.save(self.filename, save_virtual_workbook(self._wb))
         datafile.file.name = self.filename
         datafile.save()
+
+        
+class TestCheckBookkeepingWriter(BookkeepingWriter):
+    
+    def write_table_header(self, row):
+        for col, key in enumerate(row.keys()):
+            self._default_ws.write(self._row, row[key]["cell"], str(row[key]["title"]))
+            
+    def write_position(self, position, number_line, header):
+        number_line += 1
+        self.write_product(position["initial_product"], header, number_line)
+        
+        if position["analogs"]["analog"]:
+            number_line += 1
+            self.write_product(position["analogs"]["analog"], header, number_line, type_record='Приор. аналог')
+            
+            if position["analogs"]["queryset"]:
+                for analog in position["analogs"]["queryset"]:
+                    number_line += 1
+                    self.write_product(analog, header, number_line, type_record='Проч. аналог')
+        else:
+            self._default_ws.write(number_line, 0, f'Analog not found for {position["initial_product"].article}')
+            
+        return number_line + 1
+    
+    def write_product(self, product, header, number_line, type_record='Исходный продукт'):
+        full_info = product.get_attributes()
+        for key in full_info.keys():
+            attribute = full_info[key]
+            
+            c_item = str(attribute["un_value"])
+            if attribute["attribute__is_fixed"]:
+                c_item = str(attribute["value__title"])
+            
+            self._default_ws.write(number_line, header[attribute["attribute__pk"]]["cell"], c_item)
+
+        self._default_ws.write(number_line, header["title"]["cell"], product.title)
+        self._default_ws.write(number_line, header["article"]["cell"], product.article)
+        self._default_ws.write(number_line, header["category"]["cell"], product.category.title)
+        self._default_ws.write(number_line, 0, type_record)
+        
+    def dump(self, books):
+        for data in books:
+            self.create_page(data['top_header']['name'])
+            self.write_table_header(data['table_header'])
+            line = 2
+            for position in data['table_data']:
+                line = self.write_position(position, line, data["table_header"])
+                
+                # try:
+                #     if isinstance(row, OrderedDict):
+                #         self.write_table_row(row.values())
+                #     elif isinstance(row, tuple):
+                #         self.write_table_row(row)
+                # except Exception as e:
+                #     print(e, row)
 
 
 def dump_csv(name, data):

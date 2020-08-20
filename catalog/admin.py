@@ -121,7 +121,7 @@ class ProductAdmin(BaseAdmin):
 
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'created_at', 'created_by']
-    actions = ['export_data_to_xls', 'export_full_dump', 'export_duplicate_products', 'delete_all_products']
+    actions = ['export_data_to_xls', 'export_full_dump', 'export_duplicate_products', 'delete_all_products', 'download_check_result']
     
     def delete_all_products(self, request, queryset):
         for manufacturer in queryset:
@@ -153,7 +153,11 @@ class ManufacturerAdmin(BaseAdmin):
     export_duplicate_products.short_description = 'Выгрузить дубликаты'
     
     def download_check_result(self, request, queryset):
-        pass
+        data = generators.SearchCheckGenerator(queryset)
+        with writers.TestCheckBookkeepingWriter('Dump data {}'.format(datetime.now().date()), request.user) as writer:
+            writer.dump(data.generate())
+
+    download_check_result.short_description = 'Download check result'
 
 
 class FileUploadAdmin(admin.ModelAdmin):
