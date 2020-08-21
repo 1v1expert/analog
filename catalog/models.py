@@ -395,16 +395,27 @@ class AnalogSearch(object):
                 ).annotate(
                     abs_diff=Func(F('un_value') - attribute["un_value"], function='ABS')
                 ).order_by('abs_diff')  # .distinct('product')  # .values_list('product__pk', flat=True)
+
+                if middleware_attributes.exists():
+                    closest_attribute = middleware_attributes.first()
+                    
+                    middleware_pk_products = AttributeValue.objects.select_related(
+                        'attribute', 'product', 'value'
+                    ).filter(
+                        product__pk__in=middleware_pk_products,
+                        attribute=attribute['attribute'],
+                        un_value=closest_attribute.un_value,
+                    ).distinct('product__pk').values_list('product__pk', flat=True)
                 
-                products_pk = set()
-                for idx, unfix_attribute in enumerate(middleware_attributes):
-                    if not idx:  # first iteration
-                        closest_attribute = unfix_attribute  # = min abs_diff
-                    else:
-                        if closest_attribute.abs_diff == unfix_attribute.abs_diff:
-                            products_pk.add(closest_attribute.product.pk)
-                if len(products_pk):
-                    middleware_pk_products = Product.objects.filter(pk__in=products_pk).values_list('pk', flat=True)
+                # products_pk = set()
+                # for idx, unfix_attribute in enumerate(middleware_attributes):
+                #     if not idx:  # first iteration
+                #         closest_attribute = unfix_attribute  # = min abs_diff
+                #     else:
+                #         if closest_attribute.abs_diff == unfix_attribute.abs_diff:
+                #             products_pk.update(closest_attribute.product.pk)
+                # if len(products_pk):
+                #     middleware_pk_products = Product.objects.filter(pk__in=products_pk).values_list('pk', flat=True)
                 
         return middleware_pk_products
     
@@ -458,7 +469,7 @@ class AnalogSearch(object):
         if second_dataset.count() == 0:
             raise Exception('Not founded')  # after hard check
         
-        self.second_dataset = second_dataset
+        self.second_dataset = list(second_dataset)
         # third step
         third_dataset: QuerySet = self.filter_by_soft_attributes(second_dataset)
         
