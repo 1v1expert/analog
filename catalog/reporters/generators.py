@@ -226,7 +226,7 @@ class SearchCheckGenerator(object):
                     'initial_product': initial_product,
                     'analogs': {
                         'analog': analog,
-                        'queryset': Product.objects.filter(pk__in=queryset__pk) if queryset__pk is not None else []
+                        'queryset': Product.objects.filter(pk__in=queryset__pk.get("analog_seconds")) if queryset__pk.get("analog_seconds") is not None else []
                     }
                 }
     
