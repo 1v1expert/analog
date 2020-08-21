@@ -155,6 +155,7 @@ class TestCheckBookkeepingWriter(BookkeepingWriter):
         self._default_ws.write(number_line, header["title"]["cell"], product.title)
         self._default_ws.write(number_line, header["article"]["cell"], product.article)
         self._default_ws.write(number_line, header["category"]["cell"], product.category.title)
+        self._default_ws.write(number_line, header["category"]["cell"], product.manufacturer.title)
         self._default_ws.write(number_line, 0, type_record)
         
     def dump(self, books):
