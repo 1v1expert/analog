@@ -1,23 +1,22 @@
-from catalog.models import DataFile
-from catalog import choices
-
-import xlsxwriter
-
+import csv
 from collections import OrderedDict
 from datetime import datetime
 
-import csv
-
+import xlsxwriter
 from django.conf import settings
 from django.utils.functional import LazyObject, SimpleLazyObject
 
+from catalog import choices
+from catalog.models import DataFile
+from catalog.utils import get_or_create_tech_user
+
 
 class BookkeepingWriter(object):
-    def __init__(self, name, user):
+    def __init__(self, name, user=None):
         self.filename = 'files/{}.xlsx'.format(name)
         # self.filename = name
         self._default_ws = None
-        self.user = user
+        self.user = user or get_or_create_tech_user()
         self._row = 0
         self._col = 0
     
@@ -165,6 +164,9 @@ class TestCheckBookkeepingWriter(BookkeepingWriter):
             line = 2
             for position in data['table_data']:
                 line = self.write_position(position, line, data["table_header"])
+                
+    def write(self):
+        pass
 
 
 def dump_csv(name, data):

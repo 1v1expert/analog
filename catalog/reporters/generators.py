@@ -137,7 +137,6 @@ class AdditionalGeneratorTemplate(object):
 class SearchCheckGenerator(object):
     def __init__(self, manufactures=None):
         self.manufactures = manufactures or Manufacturer.objects.all()
-        # self.products = Product.objects.filter(manufacturer__in=self.manufactures)
         self.start_at = time()
 
     def get_table(self, manufacturer) -> dict:

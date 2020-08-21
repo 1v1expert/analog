@@ -1,9 +1,11 @@
 """
 Описание основных моделей проекта
 """
+import logging
 import time
 from itertools import chain
 from itertools import groupby
+from typing import List, Mapping, Optional
 
 from django.contrib.auth.models import User
 from django.contrib.postgres import fields as pgfields
@@ -12,7 +14,8 @@ from django.db.models import F, Func, QuerySet
 
 from catalog.choices import HARD, PRICE, RECALCULATION, RELATION, SOFT, TYPES, TYPES_FILE, UNITS
 from catalog.managers import CoreModelManager
-from typing import List, Mapping, Optional
+
+logger = logging.getLogger("analog")
 
 
 class Base(models.Model):
@@ -186,6 +189,9 @@ class Product(Base):
     
     def get_analog(self, manufacturer_to: Manufacturer) -> Optional["Product"]:
         assert manufacturer_to is not None, 'Manufacturer is None'
+        logger.info(
+            f'call <get_analog> for product({self.pk}/{self.article}) and manufacturer({manufacturer_to.title})'
+        )
         
         analogs = self.analogs_to.filter(manufacturer=manufacturer_to)
         if analogs.exists():
