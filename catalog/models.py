@@ -203,8 +203,8 @@ class Product(Base):
             raw = self.raw or {}
             raw__analogs: dict = raw.get("analogs", {})
             raw__analogs[manufacturer_to.pk] = {
-                "analog_seconds": result.second_dataset,
-                "analog": result.product
+                "analog_seconds": list(result.second_dataset),
+                "analog": result.product.pk
             }
             raw["analogs"] = raw__analogs
             self.raw = raw
