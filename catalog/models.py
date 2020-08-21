@@ -1,16 +1,18 @@
 """
 Описание основных моделей проекта
 """
-
+import time
 from itertools import chain
 from itertools import groupby
 
 from django.contrib.auth.models import User
 from django.contrib.postgres import fields as pgfields
 from django.db import models
+from django.db.models import F, Func, QuerySet
 
-from catalog.choices import TYPES, TYPES_FILE, UNITS
+from catalog.choices import HARD, PRICE, RECALCULATION, RELATION, SOFT, TYPES, TYPES_FILE, UNITS
 from catalog.managers import CoreModelManager
+from typing import List, Mapping, Optional
 
 
 class Base(models.Model):
@@ -182,6 +184,38 @@ class Product(Base):
 
     priority = models.PositiveSmallIntegerField(verbose_name='Приоритет', default=0)
     
+    def get_analog(self, manufacturer_to: Manufacturer) -> Optional["Product"]:
+        assert manufacturer_to is not None, 'Manufacturer is None'
+        
+        analogs = self.analogs_to.filter(manufacturer=manufacturer_to)
+        if analogs.exists():
+            return analogs.first()
+
+        search = AnalogSearch(product_from=self, manufacturer_to=manufacturer_to)
+        try:
+            result = search.build()
+            
+            if result.product is None:
+                return None
+            
+            self.analogs_to.add(result.product)
+            
+            raw = self.raw or {}
+            raw__analogs: dict = raw.get("analogs", {})
+            raw__analogs[manufacturer_to.pk] = {
+                "analog_seconds": result.second_dataset,
+                "analog": result.product
+            }
+            raw["analogs"] = raw__analogs
+            self.raw = raw
+            self.save()
+            
+            return result.product
+
+        except Exception as e:
+            print(e)
+            return None
+    
     def get_info(self) -> list:
         return list(self.attributevalue_set.all())
     
@@ -270,3 +304,171 @@ class DataFile(Base):
     
     def save(self, *args, **kwargs):
         super(DataFile, self).save(*args, **kwargs)
+
+
+class AnalogSearch(object):
+    def __init__(self, product_from: Optional[Product] = None, manufacturer_to: Optional[Manufacturer] = None):
+        
+        self.start_time = time.time()
+        self.left_time = None
+        self.initial_product = product_from
+        self.initial_product_info = {}
+        self.manufacturer_to = manufacturer_to
+        self.product = None
+        self.first_step_products = None
+        self.second_dataset = None
+        
+        # raise product_from is None or manufacturer_to is None
+        
+    def filter_by_category_and_manufacturer(self) -> QuerySet:
+        return Product.objects.filter(
+            category=self.initial_product.category,
+            manufacturer=self.manufacturer_to
+        ).values_list(
+            'pk',
+            flat=True
+        )
+
+    def get_full_info_from_initial_product(self) -> Mapping[str, List[AttributeValue]]:
+        attributes = self.initial_product.attributevalue_set.values(
+            'value',
+            'un_value',
+            'attribute',
+            'attribute__type',
+            'attribute__title',
+            'attribute__is_fixed'
+        ).order_by('-attribute__is_fixed')  # Attr is fixed: True, True, ..., False, False
+
+        info = {HARD: [], SOFT: [], RELATION: [], RECALCULATION: [], PRICE: []}
+        for attribute in attributes:
+            info[attribute["attribute__type"]].append(attribute)
+        
+        return info
+    
+    def find_unfix_value(self, values_list, value, method='nearest'):
+        # value = (119444, 500.0, 'hrd', 'ширина')
+        # value_list <QuerySet [(51903, 0.0, 'hrd', 'ширина доп.'), (51904, 0.0, 'hrd', 'ширина доп.'), (51905, 0.0, 'hrd', 'ширина доп.') # noqa
+        if method == 'min':
+            values = min(values_list, key=lambda x: x[1])
+        elif method == 'max':
+            values = max(values_list, key=lambda x: x[1])
+        else:  # method = 'nearest
+            # print(values_list, step_attr.value)
+            values = min(values_list, key=lambda x: abs(x[1] - value))
+        
+        # print(values, value)
+        pks = {val[0] if values[1] == val[1] else None for val in values_list}
+        if None in pks: pks.remove(None)
+        # print(pks)
+        return pks
+
+    def find_fix_value(self, values_list, value):
+        # print(value)
+        pks = {val[0] if value == val[1] else None for val in values_list}
+        if None in pks: pks.remove(None)
+        return pks
+
+    def filter_by_hard_attributes(self, dataset_pk) -> QuerySet:
+        middleware_pk_products = dataset_pk
+
+        for attribute in self.initial_product_info[HARD]:
+            if attribute["attribute__is_fixed"]:
+                middleware_pk_products = AttributeValue.objects.select_related(
+                    'attribute', 'product', 'value'
+                ).filter(
+                    product__pk__in=middleware_pk_products,
+                    # attribute__type=HARD,
+                    attribute=attribute['attribute'],
+                    # attribute__is_fixed=attribute["attribute__is_fixed"],
+                    value=attribute["value"],
+                ).distinct('product__pk').values_list('product__pk', flat=True)
+            else:
+                middleware_attributes = AttributeValue.objects.select_related(
+                    'attribute', 'product'
+                ).filter(
+                    product__pk__in=middleware_pk_products,
+                    # attribute__type=HARD,
+                    # attribute__is_fixed=attribute["attribute__is_fixed"],
+                    attribute=attribute['attribute'],
+                    # value__title=attribute["value__title"],
+                    # un_value=attribute["un_value"]
+                ).annotate(
+                    abs_diff=Func(F('un_value') - attribute["un_value"], function='ABS')
+                ).order_by('abs_diff')  # .distinct('product')  # .values_list('product__pk', flat=True)
+                
+                products_pk = set()
+                for idx, unfix_attribute in enumerate(middleware_attributes):
+                    if not idx:  # first iteration
+                        closest_attribute = unfix_attribute  # = min abs_diff
+                    else:
+                        if closest_attribute.abs_diff == unfix_attribute.abs_diff:
+                            products_pk.add(closest_attribute.product.pk)
+                if len(products_pk):
+                    middleware_pk_products = Product.objects.filter(pk__in=products_pk).values_list('pk', flat=True)
+                
+        return middleware_pk_products
+    
+    def filter_by_soft_attributes(self, dataset_pk: QuerySet) -> QuerySet:
+        middleware_pk_products = dataset_pk
+
+        for attribute in self.initial_product_info[SOFT]:
+            if attribute["attribute__is_fixed"]:
+                products_pk: QuerySet = AttributeValue.objects.select_related(
+                    'attribute', 'product', 'value'
+                ).filter(
+                    product__pk__in=middleware_pk_products,
+                    attribute=attribute["attribute"],
+                    value=attribute["value"],
+                ).distinct('product').values_list('product__pk', flat=True)
+        
+                if products_pk.count() > 0:
+                    middleware_pk_products = products_pk
+
+            else:
+                products_pk = AttributeValue.objects.select_related(
+                    'attribute', 'product'
+                ).filter(
+                    product__pk__in=middleware_pk_products,
+                    attribute=attribute['attribute'],
+                ).annotate(
+                    abs_diff=Func(F('un_value') - attribute["un_value"], function='ABS')
+                ).order_by('abs_diff')  # .distinct('product')  # .values_list('product__pk', flat=True)
+    
+                set_products_pk = set()
+                for idx, unfix_attribute in enumerate(products_pk):
+                    if not idx:  # first iteration
+                        closest_attribute = unfix_attribute  # = min abs_diff
+                    else:
+                        if closest_attribute.abs_diff == unfix_attribute.abs_diff:
+                            set_products_pk.add(closest_attribute.product.pk)
+                if len(set_products_pk):
+                    middleware_pk_products = Product.objects.filter(pk__in=set_products_pk).values_list('pk', flat=True)
+
+        return middleware_pk_products
+
+    def build(self):
+        self.initial_product_info = self.get_full_info_from_initial_product()
+        
+        # first step
+        first_dataset: QuerySet = self.filter_by_category_and_manufacturer()
+        
+        # second step
+        second_dataset: QuerySet = self.filter_by_hard_attributes(first_dataset)
+
+        if second_dataset.count() == 0:
+            raise Exception('Not founded')  # after hard check
+        
+        self.second_dataset = second_dataset
+        # third step
+        third_dataset: QuerySet = self.filter_by_soft_attributes(second_dataset)
+        
+        products = Product.objects.filter(pk__in=third_dataset)
+
+        self.product = products.first()
+        self.first_step_products = products
+        self.left_time = time.time() - self.start_time
+        return self
+        
+        
+    def smart_search(self, products):
+        pass

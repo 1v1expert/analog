@@ -5,8 +5,7 @@ from typing import Optional, Tuple
 
 from django.db.models import QuerySet
 
-from catalog.models import Attribute, Manufacturer, Product
-from catalog.utils import AnalogSearch
+from catalog.models import AnalogSearch, Attribute, Manufacturer, Product
 
 
 class BaseGenerator:
@@ -155,12 +154,13 @@ class SearchCheckGenerator(object):
             'table_data': self.get_data(manufacturer)
         }
         
-        for idx, key in enumerate(data["table_header"].keys(), 4):
+        for idx, key in enumerate(data["table_header"].keys(), 5):
             data["table_header"][key]["cell"] = idx
 
         data["table_header"]["category"] = {"title": "подкласс", "cell": 3}
         data["table_header"]["title"] = {"title": "наименование", "cell": 2}
         data["table_header"]["article"] = {"title": "артикул", "cell": 1}
+        data["table_header"]["manufacturer"] = {"title": "производитель", "cell": 4}
         
         return data
 

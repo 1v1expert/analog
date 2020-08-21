@@ -1,9 +1,8 @@
 from django.http import JsonResponse
 from django.views import View
 
-from catalog.models import Product, Manufacturer
+from catalog.models import AnalogSearch, Product, Manufacturer
 from catalog.forms import AdvancedSearchForm, SearchForm
-from catalog.utils import AnalogSearch
 from catalog.exceptions import AnalogNotFound, ArticleNotFound, InternalError
 import traceback
 
