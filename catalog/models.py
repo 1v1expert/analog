@@ -210,6 +210,7 @@ class Product(Base):
             self.raw = raw
             self.save()
             
+            
             return result.product
 
         except Exception as e:

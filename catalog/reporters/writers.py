@@ -155,7 +155,7 @@ class TestCheckBookkeepingWriter(BookkeepingWriter):
         self._default_ws.write(number_line, header["title"]["cell"], product.title)
         self._default_ws.write(number_line, header["article"]["cell"], product.article)
         self._default_ws.write(number_line, header["category"]["cell"], product.category.title)
-        self._default_ws.write(number_line, header["category"]["cell"], product.manufacturer.title)
+        self._default_ws.write(number_line, header["manufacturer"]["cell"], product.manufacturer.title)
         self._default_ws.write(number_line, 0, type_record)
         
     def dump(self, books):
@@ -165,14 +165,6 @@ class TestCheckBookkeepingWriter(BookkeepingWriter):
             line = 2
             for position in data['table_data']:
                 line = self.write_position(position, line, data["table_header"])
-                
-                # try:
-                #     if isinstance(row, OrderedDict):
-                #         self.write_table_row(row.values())
-                #     elif isinstance(row, tuple):
-                #         self.write_table_row(row)
-                # except Exception as e:
-                #     print(e, row)
 
 
 def dump_csv(name, data):
