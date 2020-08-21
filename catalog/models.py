@@ -213,7 +213,6 @@ class Product(Base):
             return result.product
 
         except Exception as e:
-            print(e)
             return None
     
     def get_info(self) -> list:

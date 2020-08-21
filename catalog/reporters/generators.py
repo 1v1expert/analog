@@ -216,7 +216,8 @@ class SearchCheckGenerator(object):
         for initial_product in Product.objects.filter(manufacturer=manufacturer):
             for manufacturer_to in manufactures_to:
                 
-                analog, queryset = self._get_or_put_analogs(initial_product, manufacturer_to, need_update=True)
+                analog = initial_product.get_analog(manufacturer_to)
+                
                 if analog is None:
                     continue
 
@@ -224,7 +225,7 @@ class SearchCheckGenerator(object):
                     'initial_product': initial_product,
                     'analogs': {
                         'analog': analog,
-                        'queryset': queryset or []
+                        'queryset': initial_product.raw.get("analogs", {}).get(manufacturer_to.pk, [])
                     }
                 }
     
