@@ -221,7 +221,7 @@ class SearchCheckGenerator(object):
                 if analog is None:
                     continue
 
-                queryset__pk = initial_product.raw.get("analogs", {}).get(manufacturer_to.pk) if initial_product.raw is not None else {}
+                queryset__pk = initial_product.raw.get("analogs", {}).get(manufacturer_to.pk, {}) if initial_product.raw is not None else {}
                 yield {
                     'initial_product': initial_product,
                     'analogs': {
