@@ -117,7 +117,7 @@ class BookkeepingWriter(object):
         datafile.save()
 
         
-class TestCheckBookkeepingWriter(BookkeepingWriter):
+class HealthCheckBookkeepingWriter(BookkeepingWriter):
     
     def write_table_header(self, row):
         for col, key in enumerate(row.keys()):

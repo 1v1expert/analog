@@ -88,7 +88,7 @@
                         $('#result').html('Спасибо, вы успешно подписаны.');
                     }
                     else {
-                        $('#result').html(response.error);
+                        $('#result').html('Вы уже подписаны.');
                     }
                 },
                 error: function (error) {
@@ -307,6 +307,7 @@
                         createCookie("attempt_count", attempt_count + 1, 10);
 
                         function buildTable(data, image) {
+                            console.log(data);
                             var table = document.createElement("table");
                             table.className = "table table-hover mb-0";
                             table.id = 'table-info';

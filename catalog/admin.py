@@ -120,7 +120,7 @@ class ProductAdmin(BaseAdmin):
 
 
 class ManufacturerAdmin(BaseAdmin):
-    list_display = ['title', 'id', 'created_at', 'created_by']
+    list_display = ['title', 'id', 'is_tried', 'created_at', 'created_by']
     actions = ['export_data_to_xls', 'export_full_dump', 'export_duplicate_products', 'delete_all_products', 'download_check_result']
     
     def delete_all_products(self, request, queryset):
@@ -153,9 +153,8 @@ class ManufacturerAdmin(BaseAdmin):
     export_duplicate_products.short_description = 'Выгрузить дубликаты'
     
     def download_check_result(self, request, queryset):
-        data = generators.SearchCheckGenerator(queryset)
-        with writers.TestCheckBookkeepingWriter('Dump data {}'.format(datetime.now().date()), request.user) as writer:
-            writer.dump(data.generate())
+        generator = generators.HealthCheckGenerator(queryset, request.user)
+        generator.generate_and_write()
 
     download_check_result.short_description = 'Download check result'
 

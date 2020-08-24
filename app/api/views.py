@@ -1,5 +1,5 @@
 import json
-import traceback
+import logging
 
 from django.contrib.auth import login, logout, models
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
@@ -10,27 +10,17 @@ from app.decorators import a_decorator_passing_logs
 from app.decorators import check_recaptcha
 from app.forms import FeedBackForm, SubscribeForm
 from app.models import FeedBack, MainLog
-from catalog.exceptions import AnalogNotFound, ArticleNotFound, InternalError
+from catalog.exceptions import AnalogNotFound, ArticleNotFound
 from catalog.forms import AdvancedSearchForm, SearchForm
 from catalog.handlers import result_api_processing
 from catalog.internal.auth_actions import registration
-from catalog.internal.utils import ProductInfo, get_product_info
+from catalog.internal.utils import ProductInfo#, get_product_info
 from catalog.models import Manufacturer, Product
 from catalog.utils import SearchProducts
 
+logger = logging.getLogger('analog')
 
-# class BaseView(object):
-#     def __init__(self, request):
-#         if request.method == 'POST':
-#             self.do_post(request)
-#         elif request.method == 'GET':
-#             self.do_get(request)
-#
-#     def do_post(self, request):
-#         raise NotImplemented
-#
-#     def do_get(self, request):
-#         raise NotImplemented
+
 def get_product_info(analog, original=None):
     info = [{"analog":
                  {"name": "наименование", "value": analog.title},
@@ -68,7 +58,8 @@ def get_product_info(analog, original=None):
         
         analog_info['value'] = analog_value
         
-        info.append({"analog": analog_info,
+        info.append({"analog":
+                         {"name": analog_info["name"], "value": analog_info["value"]},
                      "original":
                          {"name": analog_info["name"], "value": original_value}
                      })
@@ -95,6 +86,7 @@ def get_product_info(analog, original=None):
     
     return {"result": info}
 
+
 def get_analog(article: str = None, manufacturer_to: Manufacturer = None) -> json:
     product = Product.objects.filter(article=article,
                                      is_enabled=True).first()
@@ -102,32 +94,13 @@ def get_analog(article: str = None, manufacturer_to: Manufacturer = None) -> jso
         raise ArticleNotFound("Артикул {} не найден".format(article),
                               "Article: {}, manufacturer to: {}".format(article, manufacturer_to))
     
-    try:
-        analog_pk = product.raw['analogs'][manufacturer_to.title]
-        analog = Product.objects.get(pk=analog_pk)
-        info = get_product_info(analog=analog, original=product)
-        return {"analog": analog, "info": info, "product": product}
-    
-    except (KeyError, TypeError):
-        search = SearchProducts(product=product, manufacturer_to=manufacturer_to)
-        search.global_search()
-        analog = search.founded_products.first()
-        if not analog:
-            raise AnalogNotFound('Аналог по артикулу: {} не найден'.format(article),
-                                 "Not find analog for article: {}, manufacturer to: {}".format(article, manufacturer_to))
-        info = get_product_info(analog=analog, original=product)
-        
-        if product.raw is None:
-            product.raw = {"analogs": {manufacturer_to.title: analog.pk}}
-        else:
-            product.raw['analogs'].update({manufacturer_to.title: analog.pk})
-        product.save()
-        
-        return {"analog": analog, "info": info, "product": product}
-    
-    except Exception as e:
-        raise InternalError('Аналог не найден', "Internal error: \n{}".format(traceback.format_exc()))
-        
+    analog = product.get_analog(manufacturer_to)
+    if not analog:
+        raise AnalogNotFound('Аналог по артикулу: {} не найден'.format(article),
+                             "Not find analog for article: {}, manufacturer to: {}".format(article, manufacturer_to))
+    info = get_product_info(analog=analog, original=product)
+    return {"analog": analog, "info": info, "product": product}
+
 
 @csrf_exempt
 @a_decorator_passing_logs
@@ -141,6 +114,7 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
             
             try:
                 result = get_analog(article=article, manufacturer_to=manufacturer_to)
+                logger.info(result["info"].get("result"))
                 return JsonResponse({
                     'result': [result["analog"].article],
                     'info': result["info"].get("result"),
@@ -150,7 +124,7 @@ def search_from_form(request: HttpRequest) -> HttpResponse:
                     'error': False
                 })
             except Exception as e:
-                return JsonResponse({'result': [], 'error': e.args[0]})
+                return JsonResponse({'result': [], 'error': 'Аналог не найден'})
                 
         return JsonResponse({'error': 'Некорректно заполненные данные.'})
     else:
@@ -235,8 +209,6 @@ def feedback(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = FeedBackForm(request.POST)
         user = request.user if str(request.user) != 'AnonymousUser' else None
-        # if str(request.user) == 'AnonymousUser':
-            # user = None
         if form.is_valid():
             
             if not request.recaptcha_is_valid:
@@ -260,16 +232,18 @@ def feedback(request: HttpRequest) -> HttpResponse:
 def subscriber(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = SubscribeForm(request.POST)
-        user = request.user
-        if str(request.user) == 'AnonymousUser':
-            user = None
+        user = request.user if str(request.user) != 'AnonymousUser' else None
         if form.is_valid():
             try:
-                FeedBack.objects.create(user=user,
-                                        email=form.cleaned_data.get('email', ''),
-                                        is_subscriber=True
-                                        )
-                return JsonResponse({"OK": True})
+                obj, created = FeedBack.objects.get_or_create(
+                    email=form.cleaned_data.get('email', ''),
+                    is_subscriber=True,
+                    defaults={"user": user}
+                )
+                if created:
+                    return JsonResponse({"OK": True})
+                else:
+                    return JsonResponse({"OK": False})
             except Exception as e:
                 MainLog.objects.create(user=user, raw={'error': e}, has_errors=True)
                 return HttpResponseBadRequest()

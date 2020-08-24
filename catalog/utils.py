@@ -7,7 +7,7 @@ from catalog.models import Product
 
 
 def get_or_create_tech_user():
-    return User.objects.get_or_create(username='tech', defaults={"password": "ZxCvBnMJY654321"})
+    return User.objects.get_or_create(username='admin', defaults={"password": "ZxCvBnMJY654321"})
 
 
 class SearchProducts(object):

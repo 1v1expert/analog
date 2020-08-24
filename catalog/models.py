@@ -3,6 +3,7 @@
 """
 import logging
 import time
+import traceback
 from itertools import chain
 from itertools import groupby
 from typing import List, Mapping, Optional
@@ -13,6 +14,7 @@ from django.db import models
 from django.db.models import F, Func, QuerySet
 
 from catalog.choices import HARD, PRICE, RECALCULATION, RELATION, SOFT, TYPES, TYPES_FILE, UNITS
+from catalog.exceptions import AnalogNotFound
 from catalog.managers import CoreModelManager
 
 logger = logging.getLogger("analog")
@@ -190,22 +192,34 @@ class Product(Base):
     def get_analog(self, manufacturer_to: Manufacturer) -> Optional["Product"]:
         assert manufacturer_to is not None, 'Manufacturer is None'
         logger.info(
-            f'call <get_analog> for product({self.pk}/{self.article}) and manufacturer({manufacturer_to.title})'
+            f'call <get_analog({manufacturer_to.title})> for product: <{self.pk}>/<{self.article}>'
         )
         
         analogs = self.analogs_to.filter(manufacturer=manufacturer_to)
         if analogs.exists():
+            analog = analogs.first()
+            logger.info(f'analog is <{analog.pk}/{analog.article}>')
             return analogs.first()
-
+        
+        return self.search_analog(manufacturer_to)
+    
+    def search_analog(self, manufacturer_to: Manufacturer) -> Optional["Product"]:
+        """ Start <AnalogSearch> process """
+        logger.info(f'call <search_analog({manufacturer_to.title})> for product: <{self.pk}>/<{self.article}')
+        
         search = AnalogSearch(product_from=self, manufacturer_to=manufacturer_to)
         try:
             result = search.build()
-            
+        
             if result.product is None:
                 return None
             
+            old_analogs = self.analogs_to.filter(manufacturer=manufacturer_to)
+            if old_analogs.exists():
+                self.analogs_to.remove(old_analogs)
+
             self.analogs_to.add(result.product)
-            
+        
             raw = self.raw or {}
             raw__analogs: dict = raw.get("analogs", {})
             raw__analogs[manufacturer_to.pk] = {
@@ -215,11 +229,14 @@ class Product(Base):
             raw["analogs"] = raw__analogs
             self.raw = raw
             self.save()
-            
-            
+        
             return result.product
-
+    
+        except AnalogNotFound:
+            return None
+    
         except Exception as e:
+            logger.debug(f'<{e}>\n{traceback.format_exc()}')
             return None
     
     def get_info(self) -> list:
@@ -313,9 +330,9 @@ class DataFile(Base):
 
 
 class AnalogSearch(object):
-    def __init__(self, product_from: Optional[Product] = None, manufacturer_to: Optional[Manufacturer] = None):
+    def __init__(self, product_from: Optional[Product], manufacturer_to: Optional[Manufacturer]):
         
-        self.start_time = time.time()
+        # self.start_time = None
         self.left_time = None
         self.initial_product = product_from
         self.initial_product_info = {}
@@ -350,29 +367,6 @@ class AnalogSearch(object):
             info[attribute["attribute__type"]].append(attribute)
         
         return info
-    
-    def find_unfix_value(self, values_list, value, method='nearest'):
-        # value = (119444, 500.0, 'hrd', 'ширина')
-        # value_list <QuerySet [(51903, 0.0, 'hrd', 'ширина доп.'), (51904, 0.0, 'hrd', 'ширина доп.'), (51905, 0.0, 'hrd', 'ширина доп.') # noqa
-        if method == 'min':
-            values = min(values_list, key=lambda x: x[1])
-        elif method == 'max':
-            values = max(values_list, key=lambda x: x[1])
-        else:  # method = 'nearest
-            # print(values_list, step_attr.value)
-            values = min(values_list, key=lambda x: abs(x[1] - value))
-        
-        # print(values, value)
-        pks = {val[0] if values[1] == val[1] else None for val in values_list}
-        if None in pks: pks.remove(None)
-        # print(pks)
-        return pks
-
-    def find_fix_value(self, values_list, value):
-        # print(value)
-        pks = {val[0] if value == val[1] else None for val in values_list}
-        if None in pks: pks.remove(None)
-        return pks
 
     def filter_by_hard_attributes(self, dataset_pk) -> QuerySet:
         middleware_pk_products = dataset_pk
@@ -463,7 +457,9 @@ class AnalogSearch(object):
 
         return middleware_pk_products
 
-    def build(self):
+    def build(self) -> "AnalogSearch":
+        start_time = time.time()
+        # logger.
         self.initial_product_info = self.get_full_info_from_initial_product()
         
         # first step
@@ -473,7 +469,7 @@ class AnalogSearch(object):
         second_dataset: QuerySet = self.filter_by_hard_attributes(first_dataset)
 
         if second_dataset.count() == 0:
-            raise Exception('Not founded')  # after hard check
+            raise AnalogNotFound('Not founded')  # after hard check
         
         self.second_dataset = list(second_dataset)
         # third step
@@ -483,9 +479,5 @@ class AnalogSearch(object):
 
         self.product = products.first()
         self.first_step_products = products
-        self.left_time = time.time() - self.start_time
+        self.left_time = time.time() - start_time
         return self
-        
-        
-    def smart_search(self, products):
-        pass

@@ -4,9 +4,9 @@ from time import time
 from typing import Optional, Tuple
 
 from django.db.models import QuerySet
-
+from catalog.reporters.writers import HealthCheckBookkeepingWriter
 from catalog.models import AnalogSearch, Attribute, Manufacturer, Product
-
+from catalog.utils import get_or_create_tech_user
 
 class BaseGenerator:
     def __init__(self, *args, **kwargs):
@@ -134,23 +134,26 @@ class AdditionalGeneratorTemplate(object):
         return cls_obj.objects.filter(**kwargs).values_list()
 
 
-class SearchCheckGenerator(object):
-    def __init__(self, manufactures=None):
-        self.manufactures = manufactures or Manufacturer.objects.all()
+class HealthCheckGenerator(object):
+    def __init__(self, manufacturer=None, user=None):
+        assert manufacturer is not None, 'Manufacturer is not be None'
+        self.manufacturer = manufacturer
         self.start_at = time()
+        self.writer = HealthCheckBookkeepingWriter
+        self.user = user or get_or_create_tech_user()
 
-    def get_table(self, manufacturer) -> dict:
+    def generate(self) -> dict:
         data = {
             "top_header": {
                 'spread': None,
                 'row': [],
-                'name': str(Manufacturer)[:31],
+                'name': str(self.manufacturer)[:31],
             },
             'table_header': {
                 attribute["pk"]: {
                     key: attribute[key] for key in attribute.keys()
                 } for attribute in Attribute.objects.values('pk', 'title', 'type').order_by('pk', 'type')},
-            'table_data': self.get_data(manufacturer)
+            'table_data': self.get_data(self.manufacturer)
         }
         
         for idx, key in enumerate(data["table_header"].keys(), 5):
@@ -161,53 +164,7 @@ class SearchCheckGenerator(object):
         data["table_header"]["article"] = {"title": "артикул", "cell": 1}
         data["table_header"]["manufacturer"] = {"title": "производитель", "cell": 4}
         
-        return data
-
-    @staticmethod
-    def _search_and_update_analog(
-            initial_product: Product,
-            manufacturer_to: Manufacturer
-    ) -> Tuple[Optional[Product], Optional[AnalogSearch]]:
-
-        search = AnalogSearch(product_from=initial_product, manufacturer_to=manufacturer_to)
-        try:
-            result = search.build()
-        
-            analogs = initial_product.analogs_to.filter(manufacturer=manufacturer_to)
-            
-            if analogs.exists():
-                initial_product.analogs_to.remove(analogs)
-
-            initial_product.analogs_to.add(result.product)
-            return result.product, result
-    
-        except Exception as e:
-            return None, None
-        
-    def _get_or_put_analogs(self,
-                            initial_product: Product,
-                            manufacturer_to: Manufacturer,
-                            need_update: bool = False
-                            ) -> Tuple[Optional[Product], Optional[QuerySet]]:
-        analogs = initial_product.analogs_to.filter(manufacturer=manufacturer_to)
-        
-        if need_update:
-            analog, analog_search_object = self._search_and_update_analog(initial_product, manufacturer_to)
-            
-            if analog is None:
-                return None, None
-            
-            return analog, Product.objects.filter(pk__in=analog_search_object.second_dataset)
-            
-        if not analogs.exists():
-            analog, analog_search_object = self._search_and_update_analog(initial_product, manufacturer_to)
-    
-            if analog is None:
-                return None, None
-    
-            return analog, Product.objects.filter(pk__in=analog_search_object.second_dataset)
-        else:
-            return analogs.first(), []
+        yield data
         
     def get_data(self, manufacturer):
         manufactures_to = Manufacturer.objects.exclude(pk=manufacturer.pk)
@@ -229,6 +186,6 @@ class SearchCheckGenerator(object):
                     }
                 }
     
-    def generate(self):
-        for manufacturer in self.manufactures:
-            yield self.get_table(manufacturer)
+    def generate_and_write(self):
+        with self.writer(f'HealthCheck for {self.manufacturer.title}', self.user) as writer:
+            writer.dump(self.generate())
