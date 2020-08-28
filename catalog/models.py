@@ -206,6 +206,9 @@ class Product(Base):
         
         return self.search_analog(manufacturer_to)
     
+    def pprint_info(self, *args):
+        pass
+
     def search_analog(self, manufacturer_to: Manufacturer) -> Optional["Product"]:
         """ Start <AnalogSearch> process """
         logger.info(f'call <search_analog({manufacturer_to.title})> for product: <{self.pk}>/<{self.article}')
@@ -271,9 +274,21 @@ class Product(Base):
             ),
             key=lambda attribute: attribute['attribute__pk']
         )
-        
+    
         return groupby(attributes, lambda x: x['attribute__pk'])
-        
+    
+    # def comparison(self, *analogs):
+    #     fields = ('value__title', 'un_value', 'attribute__title', 'attribute__pk', 'product__pk')
+    #     attributes = sorted(
+    #         chain(
+    #             self.attributevalue_set.all().order_by('attribute__pk').values(*fields),
+    #             *[analog.attributevalue_set.all().order_by('attribute__pk').values(*fields) for analog in analogs]
+    #         ),
+    #         key=lambda attribute: attribute['attribute__pk']
+    #     )
+    #
+    #     return groupby(attributes, lambda x: x['attribute__pk'])
+    
     def __str__(self):
         return self.title
 
