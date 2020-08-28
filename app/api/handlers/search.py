@@ -31,7 +31,7 @@ def get_product_info(analog: Product, original: Product):
         elements = list(group)
         element1 = elements[0]
         
-        if element1["attribute__title"].lower() in ('ед.изм', 'цена'):
+        if element1["attribute__title"].lower() in ('ед. изм.', 'цена', 'нет в прайсе'):
             continue
         
         if len(elements) == 2:

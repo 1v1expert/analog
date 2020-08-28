@@ -195,6 +195,9 @@ class Product(Base):
             f'call <get_analog({manufacturer_to.title})> for product: <{self.pk}>/<{self.article}>'
         )
         
+        if self.manufacturer == manufacturer_to:
+            return self
+        
         analogs = self.analogs_to.filter(manufacturer=manufacturer_to)
         if analogs.exists():
             analog = analogs.first()
