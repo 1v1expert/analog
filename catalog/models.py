@@ -259,7 +259,7 @@ class Product(Base):
                 key: attribute[key] for key in attribute.keys()
             } for attribute in self.get_full_info()}
 
-    def comparison(self, analog):
+    def comparison(self, analog: "Product"):
         fields = ('value__title', 'un_value', 'attribute__title', 'attribute__pk', 'product__pk')
         attributes = sorted(
             chain(
