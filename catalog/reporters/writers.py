@@ -121,7 +121,10 @@ class HealthCheckBookkeepingWriter(BookkeepingWriter):
     
     def write_table_header(self, row):
         for col, key in enumerate(row.keys()):
-            self._default_ws.write(self._row, row[key]["cell"], f'{row[key]["title"]}({row[key]["type"]})')
+            value: str = f'{row[key]["title"]}'
+            if row[key].get("type"):
+                value += ({row[key]["type"]})
+            self._default_ws.write(self._row, row[key]["cell"], value)
             
     def write_position(self, position, number_line, header):
         number_line += 1
