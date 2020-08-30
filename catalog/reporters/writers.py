@@ -121,7 +121,7 @@ class HealthCheckBookkeepingWriter(BookkeepingWriter):
     
     def write_table_header(self, row):
         for col, key in enumerate(row.keys()):
-            self._default_ws.write(self._row, row[key]["cell"], str(row[key]["title"]))
+            self._default_ws.write(self._row, row[key]["cell"], f'{row[key]["title"]}({row[key]["type"]})')
             
     def write_position(self, position, number_line, header):
         number_line += 1
@@ -136,7 +136,8 @@ class HealthCheckBookkeepingWriter(BookkeepingWriter):
                     number_line += 1
                     self.write_product(analog, header, number_line, type_record='Проч. аналог')
         else:
-            self._default_ws.write(number_line, 0, f'Analog not found for {position["initial_product"].article}')
+            number_line += 1
+            self._default_ws.write(number_line, 0, f'Аналог в {position["analogs"].get("manufacturer_to")} не найден')
             
         return number_line + 1
     
@@ -155,6 +156,7 @@ class HealthCheckBookkeepingWriter(BookkeepingWriter):
         self._default_ws.write(number_line, header["article"]["cell"], product.article)
         self._default_ws.write(number_line, header["category"]["cell"], product.category.title)
         self._default_ws.write(number_line, header["manufacturer"]["cell"], product.manufacturer.title)
+        self._default_ws.write(number_line, header["additional_article"]["cell"], product.additional_article)
         self._default_ws.write(number_line, 0, type_record)
         
     def dump(self, books):

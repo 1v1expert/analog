@@ -156,13 +156,14 @@ class HealthCheckGenerator(object):
             'table_data': self.get_data(self.manufacturer)
         }
         
-        for idx, key in enumerate(data["table_header"].keys(), 5):
+        for idx, key in enumerate(data["table_header"].keys(), 6):
             data["table_header"][key]["cell"] = idx
 
-        data["table_header"]["category"] = {"title": "подкласс", "cell": 3}
-        data["table_header"]["title"] = {"title": "наименование", "cell": 2}
+        data["table_header"]["category"] = {"title": "подкласс", "cell": 4}
+        data["table_header"]["title"] = {"title": "наименование", "cell": 3}
         data["table_header"]["article"] = {"title": "артикул", "cell": 1}
-        data["table_header"]["manufacturer"] = {"title": "производитель", "cell": 4}
+        data["table_header"]["additional_article"] = {"title": "доп. артикул", "cell": 2}
+        data["table_header"]["manufacturer"] = {"title": "производитель", "cell": 5}
         
         yield data
         
@@ -174,14 +175,15 @@ class HealthCheckGenerator(object):
                 
                 analog = initial_product.get_analog(manufacturer_to)
                 
-                if analog is None:
-                    continue
+                # if analog is None:
+                #     continue
 
                 queryset__pk = initial_product.raw.get("analogs", {}).get(manufacturer_to.pk, {}) if initial_product.raw is not None else {}
                 yield {
                     'initial_product': initial_product,
                     'analogs': {
                         'analog': analog,
+                        'manufacturer_to': manufacturer_to,
                         'queryset': Product.objects.filter(pk__in=queryset__pk.get("analog_seconds")) if queryset__pk.get("analog_seconds") is not None else []
                     }
                 }
