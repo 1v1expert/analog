@@ -151,8 +151,9 @@ class ManufacturerAdmin(BaseAdmin):
     export_duplicate_products.short_description = 'Выгрузить дубликаты'
     
     def download_check_result(self, request, queryset):
-        generator = generators.HealthCheckGenerator(queryset, request.user)
-        generator.generate_and_write()
+        for manufacturer in queryset:
+            generator = generators.HealthCheckGenerator(queryset, request.user)
+            generator.generate_and_write()
 
     download_check_result.short_description = 'Download check result'
 
