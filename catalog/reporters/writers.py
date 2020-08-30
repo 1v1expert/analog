@@ -123,7 +123,7 @@ class HealthCheckBookkeepingWriter(BookkeepingWriter):
         for col, key in enumerate(row.keys()):
             value: str = f'{row[key]["title"]}'
             if row[key].get("type"):
-                value += ({row[key]["type"]})
+                value += f'({row[key]["type"]})'
             self._default_ws.write(self._row, row[key]["cell"], value)
             
     def write_position(self, position, number_line, header):
