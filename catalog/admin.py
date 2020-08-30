@@ -152,7 +152,7 @@ class ManufacturerAdmin(BaseAdmin):
     
     def download_check_result(self, request, queryset):
         for manufacturer in queryset:
-            generator = generators.HealthCheckGenerator(queryset, request.user)
+            generator = generators.HealthCheckGenerator(manufacturer, request.user)
             generator.generate_and_write()
 
     download_check_result.short_description = 'Download check result'
