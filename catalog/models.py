@@ -107,6 +107,7 @@ class Attribute(Base):
     type = models.CharField(max_length=13, choices=TYPES, verbose_name="Тип")
     unit = models.CharField(max_length=5, choices=UNITS, verbose_name="Единицы измерения", blank=True)
     priority = models.PositiveSmallIntegerField(verbose_name='Приоритет')
+    weight = models.PositiveSmallIntegerField(verbose_name='Вес', default=0)
     is_fixed = models.BooleanField(verbose_name='Fixed attribute?', default=False)
     
     def __str__(self):
@@ -205,9 +206,6 @@ class Product(Base):
             return analogs.first()
         
         return self.search_analog(manufacturer_to)
-    
-    def pprint_info(self, *args):
-        pass
 
     def search_analog(self, manufacturer_to: Manufacturer) -> Optional["Product"]:
         """ Start <AnalogSearch> process """
@@ -264,30 +262,30 @@ class Product(Base):
             attribute["attribute__pk"]: {
                 key: attribute[key] for key in attribute.keys()
             } for attribute in self.get_full_info()}
-
-    def comparison(self, analog: "Product"):
-        fields = ('value__title', 'un_value', 'attribute__title', 'attribute__pk', 'product__pk')
+    
+    def comparison(self, *analogs: "Product"):
+        fields = ('value__title', 'un_value', 'attribute__title', 'attribute__pk', 'product__pk', 'attribute__type', 'attribute__is_fixed')
         attributes = sorted(
             chain(
                 self.attributevalue_set.all().order_by('attribute__pk').values(*fields),
-                analog.attributevalue_set.all().order_by('attribute__pk').values(*fields)
+                *[analog.attributevalue_set.all().order_by('attribute__pk').values(*fields) for analog in analogs]
             ),
             key=lambda attribute: attribute['attribute__pk']
         )
-    
+
         return groupby(attributes, lambda x: x['attribute__pk'])
     
-    # def comparison(self, *analogs):
-    #     fields = ('value__title', 'un_value', 'attribute__title', 'attribute__pk', 'product__pk')
-    #     attributes = sorted(
-    #         chain(
-    #             self.attributevalue_set.all().order_by('attribute__pk').values(*fields),
-    #             *[analog.attributevalue_set.all().order_by('attribute__pk').values(*fields) for analog in analogs]
-    #         ),
-    #         key=lambda attribute: attribute['attribute__pk']
-    #     )
-    #
-    #     return groupby(attributes, lambda x: x['attribute__pk'])
+    def pprint_info(self, *args: "Product"):
+        header = {analog.pk: idx for idx, analog in enumerate(args)}
+        print('    '.join([analog.article for analog in args] + [self.article]))
+        for attribute__pk, group in self.comparison(*args):
+            string = ''
+            for idx, attribute in enumerate(group):
+                if idx == 0:
+                    string += f'{attribute["attribute__title"]}({attribute["attribute__type"]}) ||'
+                string += f'\t{attribute["value__title"] if attribute["attribute__is_fixed"] else attribute["un_value"]}'
+            
+            print(f'{string}')
     
     def __str__(self):
         return self.title
@@ -390,57 +388,28 @@ class AnalogSearch(object):
         middleware_pk_products = dataset_pk
 
         for attribute in self.initial_product_info[HARD]:
+            filter_args = dict(
+                product__pk__in=middleware_pk_products,
+                attribute=attribute['attribute']
+            )
+    
             if attribute["attribute__is_fixed"]:
-                middleware_pk_products = AttributeValue.objects.select_related(
+                filter_args["value"] = attribute["value"]
+            else:
+                filter_args["un_value"] = attribute["un_value"]
+            
+            middleware_pk_products = AttributeValue.objects.select_related(
                     'attribute', 'product', 'value'
                 ).filter(
-                    product__pk__in=middleware_pk_products,
-                    # attribute__type=HARD,
-                    attribute=attribute['attribute'],
-                    # attribute__is_fixed=attribute["attribute__is_fixed"],
-                    value=attribute["value"],
+                **filter_args
                 ).distinct('product__pk').values_list('product__pk', flat=True)
-            else:
-                middleware_attributes = AttributeValue.objects.select_related(
-                    'attribute', 'product'
-                ).filter(
-                    product__pk__in=middleware_pk_products,
-                    # attribute__type=HARD,
-                    # attribute__is_fixed=attribute["attribute__is_fixed"],
-                    attribute=attribute['attribute'],
-                    # value__title=attribute["value__title"],
-                    # un_value=attribute["un_value"]
-                ).annotate(
-                    abs_diff=Func(F('un_value') - attribute["un_value"], function='ABS')
-                ).order_by('abs_diff')  # .distinct('product')  # .values_list('product__pk', flat=True)
-
-                if middleware_attributes.exists():
-                    closest_attribute = middleware_attributes.first()
-                    
-                    middleware_pk_products = AttributeValue.objects.select_related(
-                        'attribute', 'product', 'value'
-                    ).filter(
-                        product__pk__in=middleware_pk_products,
-                        attribute=attribute['attribute'],
-                        un_value=closest_attribute.un_value,
-                    ).distinct('product__pk').values_list('product__pk', flat=True)
-                
-                # products_pk = set()
-                # for idx, unfix_attribute in enumerate(middleware_attributes):
-                #     if not idx:  # first iteration
-                #         closest_attribute = unfix_attribute  # = min abs_diff
-                #     else:
-                #         if closest_attribute.abs_diff == unfix_attribute.abs_diff:
-                #             products_pk.update(closest_attribute.product.pk)
-                # if len(products_pk):
-                #     middleware_pk_products = Product.objects.filter(pk__in=products_pk).values_list('pk', flat=True)
                 
         return middleware_pk_products
-    
-    def filter_by_soft_attributes(self, dataset_pk: QuerySet) -> QuerySet:
-        middleware_pk_products = dataset_pk
 
-        for attribute in self.initial_product_info[SOFT]:
+    def filter_by_any_attributes(self, dataset_pk: QuerySet, attribute_type=SOFT) -> QuerySet:
+        middleware_pk_products = dataset_pk
+    
+        for attribute in self.initial_product_info[attribute_type]:
             if attribute["attribute__is_fixed"]:
                 products_pk: QuerySet = AttributeValue.objects.select_related(
                     'attribute', 'product', 'value'
@@ -449,12 +418,12 @@ class AnalogSearch(object):
                     attribute=attribute["attribute"],
                     value=attribute["value"],
                 ).distinct('product').values_list('product__pk', flat=True)
-        
+            
                 if products_pk.count() > 0:
                     middleware_pk_products = products_pk
-
+        
             else:
-                products_pk = AttributeValue.objects.select_related(
+                middleware_attributes = AttributeValue.objects.select_related(
                     'attribute', 'product'
                 ).filter(
                     product__pk__in=middleware_pk_products,
@@ -462,17 +431,18 @@ class AnalogSearch(object):
                 ).annotate(
                     abs_diff=Func(F('un_value') - attribute["un_value"], function='ABS')
                 ).order_by('abs_diff')  # .distinct('product')  # .values_list('product__pk', flat=True)
+            
+                if middleware_attributes.exists():
+                    closest_attribute = middleware_attributes.first()
+                
+                    middleware_pk_products = AttributeValue.objects.select_related(
+                        'attribute', 'product', 'value'
+                    ).filter(
+                        product__pk__in=middleware_pk_products,
+                        attribute=attribute['attribute'],
+                        un_value=closest_attribute.un_value,
+                    ).distinct('product__pk').values_list('product__pk', flat=True)
     
-                set_products_pk = set()
-                for idx, unfix_attribute in enumerate(products_pk):
-                    if not idx:  # first iteration
-                        closest_attribute = unfix_attribute  # = min abs_diff
-                    else:
-                        if closest_attribute.abs_diff == unfix_attribute.abs_diff:
-                            set_products_pk.add(closest_attribute.product.pk)
-                if len(set_products_pk):
-                    middleware_pk_products = Product.objects.filter(pk__in=set_products_pk).values_list('pk', flat=True)
-
         return middleware_pk_products
 
     def build(self) -> "AnalogSearch":
@@ -491,9 +461,12 @@ class AnalogSearch(object):
         
         self.second_dataset = list(second_dataset)
         # third step
-        third_dataset: QuerySet = self.filter_by_soft_attributes(second_dataset)
+        third_dataset: QuerySet = self.filter_by_any_attributes(second_dataset, attribute_type=SOFT)
         
-        products = Product.objects.filter(pk__in=third_dataset)
+        # fourth step
+        fourth_dataset: QuerySet = self.filter_by_any_attributes(third_dataset, attribute_type=RECALCULATION)
+        
+        products = Product.objects.filter(pk__in=fourth_dataset)
 
         self.product = products.first()
         self.first_step_products = products

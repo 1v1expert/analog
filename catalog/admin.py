@@ -81,10 +81,8 @@ class CategoryAdmin(BaseAdmin):
     get_attributes.short_description = 'Атрибуты'
 
 
-class AttrAdmin(BaseAdmin):
-    list_display = ['title', 'unit', 'id', 'type', 'priority', 'is_public', 'deleted']
-    #'category'
-    #autocomplete_fields = ['category']
+class AttributeAdmin(BaseAdmin):
+    list_display = ['title', 'unit', 'weight', 'id', 'type', 'priority', 'is_public', 'deleted']
 
 
 class ProductChangeList(ChangeList):
@@ -224,7 +222,7 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(FixedValue, FixValAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Manufacturer, ManufacturerAdmin)
-admin.site.register(Attribute, AttrAdmin)
+admin.site.register(Attribute, AttributeAdmin)
 admin.site.register(Specification, BaseAdmin)
 admin.site.register(DataFile, FileUploadAdmin)
 admin.site.register(LogEntry, LogEntryAdmin)
