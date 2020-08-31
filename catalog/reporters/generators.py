@@ -168,9 +168,11 @@ class HealthCheckGenerator(object):
         yield data
         
     def get_data(self, manufacturer):
-        manufactures_to = Manufacturer.objects.exclude(pk=manufacturer.pk)
+        manufactures_to = Manufacturer.objects.exclude(pk=manufacturer.pk).filter(is_tried=True)
         
-        for initial_product in Product.objects.filter(manufacturer=manufacturer):
+        pr_counts = Product.objects.filter(manufacturer=manufacturer).count()
+        limit = int(pr_counts/2)
+        for initial_product in Product.objects.filter(manufacturer=manufacturer)[limit:]:
             for manufacturer_to in manufactures_to:
                 
                 analog = initial_product.get_analog(manufacturer_to)

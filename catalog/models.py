@@ -6,7 +6,7 @@ import time
 import traceback
 from itertools import chain
 from itertools import groupby
-from typing import List, Mapping, Optional
+from typing import List, Mapping, Optional, Any
 
 from django.contrib.auth.models import User
 from django.contrib.postgres import fields as pgfields
@@ -220,7 +220,7 @@ class Product(Base):
             
             old_analogs = self.analogs_to.filter(manufacturer=manufacturer_to)
             if old_analogs.exists():
-                self.analogs_to.remove(old_analogs)
+                self.analogs_to.remove(old_analogs.values('pk'))
 
             self.analogs_to.add(result.product)
         
@@ -254,7 +254,8 @@ class Product(Base):
             'attribute__pk',
             'value__title',
             'un_value',
-            'attribute__is_fixed'
+            'attribute__is_fixed',
+            'attribute__title'
         )
     
     def get_attributes(self):
@@ -293,7 +294,7 @@ class Product(Base):
     class Meta:
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
-        ordering = ('-priority', )
+        # ordering = ('-priority', )
 
 
 class Specification(Base):
@@ -352,6 +353,7 @@ class AnalogSearch(object):
         self.left_time = None
         self.initial_product = product_from
         self.initial_product_info = {}
+        self.null_attributes = {}
         self.manufacturer_to = manufacturer_to
         self.product = None
         self.first_step_products = None
@@ -368,8 +370,19 @@ class AnalogSearch(object):
             flat=True
         )
 
-    def get_full_info_from_initial_product(self) -> Mapping[str, List[AttributeValue]]:
-        attributes = self.initial_product.attributevalue_set.values(
+    def get_full_info_from_initial_product(self) -> List[Mapping[str, List[Optional[AttributeValue]]]]:
+        # attributes = Category.objects.get(pk=self.initial_product.category.pk).attributes.values(
+        #     'value',
+        #     'un_value',
+        #     'attribute',
+        #     'attribute__type',
+        #     'attribute__title',
+        #     'attribute__is_fixed'
+        # ).order_by('-attribute__is_fixed')
+
+        attributes = self.initial_product.attributevalue_set.select_related(
+            'value', 'attribute'
+        ).values(
             'value',
             'un_value',
             'attribute',
@@ -377,12 +390,23 @@ class AnalogSearch(object):
             'attribute__title',
             'attribute__is_fixed'
         ).order_by('-attribute__is_fixed')  # Attr is fixed: True, True, ..., False, False
+        
+        null_attributes = Category.objects.get(
+            pk=self.initial_product.category.pk
+        ).attributes.exclude(
+            pk__in=self.initial_product.attributevalue_set.values_list('attribute__pk', flat=True)
+        )
 
         info = {HARD: [], SOFT: [], RELATION: [], RECALCULATION: [], PRICE: []}
         for attribute in attributes:
             info[attribute["attribute__type"]].append(attribute)
         
-        return info
+        null_info = {HARD: [], SOFT: [], RELATION: [], RECALCULATION: [], PRICE: []}
+        for null_attribute in null_attributes:
+            null_info[null_attribute.type].append(null_attribute)
+        
+        print(null_info)
+        return [info, null_info]
 
     def filter_by_hard_attributes(self, dataset_pk) -> QuerySet:
         middleware_pk_products = dataset_pk
@@ -403,7 +427,17 @@ class AnalogSearch(object):
                 ).filter(
                 **filter_args
                 ).distinct('product__pk').values_list('product__pk', flat=True)
-                
+
+        for null_attribute in self.null_attributes[HARD]:
+            if null_attribute.attribute.is_fixed:
+                middleware_pk_products = Product.objects.filter(
+                    pk__in=middleware_pk_products
+                ).exclude(
+                    pk__in=Product.objects.filter(
+                        attributevalue__value__isnull=False,
+                        attributevalue__attribute=null_attribute
+                    )).values_list('pk', flat=True)
+            
         return middleware_pk_products
 
     def filter_by_any_attributes(self, dataset_pk: QuerySet, attribute_type=SOFT) -> QuerySet:
@@ -442,13 +476,13 @@ class AnalogSearch(object):
                         attribute=attribute['attribute'],
                         un_value=closest_attribute.un_value,
                     ).distinct('product__pk').values_list('product__pk', flat=True)
-    
+            
         return middleware_pk_products
 
     def build(self) -> "AnalogSearch":
         start_time = time.time()
         # logger.
-        self.initial_product_info = self.get_full_info_from_initial_product()
+        self.initial_product_info, self.null_attributes = self.get_full_info_from_initial_product()
         
         # first step
         first_dataset: QuerySet = self.filter_by_category_and_manufacturer()
