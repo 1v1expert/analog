@@ -405,7 +405,6 @@ class AnalogSearch(object):
         for null_attribute in null_attributes:
             null_info[null_attribute.type].append(null_attribute)
         
-        print(null_info)
         return [info, null_info]
 
     def filter_by_hard_attributes(self, dataset_pk) -> QuerySet:
@@ -429,7 +428,7 @@ class AnalogSearch(object):
                 ).distinct('product__pk').values_list('product__pk', flat=True)
 
         for null_attribute in self.null_attributes[HARD]:
-            if null_attribute.attribute.is_fixed:
+            if null_attribute.is_fixed:
                 middleware_pk_products = Product.objects.filter(
                     pk__in=middleware_pk_products
                 ).exclude(

@@ -160,6 +160,7 @@ class HealthCheckBookkeepingWriter(BookkeepingWriter):
         self._default_ws.write(number_line, header["category"]["cell"], product.category.title)
         self._default_ws.write(number_line, header["manufacturer"]["cell"], product.manufacturer.title)
         self._default_ws.write(number_line, header["additional_article"]["cell"], product.additional_article)
+        self._default_ws.write(number_line, header["pk"]["cell"], product.pk)
         self._default_ws.write(number_line, 0, type_record)
         
     def dump(self, books):

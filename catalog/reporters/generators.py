@@ -156,14 +156,15 @@ class HealthCheckGenerator(object):
             'table_data': self.get_data(self.manufacturer)
         }
         
-        for idx, key in enumerate(data["table_header"].keys(), 6):
+        for idx, key in enumerate(data["table_header"].keys(), 7):
             data["table_header"][key]["cell"] = idx
 
-        data["table_header"]["category"] = {"title": "подкласс", "cell": 4}
-        data["table_header"]["title"] = {"title": "наименование", "cell": 3}
-        data["table_header"]["article"] = {"title": "артикул", "cell": 1}
-        data["table_header"]["additional_article"] = {"title": "доп. артикул", "cell": 2}
-        data["table_header"]["manufacturer"] = {"title": "производитель", "cell": 5}
+        data["table_header"]["category"] = {"title": "подкласс", "cell": 5}
+        data["table_header"]["title"] = {"title": "наименование", "cell": 4}
+        data["table_header"]["article"] = {"title": "артикул", "cell": 2}
+        data["table_header"]["pk"] = {"title": "идентификатор", "cell": 1}
+        data["table_header"]["additional_article"] = {"title": "доп. артикул", "cell": 3}
+        data["table_header"]["manufacturer"] = {"title": "производитель", "cell": 6}
         
         yield data
         
@@ -171,8 +172,8 @@ class HealthCheckGenerator(object):
         manufactures_to = Manufacturer.objects.exclude(pk=manufacturer.pk).filter(is_tried=True)
         
         pr_counts = Product.objects.filter(manufacturer=manufacturer).count()
-        limit = int(pr_counts/2)
-        for initial_product in Product.objects.filter(manufacturer=manufacturer)[limit:]:
+        limit = int(pr_counts/4)
+        for initial_product in Product.objects.filter(manufacturer=manufacturer)[limit:2*limit]:
             for manufacturer_to in manufactures_to:
                 
                 analog = initial_product.get_analog(manufacturer_to)
