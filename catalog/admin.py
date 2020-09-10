@@ -101,11 +101,9 @@ class ProductChangeList(ChangeList):
 
 class ProductAdmin(BaseAdmin):
     list_display = ['title', 'article', 'manufacturer', 'category', 'get_attributes', 'series', 'priority', 'is_public', 'deleted', ]
-    # inlines = [PropertiesInline]
-    #filter_horizontal = ['attrs_vals']
+    list_select_related = True
     autocomplete_fields = ['category', 'manufacturer',]
 
-    # @staticmethod
     def get_attributes(self, obj):
         return "; ".join(
             [
@@ -126,6 +124,7 @@ class ProductAdmin(BaseAdmin):
             'manufacturer',
             'category'
         )
+
 
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'is_tried', 'created_at', 'created_by']
@@ -239,4 +238,3 @@ admin.site.register(DataFile, FileUploadAdmin)
 admin.site.register(LogEntry, LogEntryAdmin)
 admin.site.register(GroupSubclass, GroupSubclassAdmin)
 
-# Register your models here.

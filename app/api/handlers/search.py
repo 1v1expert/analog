@@ -1,10 +1,10 @@
 from django.http import JsonResponse
 from django.views import View
 
-from catalog.models import AnalogSearch, Product, Manufacturer
-from catalog.forms import AdvancedSearchForm, SearchForm
-from catalog.exceptions import AnalogNotFound, ArticleNotFound, InternalError
-import traceback
+from app.decorators import a_decorator_passing_logs
+from catalog.exceptions import AnalogNotFound, ArticleNotFound
+from catalog.forms import SearchForm
+from catalog.models import Manufacturer, Product
 
 
 def get_product_info(analog: Product, original: Product):
@@ -111,7 +111,8 @@ def get_analog(article: str = None, manufacturer_to: Manufacturer = None) -> dic
 
 class SearchView(View):
     LIMIT_VIEW = 50
-    
+
+    @a_decorator_passing_logs
     def get(self, request):
         article = request.GET.get("article")
         
@@ -129,7 +130,8 @@ class SearchView(View):
             ), safe=False)
 
         return JsonResponse({'error': "Not found"})
-    
+
+    @a_decorator_passing_logs
     def post(self, request):
         form = SearchForm(request.POST)
         if form.is_valid():

@@ -10,81 +10,14 @@ from app.decorators import a_decorator_passing_logs
 from app.decorators import check_recaptcha
 from app.forms import FeedBackForm, SubscribeForm
 from app.models import FeedBack, MainLog
-from catalog.exceptions import AnalogNotFound, ArticleNotFound
 from catalog.forms import AdvancedSearchForm, SearchForm
 from catalog.handlers import result_api_processing
 from catalog.internal.auth_actions import registration
-from catalog.internal.utils import ProductInfo#, get_product_info
-from catalog.models import Manufacturer, Product
+from catalog.internal.utils import ProductInfo  # , get_product_info
+from catalog.models import Product
 from catalog.utils import SearchProducts
 
 logger = logging.getLogger('analog')
-
-
-# def get_product_info(analog, original=None):
-#     info = [{"analog":
-#                  {"name": "наименование", "value": analog.title},
-#              "original":
-#                  {"name": "наименование", "value": original.title}
-#              }]
-#
-#     original_info = original.get_info()
-#     analog_get_info = analog.get_info()
-#
-#     fixed_attributes = []  # for find images in groups
-#
-#     for attr in analog_get_info:
-#         analog_name = attr.attribute.title
-#         orig_attr = None
-#
-#         if analog_name in ('ед.изм', 'цена'):
-#             continue
-#
-#         for original_attr in original_info:
-#             print(original_attr.attribute.title, analog_name)
-#             if original_attr.attribute.title == analog_name:
-#                 orig_attr = original_attr
-#                 break
-#
-#         analog_info = {'name': analog_name}
-#
-#         if attr.attribute.is_fixed:
-#             analog_value = attr.value.title
-#             original_value = orig_attr.value.title if orig_attr else ""
-#             fixed_attributes.append(attr.value)  # for search group with image
-#         else:
-#             analog_value = attr.un_value
-#             original_value = orig_attr.value if orig_attr else ""
-#
-#         analog_info['value'] = analog_value
-#
-#         info.append({"analog":
-#                          {"name": analog_info["name"], "value": analog_info["value"]},
-#                      "original":
-#                          {"name": analog_info["name"], "value": original_value}
-#                      })
-#
-#     info.append({"analog":
-#                      {"name": "производитель", "value": analog.manufacturer.title},
-#                  "original":
-#                      {"name": "производитель", "value": original.manufacturer.title}
-#                  })
-#     # find group with image
-#     if not len(fixed_attributes):
-#         return {"result": info}
-#
-#     from catalog.models import GroupSubclass
-#     try:
-#         group = GroupSubclass.objects.get(category=analog.category,
-#                                           fixed_attribute__in=fixed_attributes)
-#         return {"result": info, "image": group.image.url}
-#
-#     except GroupSubclass.DoesNotExist:
-#         pass
-#     except GroupSubclass.MultipleObjectsReturned:
-#         pass
-#
-#     return {"result": info}
 
 
 def advanced_search(request: HttpRequest) -> HttpResponse:
