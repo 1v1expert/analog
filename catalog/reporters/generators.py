@@ -173,7 +173,7 @@ class HealthCheckGenerator(object):
         
         pr_counts = Product.objects.filter(manufacturer=manufacturer).count()
         limit = int(pr_counts/4)
-        for initial_product in Product.objects.filter(manufacturer=manufacturer)[limit:2*limit]:
+        for initial_product in Product.objects.filter(manufacturer=manufacturer)[limit*2:3*limit]:
             for manufacturer_to in manufactures_to:
                 
                 analog = initial_product.get_analog(manufacturer_to)
@@ -192,5 +192,5 @@ class HealthCheckGenerator(object):
                 }
     
     def generate_and_write(self):
-        with self.writer(f'HealthCheck for {self.manufacturer.title}', self.user) as writer:
+        with self.writer(f'HealthCheck for {self.manufacturer.title} p3', self.user) as writer:
             writer.dump(self.generate())

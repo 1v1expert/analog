@@ -100,22 +100,32 @@ class ProductChangeList(ChangeList):
 
 
 class ProductAdmin(BaseAdmin):
-    list_display = ['title', 'article', 'manufacturer', 'category', 'is_public', 'deleted']
+    list_display = ['title', 'article', 'manufacturer', 'category', 'get_attributes', 'series', 'priority', 'is_public', 'deleted', ]
     # inlines = [PropertiesInline]
     #filter_horizontal = ['attrs_vals']
     autocomplete_fields = ['category', 'manufacturer',]
-    
+
     # @staticmethod
-    def get_fix_attrs_vals(self, obj):
-        return "; ".join(['{}: {}'.format(p.attribute.title, p.value.title) for p in obj.fixed_attrs_vals.all()])
+    def get_attributes(self, obj):
+        return "; ".join(
+            [
+                '{}: {}'.format(
+                    p['attribute__title'],
+                    p['value__title'] if p['attribute__is_fixed'] else p['un_value']) for p in obj.get_full_info()
+            ]
+        )
 
-    get_fix_attrs_vals.short_description = 'Фиксированные атрибуты'
+    get_attributes.short_description = 'Атрибуты'
     
-    def get_unfix_attrs_vals(self, obj):
-        return "; ".join(['{}: {}'.format(p.attribute.title, p.value) for p in obj.unfixed_attrs_vals.all()])
-
-    get_unfix_attrs_vals.short_description = 'Нефиксированные атрибуты'
-
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(
+            'attributevalue_set',
+            'attributevalue_set__attribute',
+            'attributevalue_set__value'
+        ).select_related(
+            'manufacturer',
+            'category'
+        )
 
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'is_tried', 'created_at', 'created_by']

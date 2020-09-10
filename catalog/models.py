@@ -428,14 +428,20 @@ class AnalogSearch(object):
                 ).distinct('product__pk').values_list('product__pk', flat=True)
 
         for null_attribute in self.null_attributes[HARD]:
+            null_filter_args = dict(
+                attributevalue__attribute=null_attribute
+            )
             if null_attribute.is_fixed:
-                middleware_pk_products = Product.objects.filter(
-                    pk__in=middleware_pk_products
-                ).exclude(
-                    pk__in=Product.objects.filter(
-                        attributevalue__value__isnull=False,
-                        attributevalue__attribute=null_attribute
-                    )).values_list('pk', flat=True)
+                null_filter_args["attributevalue__value__isnull"] = False
+            else:
+                null_filter_args["attributevalue__un_value__isnull"] = False
+                
+            middleware_pk_products = Product.objects.filter(
+                pk__in=middleware_pk_products
+            ).exclude(
+                pk__in=Product.objects.filter(
+                    **null_filter_args
+                )).values_list('pk', flat=True)
             
         return middleware_pk_products
 
