@@ -188,7 +188,7 @@ class Product(Base):
 
     is_enabled = models.BooleanField(verbose_name='Поисковый', default=False)
 
-    priority = models.PositiveSmallIntegerField(verbose_name='Приоритет', default=0)
+    priority = models.PositiveSmallIntegerField(verbose_name='Приоритет', default=0, null=True, blank=True)
     
     def get_analog(self, manufacturer_to: Manufacturer) -> Optional["Product"]:
         assert manufacturer_to is not None, 'Manufacturer is None'

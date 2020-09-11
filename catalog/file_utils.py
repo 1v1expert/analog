@@ -160,8 +160,8 @@ class ProcessingUploadData(object):
             structured_product, attributes = {}, []
             try:
                 self.unique_class.add(line[1])
-                self.unique_subclass.add(line[5])
-                self.unique_manufacturer.add(line[6])
+                self.unique_subclass.add(line[6])
+                self.unique_manufacturer.add(line[7])
             except KeyError:
                 return False, 'Error in line: {}'.format(line)
             
@@ -234,7 +234,7 @@ class ProcessingUploadData(object):
                 series=product.get('series', ""),
                 title=product['title'],
                 category=product['category_obj'],
-                priority=product['priority'],
+                priority=int(product['priority']) if product.get('priority') is not None else 10,
                 created_by=self.user,
                 updated_by=self.user,
                 is_tried=True
