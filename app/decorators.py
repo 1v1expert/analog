@@ -1,13 +1,13 @@
-from app.models import MainLog
-
 import requests
-
 from django.conf import settings
 
-import json
+from app.models import MainLog
+from functools import wraps
 
 
 def a_decorator_passing_logs(func):
+    
+    @wraps(func)
     def wrapper_logs(request, *args, **kwargs):
         message = {}
         
@@ -31,16 +31,23 @@ def a_decorator_passing_logs(func):
         response = b'<html>'
         if 'json' in response_content_type:
             response = response_func._container[0]
-            
-        MainLog.objects.create(user=user,
-                               message=message,
-                               client_address=client_address,
-                               raw={'raw_request': message,
-                                    'HTTP_USER_AGENT': request.META.get('HTTP_USER_AGENT'),
-                                    'HTTP_CONNECTION': request.META.get('HTTP_CONNECTION'),
-                                    'response_headers': response_func._headers,
-                                    'response': response.decode('utf-8')}
-                               )
+
+        MainLog.objects.create(
+            user=user,
+            message=message,
+            client_address=client_address,
+            raw={
+                'request': {
+                    'raw_request': message,
+                    'HTTP_USER_AGENT': request.META.get('HTTP_USER_AGENT'),
+                    'HTTP_CONNECTION': request.META.get('HTTP_CONNECTION')
+                },
+                'response': {
+                    'response_headers': response_func._headers,
+                    'response': response.decode('utf-8')
+                }
+            }
+        )
         
         return response_func
     

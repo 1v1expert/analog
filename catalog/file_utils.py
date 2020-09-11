@@ -112,9 +112,10 @@ class ProcessingUploadData(object):
         (2, "article"),
         (3, "additional_article"),
         (4, "series"),
-        (5, "subclass"),
-        (6, "manufacturer"),
-        (7, "attributes")
+        (5, "priority"),
+        (6, "subclass"),
+        (7, "manufacturer"),
+        (8, "attributes")
     )
 
     STRUCTURE_PRODUCT_REV_DICT = _rev_dict(STRUCTURE_PRODUCT)
@@ -165,7 +166,7 @@ class ProcessingUploadData(object):
                 return False, 'Error in line: {}'.format(line)
             
             for key in line.keys():
-                if key < 7:
+                if key < 8:
                     structured_product.update({
                             self.STRUCTURE_PRODUCT[key][1]: line[key]  # article: 1234
                     })
@@ -178,12 +179,14 @@ class ProcessingUploadData(object):
             structured_product.update({
                 self.STRUCTURE_PRODUCT[7][1]: attributes
             })
-            
+
             is_valid_data = self.check_exists_types(structured_product)
 
             if isinstance(is_valid_data, str):
-                MainLog(user=self.user,
-                        message=f'{is_valid_data}\n reason: {structured_product}, time: {time.time() - self.start_time}').save()
+                MainLog(
+                    user=self.user,
+                    message=f'{is_valid_data}\n reason: {structured_product}, time: {time.time() - self.start_time}'
+                ).save()
                 return False, is_valid_data
             else:
                 self.products.append(is_valid_data)
@@ -231,6 +234,7 @@ class ProcessingUploadData(object):
                 series=product.get('series', ""),
                 title=product['title'],
                 category=product['category_obj'],
+                priority=product['priority'],
                 created_by=self.user,
                 updated_by=self.user,
                 is_tried=True

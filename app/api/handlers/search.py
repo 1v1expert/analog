@@ -1,11 +1,11 @@
 from django.http import JsonResponse
 from django.views import View
 
-from app.decorators import a_decorator_passing_logs
 from catalog.exceptions import AnalogNotFound, ArticleNotFound
 from catalog.forms import SearchForm
 from catalog.models import Manufacturer, Product
-
+from app.api.handlers.functools import make_error_json_response, make_success_json_response
+from app.decorators import a_decorator_passing_logs
 
 def get_product_info(analog: Product, original: Product):
     info = list()
@@ -115,21 +115,24 @@ class SearchView(View):
     @a_decorator_passing_logs
     def get(self, request):
         article = request.GET.get("article")
-        
+    
         if article is not None and len(article) > 1:
-            return JsonResponse(list(
-                Product.objects.filter(
-                    article__istartswith=article #, is_enabled=True  # todo: maybe use later
-                ).extra(
-                    select={'value': 'article'}
-                ).values(
-                    'value',
-                    'title',
-                    'manufacturer__title'
-                )[:self.LIMIT_VIEW]
-            ), safe=False)
-
-        return JsonResponse({'error': "Not found"})
+            return make_success_json_response(
+                list(
+                    Product.objects.filter(
+                        article__istartswith=article  # , is_enabled=True  # todo: maybe use later
+                    ).extra(
+                        select={'value': 'article'}
+                    ).values(
+                        'value',
+                        'title',
+                        'manufacturer__title'
+                    )[:self.LIMIT_VIEW]
+                ),
+                safe=False
+            )
+    
+        return make_error_json_response(f'{article} не найден')  # JsonResponse({'error': "Not found"})
 
     @a_decorator_passing_logs
     def post(self, request):
