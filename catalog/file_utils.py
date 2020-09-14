@@ -234,7 +234,7 @@ class ProcessingUploadData(object):
                 series=product.get('series', ""),
                 title=product['title'],
                 category=product['category_obj'],
-                priority=int(product['priority']) if product.get('priority') is not None else 10,
+                priority=int(product.get('priority', 10)),
                 created_by=self.user,
                 updated_by=self.user,
                 is_tried=True
