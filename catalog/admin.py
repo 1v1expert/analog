@@ -127,8 +127,13 @@ class ProductAdmin(BaseAdmin):
 
 
 class ManufacturerAdmin(BaseAdmin):
-    list_display = ['title', 'id', 'is_tried', 'created_at', 'created_by']
+    list_display = ['title', 'id', 'is_tried', 'get_product_count', 'created_at', 'created_by']
     actions = ['export_data_to_xls', 'export_full_dump', 'export_duplicate_products', 'delete_all_products', 'download_check_result']
+    
+    def get_product_count(self, obj):
+        return obj.products.count()
+
+    get_product_count.short_description = 'Кол-во поз-й'
     
     def delete_all_products(self, request, queryset):
         for manufacturer in queryset:
