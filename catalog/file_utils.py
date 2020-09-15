@@ -43,9 +43,6 @@ class XLSDocumentReader(object):
         rows = self.sheet.rows
         for cnt, row in enumerate(rows):
             
-            # if cnt > 500:
-            #     break
-            
             line = {}
             for cnt_c, cell in enumerate(row):
     
@@ -53,9 +50,9 @@ class XLSDocumentReader(object):
                     continue
                 value = str(cell.value).strip()
                 
-                if cell.value:
+                if value:
                     line.update({cnt_c: value})
-
+                    
             self.doc.append(line)
             
         self.workbook._archive.close()
@@ -209,16 +206,14 @@ class ProcessingUploadData(object):
     def create_products(self):
         
         def create_attr():
-            # if attr.get('type'):
-            if attr['attr_obj'].is_fixed:
-                attr_val = AttributeValue(value=attr['value'], attribute=attr['attr_obj'], created_by=self.user,
-                                          updated_by=self.user,
-                                          product=new_product)
-            else:
-                attr_val = AttributeValue(un_value=attr['value'], attribute=attr['attr_obj'], created_by=self.user,
-                                          updated_by=self.user,
-                                          product=new_product)
-            
+            attr_val = AttributeValue(
+                value=attr['value'] if attr['attr_obj'].is_fixed else None,
+                un_value=attr['value'] if not attr['attr_obj'].is_fixed else None,
+                attribute=attr['attr_obj'],
+                created_by=self.user,
+                updated_by=self.user,
+                product=new_product
+            )
             attr_val.save()
             
         for count, product in enumerate(self.products):
