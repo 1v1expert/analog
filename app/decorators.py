@@ -4,16 +4,15 @@ from django.conf import settings
 from app.models import MainLog
 from functools import wraps
 
-# from django.views.decorators.http import require_http_methods
 
 def a_decorator_passing_logs(func):
     
     @wraps(func)
     def wrapper_logs(*args, **kwargs):
         if len(args) == 1:
-            request = args[0]
+            request = args[0]  # if called func
         elif len(args) > 1:
-            request = args[1]
+            request = args[1]  # if called method of class
 
         message = {}
         

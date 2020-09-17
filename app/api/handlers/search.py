@@ -117,8 +117,7 @@ class SearchView(View):
         article = request.GET.get("article")
     
         if article is not None and len(article) > 1:
-            return JsonResponse(
-                # return make_success_json_response(
+            return make_success_json_response(
                 list(
                     Product.objects.filter(
                         article__istartswith=article  # , is_enabled=True  # todo: maybe use later
@@ -133,7 +132,6 @@ class SearchView(View):
                 safe=False
             )
         
-        
         return make_error_json_response(f'{article} не найден')  # JsonResponse({'error': "Not found"})
 
     @a_decorator_passing_logs
@@ -143,11 +141,10 @@ class SearchView(View):
         
             article = form.cleaned_data['article']
             manufacturer_to = form.cleaned_data['manufacturer_to']
-            result = get_analog(article=article, manufacturer_to=manufacturer_to)
         
             try:
-                
-                return JsonResponse({
+                result = get_analog(article=article, manufacturer_to=manufacturer_to)
+                return make_success_json_response({
                     'result': [result["analog"].article],
                     'info': result["info"].get("result"),
                     "image": result["info"].get("image"),
@@ -156,6 +153,7 @@ class SearchView(View):
                     'error': False
                 })
             except Exception as e:
-                return JsonResponse({'result': [], 'error': e.args[0]})
+                return make_error_json_response('Аналог не найден')
     
-        return JsonResponse({'error': 'Некорректно заполненные данные.'})
+        return make_error_json_response('Некорректные данные.')
+

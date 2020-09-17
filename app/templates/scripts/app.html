@@ -238,11 +238,11 @@
          Analogue search from article
          ==================*/
 
-        var form = $('#form');
+        let form = $('#form');
         form.submit(function (e) {
             e.preventDefault();
 
-            var attempt_count = +accessCookie('attempt_count');
+            let attempt_count = +accessCookie('attempt_count');
             {% if not request.user.is_authenticated %}
                 if (attempt_count > 10) {
                     swal("Ошибка!", "Пожалуйста, авторизуйтесь, чтобы продолжить пользоваться сервисом", "info");
@@ -259,7 +259,7 @@
                 success: function (data) {
                     if (data.error) {
                         {#alert(data.error);#}
-                        swal("Внимание!", data.error, {
+                        swal("Внимание!", data.description, {
                             {#content: ,#}
                             buttons: {
                                 cancel: "Ok",
@@ -346,8 +346,8 @@
                             return table;
                         }
 
-                        swal("Артикул: " + data.result.join(' ;'), {
-                            content: buildTable(data.info, data.image),
+                        swal("Артикул: " + data.body.result.join(' ;'), {
+                            content: buildTable(data.body.info, data.image),
                             buttons: {
                                 cancel: "Закрыть",
                                 catch: {
@@ -473,9 +473,9 @@
                         article: request.term
                     },
                     success: function (data) {
-                        console.log(data);
-                        response(data);
-
+                        if (!data.error) {
+                            response(data.body);
+                        }
                     }
                 });
 
