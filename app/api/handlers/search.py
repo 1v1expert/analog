@@ -117,7 +117,8 @@ class SearchView(View):
         article = request.GET.get("article")
     
         if article is not None and len(article) > 1:
-            return make_success_json_response(
+            return JsonResponse(
+                # return make_success_json_response(
                 list(
                     Product.objects.filter(
                         article__istartswith=article  # , is_enabled=True  # todo: maybe use later
@@ -131,7 +132,8 @@ class SearchView(View):
                 ),
                 safe=False
             )
-    
+        
+        
         return make_error_json_response(f'{article} не найден')  # JsonResponse({'error': "Not found"})
 
     @a_decorator_passing_logs
