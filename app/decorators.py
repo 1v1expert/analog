@@ -4,11 +4,17 @@ from django.conf import settings
 from app.models import MainLog
 from functools import wraps
 
+# from django.views.decorators.http import require_http_methods
 
 def a_decorator_passing_logs(func):
     
     @wraps(func)
-    def wrapper_logs(request, *args, **kwargs):
+    def wrapper_logs(*args, **kwargs):
+        if len(args) == 1:
+            request = args[0]
+        elif len(args) > 1:
+            request = args[1]
+
         message = {}
         
         try:
@@ -26,7 +32,7 @@ def a_decorator_passing_logs(func):
         if request.method == 'POST':
             message['post_data'] = request.POST
 
-        response_func = func(request, *args, **kwargs)
+        response_func = func(*args, **kwargs)
         response_content_type = response_func._headers['content-type'][1]
         response = b'<html>'
         if 'json' in response_content_type:
