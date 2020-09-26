@@ -42,6 +42,7 @@ class MainLog(models.Model):
     message = models.TextField(_('message'), blank=True)
     raw = pgfields.JSONField(null=True, blank=True, verbose_name="Голые данные")
     has_errors = models.BooleanField(default=False, null=True)
+    # method = models.
     
     class Meta:
         verbose_name = "Лог активности"

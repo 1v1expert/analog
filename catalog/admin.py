@@ -135,6 +135,16 @@ class ManufacturerAdmin(BaseAdmin):
 
     get_product_count.short_description = 'Кол-во поз-й'
     
+    def clear_analogs(self, request, queryset):
+        for manufacturer in queryset:
+            Product.objects.filter(manufacturer=manufacturer).update(raw=None)
+            for product in Product.objects.filter(manufacturer=manufacturer):
+                product.analogs_to.clear()
+
+        messages.add_message(request, messages.SUCCESS,
+                             'Результаты подобора для выбранных производителей успешно очищены')
+    clear_analogs.short_description = 'Очистить рез-ты подбора'
+    
     def delete_all_products(self, request, queryset):
         for manufacturer in queryset:
             Product.objects.filter(manufacturer=manufacturer).delete()
