@@ -23,6 +23,7 @@ class SearchForm(forms.Form):
     manufacturer_to = forms.ModelChoiceField(label='Необходимый производитель', empty_label=None,
                                              queryset=Manufacturer.objects.all())
     advanced_search = forms.BooleanField(label='Расширенный поиск', widget=forms.CheckboxInput, required=False)
+    pk = forms.CharField(label='Primary key', required=False)
     
 
 class AdvancedSearchForm(forms.Form):

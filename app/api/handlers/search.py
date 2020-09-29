@@ -91,11 +91,16 @@ def get_product_info(analog: Product, original: Product):
     return {"result": info}
 
 
-def get_analog(article: str = None, manufacturer_to: Manufacturer = None) -> dict:
-    product = Product.objects.filter(
-        article=article,
-        # is_enabled=True
-    ).first()
+def get_analog(article: str = None, manufacturer_to: Manufacturer = None, pk: str = None) -> dict:
+    if pk:
+        product = Product.objects.filter(
+            pk=pk
+        ).first()
+    else:
+        product = Product.objects.filter(
+            article=article,
+            # is_enabled=True
+        ).first()
     
     if not product:
         raise ArticleNotFound("Артикул {} не найден".format(article),
@@ -126,7 +131,8 @@ class SearchView(View):
                     ).values(
                         'value',
                         'title',
-                        'manufacturer__title'
+                        'manufacturer__title',
+                        'pk'
                     )[:self.LIMIT_VIEW]
                 ),
                 safe=False
@@ -141,9 +147,10 @@ class SearchView(View):
         
             article = form.cleaned_data['article']
             manufacturer_to = form.cleaned_data['manufacturer_to']
+            pk = form.cleaned_data["pk"]
         
             try:
-                result = get_analog(article=article, manufacturer_to=manufacturer_to)
+                result = get_analog(article=article, manufacturer_to=manufacturer_to, pk=pk)
                 return make_success_json_response({
                     'result': [result["analog"].article],
                     'info': result["info"].get("result"),

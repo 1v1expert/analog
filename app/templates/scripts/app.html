@@ -257,6 +257,7 @@
                 {#async: false,#}
                 data: form.serialize(),
                 success: function (data) {
+                    $("#pk").val("")
                     if (data.error) {
                         {#alert(data.error);#}
                         swal("Внимание!", data.description, {
@@ -431,9 +432,8 @@
 
                 },
                 error: function (data) {
+                    $("#pk").val("")
                     swal("Сбой поиска!", "Произошла системная ошибка", "warning");
-                    {#alert('Произошла системная ошибка');#}
-                    console.log('Error', data)
                 }
             })
         });
@@ -482,8 +482,7 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event, ui);
-                {#console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );#}
+                $("#pk").val(ui.item.pk)
             }
         })
             .autocomplete("instance")._renderItem = function (ul, item) {
