@@ -112,7 +112,8 @@ class ProcessingUploadData(object):
         (5, "priority"),
         (6, "subclass"),
         (7, "manufacturer"),
-        (8, "attributes")
+        (8, "irrelevant"),
+        (9, "attributes")
     )
 
     STRUCTURE_PRODUCT_REV_DICT = _rev_dict(STRUCTURE_PRODUCT)
@@ -163,7 +164,7 @@ class ProcessingUploadData(object):
                 return False, 'Error in line: {}'.format(line)
             
             for key in line.keys():
-                if key < 8:
+                if key < 9:
                     structured_product.update({
                             self.STRUCTURE_PRODUCT[key][1]: line[key]  # article: 1234
                     })
@@ -174,7 +175,7 @@ class ProcessingUploadData(object):
                         })
 
             structured_product.update({
-                self.STRUCTURE_PRODUCT[8][1]: attributes
+                self.STRUCTURE_PRODUCT[9][1]: attributes
             })
 
             is_valid_data = self.check_exists_types(structured_product)
@@ -232,14 +233,13 @@ class ProcessingUploadData(object):
                 priority=int(product.get('priority', 10)),
                 created_by=self.user,
                 updated_by=self.user,
-                is_tried=True
+                is_tried=True,
+                irrelevant=True if product.get("irrelevant", False) in ("True", "true", 1, "1", True) else False
             )
             new_product.save()
             for attr in product['attributes']:
                 create_attr()
-                    #obj_product.save()
-                    #attr_val.save()
-                   
+ 
     def check_exists_types(self, product):
         # check manufacturer
         try:
