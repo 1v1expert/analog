@@ -170,8 +170,7 @@ class ManufacturerAdmin(BaseAdmin):
         for manufacturer in queryset:
             products = Product.objects.filter(
                 manufacturer=manufacturer,
-                category__title__icontains="крепеж",
-                category__parent=None
+                category__parent__title__icontains="крепеж",
             )
             c_products = products.count()
             products.delete()
@@ -185,8 +184,7 @@ class ManufacturerAdmin(BaseAdmin):
         for manufacturer in queryset:
             products = Product.objects.filter(
                 manufacturer=manufacturer,
-                category__title__icontains="КНС",
-                category__parent=None
+                category__parent__title__icontains="КНС",
             )
             c_products = products.count()
             products.delete()
