@@ -139,7 +139,7 @@ class ManufacturerAdmin(BaseAdmin):
     
     def get_kns_product_count(self, obj):
         return obj.products.filter(
-            category__title__icontains="КНС",
+            category__parent__title__icontains="КНС",
             category__parent=None
         ).count()
 
@@ -147,8 +147,7 @@ class ManufacturerAdmin(BaseAdmin):
 
     def get_fasteners_product_count(self, obj):
         return obj.products.filter(
-            category__title__icontains="крепеж",
-            category__parent=None
+            category__parent__title__icontains="крепеж",
         ).count()
 
     get_fasteners_product_count.short_description = 'Кол-во КРЕПЕЖ'
