@@ -128,8 +128,8 @@ class ProductAdmin(BaseAdmin):
 
 class ManufacturerAdmin(BaseAdmin):
     list_display = ['title', 'id', 'is_tried', 'get_product_count', 'created_at', 'created_by']
-    actions = ['export_data_to_xls', 'export_full_dump', 'export_duplicate_products', 'delete_all_products',
-               'download_check_result', 'clear_analogs']
+    actions = ['export_data_to_xls', 'export_full_dump', 'export_duplicate_products', 'delete_fasteners_products',
+               'delete_kns_products', 'download_check_result', 'clear_analogs']
     
     def get_product_count(self, obj):
         return obj.products.count()
@@ -146,11 +146,35 @@ class ManufacturerAdmin(BaseAdmin):
                              'Результаты подобора для выбранных производителей успешно очищены')
     clear_analogs.short_description = 'Очистить рез-ты подбора'
     
-    def delete_all_products(self, request, queryset):
+    def delete_fasteners_products(self, request, queryset):
         for manufacturer in queryset:
-            Product.objects.filter(manufacturer=manufacturer).delete()
+            products = Product.objects.filter(
+                manufacturer=manufacturer,
+                category__title__icontains="крепеж",
+                category__parent=None
+            )
+            c_products = products.count()
+            products.delete()
 
-    delete_all_products.short_description = 'Удалить позиции по производителю'
+            messages.add_message(request, messages.SUCCESS,
+                                 f'Удалены {c_products} позиций у {manufacturer.title} в категории "Крепеж"')
+
+    delete_fasteners_products.short_description = 'Удалить позиции "Крепеж"а'
+    
+    def delete_kns_products(self, request, queryset):
+        for manufacturer in queryset:
+            products = Product.objects.filter(
+                manufacturer=manufacturer,
+                category__title__icontains="КНС",
+                category__parent=None
+            )
+            c_products = products.count()
+            products.delete()
+    
+            messages.add_message(request, messages.SUCCESS,
+                                 f'Удалены {c_products} позиций у {manufacturer.title} в категории "КНС"')
+
+    delete_kns_products.short_description = 'Удалить позиции "КНС"а'
     
     def export_full_dump(self, request, queryset):
         meta_data = generators.AdditionalGeneratorTemplate((User, Manufacturer, Category, Attribute, FixedValue))
