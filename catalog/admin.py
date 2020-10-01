@@ -140,7 +140,6 @@ class ManufacturerAdmin(BaseAdmin):
     def get_kns_product_count(self, obj):
         return obj.products.filter(
             category__parent__title__icontains="КНС",
-            category__parent=None
         ).count()
 
     get_kns_product_count.short_description = 'Кол-во КНС'
