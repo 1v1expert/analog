@@ -127,7 +127,7 @@ class ProductAdmin(BaseAdmin):
 
 
 class ManufacturerAdmin(BaseAdmin):
-    list_display = ['title', 'id', 'is_tried', 'get_product_count', 'created_at', 'created_by']
+    list_display = ['title', 'id', 'is_tried', 'get_product_count', 'get_working_product_count', 'created_at', 'created_by']
     actions = ['export_data_to_xls', 'export_full_dump', 'export_duplicate_products', 'delete_fasteners_products',
                'delete_kns_products', 'download_check_result', 'clear_analogs']
     
@@ -135,6 +135,11 @@ class ManufacturerAdmin(BaseAdmin):
         return obj.products.count()
 
     get_product_count.short_description = 'Кол-во поз-й'
+    
+    def get_working_product_count(self, obj):
+        return obj.products.exclude(raw=None).count()
+
+    get_working_product_count.short_description = 'Кол-во обраб. поз-й'
     
     def clear_analogs(self, request, queryset):
         for manufacturer in queryset:
