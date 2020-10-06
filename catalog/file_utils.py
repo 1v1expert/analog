@@ -218,10 +218,6 @@ class ProcessingUploadData(object):
             attr_val.save()
             
         for count, product in enumerate(self.products):
-            # if count % 100 == 0:
-            #     print('Line #{}'.format(count))
-            #     messages.add_message(request, messages.INFO,
-            #                          'Success added {} products'.format(count))
     
             new_product = Product(
                 article=product['article'],
