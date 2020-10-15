@@ -514,3 +514,11 @@ class AnalogSearch(object):
         self.first_step_products = products
         self.left_time = time.time() - start_time
         return self
+
+
+class AlternativeCategory(Base):
+    """
+    Модель класса товаров
+    """
+    original = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Исходный класс", related_name="original_category")
+    alternative = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Альтернативный класс", related_name="alternative_category")

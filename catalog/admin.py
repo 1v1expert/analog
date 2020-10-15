@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from app.models import MainLog
 from catalog.file_utils import ProcessingUploadData, XLSDocumentReader
 from catalog.models import Attribute, Category, DataFile, FixedValue, GroupSubclass, Manufacturer, Product, \
-    Specification
+    Specification, AlternativeCategory
 from catalog.reporters import generators, writers
 
 
@@ -283,6 +283,10 @@ class FixValAdmin(BaseAdmin):
 
 class GroupSubclassAdmin(BaseAdmin):
     list_display = ['category', 'fixed_attribute', 'image']
+    
+
+class AlternativeCategoryAdmin(BaseAdmin):
+    list_display = ['original', 'alternative']
 
 
 admin.site.register(MainLog, MainLogAdmin)
@@ -295,4 +299,5 @@ admin.site.register(Specification, BaseAdmin)
 admin.site.register(DataFile, FileUploadAdmin)
 admin.site.register(LogEntry, LogEntryAdmin)
 admin.site.register(GroupSubclass, GroupSubclassAdmin)
+admin.site.register(AlternativeCategory, AlternativeCategoryAdmin)
 
