@@ -216,7 +216,19 @@ class Product(Base):
         search = AnalogSearch(product_from=self, manufacturer_to=manufacturer_to)
         try:
             result = search.build()
-        
+
+            alternative_categories = AlternativeCategory.objects.filter(original=self.category)
+            
+            if result.product is None and not alternative_categories.exists():
+                return None
+            
+            if result.product is None:
+                for alt_category in alternative_categories:
+                    search = AnalogSearch(product_from=self, manufacturer_to=manufacturer_to)
+                    result = search.build(category=alt_category.alternative)
+                    if result.product is not None:
+                        break
+                        
             if result.product is None:
                 return None
             
@@ -363,9 +375,9 @@ class AnalogSearch(object):
         
         # raise product_from is None or manufacturer_to is None
         
-    def filter_by_category_and_manufacturer(self) -> QuerySet:
+    def filter_by_category_and_manufacturer(self, category) -> QuerySet:
         return Product.objects.filter(
-            category=self.initial_product.category,
+            category=self.initial_product.category if category is None else category,
             manufacturer=self.manufacturer_to,
             irrelevant=False
         ).values_list(
@@ -487,13 +499,13 @@ class AnalogSearch(object):
             
         return middleware_pk_products
 
-    def build(self) -> "AnalogSearch":
+    def build(self, category=None) -> "AnalogSearch":
         start_time = time.time()
         # logger.
         self.initial_product_info, self.null_attributes = self.get_full_info_from_initial_product()
         
         # first step
-        first_dataset: QuerySet = self.filter_by_category_and_manufacturer()
+        first_dataset: QuerySet = self.filter_by_category_and_manufacturer(category)
         
         # second step
         second_dataset: QuerySet = self.filter_by_hard_attributes(first_dataset)
