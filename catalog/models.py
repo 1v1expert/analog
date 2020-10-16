@@ -216,22 +216,31 @@ class Product(Base):
         search = AnalogSearch(product_from=self, manufacturer_to=manufacturer_to)
         try:
             result = search.build()
-
+        except AnalogNotFound:
             alternative_categories = AlternativeCategory.objects.filter(original=self.category)
-            
-            if result.product is None and not alternative_categories.exists():
+            if not alternative_categories.exists():
                 return None
             
-            if result.product is None:
-                for alt_category in alternative_categories:
-                    search = AnalogSearch(product_from=self, manufacturer_to=manufacturer_to)
+            # if result.product is None and not alternative_categories.exists():
+            #     return None
+            
+            # if result.product is None:
+            result = None
+            for alt_category in alternative_categories:
+                search = AnalogSearch(product_from=self, manufacturer_to=manufacturer_to)
+                try:
                     result = search.build(category=alt_category.alternative)
-                    if result.product is not None:
-                        break
-                        
-            if result.product is None:
-                return None
+                except AnalogNotFound:
+                    continue
+                # if result.product is not None:
+                #     break
+            #
+            # if result.product is None:
+            #     return None
             
+            if result is None:
+                return None
+
             old_analogs = self.analogs_to.filter(manufacturer=manufacturer_to)
             if old_analogs.exists():
                 self.analogs_to.remove(old_analogs.values('pk'))
@@ -250,8 +259,8 @@ class Product(Base):
         
             return result.product
     
-        except AnalogNotFound:
-            return None
+        # except AnalogNotFound:
+        #     return None
     
         except Exception as e:
             logger.debug(f'<{e}>\n{traceback.format_exc()}')
