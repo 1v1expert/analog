@@ -192,6 +192,8 @@ class Product(Base):
 
     irrelevant = models.BooleanField(verbose_name='Неактуал', default=False)  # position for only search from this
     
+    objects = ProductManager()
+    
     def get_analog(self, manufacturer_to: Manufacturer) -> Optional["Product"]:
         assert manufacturer_to is not None, 'Manufacturer is None'
         logger.info(
@@ -232,40 +234,32 @@ class Product(Base):
                     result = search.build(category=alt_category.alternative)
                 except AnalogNotFound:
                     continue
-                # if result.product is not None:
-                #     break
-            #
-            # if result.product is None:
-            #     return None
-            
-            if result is None:
-                return None
 
-            old_analogs = self.analogs_to.filter(manufacturer=manufacturer_to)
-            if old_analogs.exists():
-                self.analogs_to.remove(old_analogs.values('pk'))
-
-            self.analogs_to.add(result.product)
-        
-            raw = self.raw or {}
-            raw__analogs: dict = raw.get("analogs", {})
-            raw__analogs[manufacturer_to.pk] = {
-                "analog_seconds": list(result.second_dataset),
-                "analog": result.product.pk
-            }
-            raw["analogs"] = raw__analogs
-            self.raw = raw
-            self.save()
-        
-            return result.product
-    
-        # except AnalogNotFound:
-        #     return None
-    
         except Exception as e:
             logger.debug(f'<{e}>\n{traceback.format_exc()}')
             return None
+
+        if result is None:
+            return None
+
+        old_analogs = self.analogs_to.filter(manufacturer=manufacturer_to)
+        if old_analogs.exists():
+            self.analogs_to.remove(old_analogs.values('pk'))
+
+        self.analogs_to.add(result.product)
     
+        raw = self.raw or {}
+        raw__analogs: dict = raw.get("analogs", {})
+        raw__analogs[manufacturer_to.pk] = {
+            "analog_seconds": list(result.second_dataset),
+            "analog": result.product.pk
+        }
+        raw["analogs"] = raw__analogs
+        self.raw = raw
+        self.save()
+    
+        return result.product
+
     def get_info(self) -> list:
         return list(self.attributevalue_set.all())
     
@@ -532,7 +526,7 @@ class AnalogSearch(object):
         products = Product.objects.filter(pk__in=fourth_dataset)
 
         self.product = products.first()
-        self.first_step_products = products
+        self.first_step_products = second_dataset
         self.left_time = time.time() - start_time
         return self
 
