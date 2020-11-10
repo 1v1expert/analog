@@ -160,6 +160,15 @@ class AttributeValue(Base):
         verbose_name_plural = "Значения атрибутов"
 
 
+class ProductManager(models.Manager):
+    def autoselect(self, instance, type_=None):
+        """
+        :raises: :class:`AssertionError`: when instance is Parcel and type_
+                 not specified
+        """
+        return None
+
+
 class Product(Base):
     """
     Модель товара
